@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Login</title>
+<style>
+    :root{
+        --bg:#f5f7fb;
+        --card:#ffffff;
+        --accent:#3b82f6;
+        --muted:#6b7280;
+        --radius:12px;
+        --shadow: 0 6px 24px rgba(15,23,42,0.08);
+    }
+
+    /* Basic reset */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+        margin:0;
+        font-family:Inter, system-ui, sans-serif;
+        background:linear-gradient(180deg,var(--bg),#eef3fb);
+        display:grid;
+        place-items:center;
+        padding:24px;
+        color:#0f172a;
+    }
+
+    /* Card */
+    .card{
+        width:100%;
+        max-width:420px;
+        background:var(--card);
+        border-radius:var(--radius);
+        box-shadow:var(--shadow);
+        padding:28px;
+    }
+
+    h1{margin:0 0 8px;font-size:20px}
+    p.lead{margin:0 0 20px;color:var(--muted);font-size:14px}
+
+    form{display:grid;gap:14px}
+
+    label{display:block;font-size:13px;margin-bottom:6px;color:var(--muted)}
+    .field{
+        position:relative;
+    }
+
+    input[type="email"],
+    input[type="password"]{
+        width:100%;
+        padding:12px 44px 12px 12px; /* right padding to make room for icon */
+        border:1px solid #e6e9ef;
+        border-radius:10px;
+        font-size:15px;
+        background:linear-gradient(180deg,#fff,#fbfdff);
+        color:inherit;
+        outline:none;
+        transition:box-shadow .12s, border-color .12s;
+    }
+
+    input:focus{
+        border-color:var(--accent);
+        box-shadow:0 4px 14px rgba(59,130,246,0.12);
+    }
+
+    /* icon button placed inside field, no white block, accessible focus ring */
+    .icon{
+        position:absolute;
+        right:10px;
+        top:50%;
+        transform:translateY(-50%);
+        width:36px;
+        height:36px;
+        display:grid;
+        place-items:center;
+        color:var(--muted);
+        cursor:pointer;
+
+        /* reset button defaults so no white block shows */
+        background: transparent;
+        border: 0;
+        padding: 0;
+        line-height: 0;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    /* focus ring (keep for accessibility) */
+    .icon:focus{
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(59,130,246,0.18);
+        border-radius:8px;
+    }
+
+    /* ensure SVGs don't introduce inline spacing */
+    .icon svg{ display:block; width:20px; height:20px; }
+
+    .actions{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:4px}
+    button.primary{
+        background:var(--accent);
+        color:white;
+        border:0;
+        padding:10px 14px;
+        border-radius:10px;
+        font-weight:600;
+        cursor:pointer;
+    }
+    button.primary:active{transform:translateY(1px)}
+    .muted-link{font-size:13px;color:var(--muted);text-decoration:none}
+
+    /* small helper text */
+    .help{font-size:13px;color:var(--muted);margin-top:8px}
+</style>
+</head>
+<body>
+    <main class="card" aria-labelledby="loginTitle">
+        <h1 id="loginTitle">Sign in</h1>
+        <p class="lead">Enter your credentials to access your account.</p>
+
+        <form id="loginForm" autocomplete="on" novalidate>
+            <div>
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" inputmode="email" required placeholder="you@example.com" />
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" required placeholder="••••••••" aria-describedby="pwHelp" />
+                <button type="button" class="icon" id="pwToggle" aria-pressed="false" aria-label="Show password">
+                    <!-- eye (visible) / eye-off (hidden) - default hidden icon shown -->
+                    <svg id="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg id="eyeOff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none;">
+                        <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a20.25 20.25 0 0 1 4.11-5.22"></path>
+                        <path d="M1 1l22 22"></path>
+                        <path d="M9.88 9.88A3 3 0 0 0 14.12 14.12"></path>
+                        <path d="M14.53 9.47A3 3 0 0 1 9.47 14.53"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="actions">
+                <a class="muted-link" href="#">Forgot password?</a>
+                <button class="primary" type="submit">Sign in</button>
+            </div>
+
+            <p id="pwHelp" class="help">Use at least 8 characters. Passwords are case-sensitive.</p>
+        </form>
+    </main>
+
+<script>
+    // Toggle password visibility, update accessible labels and icons
+    (function(){
+        const pw = document.getElementById('password');
+        const btn = document.getElementById('pwToggle');
+        const eye = document.getElementById('eye');
+        const eyeOff = document.getElementById('eyeOff');
+
+        btn.addEventListener('click', () => {
+            const showing = pw.type === 'text';
+            if (showing) {
+                pw.type = 'password';
+                btn.setAttribute('aria-pressed','false');
+                btn.setAttribute('aria-label','Show password');
+                eye.style.display = 'block';
+                eyeOff.style.display = 'none';
+            } else {
+                pw.type = 'text';
+                btn.setAttribute('aria-pressed','true');
+                btn.setAttribute('aria-label','Hide password');
+                eye.style.display = 'none';
+                eyeOff.style.display = 'block';
+            }
+            // keep focus on button (no repaint flicker)
+            btn.focus();
+        });
+
+        // optional: keyboard toggle via Enter/Space handled by button element automatically
+    })();
+</script>
+</body>
+</html></svg>
