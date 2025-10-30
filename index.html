@@ -115,28 +115,39 @@
   const supabase = supabase.createClient(supabaseUrl, supabaseKey)
 </script>
 <script>
-
-    
-async function validate(event) {
+async function validate(event) {
   event.preventDefault();
   
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
   const pwhelp = document.getElementById('pwHelp');
   
-  // Try to login
-  const { data, error } = await supabase.auth.signInWithPassword({
+  // First try to sign in
+  const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
     email: email,
     password: password
   });
   
-  if (error) {
-    pwhelp.innerHTML = 'Wrong email or password';
-    pwhelp.style.color = 'red';
+  // If login fails, try to sign up instead
+  if (signInError) {
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+      email: email,
+      password: password
+    });
+    
+    if (signUpError) {
+      pwhelp.innerHTML = 'Error: ' + signUpError.message;
+      pwhelp.style.color = 'red';
+    } else {
+      pwhelp.innerHTML = 'Account created successfully!';
+      pwhelp.style.color = 'green';
+      // Redirect or continue
+      window.location.href = '/dashboard.html';
+    }
   } else {
+    // Login successful
     pwhelp.innerHTML = 'Login successful!';
     pwhelp.style.color = 'green';
-    // Redirect to another page
     window.location.href = '/dashboard.html';
   }
 }
