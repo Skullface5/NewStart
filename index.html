@@ -117,20 +117,29 @@
 <script>
 
     
-    function validate() {
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
-    const evalue = email.value;
-    const pwhelp = document.getElementById('pwHelp');
-    const pvalue = password.value;
-        event.preventDefault();
-        if (pvalue.length < 8 || evalue == null || !evalue.includes('.com' || '@')) {
-        pwhelp.innerHTML = 'check ur Credentials and try again';
-        pwhelp.style.color = 'red';
-        return false;
-        }
-        pwhelp.innerHTML = '';
-    }
+async function validate(event) {
+  event.preventDefault();
+  
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const pwhelp = document.getElementById('pwHelp');
+  
+  // Try to login
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+  
+  if (error) {
+    pwhelp.innerHTML = 'Wrong email or password';
+    pwhelp.style.color = 'red';
+  } else {
+    pwhelp.innerHTML = 'Login successful!';
+    pwhelp.style.color = 'green';
+    // Redirect to another page
+    window.location.href = '/dashboard.html';
+  }
+}
 </script>
 </body>
 </html></svg>
