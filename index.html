@@ -46,7 +46,7 @@
     input[type="email"],
     input[type="password"]{
         width:90%;
-        padding:12px 44px 12px 12px; /* right padding to make room for icon */
+        padding:12px 44px 12px 12px;
         border:1px solid #e6e9ef;
         border-radius:10px;
         font-size:15px;
@@ -59,7 +59,7 @@
         width: 100%;
         border-color:#000000;
     }
-        input[type="email"]:hover{
+    input[type="email"]:hover{
         width: 100%;
         border-color:#000000;
     }
@@ -80,6 +80,7 @@
     button.primary:active{transform:translateY(1px)}
     .muted-link{font-size:13px;color:var(--muted);text-decoration:none}
     .help{font-size:13px;color:var(--muted);margin-top:8px}
+    .loading{opacity:0.6;pointer-events:none}
 </style>
 </head>
 <body>
@@ -100,7 +101,7 @@
 
             <div class="actions">
                 <a class="muted-link" href="#">Forgot password?</a>
-                <button class="primary" onclick="validate()" type="submit">Sign in</button>
+                <button class="primary" type="submit">Sign in</button>
             </div>
 
             <p id="pwHelp" class="help"></p>
@@ -109,57 +110,71 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Replace these with your actual Supabase credentials
+  // Supabase configuration
   const supabaseUrl = 'https://cezaeiotddqoxikodoks.supabase.co'
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlemFlaW90ZGRxb3hpa29kb2tzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE4MDYwODcsImV4cCI6MjA3NzM4MjA4N30.jtqUY-cIYOYywkRzBNvtkzUFR91JBWDap_Xwq0qo3eU'
   const supabase = supabase.createClient(supabaseUrl, supabaseKey)
 </script>
 <script>
-async function validate(event) {
+document.getElementById('loginForm').addEventListener('submit', async function(event) {
   event.preventDefault();
   
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
   const pwhelp = document.getElementById('pwHelp');
+  const submitButton = this.querySelector('button[type="submit"]');
   
-  // Try to sign in first
-  const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-    email: email,
-    password: password
-  });
+  // Show loading state
+  submitButton.textContent = 'Signing in...';
+  submitButton.classList.add('loading');
+  pwhelp.innerHTML = '';
   
-  if (signInError) {
-    // If login fails, try to sign up
-    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+  try {
+    // Try to sign in first
+    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
       email: email,
-      password: password,
-      options: {
-        emailRedirectTo: window.location.origin // For email confirmation
-      }
+      password: password
     });
-    
-    if (signUpError) {
-      pwhelp.innerHTML = 'Error: ' + signUpError.message;
-      pwhelp.style.color = 'red';
-    } else {
-      if (signUpData.user && signUpData.user.identities && signUpData.user.identities.length === 0) {
-        pwhelp.innerHTML = 'User already exists but needs email confirmation';
-        pwhelp.style.color = 'orange';
+
+    if (signInError) {
+      // If login fails, try to sign up
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          emailRedirectTo: window.location.origin
+        }
+      });
+
+      if (signUpError) {
+        pwhelp.innerHTML = 'Error: ' + signUpError.message;
+        pwhelp.style.color = 'red';
       } else {
-        pwhelp.innerHTML = 'Account created! Check your email for confirmation.';
-        pwhelp.style.color = 'green';
+        if (signUpData.user && signUpData.user.identities && signUpData.user.identities.length === 0) {
+          pwhelp.innerHTML = 'Account exists! Please check your email for confirmation link.';
+          pwhelp.style.color = 'orange';
+        } else {
+          pwhelp.innerHTML = 'Account created! Please check your email to confirm your account.';
+          pwhelp.style.color = 'green';
+        }
       }
+    } else {
+      // Login successful
+      pwhelp.innerHTML = 'Login successful! Redirecting...';
+      pwhelp.style.color = 'green';
+      setTimeout(() => {
+        window.location.href = '/dashboard.html';
+      }, 1000);
     }
-  } else {
-    // Login successful
-    pwhelp.innerHTML = 'Login successful!';
-    pwhelp.style.color = 'green';
-    window.location.href = '/dashboard.html';
+  } catch (error) {
+    pwhelp.innerHTML = 'Unexpected error: ' + error.message;
+    pwhelp.style.color = 'red';
+  } finally {
+    // Reset button state
+    submitButton.textContent = 'Sign in';
+    submitButton.classList.remove('loading');
   }
-}
+});
 </script>
 </body>
-</html></svg>
-
-
-
+</html>
