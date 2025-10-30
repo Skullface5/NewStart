@@ -110,70 +110,86 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// Wait for the page to load completely
+document.addEventListener('DOMContentLoaded', function() {
   // Supabase configuration
   const supabaseUrl = 'https://cezaeiotddqoxikodoks.supabase.co'
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlemFlaW90ZGRxb3hpa29kb2tzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE4MDYwODcsImV4cCI6MjA3NzM4MjA4N30.jtqUY-cIYOYywkRzBNvtkzUFR91JBWDap_Xwq0qo3eU'
-  const supabase = supabase.createClient(supabaseUrl, supabaseKey)
-</script>
-<script>
-document.getElementById('loginForm').addEventListener('submit', async function(event) {
-  event.preventDefault();
   
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  const pwhelp = document.getElementById('pwHelp');
-  const submitButton = this.querySelector('button[type="submit"]');
+  // Create Supabase client
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey)
   
-  // Show loading state
-  submitButton.textContent = 'Signing in...';
-  submitButton.classList.add('loading');
-  pwhelp.innerHTML = '';
-  
-  try {
-    // Try to sign in first
-    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password
-    });
+  // Make supabase available globally for debugging
+  window.supabaseClient = supabase;
 
-    if (signInError) {
-      // If login fails, try to sign up
-      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+  // Form submission handler
+  document.getElementById('loginForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const pwhelp = document.getElementById('pwHelp');
+    const submitButton = this.querySelector('button[type="submit"]');
+    
+    // Show loading state
+    submitButton.textContent = 'Signing in...';
+    submitButton.classList.add('loading');
+    pwhelp.innerHTML = '';
+    
+    try {
+      // Check if supabase is defined
+      if (!supabase) {
+        throw new Error('Supabase client not loaded');
+      }
+      
+      // Try to sign in first
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
         email: email,
-        password: password,
-        options: {
-          emailRedirectTo: window.location.origin
-        }
+        password: password
       });
 
-      if (signUpError) {
-        pwhelp.innerHTML = 'Error: ' + signUpError.message;
-        pwhelp.style.color = 'red';
-      } else {
-        if (signUpData.user && signUpData.user.identities && signUpData.user.identities.length === 0) {
-          pwhelp.innerHTML = 'Account exists! Please check your email for confirmation link.';
-          pwhelp.style.color = 'orange';
+      if (signInError) {
+        console.log('Login error:', signInError);
+        
+        // If login fails, try to sign up
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            emailRedirectTo: window.location.origin
+          }
+        });
+
+        if (signUpError) {
+          pwhelp.innerHTML = 'Error: ' + signUpError.message;
+          pwhelp.style.color = 'red';
         } else {
-          pwhelp.innerHTML = 'Account created! Please check your email to confirm your account.';
-          pwhelp.style.color = 'green';
+          if (signUpData.user && signUpData.user.identities && signUpData.user.identities.length === 0) {
+            pwhelp.innerHTML = 'Account exists! Please check your email for confirmation link.';
+            pwhelp.style.color = 'orange';
+          } else {
+            pwhelp.innerHTML = 'Account created! Please check your email to confirm your account.';
+            pwhelp.style.color = 'green';
+          }
         }
+      } else {
+        // Login successful
+        pwhelp.innerHTML = 'Login successful! Redirecting...';
+        pwhelp.style.color = 'green';
+        setTimeout(() => {
+          window.location.href = '/dashboard.html';
+        }, 1000);
       }
-    } else {
-      // Login successful
-      pwhelp.innerHTML = 'Login successful! Redirecting...';
-      pwhelp.style.color = 'green';
-      setTimeout(() => {
-        window.location.href = '/dashboard.html';
-      }, 1000);
+    } catch (error) {
+      console.error('Authentication error:', error);
+      pwhelp.innerHTML = 'Error: ' + error.message;
+      pwhelp.style.color = 'red';
+    } finally {
+      // Reset button state
+      submitButton.textContent = 'Sign in';
+      submitButton.classList.remove('loading');
     }
-  } catch (error) {
-    pwhelp.innerHTML = 'Unexpected error: ' + error.message;
-    pwhelp.style.color = 'red';
-  } finally {
-    // Reset button state
-    submitButton.textContent = 'Sign in';
-    submitButton.classList.remove('loading');
-  }
+  });
 });
 </script>
 </body>
