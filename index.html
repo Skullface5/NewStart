@@ -13,8 +13,6 @@
         --radius:12px;
         --shadow: 0 6px 24px rgba(15,23,42,0.08);
     }
-
-    /* Basic reset */
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -26,8 +24,6 @@
         padding:24px;
         color:#0f172a;
     }
-
-    /* Card */
     .card{
         width:100%;
         max-width:420px;
@@ -57,46 +53,20 @@
         background:linear-gradient(180deg,#fff,#fbfdff);
         color:inherit;
         outline:none;
-        transition:box-shadow .12s, border-color .12s;
+        transition:width 0.6s,box-shadow .12s, border-color .12s;
     }
-
+    input[type="password"]:hover{
+        width: 100%;
+        border-color:#000000;
+    }
+        input[type="email"]:hover{
+        width: 100%;
+        border-color:#000000;
+    }
     input:focus{
         border-color:var(--accent);
         box-shadow:0 4px 14px rgba(59,130,246,0.12);
     }
-
-    /* icon button placed inside field, no white block, accessible focus ring */
-    .icon{
-        position:absolute;
-        right:10px;
-        top:50%;
-        transform:translateY(-50%);
-        width:36px;
-        height:36px;
-        display:grid;
-        place-items:center;
-        color:var(--muted);
-        cursor:pointer;
-
-        /* reset button defaults so no white block shows */
-        background: transparent;
-        border: 0;
-        padding: 0;
-        line-height: 0;
-        -webkit-appearance: none;
-        appearance: none;
-    }
-
-    /* focus ring (keep for accessibility) */
-    .icon:focus{
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(59,130,246,0.18);
-        border-radius:8px;
-    }
-
-    /* ensure SVGs don't introduce inline spacing */
-    .icon svg{ display:block; width:20px; height:20px; }
-
     .actions{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:4px}
     button.primary{
         background:var(--accent);
@@ -109,8 +79,6 @@
     }
     button.primary:active{transform:translateY(1px)}
     .muted-link{font-size:13px;color:var(--muted);text-decoration:none}
-
-    /* small helper text */
     .help{font-size:13px;color:var(--muted);margin-top:8px}
 </style>
 </head>
@@ -159,9 +127,6 @@
 </script>
 </body>
 </html></svg>
-
-
-
 
 
 
