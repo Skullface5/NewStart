@@ -122,54 +122,43 @@
         <form id="loginForm" autocomplete="on" novalidate>
             <div>
                 <label for="email">Email</label>
-                <input id="email" name="email" type="email" inputmode="email" required placeholder="you@example.com" />
+                <input id="email" name="email" type="email" inputmode="email" placeholder="email@example.com" required/>
             </div>
 
             <div class="field">
                 <label for="password">Password</label>
-                <input id="password" name="password" type="password" required placeholder="••••••••" aria-describedby="pwHelp" />
+                <input id="password" name="password" type="password" required placeholder="123456ABC" aria-describedby="pwHelp" />
             </div>
 
             <div class="actions">
                 <a class="muted-link" href="#">Forgot password?</a>
-                <button class="primary" type="submit">Sign in</button>
+                <button class="primary" onclick="validate()" type="submit">Sign in</button>
             </div>
 
-            <p id="pwHelp" class="help">Use at least 8 characters. Passwords are case-sensitive.</p>
+            <p id="pwHelp" class="help"></p>
         </form>
     </main>
 
 <script>
-    // Toggle password visibility, update accessible labels and icons
-    (function(){
-        const pw = document.getElementById('password');
-        const btn = document.getElementById('pwToggle');
-        const eye = document.getElementById('eye');
-        const eyeOff = document.getElementById('eyeOff');
 
-        btn.addEventListener('click', () => {
-            const showing = pw.type === 'text';
-            if (showing) {
-                pw.type = 'password';
-                btn.setAttribute('aria-pressed','false');
-                btn.setAttribute('aria-label','Show password');
-                eye.style.display = 'block';
-                eyeOff.style.display = 'none';
-            } else {
-                pw.type = 'text';
-                btn.setAttribute('aria-pressed','true');
-                btn.setAttribute('aria-label','Hide password');
-                eye.style.display = 'none';
-                eyeOff.style.display = 'block';
-            }
-            // keep focus on button (no repaint flicker)
-            btn.focus();
-        });
-
-        // optional: keyboard toggle via Enter/Space handled by button element automatically
-    })();
+    
+    function validate() {
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const evalue = email.value;
+    const pwhelp = document.getElementById('pwHelp');
+    const pvalue = password.value;
+        event.preventDefault();
+        if (pvalue.length < 8 || evalue == null || !evalue.includes('.com' || '@')) {
+        pwhelp.innerHTML = 'check ur Credentials and try again';
+        pwhelp.style.color = 'red';
+        return false;
+        }
+        pwhelp.innerHTML = '';
+    }
 </script>
 </body>
 </html></svg>
+
 
 
