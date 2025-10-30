@@ -122,27 +122,33 @@
   const password = document.getElementById('password').value;
   const pwhelp = document.getElementById('pwHelp');
   
-  // First try to sign in
+  // Try to sign in first
   const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
     email: email,
     password: password
   });
   
-  // If login fails, try to sign up instead
   if (signInError) {
+    // If login fails, try to sign up
     const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
       email: email,
-      password: password
+      password: password,
+      options: {
+        emailRedirectTo: window.location.origin // For email confirmation
+      }
     });
     
     if (signUpError) {
       pwhelp.innerHTML = 'Error: ' + signUpError.message;
       pwhelp.style.color = 'red';
     } else {
-      pwhelp.innerHTML = 'Account created successfully!';
-      pwhelp.style.color = 'green';
-      // Redirect or continue
-      window.location.href = '/dashboard.html';
+      if (signUpData.user && signUpData.user.identities && signUpData.user.identities.length === 0) {
+        pwhelp.innerHTML = 'User already exists but needs email confirmation';
+        pwhelp.style.color = 'orange';
+      } else {
+        pwhelp.innerHTML = 'Account created! Check your email for confirmation.';
+        pwhelp.style.color = 'green';
+      }
     }
   } else {
     // Login successful
