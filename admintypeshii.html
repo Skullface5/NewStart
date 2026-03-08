@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sillage · admin console</title>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: #f4efe9;
+      color: #2c2824;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .admin-wrapper {
+      max-width: 1100px;
+      width: 100%;
+      background: #ffffffd9;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 42px;
+      box-shadow: 0 30px 50px -25px rgba(98, 78, 62, 0.3);
+      border: 1px solid #ede3da;
+      overflow: hidden;
+      padding: 2.2rem 2.5rem;
+    }
+
+    h1 {
+      font-weight: 320;
+      font-size: 2.2rem;
+      letter-spacing: 0.02em;
+      color: #3f3730;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #e3d8cf;
+      padding-bottom: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    h1 i {
+      color: #b6987a;
+      font-size: 2.4rem;
+    }
+
+    h2 {
+      font-weight: 350;
+      font-size: 1.4rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #5f5348;
+      margin-bottom: 1.2rem;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr;
+      gap: 2.2rem;
+      align-items: start;
+    }
+
+    /* ---------- FORM PANEL ---------- */
+    .form-panel {
+      background: #fcf9f6;
+      padding: 1.8rem 2rem;
+      border-radius: 32px;
+      border: 1px solid #e7dcd2;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.8), 0 8px 18px -12px rgba(87, 67, 52, 0.2);
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #937f6e;
+      margin-bottom: 0.4rem;
+    }
+
+    input, select {
+      width: 100%;
+      background: white;
+      border: 1px solid #dbcec2;
+      border-radius: 60px;
+      padding: 0.9rem 1.4rem;
+      font-size: 0.95rem;
+      color: #2c2824;
+      outline: none;
+      transition: 0.15s;
+    }
+
+    input:focus, select:focus {
+      border-color: #b6987a;
+      box-shadow: 0 0 0 3px #eeddd2;
+    }
+
+    .icon-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.4rem;
+    }
+
+    .icon-option {
+      background: white;
+      border: 1px solid #dacfc6;
+      border-radius: 50px;
+      padding: 0.6rem 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: #3f3730;
+    }
+
+    .icon-option i {
+      font-size: 1.1rem;
+      color: #b6987a;
+    }
+
+    .icon-option.selected {
+      background: #b6987a;
+      border-color: #b6987a;
+      color: white;
+    }
+    .icon-option.selected i {
+      color: white;
+    }
+
+    .icon-option:hover {
+      border-color: #b6987a;
+      background: #f5ede6;
+    }
+
+    .file-input-area {
+      background: #f7f2ec;
+      border: 1px dashed #cbb9aa;
+      border-radius: 34px;
+      padding: 1.2rem 1.4rem;
+      text-align: center;
+      color: #7a6a5c;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .file-input-area:hover {
+      background: #f1e8df;
+      border-color: #b6987a;
+    }
+
+    .file-input-area i {
+      font-size: 1.8rem;
+      color: #b6987a;
+      margin-bottom: 6px;
+    }
+
+    #imagePreview {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: #fff5ed;
+      padding: 0.6rem 1.2rem;
+      border-radius: 40px;
+      border: 1px solid #e2d3c6;
+    }
+
+    #imagePreview img {
+      width: 48px;
+      height: 48px;
+      border-radius: 30px;
+      object-fit: cover;
+      background: #e5d8ce;
+    }
+
+    .btn-primary {
+      background: #b6987a;
+      border: none;
+      color: white;
+      padding: 1rem 2.2rem;
+      border-radius: 60px;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+      width: 100%;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-primary:hover {
+      background: #a07d63;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    /* ---------- PRODUCT LIST (admin) ---------- */
+    .list-panel {
+      background: #fcf9f6;
+      padding: 1.8rem 1.5rem;
+      border-radius: 32px;
+      border: 1px solid #e7dcd2;
+      max-height: 540px;
+      overflow-y: auto;
+    }
+
+    .admin-product-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0.8rem;
+      border-bottom: 1px solid #ece0d6;
+    }
+
+    .admin-product-item:last-child {
+      border-bottom: none;
+    }
+
+    .admin-product-img {
+      width: 54px;
+      height: 54px;
+      background: #e9dfd6;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .admin-product-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .admin-product-img i {
+      font-size: 2rem;
+      color: #8f7c6b;
+    }
+
+    .admin-product-info {
+      flex: 1;
+    }
+
+    .admin-product-title {
+      font-weight: 500;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .admin-product-brand {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #b6987a;
+      letter-spacing: 0.1em;
+    }
+
+    .admin-product-price {
+      font-weight: 350;
+      color: #3f3730;
+    }
+
+    .admin-product-price::before {
+      content: '€';
+      margin-right: 2px;
+      color: #887b70;
+    }
+
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #b7a597;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: color 0.15s;
+      padding: 6px;
+    }
+
+    .delete-btn:hover {
+      color: #c1654c;
+    }
+
+    .empty-list {
+      color: #ad9f93;
+      text-align: center;
+      font-style: italic;
+      padding: 2rem 0;
+    }
+
+    /* password gate */
+    .gate {
+      background: #fcf9f6;
+      border-radius: 48px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      border: 1px solid #ece0d6;
+    }
+
+    .gate h2 {
+      margin-bottom: 1.8rem;
+    }
+
+    .password-input {
+      display: flex;
+      gap: 10px;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    .password-input input {
+      flex: 1;
+    }
+
+    .password-input button {
+      background: #b6987a;
+      border: none;
+      color: white;
+      padding: 0 1.6rem;
+      border-radius: 60px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .hint {
+      margin-top: 1rem;
+      color: #a49182;
+      font-size: 0.8rem;
+    }
+
+    .back-link {
+      margin-top: 2rem;
+      display: inline-block;
+      color: #b6987a;
+      text-decoration: none;
+      border-bottom: 1px dotted;
+    }
+
+    hr {
+      border: 0.5px solid #ece0d6;
+      margin: 1.5rem 0;
+    }
+
+    /* toast */
+    .admin-toast {
+      position: fixed;
+      bottom: 30px; left: 30px;
+      background: #2c2824;
+      color: #f0e7de;
+      padding: 0.9rem 2rem;
+      border-radius: 60px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: translateY(80px);
+      transition: 0.2s;
+      z-index: 1000;
+    }
+    .admin-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+<div class="admin-wrapper" id="adminWrapper">
+  <!-- GATE (SIMPLE PASSWORD) -->
+  <div id="gatePanel" class="gate">
+    <i class="fas fa-lock" style="font-size: 2.8rem; color: #b6987a; margin-bottom: 1rem;"></i>
+    <h2>Bereich für Inhaber</h2>
+    <div class="password-input">
+      <input type="password" id="passwordInput" placeholder="Passwort" value="">
+      <button id="unlockBtn"><i class="fas fa-arrow-right"></i></button>
+    </div>
+    <div class="hint">🔐 Hinweis: das Passwort lautet <strong>sillage</strong> (demo)</div>
+    <a href="#" id="backToShopLink" class="back-link"><i class="fas fa-arrow-left"></i> zurück zum Shop</a>
+  </div>
+
+  <!-- ADMIN PANEL (hidden by default) -->
+  <div id="adminPanel" style="display: none;">
+    <h1>
+      <i class="fas fa-pen-nib"></i> Sillage · Produkte verwalten
+      <span style="flex:1; text-align: right; font-size: 0.8rem; opacity:0.7;" id="loggedInAs"></span>
+    </h1>
+
+    <div class="two-column">
+      <!-- ADD PRODUCT FORM -->
+      <div class="form-panel">
+        <h2><i class="fas fa-plus-circle" style="margin-right: 10px;"></i>neuen Duft einpflegen</h2>
+        <div class="input-group">
+          <label>Produktname</label>
+          <input type="text" id="productName" placeholder="z.B. Bois d'Argent" autocomplete="off">
+        </div>
+        <div class="input-group">
+          <label>Marke / Haus</label>
+          <input type="text" id="productBrand" placeholder="PHYSALIS / NAEVE ...">
+        </div>
+        <div class="input-group">
+          <label>Preis (€)</label>
+          <input type="number" id="productPrice" step="0.01" min="0" value="89.00">
+        </div>
+
+        <!-- Icon selection (Font Awesome fallback) -->
+        <div class="input-group">
+          <label>Icon (falls kein Bild)</label>
+          <div class="icon-selector" id="iconSelector">
+            <div class="icon-option selected" data-icon="fa-leaf"><i class="fas fa-leaf"></i> Blatt</div>
+            <div class="icon-option" data-icon="fa-plant-wilt"><i class="fas fa-plant-wilt"></i> Pflanze</div>
+            <div class="icon-option" data-icon="fa-tree"><i class="fas fa-tree"></i> Holz</div>
+            <div class="icon-option" data-icon="fa-flower"><i class="fas fa-flower"></i> Blüte</div>
+            <div class="icon-option" data-icon="fa-cloud-moon"><i class="fas fa-cloud-moon"></i> Rauch</div>
+            <div class="icon-option" data-icon="fa-crown"><i class="fas fa-crown"></i> König</div>
+          </div>
+        </div>
+
+        <!-- Image upload (overrides icon) -->
+        <div class="input-group">
+          <label>Produktbild (optional)</label>
+          <div class="file-input-area" id="fileInputArea">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Bild antippen oder hier ablegen</p>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+          </div>
+          <div id="imagePreview" style="display: none;">
+            <img id="previewImg" src="#" alt="preview">
+            <span id="previewFilename"></span>
+            <i class="fas fa-times" id="clearPreview" style="margin-left: auto; cursor:pointer; color:#b6987a;"></i>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="addProductBtn"><i class="fas fa-gem"></i> Produkt speichern</button>
+        <hr>
+        <p style="font-size:0.75rem; color:#aa9b8e;"><i class="fas fa-info-circle"></i> Bilder werden als Base64 im Browser gespeichert (localStorage). Für Demo geeignet.</p>
+      </div>
+
+      <!-- CURRENT PRODUCTS LIST (admin) -->
+      <div class="list-panel">
+        <h2><i class="fas fa-box-open" style="margin-right: 10px;"></i>vorhandene Düfte</h2>
+        <div id="adminProductListContainer">
+          <!-- dynamic list from localStorage -->
+          <div class="empty-list">Lade Produkte ...</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 1.5rem; text-align: right;">
+      <button id="logoutBtn" style="background:none; border:none; color:#b6987a; cursor:pointer; text-decoration:underline;"><i class="fas fa-sign-out-alt"></i> abmelden</button>
+    </div>
+  </div>
+</div>
+
+<!-- toast -->
+<div id="adminToast" class="admin-toast">✨ gespeichert</div>
+
+<script>
+  (function() {
+    // ---------- SIMPLE PASSWORD PROTECTION (demo only) ----------
+    const GATE_PASSWORD = 'sillage'; // plain for demo
+    const gatePanel = document.getElementById('gatePanel');
+    const adminPanel = document.getElementById('adminPanel');
+    const unlockBtn = document.getElementById('unlockBtn');
+    const passwordInput = document.getElementById('passwordInput');
+    const backLink = document.getElementById('backToShopLink');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const loggedInSpan = document.getElementById('loggedInAs');
+
+    // unlock handler
+    function unlockAdmin() {
+      gatePanel.style.display = 'none';
+      adminPanel.style.display = 'block';
+      loggedInSpan.textContent = '⚡ owner · ' + new Date().toLocaleDateString('de-DE');
+      // load products when entering admin
+      loadAdminProducts();
+    }
+
+    unlockBtn.addEventListener('click', () => {
+      if (passwordInput.value === GATE_PASSWORD) {
+        unlockAdmin();
+      } else {
+        alert('❌ falsches Passwort (Tipp: sillage)');
+      }
+    });
+    passwordInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') unlockBtn.click(); });
+
+    // back to shop link (replace with actual shop URL)
+    backLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = '#';  // In real use: 'index.html' or shop page
+      alert('In der Demo würde hier der Shop erscheinen. Zurück zur Admin-Seite?');
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      adminPanel.style.display = 'none';
+      gatePanel.style.display = 'block';
+      passwordInput.value = '';
+    });
+
+    // ---------- PRODUCT STORAGE (shared with shop ideally) ----------
+    const STORAGE_KEY = 'sillage_catalog';
+
+    // default products if storage empty
+    const defaultProducts = [
+      { id: 'p1', name: 'Bois d’Argent', brand: 'PHYSALIS', price: 89.00, icon: 'fa-leaf', image: null },
+      { id: 'p2', name: 'Iris Cendré', brand: 'NAEVE', price: 120.00, icon: 'fa-plant-wilt', image: null },
+      { id: 'p3', name: 'Cuir Balsamique', brand: 'ATELIER D’OMBRE', price: 150.00, icon: 'fa-tree', image: null },
+      { id: 'p4', name: 'Vanille d’Orléans', brand: 'JARDIN RÊVÉ', price: 76.00, icon: 'fa-flower', image: null },
+      { id: 'p5', name: 'Encens Suave', brand: 'FUMÉE', price: 204.00, icon: 'fa-cloud-moon', image: null },
+      { id: 'p6', name: 'Eau de Néroli', brand: 'LA SERENA', price: 68.00, icon: 'fa-sun-plant-wilt', image: null }
+    ];
+
+    function loadCatalog() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try {
+          return JSON.parse(stored);
+        } catch (e) {
+          return defaultProducts;
+        }
+      } else {
+        // first visit — store defaults
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultProducts));
+        return defaultProducts;
+      }
+    }
+
+    function saveCatalog(catalog) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(catalog));
+    }
+
+    // generate short id (for new products)
+    function generateId() { return 'prod_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6); }
+
+    // ---------- ADMIN UI RENDER ----------
+    function loadAdminProducts() {
+      const catalog = loadCatalog();
+      const container = document.getElementById('adminProductListContainer');
+      if (!container) return;
+      if (catalog.length === 0) {
+        container.innerHTML = '<div class="empty-list">✨ noch keine Düfte. Füge den ersten hinzu.</div>';
+        return;
+      }
+      let html = '';
+      catalog.forEach(prod => {
+        const priceStr = prod.price.toFixed(2).replace('.', ',');
+        // decide show image or icon
+        const iconOrImage = prod.image 
+          ? `<img src="${prod.image}" alt="${prod.name}" style="width:100%; height:100%; object-fit:cover;">` 
+          : `<i class="fas ${prod.icon || 'fa-leaf'}"></i>`;
+        html += `
+          <div class="admin-product-item" data-id="${prod.id}">
+            <div class="admin-product-img">${iconOrImage}</div>
+            <div class="admin-product-info">
+              <div class="admin-product-title">${prod.name}</div>
+              <div class="admin-product-brand">${prod.brand}</div>
+              <div class="admin-product-price">${priceStr}</div>
+            </div>
+            <button class="delete-btn" data-id="${prod.id}" title="Produkt löschen"><i class="fas fa-trash-alt"></i></button>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    // show toast
+    function showAdminToast(msg) {
+      const toast = document.getElementById('adminToast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    // ---------- ADD PRODUCT LOGIC ----------
+    const productName = document.getElementById('productName');
+    const productBrand = document.getElementById('productBrand');
+    const productPrice = document.getElementById('productPrice');
+    const iconOptions = document.querySelectorAll('.icon-option');
+    let selectedIcon = 'fa-leaf';   // default
+
+    // icon selector highlight
+    iconOptions.forEach(opt => {
+      opt.addEventListener('click', () => {
+        iconOptions.forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        selectedIcon = opt.dataset.icon;
+      });
+    });
+
+    // Image upload preview
+    const fileInput = document.getElementById('imageUpload');
+    const fileArea = document.getElementById('fileInputArea');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const previewFilename = document.getElementById('previewFilename');
+    const clearPreview = document.getElementById('clearPreview');
+    let uploadedImageBase64 = null;
+
+    fileArea.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        uploadedImageBase64 = ev.target.result;
+        previewImg.src = ev.target.result;
+        previewFilename.textContent = file.name.length > 20 ? file.name.substr(0,18)+'…' : file.name;
+        imagePreview.style.display = 'flex';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    clearPreview.addEventListener('click', () => {
+      uploadedImageBase64 = null;
+      imagePreview.style.display = 'none';
+      fileInput.value = '';
+    });
+
+    // add product
+    document.getElementById('addProductBtn').addEventListener('click', () => {
+      const name = productName.value.trim();
+      const brand = productBrand.value.trim();
+      const price = parseFloat(productPrice.value);
+      if (!name || !brand || isNaN(price) || price <= 0) {
+        showAdminToast('❌ Bitte Name, Marke und gültigen Preis angeben');
+        return;
+      }
+
+      const catalog = loadCatalog();
+      const newProduct = {
+        id: generateId(),
+        name: name,
+        brand: brand,
+        price: price,
+        icon: selectedIcon,
+        image: uploadedImageBase64 || null   // store base64 image or null
+      };
+      catalog.push(newProduct);
+      saveCatalog(catalog);
+      // reset form
+      productName.value = '';
+      productBrand.value = '';
+      productPrice.value = '89.00';
+      // reset icon to default leaf
+      iconOptions.forEach(o => o.classList.remove('selected'));
+      document.querySelector('.icon-option[data-icon="fa-leaf"]').classList.add('selected');
+      selectedIcon = 'fa-leaf';
+      // clear image
+      uploadedImageBase64 = null;
+      imagePreview.style.display = 'none';
+      fileInput.value = '';
+      showAdminToast('✅ Produkt gespeichert');
+      loadAdminProducts(); // refresh list
+    });
+
+    // DELETE product (delegation)
+    document.getElementById('adminProductListContainer').addEventListener('click', (e) => {
+      const deleteBtn = e.target.closest('.delete-btn');
+      if (!deleteBtn) return;
+      const id = deleteBtn.dataset.id;
+      let catalog = loadCatalog();
+      catalog = catalog.filter(p => p.id !== id);
+      saveCatalog(catalog);
+      loadAdminProducts();
+      showAdminToast('🗑️ Produkt entfernt');
+    });
+
+    // initial if admin unlocked later, but we also call after unlock
+
+    // if somehow already unlocked (no, but just in case we load)
+    // but we only load after unlock.
+  })();
+</script>
+</body>
+</html>
