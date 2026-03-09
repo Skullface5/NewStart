@@ -4,10 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sillage | Atelier de Parfums</title>
-  <!-- Font Awesome 6 (gratuit) pour icônes -->
+  <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Supabase client library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* === RESET & VARIABLES === */
+    /* Mêmes styles que précédemment - gardez le CSS identique */
     * {
       margin: 0;
       padding: 0;
@@ -16,12 +18,11 @@
     }
 
     body {
-      background: #faf7f2;  /* fond crème doux */
+      background: #faf7f2;
       color: #2e2a28;
       line-height: 1.5;
     }
 
-    /* texture de bruit subtile (optionnel) */
     body::before {
       content: '';
       position: fixed;
@@ -32,7 +33,6 @@
       opacity: 0.3;
     }
 
-    /* === TYPOGRAPHIE & GLOBAL === */
     h1, h2, h3 {
       font-weight: 350;
       letter-spacing: 0.03em;
@@ -50,7 +50,6 @@
       padding: 1.5rem 2rem;
     }
 
-    /* === EN-TÊTE / NAVIGATION === */
     header {
       background: #ffffffd9;
       backdrop-filter: blur(10px);
@@ -76,7 +75,7 @@
 
     .logo i {
       font-size: 2rem;
-      color: #b6987a;  /* terracotta doux */
+      color: #b6987a;
     }
 
     .nav-links {
@@ -127,7 +126,6 @@
       box-shadow: 0 3px 8px rgba(182,152,122,0.3);
     }
 
-    /* === SECTION HÉRO (simple) === */
     .hero {
       text-align: center;
       padding: 3rem 1rem 2rem;
@@ -149,7 +147,6 @@
       margin: 0 auto;
     }
 
-    /* === GRILLE PRODUITS === */
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -193,6 +190,13 @@
       font-size: 5rem;
       color: #917b67;
       filter: drop-shadow(2px 6px 10px rgba(106, 79, 57, 0.15));
+    }
+
+    .product-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
     }
 
     .product-title {
@@ -247,7 +251,6 @@
       box-shadow: 0 8px 16px -8px #b6987aaa;
     }
 
-    /* === PANIER LATÉRAL === */
     .cart-overlay {
       position: fixed;
       top: 0; right: 0; bottom: 0; left: 0;
@@ -416,7 +419,6 @@
       font-style: italic;
     }
 
-    /* === NOTIFICATION (toast) === */
     .notification {
       position: fixed;
       bottom: 30px; left: 30px;
@@ -437,7 +439,6 @@
       opacity: 1;
     }
 
-    /* === PIED DE PAGE === */
     footer {
       text-align: center;
       padding: 2.5rem 1rem 1.5rem;
@@ -447,7 +448,12 @@
       margin-top: 2rem;
     }
 
-    /* === AJUSTEMENTS RESPONSIVE === */
+    .loading-spinner {
+      text-align: center;
+      padding: 3rem;
+      color: #b6987a;
+    }
+
     @media (max-width: 600px) {
       .header-flex {
         flex-wrap: wrap;
@@ -477,7 +483,6 @@
       <button class="close-cart" id="closeCartBtn"><i class="fas fa-times"></i></button>
     </div>
     <div id="cartItemsContainer" class="cart-items">
-      <!-- les articles du panier apparaîtront ici -->
       <div class="empty-cart-message">Votre panier est vide.</div>
     </div>
     <div class="cart-footer">
@@ -497,7 +502,6 @@
         <h1>SILLAGE</h1>
       </div>
       <div class="nav-links">
-        <a href="admintypeshii.html">Log_in</a>
         <a href="#">COLLECTION</a>
         <a href="#">EXCLUSIVITÉS</a>
         <a href="#">COFFRETS</a>
@@ -517,9 +521,11 @@
     </section>
 
     <!-- GRILLE PRODUITS -->
-    <div class="product-grid" id="productGrid">
-      <!-- les produits seront injectés via JS -->
+    <div id="loadingProducts" class="loading-spinner">
+      <i class="fas fa-spinner fa-spin fa-3x"></i>
+      <p>Chargement des parfums...</p>
     </div>
+    <div class="product-grid" id="productGrid" style="display: none;"></div>
   </main>
 
   <footer>
@@ -528,54 +534,19 @@
 
   <script>
     (function() {
-      // ---------- CATALOGUE (données parfums) ----------
-      const products = [
-        {
-          id: 'p1',
-          name: 'Bois d’Argent',
-          brand: 'PHYSALIS',
-          price: 89.00,
-          icon: 'fa-solid fa-leaf'
-        },
-        {
-          id: 'p2',
-          name: 'Iris Cendré',
-          brand: 'NAEVE',
-          price: 120.00,
-          icon: 'fa-solid fa-plant-wilt'
-        },
-        {
-          id: 'p3',
-          name: 'Cuir Balsamique',
-          brand: 'ATELIER D’OMBRE',
-          price: 150.00,
-          icon: 'fa-solid fa-tree'
-        },
-        {
-          id: 'p4',
-          name: 'Vanille d’Orléans',
-          brand: 'JARDIN RÊVÉ',
-          price: 76.00,
-          icon: 'fa-solid fa-flower'
-        },
-        {
-          id: 'p5',
-          name: 'Encens Suave',
-          brand: 'FUMÉE',
-          price: 204.00,
-          icon: 'fa-solid fa-cloud-moon'
-        },
-        {
-          id: 'p6',
-          name: 'Eau de Néroli',
-          brand: 'LA SERENA',
-          price: 68.00,
-          icon: 'fa-solid fa-sun-plant-wilt'
-        }
-      ];
+      // ---------- CONFIGURATION SUPABASE ----------
+      // REMPLACEZ CES VALEURS PAR VOS PROPRES CLÉS SUPABASE
+      const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
+      const SUPABASE_ANON_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
+      
+      // Initialiser le client Supabase
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
       // ---------- ÉTAT GLOBAL ----------
-      let cart = JSON.parse(localStorage.getItem('sillage_cart')) || [];   // tableau d'articles { id, name, price, icon, quantity: 1 }
+      let products = [];
+      let cart = JSON.parse(localStorage.getItem('sillage_cart')) || [];
+
+      // Éléments DOM
       const cartSidebar = document.getElementById('cartSidebar');
       const cartOverlay = document.getElementById('cartOverlay');
       const cartToggle = document.getElementById('cartToggle');
@@ -585,39 +556,76 @@
       const cartTotalSpan = document.getElementById('cartTotalPrice');
       const toast = document.getElementById('toast');
       const productGrid = document.getElementById('productGrid');
+      const loadingEl = document.getElementById('loadingProducts');
       const checkoutBtn = document.getElementById('checkoutBtn');
 
       // ---------- FONCTIONS UTILITAIRES ----------
       function formatPrice(price) {
-        return '€' + price.toFixed(2).replace('.', ',');
+        return '€' + parseFloat(price).toFixed(2).replace('.', ',');
       }
 
-      // afficher la grille produits
+      // Charger les produits depuis Supabase
+      async function loadProducts() {
+        try {
+          const { data, error } = await supabase
+            .from('products')
+            .select('*')
+            .order('created_at', { ascending: true });
+
+          if (error) throw error;
+          
+          products = data || [];
+          renderProducts();
+        } catch (error) {
+          console.error('Erreur chargement produits:', error);
+          showToast('❌ Erreur chargement des produits');
+          products = [];
+          renderProducts();
+        }
+      }
+
+      // Afficher la grille produits
       function renderProducts() {
+        loadingEl.style.display = 'none';
+        
+        if (products.length === 0) {
+          productGrid.style.display = 'grid';
+          productGrid.innerHTML = '<div class="empty-cart-message" style="grid-column:1/-1;">Aucun parfum disponible pour le moment.</div>';
+          return;
+        }
+
+        productGrid.style.display = 'grid';
         let html = '';
+        
         products.forEach(p => {
+          // Utiliser l'image si elle existe, sinon l'icône
+          const imageHtml = p.image 
+            ? `<img src="${p.image}" alt="${p.name}">` 
+            : `<i class="fas ${p.icon || 'fa-leaf'}"></i>`;
+
           html += `
             <div class="product-card" data-product-id="${p.id}">
               <div class="product-img">
-                <i class="fas ${p.icon}"></i>
+                ${imageHtml}
               </div>
               <div class="product-title">${p.name}</div>
               <div class="product-brand">${p.brand}</div>
-              <div class="product-price">${p.price.toFixed(2).replace('.', ',')}</div>
-              <button class="add-to-cart" data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-icon="${p.icon}">Ajouter au panier</button>
+              <div class="product-price">${parseFloat(p.price).toFixed(2).replace('.', ',')}</div>
+              <button class="add-to-cart" data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-icon="${p.icon || 'fa-leaf'}" data-image="${p.image || ''}">Ajouter au panier</button>
             </div>
           `;
         });
+        
         productGrid.innerHTML = html;
       }
 
-      // mettre à jour le compteur du panier
+      // Mettre à jour le compteur du panier
       function updateCartCount() {
         const totalItems = cart.reduce((acc, item) => acc + (item.quantity || 1), 0);
         cartCountSpan.textContent = totalItems;
       }
 
-      // afficher les articles dans le panier latéral
+      // Afficher les articles dans le panier
       function renderCart() {
         if (cart.length === 0) {
           cartItemsContainer.innerHTML = '<div class="empty-cart-message">Votre panier est vide.</div>';
@@ -627,12 +635,16 @@
 
         let itemsHtml = '';
         let total = 0;
+        
         cart.forEach(item => {
           const subtotal = item.price * (item.quantity || 1);
           total += subtotal;
+          
           itemsHtml += `
             <div class="cart-item" data-id="${item.id}">
-              <div class="cart-item-icon"><i class="fas ${item.icon}"></i></div>
+              <div class="cart-item-icon">
+                <i class="fas ${item.icon || 'fa-leaf'}"></i>
+              </div>
               <div class="cart-item-info">
                 <div class="cart-item-title">${item.name}</div>
                 <div class="cart-item-price">${formatPrice(item.price)} ${item.quantity > 1 ? ' (x' + item.quantity + ')' : ''}</div>
@@ -641,40 +653,38 @@
             </div>
           `;
         });
+        
         cartItemsContainer.innerHTML = itemsHtml;
         cartTotalSpan.textContent = formatPrice(total);
       }
 
-      // sauvegarder le panier dans localStorage et mettre à jour l'UI
-      function saveAndUpdate() {
+      // Sauvegarder le panier (localStorage uniquement - panier utilisateur)
+      function saveCart() {
         localStorage.setItem('sillage_cart', JSON.stringify(cart));
         updateCartCount();
         renderCart();
       }
 
-      // ajouter un produit au panier
-      function addToCart(id, name, price, icon) {
+      // Ajouter au panier
+      function addToCart(id, name, price, icon, image) {
         const existing = cart.find(item => item.id === id);
         if (existing) {
           existing.quantity = (existing.quantity || 1) + 1;
         } else {
-          cart.push({ id, name, price, icon, quantity: 1 });
+          cart.push({ id, name, price, icon, image, quantity: 1 });
         }
-        saveAndUpdate();
+        saveCart();
         showToast('✨ ' + name + ' ajouté');
       }
 
-      // retirer un produit du panier
+      // Retirer du panier
       function removeFromCart(id) {
         cart = cart.filter(item => item.id !== id);
-        saveAndUpdate();
-        if (cart.length === 0) {
-          // le panier reste ouvert
-        }
+        saveCart();
         showToast('🗑️ Article retiré');
       }
 
-      // message toast
+      // Toast
       function showToast(msg) {
         toast.textContent = msg;
         toast.classList.add('show');
@@ -683,7 +693,7 @@
         }, 2000);
       }
 
-      // ouvrir/fermer le panier
+      // Ouvrir/fermer le panier
       function openCart() {
         cartSidebar.classList.add('open');
         cartOverlay.classList.add('active');
@@ -695,18 +705,19 @@
       }
 
       // ---------- GESTIONNAIRES D'ÉVÉNEMENTS ----------
-      // grille produit : ajout au panier
       productGrid.addEventListener('click', (e) => {
         const btn = e.target.closest('.add-to-cart');
         if (!btn) return;
+        
         const id = btn.dataset.id;
         const name = btn.dataset.name;
         const price = parseFloat(btn.dataset.price);
         const icon = btn.dataset.icon;
-        addToCart(id, name, price, icon);
+        const image = btn.dataset.image;
+        
+        addToCart(id, name, price, icon, image);
       });
 
-      // suppression d'un article (délégation via le conteneur)
       cartItemsContainer.addEventListener('click', (e) => {
         const removeBtn = e.target.closest('.cart-item-remove');
         if (removeBtn) {
@@ -715,7 +726,6 @@
         }
       });
 
-      // ouvrir le panier au clic sur l'icône
       cartToggle.addEventListener('click', (e) => {
         e.preventDefault();
         openCart();
@@ -724,20 +734,17 @@
       closeCartBtn.addEventListener('click', closeCart);
       cartOverlay.addEventListener('click', closeCart);
 
-      // bouton de paiement (simple alerte pour la démo)
       checkoutBtn.addEventListener('click', () => {
         if (cart.length === 0) {
           showToast('🛒 Votre panier est vide');
         } else {
           alert('Redirection vers la page de paiement (démonstration) – Merci pour votre achat !');
-          // optionnel : vider le panier ?
-          // cart = []; saveAndUpdate(); closeCart();
         }
       });
 
       // ---------- INITIALISATION ----------
-      renderProducts();
-      saveAndUpdate();  // met à jour compteur et panier depuis localStorage
+      loadProducts();
+      saveCart(); // Initialise l'affichage du panier
     })();
   </script>
 </body>

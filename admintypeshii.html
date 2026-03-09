@@ -6,7 +6,10 @@
   <title>Sillage · console administrateur</title>
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Supabase client library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
+    /* Gardez les mêmes styles que précédemment */
     * {
       margin: 0;
       padding: 0;
@@ -71,7 +74,6 @@
       align-items: start;
     }
 
-    /* ---------- FORMULAIRE ---------- */
     .form-panel {
       background: #fcf9f6;
       padding: 1.8rem 2rem;
@@ -219,7 +221,6 @@
       transform: scale(0.98);
     }
 
-    /* ---------- LISTE DES PRODUITS (admin) ---------- */
     .list-panel {
       background: #fcf9f6;
       padding: 1.8rem 1.5rem;
@@ -315,7 +316,6 @@
       padding: 2rem 0;
     }
 
-    /* page de verrouillage */
     .gate {
       background: #fcf9f6;
       border-radius: 48px;
@@ -368,7 +368,6 @@
       margin: 1.5rem 0;
     }
 
-    /* toast */
     .admin-toast {
       position: fixed;
       bottom: 30px; left: 30px;
@@ -386,11 +385,17 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    .loading-spinner {
+      text-align: center;
+      padding: 2rem;
+      color: #b6987a;
+    }
   </style>
 </head>
 <body>
 <div class="admin-wrapper" id="adminWrapper">
-  <!-- PAGE DE VERROUILLAGE (MOT DE PASSE SIMPLE) -->
+  <!-- PAGE DE VERROUILLAGE -->
   <div id="gatePanel" class="gate">
     <i class="fas fa-lock" style="font-size: 2.8rem; color: #b6987a; margin-bottom: 1rem;"></i>
     <h2>Espace propriétaire</h2>
@@ -402,7 +407,7 @@
     <a href="#" id="backToShopLink" class="back-link"><i class="fas fa-arrow-left"></i> retour à la boutique</a>
   </div>
 
-  <!-- PANEL ADMIN (caché par défaut) -->
+  <!-- PANEL ADMIN -->
   <div id="adminPanel" style="display: none;">
     <h1>
       <i class="fas fa-pen-nib"></i> Sillage · Gérer les produits
@@ -426,7 +431,7 @@
           <input type="number" id="productPrice" step="0.01" min="0" value="89.00">
         </div>
 
-        <!-- Sélection d'icône (Font Awesome, utilisé si pas d'image) -->
+        <!-- Sélection d'icône -->
         <div class="input-group">
           <label>Icône (si pas d'image)</label>
           <div class="icon-selector" id="iconSelector">
@@ -439,7 +444,7 @@
           </div>
         </div>
 
-        <!-- Téléchargement d'image (remplace l'icône) -->
+        <!-- Téléchargement d'image -->
         <div class="input-group">
           <label>Image du produit (optionnelle)</label>
           <div class="file-input-area" id="fileInputArea">
@@ -456,16 +461,16 @@
 
         <button class="btn-primary" id="addProductBtn"><i class="fas fa-gem"></i> Enregistrer le produit</button>
         <hr>
-        <p style="font-size:0.75rem; color:#aa9b8e;"><i class="fas fa-info-circle"></i> Les images sont stockées en Base64 dans le navigateur (localStorage). Idéal pour la démo.</p>
+        <p style="font-size:0.75rem; color:#aa9b8e;"><i class="fas fa-info-circle"></i> Les images sont stockées en Base64 dans la base de données.</p>
       </div>
 
-      <!-- LISTE DES PRODUITS EXISTANTS (admin) -->
+      <!-- LISTE DES PRODUITS -->
       <div class="list-panel">
         <h2><i class="fas fa-box-open" style="margin-right: 10px;"></i>Parfums existants</h2>
-        <div id="adminProductListContainer">
-          <!-- liste dynamique depuis localStorage -->
-          <div class="empty-list">Chargement des produits...</div>
+        <div id="loadingAdmin" class="loading-spinner" style="display: none;">
+          <i class="fas fa-spinner fa-spin"></i> Chargement...
         </div>
+        <div id="adminProductListContainer"></div>
       </div>
     </div>
     <div style="margin-top: 1.5rem; text-align: right;">
@@ -474,13 +479,21 @@
   </div>
 </div>
 
-<!-- toast de notification -->
+<!-- toast -->
 <div id="adminToast" class="admin-toast">✨ Enregistré</div>
 
 <script>
   (function() {
-    // ---------- PROTECTION PAR MOT DE PASSE SIMPLE (démo) ----------
-    const GATE_PASSWORD = 'sillage'; // en clair pour la démo
+    // ---------- CONFIGURATION SUPABASE ----------
+    // REMPLACEZ CES VALEURS PAR VOS PROPRES CLÉS SUPABASE
+    const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
+    
+    // Initialiser le client Supabase
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+    // ---------- PROTECTION PAR MOT DE PASSE ----------
+    const GATE_PASSWORD = 'sillage';
     const gatePanel = document.getElementById('gatePanel');
     const adminPanel = document.getElementById('adminPanel');
     const unlockBtn = document.getElementById('unlockBtn');
@@ -488,129 +501,17 @@
     const backLink = document.getElementById('backToShopLink');
     const logoutBtn = document.getElementById('logoutBtn');
     const loggedInSpan = document.getElementById('loggedInAs');
+    const loadingAdmin = document.getElementById('loadingAdmin');
+    const adminListContainer = document.getElementById('adminProductListContainer');
 
-    // déverrouiller l'admin
-    function unlockAdmin() {
-      gatePanel.style.display = 'none';
-      adminPanel.style.display = 'block';
-      loggedInSpan.textContent = '⚡ propriétaire · ' + new Date().toLocaleDateString('fr-FR');
-      // charger les produits une fois connecté
-      loadAdminProducts();
-    }
-
-    unlockBtn.addEventListener('click', () => {
-      if (passwordInput.value === GATE_PASSWORD) {
-        unlockAdmin();
-      } else {
-        alert('❌ Mot de passe incorrect (indice: sillage)');
-      }
-    });
-    passwordInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') unlockBtn.click(); });
-
-    // retour à la boutique (lien)
-    backLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.location.href = '#';  // En conditions réelles: 'index.html' ou la boutique
-      alert('Dans la démo, la boutique s\'afficherait ici. Retour à la console admin ?');
-    });
-
-    logoutBtn.addEventListener('click', () => {
-      adminPanel.style.display = 'none';
-      gatePanel.style.display = 'block';
-      passwordInput.value = '';
-    });
-
-    // ---------- STOCKAGE DES PRODUITS (partagé avec la boutique) ----------
-    const STORAGE_KEY = 'sillage_catalog';
-
-    // produits par défaut si le stockage est vide
-    const defaultProducts = [
-      { id: 'p1', name: 'Bois d’Argent', brand: 'PHYSALIS', price: 89.00, icon: 'fa-leaf', image: null },
-      { id: 'p2', name: 'Iris Cendré', brand: 'NAEVE', price: 120.00, icon: 'fa-plant-wilt', image: null },
-      { id: 'p3', name: 'Cuir Balsamique', brand: 'ATELIER D’OMBRE', price: 150.00, icon: 'fa-tree', image: null },
-      { id: 'p4', name: 'Vanille d’Orléans', brand: 'JARDIN RÊVÉ', price: 76.00, icon: 'fa-flower', image: null },
-      { id: 'p5', name: 'Encens Suave', brand: 'FUMÉE', price: 204.00, icon: 'fa-cloud-moon', image: null },
-      { id: 'p6', name: 'Eau de Néroli', brand: 'LA SERENA', price: 68.00, icon: 'fa-sun-plant-wilt', image: null }
-    ];
-
-    function loadCatalog() {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        try {
-          return JSON.parse(stored);
-        } catch (e) {
-          return defaultProducts;
-        }
-      } else {
-        // premier accès — stocker les défauts
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultProducts));
-        return defaultProducts;
-      }
-    }
-
-    function saveCatalog(catalog) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(catalog));
-    }
-
-    // générer un identifiant court (pour les nouveaux produits)
-    function generateId() { return 'prod_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6); }
-
-    // ---------- AFFICHAGE DE LA LISTE ADMIN ----------
-    function loadAdminProducts() {
-      const catalog = loadCatalog();
-      const container = document.getElementById('adminProductListContainer');
-      if (!container) return;
-      if (catalog.length === 0) {
-        container.innerHTML = '<div class="empty-list">✨ Aucun parfum. Ajoutez le premier.</div>';
-        return;
-      }
-      let html = '';
-      catalog.forEach(prod => {
-        const priceStr = prod.price.toFixed(2).replace('.', ',');
-        // affichage image ou icône
-        const iconOrImage = prod.image 
-          ? `<img src="${prod.image}" alt="${prod.name}" style="width:100%; height:100%; object-fit:cover;">` 
-          : `<i class="fas ${prod.icon || 'fa-leaf'}"></i>`;
-        html += `
-          <div class="admin-product-item" data-id="${prod.id}">
-            <div class="admin-product-img">${iconOrImage}</div>
-            <div class="admin-product-info">
-              <div class="admin-product-title">${prod.name}</div>
-              <div class="admin-product-brand">${prod.brand}</div>
-              <div class="admin-product-price">${priceStr}</div>
-            </div>
-            <button class="delete-btn" data-id="${prod.id}" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
-          </div>
-        `;
-      });
-      container.innerHTML = html;
-    }
-
-    // afficher une notification toast
-    function showAdminToast(msg) {
-      const toast = document.getElementById('adminToast');
-      toast.textContent = msg;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2000);
-    }
-
-    // ---------- LOGIQUE D'AJOUT DE PRODUIT ----------
+    // Éléments du formulaire
     const productName = document.getElementById('productName');
     const productBrand = document.getElementById('productBrand');
     const productPrice = document.getElementById('productPrice');
     const iconOptions = document.querySelectorAll('.icon-option');
-    let selectedIcon = 'fa-leaf';   // par défaut
+    let selectedIcon = 'fa-leaf';
 
-    // sélecteur d'icônes
-    iconOptions.forEach(opt => {
-      opt.addEventListener('click', () => {
-        iconOptions.forEach(o => o.classList.remove('selected'));
-        opt.classList.add('selected');
-        selectedIcon = opt.dataset.icon;
-      });
-    });
-
-    // Téléchargement d'image et aperçu
+    // Upload d'image
     const fileInput = document.getElementById('imageUpload');
     const fileArea = document.getElementById('fileInputArea');
     const imagePreview = document.getElementById('imagePreview');
@@ -619,16 +520,178 @@
     const clearPreview = document.getElementById('clearPreview');
     let uploadedImageBase64 = null;
 
+    // ---------- FONCTIONS ----------
+    function showAdminToast(msg) {
+      const toast = document.getElementById('adminToast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    // Charger les produits depuis Supabase
+    async function loadAdminProducts() {
+      try {
+        adminListContainer.innerHTML = '';
+        loadingAdmin.style.display = 'block';
+
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .order('created_at', { ascending: true });
+
+        if (error) throw error;
+
+        loadingAdmin.style.display = 'none';
+        
+        if (!data || data.length === 0) {
+          adminListContainer.innerHTML = '<div class="empty-list">✨ Aucun parfum. Ajoutez le premier.</div>';
+          return;
+        }
+
+        let html = '';
+        data.forEach(prod => {
+          const priceStr = parseFloat(prod.price).toFixed(2).replace('.', ',');
+          const iconOrImage = prod.image 
+            ? `<img src="${prod.image}" alt="${prod.name}">` 
+            : `<i class="fas ${prod.icon || 'fa-leaf'}"></i>`;
+
+          html += `
+            <div class="admin-product-item" data-id="${prod.id}">
+              <div class="admin-product-img">${iconOrImage}</div>
+              <div class="admin-product-info">
+                <div class="admin-product-title">${prod.name}</div>
+                <div class="admin-product-brand">${prod.brand}</div>
+                <div class="admin-product-price">${priceStr}</div>
+              </div>
+              <button class="delete-btn" data-id="${prod.id}" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
+            </div>
+          `;
+        });
+        adminListContainer.innerHTML = html;
+      } catch (error) {
+        console.error('Erreur chargement:', error);
+        loadingAdmin.style.display = 'none';
+        adminListContainer.innerHTML = '<div class="empty-list">❌ Erreur de chargement</div>';
+        showAdminToast('❌ Erreur chargement produits');
+      }
+    }
+
+    // Ajouter un produit
+    async function addProduct() {
+      const name = productName.value.trim();
+      const brand = productBrand.value.trim();
+      const price = parseFloat(productPrice.value);
+
+      if (!name || !brand || isNaN(price) || price <= 0) {
+        showAdminToast('❌ Nom, marque et prix valides requis');
+        return;
+      }
+
+      try {
+        const newProduct = {
+          name: name,
+          brand: brand,
+          price: price,
+          icon: selectedIcon,
+          image: uploadedImageBase64 || null
+        };
+
+        const { error } = await supabase
+          .from('products')
+          .insert([newProduct]);
+
+        if (error) throw error;
+
+        // Réinitialiser le formulaire
+        productName.value = '';
+        productBrand.value = '';
+        productPrice.value = '89.00';
+        
+        iconOptions.forEach(o => o.classList.remove('selected'));
+        document.querySelector('.icon-option[data-icon="fa-leaf"]').classList.add('selected');
+        selectedIcon = 'fa-leaf';
+        
+        uploadedImageBase64 = null;
+        imagePreview.style.display = 'none';
+        fileInput.value = '';
+
+        showAdminToast('✅ Produit ajouté');
+        loadAdminProducts(); // Recharger la liste
+      } catch (error) {
+        console.error('Erreur ajout:', error);
+        showAdminToast('❌ Erreur lors de l\'ajout');
+      }
+    }
+
+    // Supprimer un produit
+    async function deleteProduct(id) {
+      if (!confirm('Supprimer ce produit ?')) return;
+
+      try {
+        const { error } = await supabase
+          .from('products')
+          .delete()
+          .match({ id });
+
+        if (error) throw error;
+
+        showAdminToast('🗑️ Produit supprimé');
+        loadAdminProducts();
+      } catch (error) {
+        console.error('Erreur suppression:', error);
+        showAdminToast('❌ Erreur lors de la suppression');
+      }
+    }
+
+    // ---------- GESTIONNAIRES D'ÉVÉNEMENTS ----------
+    unlockBtn.addEventListener('click', () => {
+      if (passwordInput.value === GATE_PASSWORD) {
+        gatePanel.style.display = 'none';
+        adminPanel.style.display = 'block';
+        loggedInSpan.textContent = '⚡ propriétaire · ' + new Date().toLocaleDateString('fr-FR');
+        loadAdminProducts();
+      } else {
+        alert('❌ Mot de passe incorrect');
+      }
+    });
+
+    passwordInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') unlockBtn.click();
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      adminPanel.style.display = 'none';
+      gatePanel.style.display = 'block';
+      passwordInput.value = '';
+    });
+
+    backLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = '#'; // À remplacer par l'URL de votre boutique
+      alert('Retour à la boutique (à configurer)');
+    });
+
+    // Sélecteur d'icônes
+    iconOptions.forEach(opt => {
+      opt.addEventListener('click', () => {
+        iconOptions.forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        selectedIcon = opt.dataset.icon;
+      });
+    });
+
+    // Upload d'image
     fileArea.addEventListener('click', () => fileInput.click());
+    
     fileInput.addEventListener('change', function(e) {
       const file = e.target.files[0];
-      if (!file) return;
-      if (!file.type.startsWith('image/')) return;
+      if (!file || !file.type.startsWith('image/')) return;
+
       const reader = new FileReader();
       reader.onload = (ev) => {
         uploadedImageBase64 = ev.target.result;
         previewImg.src = ev.target.result;
-        previewFilename.textContent = file.name.length > 20 ? file.name.substr(0,18)+'…' : file.name;
+        previewFilename.textContent = file.name.length > 20 ? file.name.substr(0, 18) + '…' : file.name;
         imagePreview.style.display = 'flex';
       };
       reader.readAsDataURL(file);
@@ -640,56 +703,17 @@
       fileInput.value = '';
     });
 
-    // bouton d'ajout
-    document.getElementById('addProductBtn').addEventListener('click', () => {
-      const name = productName.value.trim();
-      const brand = productBrand.value.trim();
-      const price = parseFloat(productPrice.value);
-      if (!name || !brand || isNaN(price) || price <= 0) {
-        showAdminToast('❌ Nom, marque et prix valides requis');
-        return;
-      }
+    // Bouton d'ajout
+    document.getElementById('addProductBtn').addEventListener('click', addProduct);
 
-      const catalog = loadCatalog();
-      const newProduct = {
-        id: generateId(),
-        name: name,
-        brand: brand,
-        price: price,
-        icon: selectedIcon,
-        image: uploadedImageBase64 || null
-      };
-      catalog.push(newProduct);
-      saveCatalog(catalog);
-      // réinitialiser le formulaire
-      productName.value = '';
-      productBrand.value = '';
-      productPrice.value = '89.00';
-      // remettre l'icône par défaut
-      iconOptions.forEach(o => o.classList.remove('selected'));
-      document.querySelector('.icon-option[data-icon="fa-leaf"]').classList.add('selected');
-      selectedIcon = 'fa-leaf';
-      // effacer l'image
-      uploadedImageBase64 = null;
-      imagePreview.style.display = 'none';
-      fileInput.value = '';
-      showAdminToast('✅ Produit enregistré');
-      loadAdminProducts(); // rafraîchir la liste
-    });
-
-    // SUPPRIMER un produit (délégation)
-    document.getElementById('adminProductListContainer').addEventListener('click', (e) => {
+    // Suppression (délégation)
+    adminListContainer.addEventListener('click', (e) => {
       const deleteBtn = e.target.closest('.delete-btn');
-      if (!deleteBtn) return;
-      const id = deleteBtn.dataset.id;
-      let catalog = loadCatalog();
-      catalog = catalog.filter(p => p.id !== id);
-      saveCatalog(catalog);
-      loadAdminProducts();
-      showAdminToast('🗑️ Produit supprimé');
+      if (deleteBtn) {
+        const id = deleteBtn.dataset.id;
+        deleteProduct(id);
+      }
     });
-
-    // si jamais on arrive déjà déverrouillé (pas le cas), mais on prévoit
   })();
 </script>
 </body>
