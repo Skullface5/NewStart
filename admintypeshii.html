@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sillage · admin console</title>
+  <title>Sillage · console administrateur</title>
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
@@ -71,7 +71,7 @@
       align-items: start;
     }
 
-    /* ---------- FORM PANEL ---------- */
+    /* ---------- FORMULAIRE ---------- */
     .form-panel {
       background: #fcf9f6;
       padding: 1.8rem 2rem;
@@ -219,7 +219,7 @@
       transform: scale(0.98);
     }
 
-    /* ---------- PRODUCT LIST (admin) ---------- */
+    /* ---------- LISTE DES PRODUITS (admin) ---------- */
     .list-panel {
       background: #fcf9f6;
       padding: 1.8rem 1.5rem;
@@ -315,7 +315,7 @@
       padding: 2rem 0;
     }
 
-    /* password gate */
+    /* page de verrouillage */
     .gate {
       background: #fcf9f6;
       border-radius: 48px;
@@ -390,97 +390,97 @@
 </head>
 <body>
 <div class="admin-wrapper" id="adminWrapper">
-  <!-- GATE (SIMPLE PASSWORD) -->
+  <!-- PAGE DE VERROUILLAGE (MOT DE PASSE SIMPLE) -->
   <div id="gatePanel" class="gate">
     <i class="fas fa-lock" style="font-size: 2.8rem; color: #b6987a; margin-bottom: 1rem;"></i>
-    <h2>Bereich für Inhaber</h2>
+    <h2>Espace propriétaire</h2>
     <div class="password-input">
-      <input type="password" id="passwordInput" placeholder="Passwort" value="">
+      <input type="password" id="passwordInput" placeholder="Mot de passe" value="">
       <button id="unlockBtn"><i class="fas fa-arrow-right"></i></button>
     </div>
-    <div class="hint">🔐 Hinweis: das Passwort lautet <strong>sillage</strong> (demo)</div>
-    <a href="#" id="backToShopLink" class="back-link"><i class="fas fa-arrow-left"></i> zurück zum Shop</a>
+    <div class="hint">🔐 Indice : le mot de passe est <strong>sillage</strong> (démo)</div>
+    <a href="#" id="backToShopLink" class="back-link"><i class="fas fa-arrow-left"></i> retour à la boutique</a>
   </div>
 
-  <!-- ADMIN PANEL (hidden by default) -->
+  <!-- PANEL ADMIN (caché par défaut) -->
   <div id="adminPanel" style="display: none;">
     <h1>
-      <i class="fas fa-pen-nib"></i> Sillage · Produkte verwalten
+      <i class="fas fa-pen-nib"></i> Sillage · Gérer les produits
       <span style="flex:1; text-align: right; font-size: 0.8rem; opacity:0.7;" id="loggedInAs"></span>
     </h1>
 
     <div class="two-column">
-      <!-- ADD PRODUCT FORM -->
+      <!-- FORMULAIRE AJOUT PRODUIT -->
       <div class="form-panel">
-        <h2><i class="fas fa-plus-circle" style="margin-right: 10px;"></i>neuen Duft einpflegen</h2>
+        <h2><i class="fas fa-plus-circle" style="margin-right: 10px;"></i>Ajouter un parfum</h2>
         <div class="input-group">
-          <label>Produktname</label>
-          <input type="text" id="productName" placeholder="z.B. Bois d'Argent" autocomplete="off">
+          <label>Nom du produit</label>
+          <input type="text" id="productName" placeholder="ex. Bois d'Argent" autocomplete="off">
         </div>
         <div class="input-group">
-          <label>Marke / Haus</label>
+          <label>Marque / Maison</label>
           <input type="text" id="productBrand" placeholder="PHYSALIS / NAEVE ...">
         </div>
         <div class="input-group">
-          <label>Preis (€)</label>
+          <label>Prix (€)</label>
           <input type="number" id="productPrice" step="0.01" min="0" value="89.00">
         </div>
 
-        <!-- Icon selection (Font Awesome fallback) -->
+        <!-- Sélection d'icône (Font Awesome, utilisé si pas d'image) -->
         <div class="input-group">
-          <label>Icon (falls kein Bild)</label>
+          <label>Icône (si pas d'image)</label>
           <div class="icon-selector" id="iconSelector">
-            <div class="icon-option selected" data-icon="fa-leaf"><i class="fas fa-leaf"></i> Blatt</div>
-            <div class="icon-option" data-icon="fa-plant-wilt"><i class="fas fa-plant-wilt"></i> Pflanze</div>
-            <div class="icon-option" data-icon="fa-tree"><i class="fas fa-tree"></i> Holz</div>
-            <div class="icon-option" data-icon="fa-flower"><i class="fas fa-flower"></i> Blüte</div>
-            <div class="icon-option" data-icon="fa-cloud-moon"><i class="fas fa-cloud-moon"></i> Rauch</div>
-            <div class="icon-option" data-icon="fa-crown"><i class="fas fa-crown"></i> König</div>
+            <div class="icon-option selected" data-icon="fa-leaf"><i class="fas fa-leaf"></i> Feuille</div>
+            <div class="icon-option" data-icon="fa-plant-wilt"><i class="fas fa-plant-wilt"></i> Plante</div>
+            <div class="icon-option" data-icon="fa-tree"><i class="fas fa-tree"></i> Bois</div>
+            <div class="icon-option" data-icon="fa-flower"><i class="fas fa-flower"></i> Fleur</div>
+            <div class="icon-option" data-icon="fa-cloud-moon"><i class="fas fa-cloud-moon"></i> Fumée</div>
+            <div class="icon-option" data-icon="fa-crown"><i class="fas fa-crown"></i> Prestige</div>
           </div>
         </div>
 
-        <!-- Image upload (overrides icon) -->
+        <!-- Téléchargement d'image (remplace l'icône) -->
         <div class="input-group">
-          <label>Produktbild (optional)</label>
+          <label>Image du produit (optionnelle)</label>
           <div class="file-input-area" id="fileInputArea">
             <i class="fas fa-cloud-upload-alt"></i>
-            <p>Bild antippen oder hier ablegen</p>
+            <p>Cliquez pour sélectionner une image</p>
             <input type="file" id="imageUpload" accept="image/*" style="display: none;">
           </div>
           <div id="imagePreview" style="display: none;">
-            <img id="previewImg" src="#" alt="preview">
+            <img id="previewImg" src="#" alt="aperçu">
             <span id="previewFilename"></span>
             <i class="fas fa-times" id="clearPreview" style="margin-left: auto; cursor:pointer; color:#b6987a;"></i>
           </div>
         </div>
 
-        <button class="btn-primary" id="addProductBtn"><i class="fas fa-gem"></i> Produkt speichern</button>
+        <button class="btn-primary" id="addProductBtn"><i class="fas fa-gem"></i> Enregistrer le produit</button>
         <hr>
-        <p style="font-size:0.75rem; color:#aa9b8e;"><i class="fas fa-info-circle"></i> Bilder werden als Base64 im Browser gespeichert (localStorage). Für Demo geeignet.</p>
+        <p style="font-size:0.75rem; color:#aa9b8e;"><i class="fas fa-info-circle"></i> Les images sont stockées en Base64 dans le navigateur (localStorage). Idéal pour la démo.</p>
       </div>
 
-      <!-- CURRENT PRODUCTS LIST (admin) -->
+      <!-- LISTE DES PRODUITS EXISTANTS (admin) -->
       <div class="list-panel">
-        <h2><i class="fas fa-box-open" style="margin-right: 10px;"></i>vorhandene Düfte</h2>
+        <h2><i class="fas fa-box-open" style="margin-right: 10px;"></i>Parfums existants</h2>
         <div id="adminProductListContainer">
-          <!-- dynamic list from localStorage -->
-          <div class="empty-list">Lade Produkte ...</div>
+          <!-- liste dynamique depuis localStorage -->
+          <div class="empty-list">Chargement des produits...</div>
         </div>
       </div>
     </div>
     <div style="margin-top: 1.5rem; text-align: right;">
-      <button id="logoutBtn" style="background:none; border:none; color:#b6987a; cursor:pointer; text-decoration:underline;"><i class="fas fa-sign-out-alt"></i> abmelden</button>
+      <button id="logoutBtn" style="background:none; border:none; color:#b6987a; cursor:pointer; text-decoration:underline;"><i class="fas fa-sign-out-alt"></i> se déconnecter</button>
     </div>
   </div>
 </div>
 
-<!-- toast -->
-<div id="adminToast" class="admin-toast">✨ gespeichert</div>
+<!-- toast de notification -->
+<div id="adminToast" class="admin-toast">✨ Enregistré</div>
 
 <script>
   (function() {
-    // ---------- SIMPLE PASSWORD PROTECTION (demo only) ----------
-    const GATE_PASSWORD = 'sillage'; // plain for demo
+    // ---------- PROTECTION PAR MOT DE PASSE SIMPLE (démo) ----------
+    const GATE_PASSWORD = 'sillage'; // en clair pour la démo
     const gatePanel = document.getElementById('gatePanel');
     const adminPanel = document.getElementById('adminPanel');
     const unlockBtn = document.getElementById('unlockBtn');
@@ -489,12 +489,12 @@
     const logoutBtn = document.getElementById('logoutBtn');
     const loggedInSpan = document.getElementById('loggedInAs');
 
-    // unlock handler
+    // déverrouiller l'admin
     function unlockAdmin() {
       gatePanel.style.display = 'none';
       adminPanel.style.display = 'block';
-      loggedInSpan.textContent = '⚡ owner · ' + new Date().toLocaleDateString('de-DE');
-      // load products when entering admin
+      loggedInSpan.textContent = '⚡ propriétaire · ' + new Date().toLocaleDateString('fr-FR');
+      // charger les produits une fois connecté
       loadAdminProducts();
     }
 
@@ -502,16 +502,16 @@
       if (passwordInput.value === GATE_PASSWORD) {
         unlockAdmin();
       } else {
-        alert('❌ falsches Passwort (Tipp: sillage)');
+        alert('❌ Mot de passe incorrect (indice: sillage)');
       }
     });
     passwordInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') unlockBtn.click(); });
 
-    // back to shop link (replace with actual shop URL)
+    // retour à la boutique (lien)
     backLink.addEventListener('click', (e) => {
       e.preventDefault();
-      window.location.href = '#';  // In real use: 'index.html' or shop page
-      alert('In der Demo würde hier der Shop erscheinen. Zurück zur Admin-Seite?');
+      window.location.href = '#';  // En conditions réelles: 'index.html' ou la boutique
+      alert('Dans la démo, la boutique s\'afficherait ici. Retour à la console admin ?');
     });
 
     logoutBtn.addEventListener('click', () => {
@@ -520,10 +520,10 @@
       passwordInput.value = '';
     });
 
-    // ---------- PRODUCT STORAGE (shared with shop ideally) ----------
+    // ---------- STOCKAGE DES PRODUITS (partagé avec la boutique) ----------
     const STORAGE_KEY = 'sillage_catalog';
 
-    // default products if storage empty
+    // produits par défaut si le stockage est vide
     const defaultProducts = [
       { id: 'p1', name: 'Bois d’Argent', brand: 'PHYSALIS', price: 89.00, icon: 'fa-leaf', image: null },
       { id: 'p2', name: 'Iris Cendré', brand: 'NAEVE', price: 120.00, icon: 'fa-plant-wilt', image: null },
@@ -542,7 +542,7 @@
           return defaultProducts;
         }
       } else {
-        // first visit — store defaults
+        // premier accès — stocker les défauts
         localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultProducts));
         return defaultProducts;
       }
@@ -552,22 +552,22 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(catalog));
     }
 
-    // generate short id (for new products)
+    // générer un identifiant court (pour les nouveaux produits)
     function generateId() { return 'prod_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6); }
 
-    // ---------- ADMIN UI RENDER ----------
+    // ---------- AFFICHAGE DE LA LISTE ADMIN ----------
     function loadAdminProducts() {
       const catalog = loadCatalog();
       const container = document.getElementById('adminProductListContainer');
       if (!container) return;
       if (catalog.length === 0) {
-        container.innerHTML = '<div class="empty-list">✨ noch keine Düfte. Füge den ersten hinzu.</div>';
+        container.innerHTML = '<div class="empty-list">✨ Aucun parfum. Ajoutez le premier.</div>';
         return;
       }
       let html = '';
       catalog.forEach(prod => {
         const priceStr = prod.price.toFixed(2).replace('.', ',');
-        // decide show image or icon
+        // affichage image ou icône
         const iconOrImage = prod.image 
           ? `<img src="${prod.image}" alt="${prod.name}" style="width:100%; height:100%; object-fit:cover;">` 
           : `<i class="fas ${prod.icon || 'fa-leaf'}"></i>`;
@@ -579,14 +579,14 @@
               <div class="admin-product-brand">${prod.brand}</div>
               <div class="admin-product-price">${priceStr}</div>
             </div>
-            <button class="delete-btn" data-id="${prod.id}" title="Produkt löschen"><i class="fas fa-trash-alt"></i></button>
+            <button class="delete-btn" data-id="${prod.id}" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
           </div>
         `;
       });
       container.innerHTML = html;
     }
 
-    // show toast
+    // afficher une notification toast
     function showAdminToast(msg) {
       const toast = document.getElementById('adminToast');
       toast.textContent = msg;
@@ -594,14 +594,14 @@
       setTimeout(() => toast.classList.remove('show'), 2000);
     }
 
-    // ---------- ADD PRODUCT LOGIC ----------
+    // ---------- LOGIQUE D'AJOUT DE PRODUIT ----------
     const productName = document.getElementById('productName');
     const productBrand = document.getElementById('productBrand');
     const productPrice = document.getElementById('productPrice');
     const iconOptions = document.querySelectorAll('.icon-option');
-    let selectedIcon = 'fa-leaf';   // default
+    let selectedIcon = 'fa-leaf';   // par défaut
 
-    // icon selector highlight
+    // sélecteur d'icônes
     iconOptions.forEach(opt => {
       opt.addEventListener('click', () => {
         iconOptions.forEach(o => o.classList.remove('selected'));
@@ -610,7 +610,7 @@
       });
     });
 
-    // Image upload preview
+    // Téléchargement d'image et aperçu
     const fileInput = document.getElementById('imageUpload');
     const fileArea = document.getElementById('fileInputArea');
     const imagePreview = document.getElementById('imagePreview');
@@ -640,13 +640,13 @@
       fileInput.value = '';
     });
 
-    // add product
+    // bouton d'ajout
     document.getElementById('addProductBtn').addEventListener('click', () => {
       const name = productName.value.trim();
       const brand = productBrand.value.trim();
       const price = parseFloat(productPrice.value);
       if (!name || !brand || isNaN(price) || price <= 0) {
-        showAdminToast('❌ Bitte Name, Marke und gültigen Preis angeben');
+        showAdminToast('❌ Nom, marque et prix valides requis');
         return;
       }
 
@@ -657,27 +657,27 @@
         brand: brand,
         price: price,
         icon: selectedIcon,
-        image: uploadedImageBase64 || null   // store base64 image or null
+        image: uploadedImageBase64 || null
       };
       catalog.push(newProduct);
       saveCatalog(catalog);
-      // reset form
+      // réinitialiser le formulaire
       productName.value = '';
       productBrand.value = '';
       productPrice.value = '89.00';
-      // reset icon to default leaf
+      // remettre l'icône par défaut
       iconOptions.forEach(o => o.classList.remove('selected'));
       document.querySelector('.icon-option[data-icon="fa-leaf"]').classList.add('selected');
       selectedIcon = 'fa-leaf';
-      // clear image
+      // effacer l'image
       uploadedImageBase64 = null;
       imagePreview.style.display = 'none';
       fileInput.value = '';
-      showAdminToast('✅ Produkt gespeichert');
-      loadAdminProducts(); // refresh list
+      showAdminToast('✅ Produit enregistré');
+      loadAdminProducts(); // rafraîchir la liste
     });
 
-    // DELETE product (delegation)
+    // SUPPRIMER un produit (délégation)
     document.getElementById('adminProductListContainer').addEventListener('click', (e) => {
       const deleteBtn = e.target.closest('.delete-btn');
       if (!deleteBtn) return;
@@ -686,13 +686,10 @@
       catalog = catalog.filter(p => p.id !== id);
       saveCatalog(catalog);
       loadAdminProducts();
-      showAdminToast('🗑️ Produkt entfernt');
+      showAdminToast('🗑️ Produit supprimé');
     });
 
-    // initial if admin unlocked later, but we also call after unlock
-
-    // if somehow already unlocked (no, but just in case we load)
-    // but we only load after unlock.
+    // si jamais on arrive déjà déverrouillé (pas le cas), mais on prévoit
   })();
 </script>
 </body>
