@@ -366,29 +366,50 @@
             const password = document.getElementById('signupPassword').value;
             const confirm = document.getElementById('signupConfirmPassword').value;
 
+            // Check password length
+            if (password.length < 6) {
+                showMessage('❌ Le mot de passe doit contenir au moins 6 caractères', 'error');
+                return;
+            }
+
+            // Check passwords match
             if (password !== confirm) {
                 showMessage('❌ Les mots de passe ne correspondent pas', 'error');
                 return;
             }
 
+            // Show loading
             signupBtn.disabled = true;
             signupBtn.innerHTML = '<span class="loading-spinner"></span> Création...';
 
             try {
+                console.log('Attempting signup with:', email); // Debug log
+
                 const { data, error } = await supabaseClient.auth.signUp({
                     email: email,
-                    password: password
+                    password: password,
+                    options: {
+                        emailRedirectTo: window.location.origin + '/index.html'
+                    }
                 });
 
                 if (error) {
+                    console.error('Signup error details:', error); // Debug log
+
                     if (error.message.includes('already registered')) {
                         showMessage('❌ Cet email est déjà utilisé', 'error');
+                    } else if (error.message.includes('password')) {
+                        showMessage('❌ Mot de passe trop faible: ' + error.message, 'error');
                     } else {
                         showMessage('❌ ' + error.message, 'error');
                     }
+
                     signupBtn.disabled = false;
                     signupBtn.innerHTML = '<span>CRÉER MON COMPTE</span>';
+
                 } else {
+                    console.log('Signup success:', data); // Debug log
+
                     showMessage('✅ Compte créé! Bienvenue chez Sillage ✨', 'success');
 
                     document.getElementById('signupEmail').value = '';
@@ -403,8 +424,8 @@
                     }, 2000);
                 }
             } catch (err) {
-                console.error('Signup error:', err);
-                showMessage('❌ Une erreur est survenue', 'error');
+                console.error('Signup exception:', err);
+                showMessage('❌ Une erreur est survenue: ' + err.message, 'error');
                 signupBtn.disabled = false;
                 signupBtn.innerHTML = '<span>CRÉER MON COMPTE</span>';
             }
