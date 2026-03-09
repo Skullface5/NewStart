@@ -731,36 +731,35 @@
             }
         }
 
-        // Load orders
-        function loadOrders() {
-            // Load orders from database
-            async function loadOrders() {
-                try {
-                    // Show loading state
-                    ordersList.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Chargement...</div>';
+        // Load orders from database
+        async function loadOrders() {
+            try {
+                // Show loading state
+                ordersList.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Chargement de vos commandes...</div>';
 
-                    // Fetch real orders from Supabase
-                    const { data: orders, error } = await supabaseClient
-                        .from('orders')
-                        .select('*')
-                        .eq('user_id', currentUser.id)
-                        .order('created_at', { ascending: false });
+                // Fetch real orders from Supabase for this user
+                const { data: orders, error } = await supabaseClient
+                    .from('orders')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .order('created_at', { ascending: false });
 
-                    if (error) throw error;
+                if (error) throw error;
 
-                    // Store orders
-                    allOrders = orders || [];
+                // Store orders
+                allOrders = orders || [];
 
-                    // Update stats
-                    updateStats();
+                console.log('Orders loaded:', allOrders); // Check console
 
-                    // Display orders
-                    displayOrders('all');
+                // Update stats
+                updateStats();
 
-                } catch (error) {
-                    console.error('Error loading orders:', error);
-                    ordersList.innerHTML = '<div class="empty-orders">Erreur lors du chargement des commandes</div>';
-                }
+                // Display orders
+                displayOrders('all');
+
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                ordersList.innerHTML = '<div class="empty-orders">Erreur lors du chargement des commandes</div>';
             }
         }
 
