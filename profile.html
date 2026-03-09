@@ -852,9 +852,9 @@
     </div>
     ${order.status === 'pending' ? `
       <div style="margin-top: 15px; text-align: right;">
-        <button onclick="cancelOrder('${order.id}')" style="background: none; border: 1px solid #b34545; color: #b34545; padding: 8px 20px; border-radius: 30px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s;">
-          <i class="fas fa-times"></i> Annuler la commande
-        </button>
+        <button onclick="cancelOrder('${order.id}')" style="background: none; border: 1px solid #b34545; color: #b34545; padding: 8px 20px; border-radius: 30px; cursor: pointer; font-size: 0.9rem;">
+    <i class="fas fa-times"></i> Annuler la commande
+</button>
       </div>
     ` : ''}
   </div>
@@ -869,6 +869,13 @@
             if (!confirm('Êtes-vous sûr de vouloir annuler cette commande ?')) return;
 
             try {
+                // Show loading state on button
+                const button = event.target;
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Annulation...';
+                button.disabled = true;
+
+                // Update order status in database
                 const { error } = await supabaseClient
                     .from('orders')
                     .update({ status: 'cancelled' })
@@ -880,12 +887,12 @@
                 // Show success message
                 alert('✅ Commande annulée avec succès');
 
-                // Reload orders
-                loadOrders();
+                // Reload orders to reflect changes
+                await loadOrders();
 
             } catch (error) {
                 console.error('Error cancelling order:', error);
-                alert('❌ Erreur lors de l\'annulation');
+                alert('❌ Erreur lors de l\'annulation: ' + error.message);
             }
         };
 
