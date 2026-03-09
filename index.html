@@ -845,15 +845,12 @@
           // Add logout functionality when clicking email
           userEmailDisplay.onclick = () => {
             if (confirm('Se déconnecter?')) {
-              supabase.auth.signOut();
-              window.location.reload();
+              // Not logged in - show login link, hide email
+              authLink.style.display = 'block';
+              authLink.href = 'login146.html';
+              userEmailDisplay.style.display = 'none';
             }
           };
-        } else {
-          // Not logged in - show login link, hide email
-          authLink.style.display = 'block';
-          authLink.href = 'login146.html';
-          userEmailDisplay.style.display = 'none';
         }
       }
 
