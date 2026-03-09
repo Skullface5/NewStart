@@ -1169,6 +1169,60 @@
       saveCart();
     })();
   </script>
+
+  <script>
+    // Test email function
+    async function testEmailFunction() {
+      try {
+        console.log('📧 Sending test email...');
+
+        const res = await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/functions/v1/smart-responder', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_'
+          },
+          body: JSON.stringify({
+            order: {
+              id: 'TEST-' + Date.now(),
+              items: [{
+                name: 'Bois d\'Argent',
+                quantity: 1,
+                price: 89
+              }],
+              total: 89
+            },
+            userEmail: 'azmmeli146@gmail.com'
+          })
+        })
+
+        const data = await res.json()
+        console.log('✅ Result:', data)
+
+        // Show alert with result
+        if (data.success) {
+          alert('✅ Email sent! Check your inbox.');
+        } else {
+          alert('❌ Error: ' + (data.error || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('❌ Error:', error)
+        alert('❌ Failed: ' + error.message)
+      }
+    }
+  </script>
+
+
+  <!-- Add this temporary test button - you can remove it later -->
+  <div style="text-align: center; margin: 20px;">
+    <button onclick="testEmailFunction()"
+      style="background: #b6987a; color: white; border: none; padding: 10px 20px; border-radius: 30px; cursor: pointer;">
+      📧 Test Email Notification
+    </button>
+  </div>
+
+
+
 </body>
 
 </html>
