@@ -10,7 +10,6 @@
     <!-- Supabase client library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* Keep all your existing styles here */
         * {
             margin: 0;
             padding: 0;
@@ -26,6 +25,31 @@
             align-items: center;
             justify-content: center;
             padding: 1.5rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(182, 152, 122, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(182, 152, 122, 0.05) 0%, transparent 50%);
+            animation: backgroundPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes backgroundPulse {
+
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
         .auth-wrapper {
@@ -33,22 +57,64 @@
             width: 100%;
             background: #ffffffd9;
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-radius: 42px;
-            box-shadow: 0 30px 50px -25px rgba(98, 78, 62, 0.3);
+            box-shadow: 0 30px 60px -20px rgba(98, 78, 62, 0.3);
             border: 1px solid #ede3da;
             overflow: hidden;
             padding: 2.5rem 2rem;
+            position: relative;
+            animation: slideUp 0.6s ease-out;
+            transform-origin: center;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .logo {
             text-align: center;
             margin-bottom: 2rem;
+            animation: fadeIn 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .logo i {
             font-size: 3rem;
             color: #b6987a;
             margin-bottom: 0.5rem;
+            animation: rotateIn 0.8s ease-out;
+        }
+
+        @keyframes rotateIn {
+            from {
+                opacity: 0;
+                transform: rotate(-180deg) scale(0.3);
+            }
+
+            to {
+                opacity: 1;
+                transform: rotate(0) scale(1);
+            }
         }
 
         .logo h1 {
@@ -57,12 +123,26 @@
             text-transform: uppercase;
             letter-spacing: 0.2em;
             color: #3f3730;
+            animation: slideInFromLeft 0.8s ease-out 0.1s both;
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .tab-container {
             display: flex;
             margin-bottom: 2rem;
             border-bottom: 1px solid #ede3da;
+            animation: fadeIn 0.8s ease-out 0.3s both;
         }
 
         .tab {
@@ -75,16 +155,82 @@
             text-transform: uppercase;
             letter-spacing: 0.1em;
             font-size: 0.9rem;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(182, 152, 122, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .tab:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .tab.active {
             color: #b6987a;
-            border-bottom: 2px solid #b6987a;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #b6987a;
+            animation: slideInUnderline 0.3s ease-out;
+        }
+
+        @keyframes slideInUnderline {
+            from {
+                transform: scaleX(0);
+            }
+
+            to {
+                transform: scaleX(1);
+            }
         }
 
         .form-group {
             margin-bottom: 1.5rem;
+            animation: slideInFromRight 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .form-group:nth-child(1) {
+            animation-delay: 0.4s;
+        }
+
+        .form-group:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .form-group:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         label {
@@ -94,6 +240,7 @@
             letter-spacing: 0.1em;
             color: #937f6e;
             margin-bottom: 0.4rem;
+            transition: color 0.3s;
         }
 
         .input-wrapper {
@@ -107,6 +254,8 @@
             left: 1.2rem;
             color: #b6987a;
             font-size: 1rem;
+            transition: transform 0.3s, color 0.3s;
+            z-index: 1;
         }
 
         input {
@@ -118,12 +267,18 @@
             font-size: 0.95rem;
             color: #2c2824;
             outline: none;
-            transition: 0.15s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         input:focus {
             border-color: #b6987a;
-            box-shadow: 0 0 0 3px #eeddd2;
+            box-shadow: 0 0 0 4px rgba(182, 152, 122, 0.1);
+            transform: translateY(-1px);
+        }
+
+        input:focus+i {
+            transform: scale(1.1) translateX(-2px);
+            color: #8b6f5a;
         }
 
         .btn-primary {
@@ -138,25 +293,55 @@
             font-weight: 500;
             width: 100%;
             cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             margin-top: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out 0.7s both;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-primary:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn-primary:hover {
             background: #a07d63;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -8px rgba(160, 125, 99, 0.4);
         }
 
         .btn-primary:active {
-            transform: scale(0.98);
+            transform: translateY(1px);
+            box-shadow: none;
         }
 
         .btn-primary:disabled {
             background: #d6c9bf;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-primary:disabled::before {
+            display: none;
         }
 
         .message {
@@ -166,10 +351,48 @@
             text-align: center;
             font-size: 0.9rem;
             display: none;
+            animation: shake 0.5s ease-out;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20% {
+                transform: translateX(-5px);
+            }
+
+            40% {
+                transform: translateX(5px);
+            }
+
+            60% {
+                transform: translateX(-3px);
+            }
+
+            80% {
+                transform: translateX(3px);
+            }
         }
 
         .message.show {
             display: block;
+            animation: slideInMessage 0.4s ease-out;
+        }
+
+        @keyframes slideInMessage {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .message.success {
@@ -190,25 +413,13 @@
             border: 1px solid #b3d1ff;
         }
 
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #b6987a;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-
-        .back-link i {
-            margin-right: 5px;
-        }
-
         .separator {
             display: flex;
             align-items: center;
             text-align: center;
             margin: 1.5rem 0;
             color: #9c8e82;
+            animation: fadeIn 0.8s ease-out 0.8s both;
         }
 
         .separator::before,
@@ -216,12 +427,49 @@
             content: '';
             flex: 1;
             border-bottom: 1px solid #ede3da;
+            transition: all 0.3s;
+        }
+
+        .separator:hover::before,
+        .separator:hover::after {
+            border-color: #b6987a;
         }
 
         .separator span {
             padding: 0 10px;
             font-size: 0.8rem;
             text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .separator:hover span {
+            color: #b6987a;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #b6987a;
+            text-decoration: none;
+            font-size: 0.9rem;
+            animation: fadeIn 0.8s ease-out 0.9s both;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-link i {
+            margin-right: 5px;
+            transition: transform 0.3s;
+        }
+
+        .back-link:hover {
+            color: #8b6f5a;
+        }
+
+        .back-link:hover i {
+            transform: translateX(-3px);
         }
 
         .loading-spinner {
@@ -238,6 +486,44 @@
             to {
                 transform: rotate(360deg);
             }
+        }
+
+        /* Floating animation for the logo icon */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            25% {
+                transform: translateY(-3px) rotate(2deg);
+            }
+
+            75% {
+                transform: translateY(3px) rotate(-2deg);
+            }
+        }
+
+        .logo i {
+            animation: float 4s ease-in-out infinite, rotateIn 0.8s ease-out;
+        }
+
+        /* Ripple effect for inputs */
+        .input-wrapper::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #b6987a;
+            transform: translateX(-50%);
+            transition: width 0.3s;
+        }
+
+        .input-wrapper:focus-within::after {
+            width: 80%;
         }
     </style>
 </head>
@@ -336,26 +622,42 @@
         const signupBtn = document.getElementById('signupBtn');
         const messageBox = document.getElementById('messageBox');
 
-        // Switch between tabs
+        // Switch between tabs with animation
         window.switchTab = function (tab) {
             if (tab === 'signin') {
                 signinTab.classList.add('active');
                 signupTab.classList.remove('active');
+
+                // Animate form switch
+                signinForm.style.animation = 'slideInFromRight 0.5s ease-out';
                 signinForm.style.display = 'block';
                 signupForm.style.display = 'none';
             } else {
                 signupTab.classList.add('active');
                 signinTab.classList.remove('active');
+
+                // Animate form switch
+                signupForm.style.animation = 'slideInFromRight 0.5s ease-out';
                 signupForm.style.display = 'block';
                 signinForm.style.display = 'none';
             }
+
             messageBox.style.display = 'none';
             messageBox.className = 'message';
         }
 
+        // Show message with animation
         function showMessage(text, type) {
             messageBox.textContent = text;
             messageBox.className = `message ${type} show`;
+
+            // Auto hide success messages after 3 seconds
+            if (type === 'success') {
+                setTimeout(() => {
+                    messageBox.style.display = 'none';
+                    messageBox.className = 'message';
+                }, 3000);
+            }
         }
 
         // Handle Sign Up
@@ -383,8 +685,6 @@
             signupBtn.innerHTML = '<span class="loading-spinner"></span> Création...';
 
             try {
-                console.log('Attempting signup with:', email); // Debug log
-
                 const { data, error } = await supabaseClient.auth.signUp({
                     email: email,
                     password: password,
@@ -394,8 +694,6 @@
                 });
 
                 if (error) {
-                    console.error('Signup error details:', error); // Debug log
-
                     if (error.message.includes('already registered')) {
                         showMessage('❌ Cet email est déjà utilisé', 'error');
                     } else if (error.message.includes('password')) {
@@ -408,8 +706,6 @@
                     signupBtn.innerHTML = '<span>CRÉER MON COMPTE</span>';
 
                 } else {
-                    console.log('Signup success:', data); // Debug log
-
                     showMessage('✅ Compte créé! Bienvenue chez Sillage ✨', 'success');
 
                     document.getElementById('signupEmail').value = '';
@@ -424,7 +720,7 @@
                     }, 2000);
                 }
             } catch (err) {
-                console.error('Signup exception:', err);
+                console.error('Signup error:', err);
                 showMessage('❌ Une erreur est survenue: ' + err.message, 'error');
                 signupBtn.disabled = false;
                 signupBtn.innerHTML = '<span>CRÉER MON COMPTE</span>';
@@ -452,7 +748,12 @@
                     signinBtn.disabled = false;
                     signinBtn.innerHTML = '<span>SE CONNECTER</span>';
                 } else {
-                    window.location.href = 'index.html';
+                    // Success with animation before redirect
+                    showMessage('✅ Connexion réussie! Redirection...', 'success');
+
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
                 }
             } catch (err) {
                 console.error('Signin error:', err);
@@ -462,11 +763,16 @@
             }
         }
 
-        // Check if user is already logged in
+        // Check if user is already logged in (redirect to home)
         async function checkLoggedIn() {
             const { data: { user } } = await supabaseClient.auth.getUser();
             if (user) {
-                window.location.href = 'index.html';
+                // Animated redirect
+                document.body.style.opacity = '0';
+                document.body.style.transition = 'opacity 0.5s';
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 500);
             }
         }
 
