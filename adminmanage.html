@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sillage | Admin Commandes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Add your styles - similar to admin page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #faf7f2;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .order-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #edeae4;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #edeae4;
+        }
+
+        .status-badge {
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: #fff3e0;
+            color: #b85c00;
+        }
+
+        .status-review {
+            background: #e6f0ff;
+            color: #2c5c8c;
+        }
+
+        .status-shipped {
+            background: #e2f0e6;
+            color: #2c682c;
+        }
+
+        .status-delivered {
+            background: #e2f0e6;
+            color: #2c682c;
+        }
+
+        .status-cancelled {
+            background: #ffe6e6;
+            color: #b34545;
+        }
+
+        .customer-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+            padding: 15px;
+            background: #faf7f2;
+            border-radius: 15px;
+        }
+
+        .status-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        select {
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid #dbcec2;
+        }
+
+        .update-btn {
+            background: #b6987a;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 1px solid #dbcec2;
+            background: white;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .filter-btn.active {
+            background: #b6987a;
+            color: white;
+            border-color: #b6987a;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-shopping-bag"></i> Gestion des commandes</h1>
+            <button onclick="logout()" class="filter-btn">Déconnexion</button>
+        </div>
+
+        <div class="filters" id="filters">
+            <button class="filter-btn active" onclick="filterOrders('all')">Toutes</button>
+            <button class="filter-btn" onclick="filterOrders('pending')">En attente</button>
+            <button class="filter-btn" onclick="filterOrders('review')">En révision</button>
+            <button class="filter-btn" onclick="filterOrders('shipped')">Expédiées</button>
+            <button class="filter-btn" onclick="filterOrders('delivered')">Livrées</button>
+            <button class="filter-btn" onclick="filterOrders('cancelled')">Annulées</button>
+        </div>
+
+        <div id="ordersList"></div>
+    </div>
+
+    <script>
+        const supabase = window.supabase.createClient(
+            'https://dtwciuhwwanwlwpydeko.supabase.co',
+            'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_'
+        );
+
+        let currentFilter = 'all';
+
+        async function loadOrders() {
+            let query = supabase.from('orders').select('*').order('created_at', { ascending: false });
+
+            if (currentFilter !== 'all') {
+                query = query.eq('status', currentFilter);
+            }
+
+            const { data: orders, error } = await query;
+
+            if (error) {
+                console.error('Error loading orders:', error);
+                return;
+            }
+
+            displayOrders(orders);
+        }
+
+        function displayOrders(orders) {
+            const container = document.getElementById('ordersList');
+
+            if (orders.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 50px;">Aucune commande trouvée</div>';
+                return;
+            }
+
+            container.innerHTML = orders.map(order => {
+                const date = new Date(order.created_at).toLocaleString('fr-FR');
+                const statusClass = getStatusClass(order.status);
+
+                return `
+          <div class="order-card" data-id="${order.id}">
+            <div class="order-header">
+              <div>
+                <strong>Commande #${order.id.slice(0, 8)}</strong>
+                <span style="margin-left: 15px; color: #9c8e82;">${date}</span>
+              </div>
+              <div class="status-selector">
+                <select id="status-${order.id}" class="status-select">
+                  <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>En attente</option>
+                  <option value="review" ${order.status === 'review' ? 'selected' : ''}>En révision</option>
+                  <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Expédiée</option>
+                  <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Livrée</option>
+                  <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Annulée</option>
+                </select>
+                <button onclick="updateStatus('${order.id}')" class="update-btn">Mettre à jour</button>
+              </div>
+            </div>
+            
+            <div class="customer-info">
+              <div><strong>👤 Nom:</strong> ${order.customer_name || 'Non spécifié'}</div>
+              <div><strong>📧 Email:</strong> ${order.customer_email}</div>
+              <div><strong>📞 Téléphone:</strong> ${order.customer_phone || 'Non spécifié'}</div>
+              <div><strong>📍 Adresse:</strong> ${order.shipping_address || ''}, ${order.city || ''} ${order.postal_code || ''}</div>
+              ${order.notes ? `<div><strong>📝 Notes:</strong> ${order.notes}</div>` : ''}
+            </div>
+            
+            <div style="margin: 15px 0;">
+              <strong>Articles:</strong>
+              ${order.items.map(item => `
+                <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                  <span>${item.name} x${item.quantity}</span>
+                  <span>€${(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+              `).join('')}
+            </div>
+            
+            <div style="text-align: right; font-size: 1.2rem;">
+              <strong>Total: €${order.total}</strong>
+            </div>
+          </div>
+        `;
+            }).join('');
+        }
+
+        function getStatusClass(status) {
+            const classes = {
+                'pending': 'status-pending',
+                'review': 'status-review',
+                'shipped': 'status-shipped',
+                'delivered': 'status-delivered',
+                'cancelled': 'status-cancelled'
+            };
+            return classes[status] || '';
+        }
+
+        async function updateStatus(orderId) {
+            const newStatus = document.getElementById(`status-${orderId}`).value;
+
+            const { error } = await supabase
+                .from('orders')
+                .update({ status: newStatus, updated_at: new Date() })
+                .match({ id: orderId });
+
+            if (error) {
+                alert('Erreur lors de la mise à jour');
+            } else {
+                alert('Statut mis à jour!');
+                loadOrders();
+            }
+        }
+
+        window.filterOrders = function (filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.toLowerCase().includes(filter) ||
+                    (filter === 'all' && btn.textContent === 'Toutes')) {
+                    btn.classList.add('active');
+                }
+            });
+            loadOrders();
+        };
+
+        window.logout = async function () {
+            await supabase.auth.signOut();
+            window.location.href = 'login146.html';
+        };
+
+        // Check if admin (you can implement proper admin check)
+        async function checkAdmin() {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user || user.email !== 'azmmeli146@gmail.com') { // Replace with your email
+                window.location.href = 'index.html';
+            }
+        }
+
+        checkAdmin();
+        loadOrders();
+    </script>
+</body>
+
+</html>
