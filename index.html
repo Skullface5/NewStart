@@ -66,6 +66,7 @@
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
+      position: relative;
     }
 
     .logo {
@@ -80,7 +81,7 @@
       color: #b6987a;
     }
 
-    /* Menu hamburger pour mobile */
+    /* Menu hamburger pour mobile - better placement */
     .menu-toggle {
       display: none;
       background: none;
@@ -90,12 +91,14 @@
       cursor: pointer;
       z-index: 102;
       transition: color 0.2s;
+      padding: 0.5rem;
     }
 
     .menu-toggle:hover {
       color: #b6987a;
     }
 
+    /* Desktop navigation */
     .nav-links {
       display: flex;
       gap: 2.5rem;
@@ -109,10 +112,26 @@
       text-decoration: none;
       color: #2e2a28;
       transition: color 0.2s;
+      position: relative;
     }
 
     .nav-links a:hover {
       color: #b6987a;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: #b6987a;
+      transition: width 0.2s;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
     }
 
     .cart-icon {
@@ -145,7 +164,7 @@
       box-shadow: 0 3px 8px rgba(182,152,122,0.3);
     }
 
-    /* Menu mobile */
+    /* Mobile menu - improved dropdown */
     @media (max-width: 768px) {
       .container {
         padding: 1rem;
@@ -165,35 +184,54 @@
       }
 
       .nav-links {
-        display: none;
+        display: flex;
+        flex-direction: column;
         position: absolute;
         top: 100%;
         left: 0;
         right: 0;
-        background: #ffffffec;
+        background: #ffffff;
         backdrop-filter: blur(10px);
-        flex-direction: column;
-        align-items: center;
         gap: 0;
-        padding: 1rem 0;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.3s ease-out, opacity 0.2s ease-out, padding 0.3s ease-out;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
         border-bottom: 1px solid #edeae4;
         z-index: 101;
+        border-radius: 0 0 24px 24px;
       }
 
       .nav-links.active {
-        display: flex;
+        max-height: 300px;
+        opacity: 1;
+        padding: 0.5rem 0 1rem 0;
       }
 
       .nav-links a {
-        padding: 1rem 0;
+        padding: 1rem 2rem;
         width: 100%;
-        text-align: center;
-        border-bottom: 1px solid #f1e8e0;
+        text-align: left;
+        border-bottom: 1px solid #f5eee8;
+        font-size: 1rem;
+        letter-spacing: 0.1em;
       }
 
       .nav-links a:last-child {
         border-bottom: none;
+      }
+
+      .nav-links a::after {
+        display: none;
+      }
+
+      .nav-links a:hover {
+        background: #faf2ea;
+        color: #b6987a;
+        padding-left: 2.5rem;
+        transition: padding-left 0.2s;
       }
 
       h1 {
@@ -227,7 +265,7 @@
       margin: 0 auto;
     }
 
-    /* === GRILLE PRODUITS AMÉLIORÉE POUR MOBILE === */
+    /* === GRILLE PRODUITS === */
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -409,6 +447,10 @@
       transition: color 0.2s;
     }
 
+    .close-cart:hover {
+      color: #2e2a28;
+    }
+
     .cart-items {
       flex: 1;
       overflow-y: auto;
@@ -579,9 +621,38 @@
       padding: 3rem;
       color: #b6987a;
     }
+
+    /* Menu overlay for better UX */
+    .menu-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(2px);
+      z-index: 99;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .menu-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .menu-overlay.active {
+        display: block;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Menu overlay for mobile -->
+  <div id="menuOverlay" class="menu-overlay"></div>
+
   <!-- NOTIFICATION TOAST -->
   <div id="toast" class="notification">✨ Article ajouté</div>
 
@@ -652,8 +723,8 @@
   <script>
     (function() {
       // ---------- CONFIGURATION SUPABASE ----------
-      const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co'; // Replace with your URL
-      const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_'; // Your key
+      const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';  // Your actual project URL
+      const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';  // Your actual key
       
       // Initialize Supabase
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
@@ -678,29 +749,60 @@
       // Menu mobile
       const menuToggle = document.getElementById('menuToggle');
       const navLinks = document.getElementById('navLinks');
+      const menuOverlay = document.getElementById('menuOverlay');
 
-      // Toggle menu mobile
-      menuToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-        // Change icon
-        const icon = menuToggle.querySelector('i');
-        if (navLinks.classList.contains('active')) {
-          icon.classList.remove('fa-bars');
-          icon.classList.add('fa-times');
-        } else {
-          icon.classList.remove('fa-times');
-          icon.classList.add('fa-bars');
-        }
-      });
-
-      // Close menu when clicking a link (mobile)
-      navLinks.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
+      // Toggle menu mobile with animation
+      function toggleMenu(force) {
+        const isActive = navLinks.classList.contains('active');
+        
+        if (force === 'close' || isActive) {
           navLinks.classList.remove('active');
+          menuOverlay.classList.remove('active');
+          document.body.style.overflow = '';
           const icon = menuToggle.querySelector('i');
           icon.classList.remove('fa-times');
           icon.classList.add('fa-bars');
+        } else {
+          navLinks.classList.add('active');
+          menuOverlay.classList.add('active');
+          document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+          const icon = menuToggle.querySelector('i');
+          icon.classList.remove('fa-bars');
+          icon.classList.add('fa-times');
+          
+          // Close cart if open
+          closeCart();
+        }
+      }
+
+      menuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMenu();
+      });
+
+      // Close menu when clicking overlay
+      menuOverlay.addEventListener('click', () => {
+        toggleMenu('close');
+      });
+
+      // Close menu when clicking a link
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          toggleMenu('close');
         });
+      });
+
+      // Handle window resize
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+          // On desktop, ensure menu is visible and overlay hidden
+          navLinks.classList.remove('active');
+          menuOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+          const icon = menuToggle.querySelector('i');
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        }
       });
 
       // ---------- FONCTIONS UTILITAIRES ----------
@@ -858,11 +960,9 @@
       function openCart() {
         cartSidebar.classList.add('open');
         cartOverlay.classList.add('active');
+        
         // Close mobile menu if open
-        navLinks.classList.remove('active');
-        const icon = menuToggle.querySelector('i');
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
+        toggleMenu('close');
       }
 
       function closeCart() {
@@ -917,15 +1017,12 @@
         }
       });
 
-      // Close mobile menu when clicking outside (optional)
-      document.addEventListener('click', (e) => {
-        if (window.innerWidth <= 768) {
-          if (!navLinks.contains(e.target) && !menuToggle.contains(e.target) && navLinks.classList.contains('active')) {
-            navLinks.classList.remove('active');
-            const icon = menuToggle.querySelector('i');
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-          }
+      // Prevent body scroll when menu/cart is open
+      cartSidebar.addEventListener('transitionend', (e) => {
+        if (e.propertyName === 'right' && !cartSidebar.classList.contains('open')) {
+          document.body.style.overflow = '';
+        } else if (cartSidebar.classList.contains('open')) {
+          document.body.style.overflow = 'hidden';
         }
       });
 
