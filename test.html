@@ -33,6 +33,8 @@
         const SUPABASE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
         
         console.log('Initializing Supabase with:', SUPABASE_URL);
+        
+        // Create supabase client - only declare once!
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
         // Test connection
@@ -40,9 +42,11 @@
             try {
                 const { data, error } = await supabase.auth.getSession();
                 document.getElementById('status').innerHTML = '✅ Connected to Supabase!';
+                document.getElementById('status').style.color = 'green';
                 console.log('Connection test result:', { data, error });
             } catch (e) {
                 document.getElementById('status').innerHTML = '❌ Connection failed: ' + e.message;
+                document.getElementById('status').style.color = 'red';
                 console.error('Connection error:', e);
             }
         }
@@ -69,13 +73,16 @@
                 
                 if (error) {
                     document.getElementById('result').innerHTML = '❌ Error: ' + error.message;
+                    document.getElementById('result').style.color = 'red';
                     console.error('Sign up error:', error);
                 } else {
-                    document.getElementById('result').innerHTML = '✅ Success! Check console and Supabase dashboard';
+                    document.getElementById('result').innerHTML = '✅ Success! User created. Check Supabase dashboard.';
+                    document.getElementById('result').style.color = 'green';
                     console.log('Sign up success:', data);
                 }
             } catch (e) {
                 document.getElementById('result').innerHTML = '❌ Exception: ' + e.message;
+                document.getElementById('result').style.color = 'red';
                 console.error('Sign up exception:', e);
             }
         }
@@ -100,13 +107,16 @@
                 
                 if (error) {
                     document.getElementById('result').innerHTML = '❌ Error: ' + error.message;
+                    document.getElementById('result').style.color = 'red';
                     console.error('Sign in error:', error);
                 } else {
                     document.getElementById('result').innerHTML = '✅ Success! User logged in';
+                    document.getElementById('result').style.color = 'green';
                     console.log('Sign in success:', data);
                 }
             } catch (e) {
                 document.getElementById('result').innerHTML = '❌ Exception: ' + e.message;
+                document.getElementById('result').style.color = 'red';
                 console.error('Sign in exception:', e);
             }
         }
