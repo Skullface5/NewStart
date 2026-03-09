@@ -749,11 +749,6 @@
   <!-- NOTIFICATION TOAST -->
   <div id="toast" class="notification">✨ Article ajouté</div>
 
-  <!-- User info -->
-  <div id="userSection" style="display: none; margin-right: 15px; font-size: 0.9rem;">
-    <span id="userEmail" style="color: #b6987a;"></span>
-  </div>
-
 
   <!-- OVERLAY & PANIER LATÉRAL -->
   <div id="cartOverlay" class="cart-overlay"></div>
@@ -797,7 +792,8 @@
         <a href="#">COLLECTION</a>
         <a href="#">EXCLUSIVITÉS</a>
         <a href="#">COFFRETS</a>
-        <a href="login146.html">se connecter</a>
+        <a href="login146.html" id="authLink">Se connecter</a> <!-- This will be dynamically updated -->
+        <a href="#" id="userEmailDisplay" style="display: none; color: #b6987a; pointer-events: none;"></a>
       </div>
     </div>
   </header>
@@ -832,27 +828,32 @@
       // Initialize Supabase
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      // Check if user is logged in and update header
+      // Check if user is logged in and update dropdown
       async function updateUserDisplay() {
         const { data: { user } } = await supabase.auth.getUser();
-        const userSection = document.getElementById('userSection');
-        const userEmail = document.getElementById('userEmail');
+        const authLink = document.getElementById('authLink');
+        const userEmailDisplay = document.getElementById('userEmailDisplay');
 
-        if (userSection && userEmail) {
-          if (user) {
-            userSection.style.display = 'block';
-            userEmail.textContent = user.email;
-            userEmail.style.cursor = 'pointer';
-            userEmail.onclick = () => {
-              if (confirm('Se déconnecter?')) {
-                supabase.auth.signOut();
-                window.location.reload();
-              }
-            };
-          } else {
-            userSection.style.display = 'block';
-            userEmail.innerHTML = '<a href="auth.html" style="color: #b6987a; text-decoration: none;">Se connecter</a>';
-          }
+        if (user) {
+          // User is logged in - hide login link, show email
+          authLink.style.display = 'none';
+          userEmailDisplay.style.display = 'block';
+          userEmailDisplay.textContent = user.email;
+          userEmailDisplay.style.cursor = 'pointer';
+          userEmailDisplay.style.pointerEvents = 'auto';
+
+          // Add logout functionality when clicking email
+          userEmailDisplay.onclick = () => {
+            if (confirm('Se déconnecter?')) {
+              supabase.auth.signOut();
+              window.location.reload();
+            }
+          };
+        } else {
+          // Not logged in - show login link, hide email
+          authLink.style.display = 'block';
+          authLink.href = 'login146.html';
+          userEmailDisplay.style.display = 'none';
         }
       }
 
