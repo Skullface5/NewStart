@@ -467,7 +467,7 @@
         }
 
         .order-total span:last-child::before {
-            content: '€';
+            content: 'TND';
             margin-right: 2px;
             color: #b6987a;
         }
@@ -558,6 +558,26 @@
             font-size: 0.8rem;
             border-top: 1px solid #e7dfd7;
             margin-top: 3rem;
+        }
+
+
+        .cancel-btn {
+            background: none;
+            border: 1px solid #b34545;
+            color: #b34545;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .cancel-btn:hover {
+            background: #b34545;
+            color: white;
         }
     </style>
 </head>
@@ -678,47 +698,7 @@
         let currentUser = null;
         let allOrders = [];
 
-        // Sample orders data (replace with real data from your database)
-        const sampleOrders = [
-            {
-                id: 'CMD-2025-001',
-                date: '2025-03-15T10:30:00',
-                status: 'delivered',
-                items: [
-                    { name: 'Bois d\'Argent', quantity: 1, price: 89.00 },
-                    { name: 'Iris Cendré', quantity: 2, price: 120.00 }
-                ],
-                total: 329.00
-            },
-            {
-                id: 'CMD-2025-002',
-                date: '2025-03-18T14:45:00',
-                status: 'shipped',
-                items: [
-                    { name: 'Cuir Balsamique', quantity: 1, price: 150.00 }
-                ],
-                total: 150.00
-            },
-            {
-                id: 'CMD-2025-003',
-                date: '2025-03-20T09:15:00',
-                status: 'pending',
-                items: [
-                    { name: 'Vanille d\'Orléans', quantity: 1, price: 76.00 },
-                    { name: 'Encens Suave', quantity: 1, price: 204.00 }
-                ],
-                total: 280.00
-            },
-            {
-                id: 'CMD-2025-004',
-                date: '2025-03-22T16:20:00',
-                status: 'review',
-                items: [
-                    { name: 'Eau de Néroli', quantity: 3, price: 68.00 }
-                ],
-                total: 204.00
-            }
-        ];
+
 
         // Check if user is logged in
         async function checkUser() {
@@ -753,32 +733,52 @@
 
         // Load orders
         function loadOrders() {
-            // In a real app, you would fetch from Supabase:
-            // const { data, error } = await supabaseClient
-            //   .from('orders')
-            //   .select('*')
-            //   .eq('user_id', currentUser.id)
-            //   .order('created_at', { ascending: false });
+            // Load orders from database
+            async function loadOrders() {
+                try {
+                    // Show loading state
+                    ordersList.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Chargement...</div>';
 
-            // Using sample data for now
-            allOrders = sampleOrders;
+                    // Fetch real orders from Supabase
+                    const { data: orders, error } = await supabaseClient
+                        .from('orders')
+                        .select('*')
+                        .eq('user_id', currentUser.id)
+                        .order('created_at', { ascending: false });
 
-            // Update stats
-            updateStats();
+                    if (error) throw error;
 
-            // Display orders
-            displayOrders('all');
+                    // Store orders
+                    allOrders = orders || [];
+
+                    // Update stats
+                    updateStats();
+
+                    // Display orders
+                    displayOrders('all');
+
+                } catch (error) {
+                    console.error('Error loading orders:', error);
+                    ordersList.innerHTML = '<div class="empty-orders">Erreur lors du chargement des commandes</div>';
+                }
+            }
         }
 
         // Update statistics
+        // Update statistics
         function updateStats() {
             totalOrdersEl.textContent = allOrders.length;
-            pendingOrdersEl.textContent = allOrders.filter(o =>
+
+            const pending = allOrders.filter(o =>
                 o.status === 'pending' || o.status === 'review' || o.status === 'shipped'
             ).length;
-            deliveredOrdersEl.textContent = allOrders.filter(o =>
+
+            const delivered = allOrders.filter(o =>
                 o.status === 'delivered'
             ).length;
+
+            pendingOrdersEl.textContent = pending;
+            deliveredOrdersEl.textContent = delivered;
         }
 
         // Display orders with filter
@@ -791,9 +791,9 @@
 
             if (filteredOrders.length === 0) {
                 ordersList.innerHTML = `
-          <div class="empty-orders">
+          <div class="empty-orders"> 
             <i class="fas fa-box-open"></i>
-            <p>Aucune commande trouvée</p>
+            <p>Aucune commande trouvée</p>   
             <a href="index.html" class="shop-now-btn">Découvrir nos parfums</a>
           </div>
         `;
@@ -806,7 +806,7 @@
                 const statusClass = getStatusClass(order.status);
 
                 // Format date
-                const orderDate = new Date(order.date);
+                const orderDate = new Date(order.created_at);
                 const formattedDate = orderDate.toLocaleDateString('fr-FR', {
                     day: '2-digit',
                     month: '2-digit',
@@ -825,38 +825,70 @@
                 <span>${item.name}</span>
                 <span class="order-item-quantity">x${item.quantity}</span>
               </div>
-              <span class="order-item-price">${item.price.toFixed(2).replace('.', ',')} €</span>
+              <span class="order-item-price">${item.price.toFixed(2).replace('.', ',')} TND</span>
             </div>
           `;
                 });
 
                 ordersHtml += `
-          <div class="order-card" style="animation-delay: ${index * 0.1}s">
-            <div class="order-header">
-              <div class="order-id">
-                <i class="fas fa-receipt"></i> ${order.id}
-              </div>
-              <div class="order-date">
-                <i class="fas fa-calendar-alt"></i> ${formattedDate}
-              </div>
-              <div class="order-status ${statusClass}">
-                <i class="fas ${getStatusIcon(order.status)}"></i>
-                ${statusText}
-              </div>
-            </div>
-            <div class="order-items">
-              ${itemsHtml}
-            </div>
-            <div class="order-total">
-              <span>Total</span>
-              <span>${order.total.toFixed(2).replace('.', ',')} €</span>
-            </div>
-          </div>
-        `;
+  <div class="order-card" style="animation-delay: ${index * 0.1}s">
+    <div class="order-header">
+      <div class="order-id">
+        <i class="fas fa-receipt"></i> ${order.id}
+      </div>
+      <div class="order-date">
+        <i class="fas fa-calendar-alt"></i> ${formattedDate}
+      </div>
+      <div class="order-status ${statusClass}">
+        <i class="fas ${getStatusIcon(order.status)}"></i>
+        ${statusText}
+      </div>s
+    </div>
+    <div class="order-items">
+      ${itemsHtml}
+    </div>
+    <div class="order-total">
+      <span>Total</span>
+      <span>${order.total.toFixed(3).replace('.', ',')} TND</span>
+    </div>
+    ${order.status === 'pending' ? `
+      <div style="margin-top: 15px; text-align: right;">
+        <button onclick="cancelOrder('${order.id}')" style="background: none; border: 1px solid #b34545; color: #b34545; padding: 8px 20px; border-radius: 30px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s;">
+          <i class="fas fa-times"></i> Annuler la commande
+        </button>
+      </div>
+    ` : ''}
+  </div>
+`;
             });
 
             ordersList.innerHTML = ordersHtml;
         }
+
+        // Cancel order function
+        window.cancelOrder = async function (orderId) {
+            if (!confirm('Êtes-vous sûr de vouloir annuler cette commande ?')) return;
+
+            try {
+                const { error } = await supabaseClient
+                    .from('orders')
+                    .update({ status: 'cancelled' })
+                    .eq('id', orderId)
+                    .eq('user_id', currentUser.id); // Security: only cancel own orders
+
+                if (error) throw error;
+
+                // Show success message
+                alert('✅ Commande annulée avec succès');
+
+                // Reload orders
+                loadOrders();
+
+            } catch (error) {
+                console.error('Error cancelling order:', error);
+                alert('❌ Erreur lors de l\'annulation');
+            }
+        };
 
         // Helper functions for order status
         function getStatusText(status) {
