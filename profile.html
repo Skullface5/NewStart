@@ -866,63 +866,62 @@
 
         // Cancel order function
         window.cancelOrder = async function (orderId) {
-            console.log('Cancel button clicked for order:', orderId); // Debug log
+            console.log('Cancel button clicked for order:', orderId);
 
             if (!confirm('Êtes-vous sûr de vouloir annuler cette commande ?')) {
-                console.log('User cancelled the cancellation'); // Debug log
                 return;
             }
 
             try {
-                console.log('Proceeding with cancellation...'); // Debug log
+                console.log('Current user:', currentUser);
+                console.log('Order ID to cancel:', orderId);
+
+                // First, check if the order exists and belongs to this user
+                const { data: checkOrder, error: checkError } = await supabaseClient
+                    .from('orders')
+                    .select('*')
+                    .eq('id', orderId)
+                    .eq('user_id', currentUser.id);
+
+                if (checkError) throw checkError;
+
+                console.log('Found order:', checkOrder);
+
+                if (!checkOrder || checkOrder.length === 0) {
+                    alert('❌ Commande non trouvée ou ne vous appartient pas');
+                    return;
+                }
 
                 // Show loading state on button
-                const button = event?.target;
+                const buttons = document.querySelectorAll(`[onclick*="cancelOrder('${orderId}')"]`);
+                const button = buttons[0];
                 if (button) {
                     button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Annulation...';
                     button.disabled = true;
                 }
 
-                // Check if currentUser exists
-                if (!currentUser) {
-                    console.error('No current user found');
-                    alert('❌ Utilisateur non connecté');
-                    return;
-                }
-
-                console.log('Updating order in database...'); // Debug log
-
-                // Update order status in database
+                // Update order status
                 const { data, error } = await supabaseClient
                     .from('orders')
                     .update({ status: 'cancelled' })
                     .eq('id', orderId)
                     .eq('user_id', currentUser.id)
-                    .select(); // Add select to see what was updated
+                    .select();
 
-                if (error) {
-                    console.error('Database error:', error);
-                    throw error;
+                if (error) throw error;
+
+                console.log('Update result:', data);
+
+                if (data && data.length > 0) {
+                    alert('✅ Commande annulée avec succès');
+                    await loadOrders();
+                } else {
+                    alert('❌ Aucune modification: la commande a peut-être déjà été annulée');
                 }
-
-                console.log('Update successful:', data); // Debug log
-
-                // Show success message
-                alert('✅ Commande annulée avec succès');
-
-                // Reload orders to reflect changes
-                await loadOrders();
 
             } catch (error) {
-                console.error('Error cancelling order:', error);
-                alert('❌ Erreur lors de l\'annulation: ' + error.message);
-
-                // Reset button if there was an error
-                const button = event?.target;
-                if (button) {
-                    button.innerHTML = '<i class="fas fa-times"></i> Annuler la commande';
-                    button.disabled = false;
-                }
+                console.error('Error:', error);
+                alert('❌ Erreur: ' + error.message);
             }
         };
 
