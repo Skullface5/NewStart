@@ -749,6 +749,18 @@
   <!-- NOTIFICATION TOAST -->
   <div id="toast" class="notification">✨ Article ajouté</div>
 
+
+  <!-- User info (if logged in) -->
+  <div id="userSection" style="display: none; margin-right: 15px;">
+    <span id="userEmail" style="color: #b6987a; font-size: 0.9rem;"></span>
+  </div>
+
+  <div class="cart-icon" id="cartToggle">
+    <i class="fas fa-bag-shopping"></i>
+    <span id="cartCount" class="cart-count">0</span>
+  </div>
+
+
   <!-- OVERLAY & PANIER LATÉRAL -->
   <div id="cartOverlay" class="cart-overlay"></div>
   <aside id="cartSidebar" class="cart-sidebar">
@@ -815,6 +827,31 @@
   </footer>
 
   <script>
+
+
+    // Check if user is logged in
+    async function checkUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      const userSection = document.getElementById('userSection');
+      const userEmail = document.getElementById('userEmail');
+
+      if (user) {
+        // User is logged in
+        userSection.style.display = 'block';
+        userEmail.textContent = user.email;
+      } else {
+        // Not logged in - show login link instead
+        userSection.style.display = 'block';
+        userEmail.innerHTML = '<a href="auth.html" style="color: #b6987a; text-decoration: none;">Se connecter</a>';
+      }
+    }
+
+    // Call it when page loads
+    checkUser();
+
+
+
+
     (function () {
       // ---------- CONFIGURATION SUPABASE ----------
       const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';  // Your actual project URL
