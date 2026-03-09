@@ -826,9 +826,8 @@
           userEmailDisplay.style.cursor = 'pointer';
           userEmailDisplay.style.pointerEvents = 'auto';
 
-          userEmailDisplay.onclick = async () => {
-            await supabase.auth.signOut();
-            window.location.reload();
+          userEmailDisplay.onclick = () => {
+            window.location.href = 'profile.html';
           };
         } else {
           authLink.style.display = 'block';
