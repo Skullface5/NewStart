@@ -877,9 +877,21 @@
           <input type="tel" id="customerPhone" placeholder="06 12 34 56 78" required>
         </div>
 
-        <div class="form-group">
+        <!-- Email field - will be dynamically shown/hidden via JS -->
+        <div id="emailFieldGroup" class="form-group">
           <label>Email *</label>
           <input type="email" id="customerEmail" placeholder="email@exemple.com" required>
+        </div>
+
+        <!-- Logged in user email display (hidden by default) -->
+        <div id="loggedInEmailDisplay" class="form-group" style="display: none;">
+          <label>Email</label>
+          <div
+            style="padding: 0.8rem 1rem; background: #f5f0ea; border-radius: 12px; color: #5f5348; border: 1px solid #dbcec2;">
+            <i class="fas fa-check-circle" style="color: #2c682c; margin-right: 8px;"></i>
+            <span id="displayEmail"></span>
+          </div>
+          <small style="color: #9c8e82; display: block; margin-top: 5px;">Connecté avec cet email</small>
         </div>
 
         <div class="form-group">
@@ -897,10 +909,7 @@
         </div>
 
         <div style="display: flex; gap: 10px; margin-top: 20px;">
-          <button type="button" class="btn-secondary" onclick="closeCheckoutModal()"
-            style="flex: 1; background: none; border: 1px solid #dbcec2; color: #2e2a28; padding: 1rem; border-radius: 50px; font-size: 1rem; cursor: pointer;">
-            Annuler
-          </button>
+          <button type="button" class="btn-secondary" onclick="closeCheckoutModal()" style="flex: 1;">Annuler</button>
           <button type="submit" class="btn-primary" id="submitOrderBtn" style="flex: 2;">
             Confirmer la commande
           </button>
@@ -1233,27 +1242,33 @@
 
       async function showCheckoutModal() {
         if (cart.length === 0) {
-          const modalItems = document.getElementById('modalCartItems');
-          modalItems.innerHTML = cart.map(item => `
-  <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #e2d7ce;">
-    <span>${item.name} <span style="color: #b6987a;">x${item.quantity}</span></span>
-    <span style="font-weight: 500;">${(item.price * item.quantity).toFixed(3).replace('.', ',')} TND</span>
-  </div>
-`).join('');
+          showToast('🛒 Votre panier est vide');
+          return;
         }
 
         const { data: { user } } = await supabase.auth.getUser();
+        const emailFieldGroup = document.getElementById('emailFieldGroup');
+        const loggedInEmailDisplay = document.getElementById('loggedInEmailDisplay');
+        const displayEmail = document.getElementById('displayEmail');
+
         if (user) {
-          document.getElementById('customerEmail').value = user.email;
+          // User is logged in - hide email input, show display
+          emailFieldGroup.style.display = 'none';
+          loggedInEmailDisplay.style.display = 'block';
+          displayEmail.textContent = user.email;
+        } else {
+          // User not logged in - show email input
+          emailFieldGroup.style.display = 'block';
+          loggedInEmailDisplay.style.display = 'none';
         }
 
         const modalItems = document.getElementById('modalCartItems');
         modalItems.innerHTML = cart.map(item => `
-          <div style="display: flex; justify-content: space-between; padding: 5px 0;">
-            <span>${item.name} x${item.quantity}</span>
-            <span>${(item.price * item.quantity).toFixed(3).replace('.', ',')} TND</span>
-          </div>
-        `).join('');
+    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #e2d7ce;">
+      <span>${item.name} <span style="color: #b6987a;">x${item.quantity}</span></span>
+      <span style="font-weight: 500;">${(item.price * item.quantity).toFixed(3).replace('.', ',')} TND</span>
+    </div>
+  `).join('');
 
         document.getElementById('modalTotal').textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND';
         document.getElementById('checkoutModal').style.display = 'flex';
@@ -1275,20 +1290,26 @@
         submitBtn.innerHTML = '<span class="loading-spinner"></span> Traitement...';
 
         try {
+          const { data: { user } } = await supabase.auth.getUser();
+
+          // Get email based on login status
+          let customerEmail;
+          if (user) {
+            customerEmail = user.email; // Use logged in user's email
+          } else {
+            customerEmail = document.getElementById('customerEmail').value; // Get from input
+          }
+
           const orderData = {
             items: cart,
             total: calculateTotal(),
             customer_name: document.getElementById('customerName').value,
             customer_phone: document.getElementById('customerPhone').value,
-            customer_email: document.getElementById('customerEmail').value,
+            customer_email: customerEmail,
             shipping_address: document.getElementById('shippingAddress').value,
-            city: document.getElementById('city').value,
-            postal_code: document.getElementById('postalCode').value,
-            notes: document.getElementById('notes').value,
             status: 'pending'
           };
 
-          const { data: { user } } = await supabase.auth.getUser();
           if (user) {
             orderData.user_id = user.id;
           }
@@ -1301,6 +1322,7 @@
 
           if (error) throw error;
 
+          // Send email notification to YOU (the admin) with customer email included
           await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/functions/v1/smart-responder', {
             method: 'POST',
             headers: {
@@ -1309,7 +1331,8 @@
             },
             body: JSON.stringify({
               order: order,
-              userEmail: 'azmmeli146@gmail.com'
+              adminEmail: 'azmmeli146@gmail.com', // Your email to receive notifications
+              customerEmail: customerEmail // Customer's email from the form
             })
           });
 
