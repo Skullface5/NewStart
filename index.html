@@ -1147,13 +1147,79 @@
       closeCartBtn.addEventListener('click', closeCart);
       cartOverlay.addEventListener('click', closeCart);
 
-      checkoutBtn.addEventListener('click', () => {
+      checkoutBtn.addEventListener('click', async () => {
         if (cart.length === 0) {
           showToast('🛒 Votre panier est vide');
-        } else {
-          alert('Redirection vers la page de paiement (démonstration) – Merci pour votre achat !');
+          return;
+        }
+
+        try {
+          // Show loading state
+          checkoutBtn.disabled = true;
+          checkoutBtn.innerHTML = '<span class="loading-spinner"></span> Traitement...';
+
+          // Get current user (if logged in)
+          const { data: { user } } = await supabase.auth.getUser();
+
+          // 1. Save order to database
+          const { data: order, error: orderError } = await supabase
+            .from('orders')
+            .insert([{
+              user_id: user?.id || null,
+              items: cart,
+              total: calculateTotal(),
+              status: 'pending',
+              created_at: new Date()
+            }])
+            .select()
+            .single();
+
+          if (orderError) throw orderError;
+
+          // 2. Send email notification
+          const emailRes = await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/functions/v1/smart-responder', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_'
+            },
+            body: JSON.stringify({
+              order: {
+                id: order.id,
+                items: cart,
+                total: calculateTotal()
+              },
+              userEmail: user?.email || 'client@anonymous.com'
+            })
+          });
+
+          // 3. Clear cart
+          cart = [];
+          localStorage.removeItem('sillage_cart');
+          saveCart();
+
+          // 4. Show success
+          showToast('✅ Commande envoyée! Vérifiez vos emails');
+
+          // 5. Close cart
+          closeCart();
+
+          // 6. Reset button
+          checkoutBtn.disabled = false;
+          checkoutBtn.innerHTML = 'PAIEMENT <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>';
+
+        } catch (error) {
+          console.error('Checkout error:', error);
+          showToast('❌ Erreur lors de la commande');
+          checkoutBtn.disabled = false;
+          checkoutBtn.innerHTML = 'PAIEMENT <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>';
         }
       });
+
+      // Helper function to calculate total
+      function calculateTotal() {
+        return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      }
 
       // Prevent body scroll when menu/cart is open
       cartSidebar.addEventListener('transitionend', (e) => {
@@ -1169,59 +1235,6 @@
       saveCart();
     })();
   </script>
-
-  <script>
-    // Test email function
-    async function testEmailFunction() {
-      try {
-        console.log('📧 Sending test email...');
-
-        const res = await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/functions/v1/smart-responder', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_'
-          },
-          body: JSON.stringify({
-            order: {
-              id: 'TEST-' + Date.now(),
-              items: [{
-                name: 'Bois d\'Argent',
-                quantity: 1,
-                price: 89
-              }],
-              total: 89
-            },
-            userEmail: 'azmmeli146@gmail.com'
-          })
-        })
-
-        const data = await res.json()
-        console.log('✅ Result:', data)
-
-        // Show alert with result
-        if (data.success) {
-          alert('✅ Email sent! Check your inbox.');
-        } else {
-          alert('❌ Error: ' + (data.error || 'Unknown error'));
-        }
-      } catch (error) {
-        console.error('❌ Error:', error)
-        alert('❌ Failed: ' + error.message)
-      }
-    }
-  </script>
-
-
-  <!-- Add this temporary test button - you can remove it later -->
-  <div style="text-align: center; margin: 20px;">
-    <button onclick="testEmailFunction()"
-      style="background: #b6987a; color: white; border: none; padding: 10px 20px; border-radius: 30px; cursor: pointer;">
-      📧 Test Email Notification
-    </button>
-  </div>
-
-
 
 </body>
 
