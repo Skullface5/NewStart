@@ -832,6 +832,22 @@
         opacity: 1;
       }
     }
+
+    .btn-secondary {
+      background: none;
+      border: 1px solid #dbcec2;
+      color: #2e2a28;
+      padding: 1rem;
+      border-radius: 50px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: #f0e8e0;
+      border-color: #b6987a;
+    }
   </style>
 </head>
 
@@ -846,8 +862,8 @@
   <div id="checkoutModal" class="modal-overlay">
     <div class="modal-content">
       <div class="modal-header">
-        <h3><i class="fas fa-truck"></i> Livraison</h3>
-        <button class="close-modal" onclick="closeCheckoutModal()"><i class="fas fa-times"></i></button>
+        <h3><i class="fas fa-truck"></i> Informations de livraison</h3>
+        <button type="button" class="close-modal" onclick="closeCheckoutModal()"><i class="fas fa-times"></i></button>
       </div>
 
       <form id="checkoutForm" onsubmit="processOrder(event)">
@@ -867,24 +883,8 @@
         </div>
 
         <div class="form-group">
-          <label>Adresse *</label>
-          <input type="text" id="shippingAddress" placeholder="123 Rue Example" required>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>Ville *</label>
-            <input type="text" id="city" placeholder="Tunis" required>
-          </div>
-          <div class="form-group">
-            <label>Code postal</label>
-            <input type="text" id="postalCode" placeholder="1000">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Notes (optionnel)</label>
-          <textarea id="notes" rows="2" placeholder="Instructions particulières..."></textarea>
+          <label>Adresse complète *</label>
+          <input type="text" id="shippingAddress" placeholder="123 Rue Example, Tunis" required>
         </div>
 
         <div class="order-summary">
@@ -896,9 +896,15 @@
           </div>
         </div>
 
-        <button type="submit" class="btn-primary" id="submitOrderBtn">
-          Confirmer la commande
-        </button>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn-secondary" onclick="closeCheckoutModal()"
+            style="flex: 1; background: none; border: 1px solid #dbcec2; color: #2e2a28; padding: 1rem; border-radius: 50px; font-size: 1rem; cursor: pointer;">
+            Annuler
+          </button>
+          <button type="submit" class="btn-primary" id="submitOrderBtn" style="flex: 2;">
+            Confirmer la commande
+          </button>
+        </div>
       </form>
     </div>
   </div>
@@ -1229,9 +1235,9 @@
         if (cart.length === 0) {
           const modalItems = document.getElementById('modalCartItems');
           modalItems.innerHTML = cart.map(item => `
-  <div class="summary-item">
-    <span>${item.name} x${item.quantity}</span>
-    <span>${(item.price * item.quantity).toFixed(3).replace('.', ',')} TND</span>
+  <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #e2d7ce;">
+    <span>${item.name} <span style="color: #b6987a;">x${item.quantity}</span></span>
+    <span style="font-weight: 500;">${(item.price * item.quantity).toFixed(3).replace('.', ',')} TND</span>
   </div>
 `).join('');
         }
