@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supabase Auth Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h2>🔐 Supabase Auth Test</h2>
+    
+    <div id="connectionStatus">Testing connection...</div>
+    
+    <hr>
+    
+    <div>
+        <h3>Sign Up</h3>
+        <input type="email" id="upEmail" placeholder="Email"><br>
+        <input type="password" id="upPassword" placeholder="Password"><br>
+        <button id="signupBtn">Sign Up</button>
+    </div>
+    
+    <hr>
+    
+    <div>
+        <h3>Sign In</h3>
+        <input type="email" id="inEmail" placeholder="Email"><br>
+        <input type="password" id="inPassword" placeholder="Password"><br>
+        <button id="signinBtn">Sign In</button>
+    </div>
+    
+    <hr>
+    
+    <div id="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"></div>
+
+    <script>
+        // Use different variable names to avoid any conflicts
+        const MY_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
+        const MY_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
+        
+        console.log('URL:', MY_URL);
+        console.log('Key:', MY_KEY.substring(0, 10) + '...');
+        
+        // Create client
+        const client = window.supabase.createClient(MY_URL, MY_KEY);
+        
+        // Test connection
+        async function checkConnection() {
+            try {
+                const { data, error } = await client.auth.getSession();
+                document.getElementById('connectionStatus').innerHTML = '✅ Connected to Supabase';
+                document.getElementById('connectionStatus').style.color = 'green';
+                console.log('Connection OK', { data, error });
+            } catch (err) {
+                document.getElementById('connectionStatus').innerHTML = '❌ Connection failed: ' + err.message;
+                document.getElementById('connectionStatus').style.color = 'red';
+                console.error('Connection error:', err);
+            }
+        }
+        
+        checkConnection();
+        
+        // Sign Up
+        document.getElementById('signupBtn').onclick = async function() {
+            const email = document.getElementById('upEmail').value;
+            const password = document.getElementById('upPassword').value;
+            
+            if (!email || !password) {
+                document.getElementById('result').innerHTML = '❌ Enter email and password';
+                return;
+            }
+            
+            document.getElementById('result').innerHTML = '⏳ Creating account...';
+            
+            try {
+                const { data, error } = await client.auth.signUp({
+                    email: email,
+                    password: password
+                });
+                
+                if (error) {
+                    document.getElementById('result').innerHTML = '❌ ' + error.message;
+                    console.error('Signup error:', error);
+                } else {
+                    document.getElementById('result').innerHTML = '✅ Account created! Check Supabase dashboard';
+                    console.log('Signup success:', data);
+                }
+            } catch (err) {
+                document.getElementById('result').innerHTML = '❌ Exception: ' + err.message;
+                console.error('Exception:', err);
+            }
+        };
+        
+        // Sign In
+        document.getElementById('signinBtn').onclick = async function() {
+            const email = document.getElementById('inEmail').value;
+            const password = document.getElementById('inPassword').value;
+            
+            if (!email || !password) {
+                document.getElementById('result').innerHTML = '❌ Enter email and password';
+                return;
+            }
+            
+            document.getElementById('result').innerHTML = '⏳ Signing in...';
+            
+            try {
+                const { data, error } = await client.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+                
+                if (error) {
+                    document.getElementById('result').innerHTML = '❌ ' + error.message;
+                    console.error('Signin error:', error);
+                } else {
+                    document.getElementById('result').innerHTML = '✅ Signed in! User: ' + data.user.email;
+                    console.log('Signin success:', data);
+                }
+            } catch (err) {
+                document.getElementById('result').innerHTML = '❌ Exception: ' + err.message;
+                console.error('Exception:', err);
+            }
+        };
+    </script>
+</body>
+</html>
