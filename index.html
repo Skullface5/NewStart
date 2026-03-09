@@ -880,7 +880,7 @@
         <!-- Email field - will be dynamically shown/hidden via JS -->
         <div id="emailFieldGroup" class="form-group">
           <label>Email *</label>
-          <input type="email" id="customerEmail" placeholder="email@exemple.com" required>
+          <input type="email" id="customerEmail" placeholder="email@exemple.com">
         </div>
 
         <!-- Logged in user email display (hidden by default) -->
@@ -1250,28 +1250,22 @@
         const emailFieldGroup = document.getElementById('emailFieldGroup');
         const loggedInEmailDisplay = document.getElementById('loggedInEmailDisplay');
         const displayEmail = document.getElementById('displayEmail');
+        const emailInput = document.getElementById('customerEmail');
 
         if (user) {
           // User is logged in - hide email input, show display
           emailFieldGroup.style.display = 'none';
           loggedInEmailDisplay.style.display = 'block';
           displayEmail.textContent = user.email;
+          emailInput.required = false; // Remove required when hidden
         } else {
           // User not logged in - show email input
           emailFieldGroup.style.display = 'block';
           loggedInEmailDisplay.style.display = 'none';
+          emailInput.required = true; // Add required when visible
         }
 
-        const modalItems = document.getElementById('modalCartItems');
-        modalItems.innerHTML = cart.map(item => `
-    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #e2d7ce;">
-      <span>${item.name} <span style="color: #b6987a;">x${item.quantity}</span></span>
-      <span style="font-weight: 500;">${(item.price * item.quantity).toFixed(3).replace('.', ',')} TND</span>
-    </div>
-  `).join('');
-
-        document.getElementById('modalTotal').textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND';
-        document.getElementById('checkoutModal').style.display = 'flex';
+        // Rest of your code...
       }
 
       window.closeCheckoutModal = function () {
@@ -1283,6 +1277,7 @@
       }
 
       window.processOrder = async function (event) {
+
         event.preventDefault();
 
         const submitBtn = document.getElementById('submitOrderBtn');
