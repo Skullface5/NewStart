@@ -886,6 +886,7 @@
                 if (checkError) throw checkError;
 
                 console.log('Found order:', checkOrder);
+                console.log('Current order status:', checkOrder[0].status);
 
                 if (!checkOrder || checkOrder.length === 0) {
                     alert('❌ Commande non trouvée ou ne vous appartient pas');
