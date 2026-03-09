@@ -866,23 +866,46 @@
 
         // Cancel order function
         window.cancelOrder = async function (orderId) {
-            if (!confirm('Êtes-vous sûr de vouloir annuler cette commande ?')) return;
+            console.log('Cancel button clicked for order:', orderId); // Debug log
+
+            if (!confirm('Êtes-vous sûr de vouloir annuler cette commande ?')) {
+                console.log('User cancelled the cancellation'); // Debug log
+                return;
+            }
 
             try {
+                console.log('Proceeding with cancellation...'); // Debug log
+
                 // Show loading state on button
-                const button = event.target;
-                const originalText = button.innerHTML;
-                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Annulation...';
-                button.disabled = true;
+                const button = event?.target;
+                if (button) {
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Annulation...';
+                    button.disabled = true;
+                }
+
+                // Check if currentUser exists
+                if (!currentUser) {
+                    console.error('No current user found');
+                    alert('❌ Utilisateur non connecté');
+                    return;
+                }
+
+                console.log('Updating order in database...'); // Debug log
 
                 // Update order status in database
-                const { error } = await supabaseClient
+                const { data, error } = await supabaseClient
                     .from('orders')
                     .update({ status: 'cancelled' })
                     .eq('id', orderId)
-                    .eq('user_id', currentUser.id); // Security: only cancel own orders
+                    .eq('user_id', currentUser.id)
+                    .select(); // Add select to see what was updated
 
-                if (error) throw error;
+                if (error) {
+                    console.error('Database error:', error);
+                    throw error;
+                }
+
+                console.log('Update successful:', data); // Debug log
 
                 // Show success message
                 alert('✅ Commande annulée avec succès');
@@ -893,6 +916,13 @@
             } catch (error) {
                 console.error('Error cancelling order:', error);
                 alert('❌ Erreur lors de l\'annulation: ' + error.message);
+
+                // Reset button if there was an error
+                const button = event?.target;
+                if (button) {
+                    button.innerHTML = '<i class="fas fa-times"></i> Annuler la commande';
+                    button.disabled = false;
+                }
             }
         };
 
