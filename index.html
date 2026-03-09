@@ -822,7 +822,14 @@
   </footer>
 
   <script>
+    // ---------- SUPABASE CONFIG ----------
+    const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
 
+    // Initialize Supabase
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    <!-- Supabase client library - add this in the <head> -->
 
     // Check if user is logged in
     async function checkUser() {
