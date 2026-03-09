@@ -319,10 +319,12 @@
     </div>
 
     <script>
-        // Supabase config
+        // ---------- SUPABASE CONFIG ----------
         const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
-        const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+        const SUPABASE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
+
+        // Create client
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // DOM elements
         const signinTab = document.getElementById('signinTab');
@@ -346,6 +348,7 @@
                 signupForm.style.display = 'block';
                 signinForm.style.display = 'none';
             }
+            // Hide any previous messages
             messageBox.style.display = 'none';
             messageBox.className = 'message';
         }
@@ -364,6 +367,7 @@
             const password = document.getElementById('signupPassword').value;
             const confirm = document.getElementById('signupConfirmPassword').value;
 
+            // Check passwords match
             if (password !== confirm) {
                 showMessage('❌ Les mots de passe ne correspondent pas', 'error');
                 return;
@@ -380,22 +384,27 @@
                 });
 
                 if (error) {
+                    // Handle specific errors
                     if (error.message.includes('already registered')) {
                         showMessage('❌ Cet email est déjà utilisé', 'error');
                     } else {
                         showMessage('❌ ' + error.message, 'error');
                     }
+
+                    // Reset button
                     signupBtn.disabled = false;
                     signupBtn.innerHTML = '<span>CRÉER MON COMPTE</span>';
+
                 } else {
                     // Success!
-                    showMessage('✅ Compte créé! Vérifiez vos emails pour confirmer', 'success');
+                    showMessage('✅ Compte créé! Bienvenue chez Sillage ✨', 'success');
 
                     // Clear form
                     document.getElementById('signupEmail').value = '';
                     document.getElementById('signupPassword').value = '';
                     document.getElementById('signupConfirmPassword').value = '';
 
+                    // Reset button
                     signupBtn.disabled = false;
                     signupBtn.innerHTML = '<span>CRÉER MON COMPTE</span>';
 
@@ -405,7 +414,7 @@
                     }, 2000);
                 }
             } catch (err) {
-                console.error(err);
+                console.error('Signup error:', err);
                 showMessage('❌ Une erreur est survenue', 'error');
                 signupBtn.disabled = false;
                 signupBtn.innerHTML = '<span>CRÉER MON COMPTE</span>';
@@ -430,20 +439,34 @@
                 });
 
                 if (error) {
+                    // Handle wrong credentials
                     showMessage('❌ Email ou mot de passe incorrect', 'error');
+
+                    // Reset button
                     signinBtn.disabled = false;
                     signinBtn.innerHTML = '<span>SE CONNECTER</span>';
+
                 } else {
                     // Success! Redirect to home page
                     window.location.href = 'index.html';
                 }
             } catch (err) {
-                console.error(err);
+                console.error('Signin error:', err);
                 showMessage('❌ Une erreur est survenue', 'error');
                 signinBtn.disabled = false;
                 signinBtn.innerHTML = '<span>SE CONNECTER</span>';
             }
         }
+
+        // Check if user is already logged in (redirect to home)
+        async function checkLoggedIn() {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        checkLoggedIn();
     </script>
 </body>
 
