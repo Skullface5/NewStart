@@ -762,8 +762,6 @@
                 ordersList.innerHTML = '<div class="empty-orders">Erreur lors du chargement des commandes</div>';
             }
         }
-
-        // Update statistics
         // Update statistics
         function updateStats() {
             totalOrdersEl.textContent = allOrders.length;
@@ -865,6 +863,7 @@
         }
 
         // Cancel order function
+        // Cancel order function
         window.cancelOrder = async function (orderId) {
             console.log('Cancel button clicked for order:', orderId);
 
@@ -887,6 +886,9 @@
 
                 console.log('Found order:', checkOrder);
                 console.log('Current order status:', checkOrder[0].status);
+                console.log('Order user_id:', checkOrder[0].user_id);
+                console.log('Current user id:', currentUser.id);
+                console.log('Do they match?', checkOrder[0].user_id === currentUser.id);
 
                 if (!checkOrder || checkOrder.length === 0) {
                     alert('❌ Commande non trouvée ou ne vous appartient pas');
@@ -901,24 +903,25 @@
                     button.disabled = true;
                 }
 
-                // Update order status
+                // ⬇️⬇️⬇️ PUT THE FORCE UPDATE CODE HERE ⬇️⬇️⬇️
+                // Force update without user_id filter to see if it works
+                console.log('Attempting force update...');
                 const { data, error } = await supabaseClient
                     .from('orders')
                     .update({ status: 'cancelled' })
                     .eq('id', orderId)
-                    .eq('user_id', currentUser.id)
                     .select();
 
                 if (error) throw error;
-
-                console.log('Update result:', data);
+                console.log('Force update result:', data);
 
                 if (data && data.length > 0) {
                     alert('✅ Commande annulée avec succès');
                     await loadOrders();
                 } else {
-                    alert('❌ Aucune modification: la commande a peut-être déjà été annulée');
+                    alert('❌ Aucune modification');
                 }
+                // ⬆️⬆️⬆️ END OF FORCE UPDATE CODE ⬆️⬆️⬆️
 
             } catch (error) {
                 console.error('Error:', error);
