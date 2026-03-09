@@ -855,6 +855,40 @@
       // Initialize Supabase
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
+      // Check if user is logged in and update header
+      async function updateUserDisplay() {
+        const { data: { user } } = await supabase.auth.getUser();
+        const userSection = document.getElementById('userSection');
+        const userEmail = document.getElementById('userEmail');
+
+        if (userSection && userEmail) {
+          if (user) {
+            userSection.style.display = 'block';
+            userEmail.textContent = user.email;
+            userEmail.style.cursor = 'pointer';
+            userEmail.onclick = () => {
+              if (confirm('Se déconnecter?')) {
+                supabase.auth.signOut();
+                window.location.reload();
+              }
+            };
+          } else {
+            userSection.style.display = 'block';
+            userEmail.innerHTML = '<a href="auth.html" style="color: #b6987a; text-decoration: none;">Se connecter</a>';
+          }
+        }
+      }
+
+      // Call it when page loads
+      updateUserDisplay();
+
+      // Listen for auth changes
+      supabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
+          updateUserDisplay();
+        }
+      });
+
       // ---------- ÉTAT GLOBAL ----------
       let products = [];
       let cart = JSON.parse(localStorage.getItem('sillage_cart')) || [];
