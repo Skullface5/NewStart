@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sillage | perfume atelier</title>
-  <!-- Font Awesome 6 (free) for cart & menu icons -->
+  <title>Sillage | Atelier de Parfums</title>
+  <!-- Font Awesome 6 (gratuit) pour icônes -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     /* === RESET & VARIABLES === */
@@ -16,12 +16,12 @@
     }
 
     body {
-      background: #faf7f2;  /* soft cream background */
+      background: #faf7f2;  /* fond crème doux */
       color: #2e2a28;
       line-height: 1.5;
     }
 
-    /* subtle noise texture (optional) */
+    /* texture de bruit subtile (optionnel) */
     body::before {
       content: '';
       position: fixed;
@@ -32,7 +32,7 @@
       opacity: 0.3;
     }
 
-    /* === TYPOGRAPHY & GLOBAL === */
+    /* === TYPOGRAPHIE & GLOBAL === */
     h1, h2, h3 {
       font-weight: 350;
       letter-spacing: 0.03em;
@@ -50,7 +50,7 @@
       padding: 1.5rem 2rem;
     }
 
-    /* === HEADER / NAVIGATION === */
+    /* === EN-TÊTE / NAVIGATION === */
     header {
       background: #ffffffd9;
       backdrop-filter: blur(10px);
@@ -76,7 +76,7 @@
 
     .logo i {
       font-size: 2rem;
-      color: #b6987a;  /* soft terracotta */
+      color: #b6987a;  /* terracotta doux */
     }
 
     .nav-links {
@@ -127,7 +127,7 @@
       box-shadow: 0 3px 8px rgba(182,152,122,0.3);
     }
 
-    /* === HERO SECTION (simple) === */
+    /* === SECTION HÉRO (simple) === */
     .hero {
       text-align: center;
       padding: 3rem 1rem 2rem;
@@ -149,7 +149,7 @@
       margin: 0 auto;
     }
 
-    /* === PRODUCT GRID === */
+    /* === GRILLE PRODUITS === */
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -247,7 +247,7 @@
       box-shadow: 0 8px 16px -8px #b6987aaa;
     }
 
-    /* === CART SIDEBAR === */
+    /* === PANIER LATÉRAL === */
     .cart-overlay {
       position: fixed;
       top: 0; right: 0; bottom: 0; left: 0;
@@ -437,7 +437,7 @@
       opacity: 1;
     }
 
-    /* === FOOTER === */
+    /* === PIED DE PAGE === */
     footer {
       text-align: center;
       padding: 2.5rem 1rem 1.5rem;
@@ -447,7 +447,7 @@
       margin-top: 2rem;
     }
 
-    /* === RESPONSIVE FINE-TUNING === */
+    /* === AJUSTEMENTS RESPONSIVE === */
     @media (max-width: 600px) {
       .header-flex {
         flex-wrap: wrap;
@@ -467,29 +467,29 @@
 </head>
 <body>
   <!-- NOTIFICATION TOAST -->
-  <div id="toast" class="notification">✨ Artikel hinzugefügt</div>
+  <div id="toast" class="notification">✨ Article ajouté</div>
 
-  <!-- CART OVERLAY & SIDEBAR -->
+  <!-- OVERLAY & PANIER LATÉRAL -->
   <div id="cartOverlay" class="cart-overlay"></div>
   <aside id="cartSidebar" class="cart-sidebar">
     <div class="cart-header">
-      <h3><i class="fas fa-bag-shopping" style="margin-right: 8px;"></i> Ihr Duftkorb</h3>
+      <h3><i class="fas fa-bag-shopping" style="margin-right: 8px;"></i> Votre panier</h3>
       <button class="close-cart" id="closeCartBtn"><i class="fas fa-times"></i></button>
     </div>
     <div id="cartItemsContainer" class="cart-items">
-      <!-- dynamic cart items will appear here -->
-      <div class="empty-cart-message">Ihr Korb ist noch leer.</div>
+      <!-- les articles du panier apparaîtront ici -->
+      <div class="empty-cart-message">Votre panier est vide.</div>
     </div>
     <div class="cart-footer">
       <div class="cart-total">
-        <span>Gesamtsumme</span>
+        <span>Total</span>
         <span id="cartTotalPrice">€0,00</span>
       </div>
-      <button class="checkout-btn" id="checkoutBtn">ZUR KASSE <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></button>
+      <button class="checkout-btn" id="checkoutBtn">PAIEMENT <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></button>
     </div>
   </aside>
 
-  <!-- MAIN PAGE -->
+  <!-- PAGE PRINCIPALE -->
   <header>
     <div class="container header-flex">
       <div class="logo">
@@ -497,10 +497,10 @@
         <h1>SILLAGE</h1>
       </div>
       <div class="nav-links">
-        <a href="#">DUFTKOLLEKTION</a>
-        <a href="#">LIMITIERT</a>
-        <a href="#">GESCHENKE</a>
-        <a href="#">ÜBER UNS</a>
+        <a href="#">COLLECTION</a>
+        <a href="#">EXCLUSIVITÉS</a>
+        <a href="#">COFFRETS</a>
+        <a href="#">NOTRE HISTOIRE</a>
       </div>
       <div class="cart-icon" id="cartToggle">
         <i class="fas fa-bag-shopping"></i>
@@ -511,23 +511,23 @@
 
   <main class="container">
     <section class="hero">
-      <h2>olfaktorische poesie</h2>
-      <p>Handverlesene Nischenparfüms – zeitlos, sinnlich, authentisch.</p>
+      <h2>poésie olfactive</h2>
+      <p>Parfums de niche sélectionnés à la main – intemporels, sensuels, authentiques.</p>
     </section>
 
-    <!-- PRODUCT GRID -->
+    <!-- GRILLE PRODUITS -->
     <div class="product-grid" id="productGrid">
-      <!-- products will be injected via JS -->
+      <!-- les produits seront injectés via JS -->
     </div>
   </main>
 
   <footer>
-    <p>© Sillage Atelier – ätherische Impressionen seit 2025</p>
+    <p>© Sillage Atelier – impressions éthérées depuis 2025</p>
   </footer>
 
   <script>
     (function() {
-      // ---------- DATA (perfume catalog) ----------
+      // ---------- CATALOGUE (données parfums) ----------
       const products = [
         {
           id: 'p1',
@@ -573,8 +573,8 @@
         }
       ];
 
-      // ---------- GLOBAL STATE ----------
-      let cart = JSON.parse(localStorage.getItem('sillage_cart')) || [];   // array of { id, name, price, icon, quantity: 1 }
+      // ---------- ÉTAT GLOBAL ----------
+      let cart = JSON.parse(localStorage.getItem('sillage_cart')) || [];   // tableau d'articles { id, name, price, icon, quantity: 1 }
       const cartSidebar = document.getElementById('cartSidebar');
       const cartOverlay = document.getElementById('cartOverlay');
       const cartToggle = document.getElementById('cartToggle');
@@ -586,12 +586,12 @@
       const productGrid = document.getElementById('productGrid');
       const checkoutBtn = document.getElementById('checkoutBtn');
 
-      // ---------- HELPER FUNCTIONS ----------
+      // ---------- FONCTIONS UTILITAIRES ----------
       function formatPrice(price) {
         return '€' + price.toFixed(2).replace('.', ',');
       }
 
-      // render product grid
+      // afficher la grille produits
       function renderProducts() {
         let html = '';
         products.forEach(p => {
@@ -603,23 +603,23 @@
               <div class="product-title">${p.name}</div>
               <div class="product-brand">${p.brand}</div>
               <div class="product-price">${p.price.toFixed(2).replace('.', ',')}</div>
-              <button class="add-to-cart" data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-icon="${p.icon}">In den Korb</button>
+              <button class="add-to-cart" data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-icon="${p.icon}">Ajouter au panier</button>
             </div>
           `;
         });
         productGrid.innerHTML = html;
       }
 
-      // update cart count bubble
+      // mettre à jour le compteur du panier
       function updateCartCount() {
         const totalItems = cart.reduce((acc, item) => acc + (item.quantity || 1), 0);
         cartCountSpan.textContent = totalItems;
       }
 
-      // render cart sidebar items
+      // afficher les articles dans le panier latéral
       function renderCart() {
         if (cart.length === 0) {
-          cartItemsContainer.innerHTML = '<div class="empty-cart-message">Ihr Korb ist noch leer.</div>';
+          cartItemsContainer.innerHTML = '<div class="empty-cart-message">Votre panier est vide.</div>';
           cartTotalSpan.textContent = '€0,00';
           return;
         }
@@ -636,7 +636,7 @@
                 <div class="cart-item-title">${item.name}</div>
                 <div class="cart-item-price">${formatPrice(item.price)} ${item.quantity > 1 ? ' (x' + item.quantity + ')' : ''}</div>
               </div>
-              <button class="cart-item-remove" data-id="${item.id}" aria-label="Entfernen"><i class="fas fa-trash-alt"></i></button>
+              <button class="cart-item-remove" data-id="${item.id}" aria-label="Retirer"><i class="fas fa-trash-alt"></i></button>
             </div>
           `;
         });
@@ -644,14 +644,14 @@
         cartTotalSpan.textContent = formatPrice(total);
       }
 
-      // save cart to localStorage and update UI (count + cart view)
+      // sauvegarder le panier dans localStorage et mettre à jour l'UI
       function saveAndUpdate() {
         localStorage.setItem('sillage_cart', JSON.stringify(cart));
         updateCartCount();
         renderCart();
       }
 
-      // add product to cart
+      // ajouter un produit au panier
       function addToCart(id, name, price, icon) {
         const existing = cart.find(item => item.id === id);
         if (existing) {
@@ -660,20 +660,20 @@
           cart.push({ id, name, price, icon, quantity: 1 });
         }
         saveAndUpdate();
-        showToast('✨ ' + name + ' hinzugefügt');
+        showToast('✨ ' + name + ' ajouté');
       }
 
-      // remove item from cart
+      // retirer un produit du panier
       function removeFromCart(id) {
         cart = cart.filter(item => item.id !== id);
         saveAndUpdate();
         if (cart.length === 0) {
-          // close sidebar optionally — but we keep it open
+          // le panier reste ouvert
         }
-        showToast('🗑️ Artikel entfernt');
+        showToast('🗑️ Article retiré');
       }
 
-      // toast message
+      // message toast
       function showToast(msg) {
         toast.textContent = msg;
         toast.classList.add('show');
@@ -682,7 +682,7 @@
         }, 2000);
       }
 
-      // open/close cart sidebar
+      // ouvrir/fermer le panier
       function openCart() {
         cartSidebar.classList.add('open');
         cartOverlay.classList.add('active');
@@ -693,8 +693,8 @@
         cartOverlay.classList.remove('active');
       }
 
-      // ---------- EVENT DELEGATION ----------
-      // product grid: add to cart
+      // ---------- GESTIONNAIRES D'ÉVÉNEMENTS ----------
+      // grille produit : ajout au panier
       productGrid.addEventListener('click', (e) => {
         const btn = e.target.closest('.add-to-cart');
         if (!btn) return;
@@ -705,7 +705,7 @@
         addToCart(id, name, price, icon);
       });
 
-      // cart items removal (delegation via container)
+      // suppression d'un article (délégation via le conteneur)
       cartItemsContainer.addEventListener('click', (e) => {
         const removeBtn = e.target.closest('.cart-item-remove');
         if (removeBtn) {
@@ -714,7 +714,7 @@
         }
       });
 
-      // open cart when clicking on cart icon
+      // ouvrir le panier au clic sur l'icône
       cartToggle.addEventListener('click', (e) => {
         e.preventDefault();
         openCart();
@@ -723,20 +723,20 @@
       closeCartBtn.addEventListener('click', closeCart);
       cartOverlay.addEventListener('click', closeCart);
 
-      // checkout button (alert demo)
+      // bouton de paiement (simple alerte pour la démo)
       checkoutBtn.addEventListener('click', () => {
         if (cart.length === 0) {
-          showToast('🛒 Ihr Korb ist leer');
+          showToast('🛒 Votre panier est vide');
         } else {
-          alert('Weiterleitung zur Kasse (Demo) – vielen Dank für Ihren Einkauf!');
-          // optional: clear cart for demo?
+          alert('Redirection vers la page de paiement (démonstration) – Merci pour votre achat !');
+          // optionnel : vider le panier ?
           // cart = []; saveAndUpdate(); closeCart();
         }
       });
 
-      // ---------- INITIAL RENDER ----------
+      // ---------- INITIALISATION ----------
       renderProducts();
-      saveAndUpdate();  // updates count + cart view from localStorage
+      saveAndUpdate();  // met à jour compteur et panier depuis localStorage
     })();
   </script>
 </body>
