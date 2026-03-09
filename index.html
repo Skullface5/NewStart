@@ -1257,15 +1257,28 @@
           emailFieldGroup.style.display = 'none';
           loggedInEmailDisplay.style.display = 'block';
           displayEmail.textContent = user.email;
-          emailInput.required = false; // Remove required when hidden
+          emailInput.required = false;
         } else {
           // User not logged in - show email input
           emailFieldGroup.style.display = 'block';
           loggedInEmailDisplay.style.display = 'none';
-          emailInput.required = true; // Add required when visible
+          emailInput.required = true;
         }
 
-        // Rest of your code...
+        // Show cart items in modal
+        const modalItems = document.getElementById('modalCartItems');
+        modalItems.innerHTML = cart.map(item => `
+    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #e2d7ce;">
+      <span>${item.name} <span style="color: #b6987a;">x${item.quantity}</span></span>
+      <span style="font-weight: 500;">${(item.price * item.quantity).toFixed(3).replace('.', ',')} TND</span>
+    </div>
+  `).join('');
+
+        // Update total
+        document.getElementById('modalTotal').textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND';
+
+        // Show the modal
+        document.getElementById('checkoutModal').style.display = 'flex';
       }
 
       window.closeCheckoutModal = function () {
