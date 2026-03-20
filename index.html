@@ -1384,7 +1384,7 @@
 
           if (error) throw error;
 
-          // Send email notification to YOU (the admin) with customer email included
+          // Send email notification
           await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/functions/v1/smart-responder', {
             method: 'POST',
             headers: {
@@ -1393,8 +1393,7 @@
             },
             body: JSON.stringify({
               order: order,
-              adminEmail: 'azmmeli146@gmail.com', // Your email to receive notifications
-              customerEmail: customerEmail // Customer's email from the form
+              customerEmail: customerEmail   // Only send customer email
             })
           });
 
