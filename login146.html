@@ -57,6 +57,35 @@
             }
         }
 
+        /* Theme Toggle Button - Top Right */
+        .theme-toggle-wrapper {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.4rem;
+            color: var(--accent);
+            background: var(--bg-primary);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+
         /* Floating gold particles */
         .particle {
             position: absolute;
@@ -603,11 +632,30 @@
             .logo i {
                 font-size: 2.5rem;
             }
+
+            .theme-toggle-wrapper {
+                top: 15px;
+                right: 15px;
+            }
+
+            .theme-toggle {
+                width: 38px;
+                height: 38px;
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 
 <body>
+    <!-- Theme Toggle Button -->
+    <div class="theme-toggle-wrapper">
+        <div class="theme-toggle" id="themeToggle">
+            <i class="fas fa-sun"></i>
+            <i class="fas fa-moon" style="display: none;"></i>
+        </div>
+    </div>
+
     <!-- Floating particles -->
     <script>
         // Create floating gold particles
@@ -715,6 +763,40 @@
         const signinBtn = document.getElementById('signinBtn');
         const signupBtn = document.getElementById('signupBtn');
         const messageBox = document.getElementById('messageBox');
+
+        // Theme Switcher
+        function initTheme() {
+            const saved = localStorage.getItem('theme') || 'light';
+            if (saved === 'dark') {
+                document.body.classList.add('dark');
+                const sun = document.querySelector('#themeToggle .fa-sun');
+                const moon = document.querySelector('#themeToggle .fa-moon');
+                if (sun) sun.style.display = 'none';
+                if (moon) moon.style.display = 'inline-block';
+            }
+        }
+
+        function toggleTheme() {
+            if (document.body.classList.contains('dark')) {
+                document.body.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                const sun = document.querySelector('#themeToggle .fa-sun');
+                const moon = document.querySelector('#themeToggle .fa-moon');
+                if (sun) sun.style.display = 'inline-block';
+                if (moon) moon.style.display = 'none';
+            } else {
+                document.body.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                const sun = document.querySelector('#themeToggle .fa-sun');
+                const moon = document.querySelector('#themeToggle .fa-moon');
+                if (sun) sun.style.display = 'none';
+                if (moon) moon.style.display = 'inline-block';
+            }
+        }
+
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+        initTheme();
 
         // Switch between tabs with animation
         window.switchTab = function (tab) {
