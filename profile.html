@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Sillage | Mon Profil</title>
+    <title>Rosa Fragrances | Mon Profil</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Supabase client library -->
@@ -1028,7 +1028,7 @@
         <div class="header-flex">
             <a href="index.html" class="logo">
                 <i class="fas fa-spa"></i>
-                <h1>SILLAGE</h1>
+                <h1>Rosa Fragrances</h1>
             </a>
             <div class="right-group">
                 <div class="cart-icon" id="cartToggle">
@@ -1131,7 +1131,7 @@
     </div>
 
     <footer>
-        <p>© Sillage Atelier – impressions éthérées depuis 2025</p>
+        <p>© Rosa Fragrances Atelier – impressions éthérées depuis 2026-2027</p>
     </footer>
 
     <script>
@@ -1172,7 +1172,7 @@
             const checkoutBtn = document.getElementById('checkoutBtn');
             const toast = document.getElementById('toast');
 
-            let cart = JSON.parse(localStorage.getItem('sillage_cart')) || [];
+            let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
             let currentUser = null;
             let allOrders = [];
 
@@ -1250,7 +1250,7 @@
             }
 
             function saveCart() {
-                localStorage.setItem('sillage_cart', JSON.stringify(cart));
+                localStorage.setItem('RosaFragrances_cart', JSON.stringify(cart));
                 updateCartCount();
                 renderCart();
             }

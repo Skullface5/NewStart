@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Sillage | Atelier de Parfums</title>
+  <title>Rosa Fragrances | Atelier de Parfums</title>
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- Supabase client library -->
@@ -1161,7 +1161,7 @@
     <div class="container header-flex">
       <div class="logo">
         <i class="fas fa-spa"></i>
-        <h1>SILLAGE</h1>
+        <h1>Rosa Fragrances</h1>
       </div>
 
       <div class="cart-icon" id="cartToggle">
@@ -1234,7 +1234,7 @@
   </main>
 
   <footer>
-    <p>© Sillage Atelier – impressions éthérées depuis 2026-2027</p>
+    <p>© Rosa Fragrances Atelier – impressions éthérées depuis 2026-2027</p>
   </footer>
 
   <script>
@@ -1294,7 +1294,7 @@
       });
 
       let products = [];
-      let cart = JSON.parse(localStorage.getItem('sillage_cart')) || [];
+      let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
 
       const cartSidebar = document.getElementById('cartSidebar');
       const cartOverlay = document.getElementById('cartOverlay');
@@ -1419,7 +1419,7 @@
         cartTotalSpan.textContent = formatPrice(total);
       }
 
-      function saveCart() { localStorage.setItem('sillage_cart', JSON.stringify(cart)); updateCartCount(); renderCart(); }
+      function saveCart() { localStorage.setItem('RosaFragrances_cart', JSON.stringify(cart)); updateCartCount(); renderCart(); }
       function addToCart(id, name, price, icon, image) {
         const existing = cart.find(item => item.id === id);
         if (existing) { existing.quantity = (existing.quantity || 1) + 1; }
@@ -1490,7 +1490,7 @@
             method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_' },
             body: JSON.stringify({ order: order, customerEmail: customerEmail })
           });
-          cart = []; localStorage.removeItem('sillage_cart'); saveCart();
+          cart = []; localStorage.removeItem('RosaFragrances_cart'); saveCart();
           closeCheckoutModal(); closeCart();
           showToast('✅ Commande confirmée! Un email vous a été envoyé.');
         } catch (error) { console.error('Order error:', error); showToast('❌ Erreur lors de la commande'); }
