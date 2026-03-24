@@ -68,7 +68,9 @@
       opacity: 0.3;
     }
 
-    h1, h2, h3 {
+    h1,
+    h2,
+    h3 {
       font-weight: 350;
       letter-spacing: 0.03em;
     }
@@ -259,9 +261,11 @@
       .container {
         padding: 1rem;
       }
+
       h1 {
         font-size: 1.4rem;
       }
+
       .nav-links {
         width: 220px;
       }
@@ -381,10 +385,21 @@
       font-size: 0.9rem;
     }
 
-    .cat-man { background-image: url(https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/man.jfif); }
-    .cat-women { background-image: url(https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/women.jfif); }
-    .cat-unisex { background-image: url(https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/unisexe.jfif); }
-    .cat-kids { background-image: url(https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/kids.jfif); }
+    .cat-man {
+      background-image: url(https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/man.jfif);
+    }
+
+    .cat-women {
+      background-image: url(https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/women.jfif);
+    }
+
+    .cat-unisex {
+      background-image: url(https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/unisexe.jfif);
+    }
+
+    .cat-kids {
+      background-image: url(https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/kids.jfif);
+    }
 
     /* Product Grid */
     .product-grid {
@@ -967,6 +982,7 @@
         transform: translateY(50px);
         opacity: 0;
       }
+
       to {
         transform: translateY(0);
         opacity: 1;
@@ -977,13 +993,16 @@
     ::-webkit-scrollbar {
       width: 8px;
     }
+
     ::-webkit-scrollbar-track {
       background: var(--bg-secondary);
     }
+
     ::-webkit-scrollbar-thumb {
       background: var(--accent);
       border-radius: 4px;
     }
+
     ::-webkit-scrollbar-thumb:hover {
       background: var(--accent-dark);
     }
@@ -1028,6 +1047,38 @@
       --input-bg: #2a2a2a;
       --hover-bg: rgba(255, 215, 0, 0.1);
     }
+
+    /* Header right side group */
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .cart-icon {
+      position: relative;
+      cursor: pointer;
+      font-size: 1.6rem;
+      color: var(--accent);
+      transition: color 0.2s;
+      z-index: 102;
+    }
+
+    .theme-toggle {
+      cursor: pointer;
+      font-size: 1.3rem;
+      color: var(--accent);
+      transition: transform 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: rotate(15deg);
+    }
+
+    .language-switcher {
+      display: flex;
+      gap: 5px;
+    }
   </style>
 </head>
 
@@ -1060,7 +1111,8 @@
         </div>
         <div id="loggedInEmailDisplay" class="form-group" style="display: none;">
           <label>Email</label>
-          <div style="padding: 0.8rem 1rem; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border);">
+          <div
+            style="padding: 0.8rem 1rem; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border);">
             <i class="fas fa-check-circle" style="color: #2c682c; margin-right: 8px;"></i>
             <span id="displayEmail"></span>
           </div>
@@ -1101,7 +1153,8 @@
         <span>Total</span>
         <span id="cartTotalPrice">0,000 TND</span>
       </div>
-      <button class="checkout-btn" id="checkoutBtn">PAIEMENT <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></button>
+      <button class="checkout-btn" id="checkoutBtn">PAIEMENT <i class="fas fa-arrow-right"
+          style="margin-left: 8px;"></i></button>
     </div>
   </aside>
 
@@ -1113,20 +1166,22 @@
         <h1>SILLAGE</h1>
       </div>
 
-      <div class="language-switcher">
-        <button class="lang-btn" data-lang="fr">FR</button>
-        <button class="lang-btn" data-lang="en">EN</button>
-        <button class="lang-btn" data-lang="ar">AR</button>
-      </div>
+      <div class="header-right">
+        <div class="language-switcher">
+          <button class="lang-btn" data-lang="fr">FR</button>
+          <button class="lang-btn" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="ar">AR</button>
+        </div>
 
-      <div class="theme-toggle" id="themeToggle">
-        <i class="fas fa-sun"></i>
-        <i class="fas fa-moon" style="display: none;"></i>
-      </div>
+        <div class="cart-icon" id="cartToggle">
+          <i class="fas fa-bag-shopping"></i>
+          <span id="cartCount" class="cart-count">0</span>
+        </div>
 
-      <div class="cart-icon" id="cartToggle">
-        <i class="fas fa-bag-shopping"></i>
-        <span id="cartCount" class="cart-count">0</span>
+        <div class="theme-toggle" id="themeToggle">
+          <i class="fas fa-sun"></i>
+          <i class="fas fa-moon" style="display: none;"></i>
+        </div>
       </div>
 
       <button class="menu-toggle" id="menuToggle">
@@ -1471,4 +1526,5 @@
     });
   </script>
 </body>
+
 </html>
