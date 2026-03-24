@@ -3,14 +3,13 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sillage · console administrateur</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Sillage · Console Administrateur</title>
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- Supabase client library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* Gardez les mêmes styles que précédemment */
     * {
       margin: 0;
       padding: 0;
@@ -19,68 +18,117 @@
     }
 
     body {
-      background: #f4efe9;
-      color: #2c2824;
+      background: var(--bg-gradient);
+      color: var(--text-primary);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 1.5rem;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
     }
 
     .admin-wrapper {
       max-width: 1100px;
       width: 100%;
-      background: #ffffffd9;
+      background: var(--bg-primary);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-radius: 42px;
-      box-shadow: 0 30px 50px -25px rgba(98, 78, 62, 0.3);
-      border: 1px solid #ede3da;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--border);
       overflow: hidden;
       padding: 2.2rem 2.5rem;
+      transition: all 0.3s ease;
+      animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     h1 {
       font-weight: 320;
-      font-size: 2.2rem;
+      font-size: 2rem;
       letter-spacing: 0.02em;
-      color: #3f3730;
+      color: var(--text-primary);
       display: flex;
       align-items: center;
       gap: 12px;
-      border-bottom: 1px solid #e3d8cf;
+      border-bottom: 1px solid var(--border);
       padding-bottom: 1.2rem;
       margin-bottom: 2rem;
     }
 
     h1 i {
-      color: #b6987a;
-      font-size: 2.4rem;
+      color: var(--accent);
+      font-size: 2.2rem;
     }
 
     h2 {
       font-weight: 350;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: #5f5348;
+      color: var(--accent);
       margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .two-column {
       display: grid;
       grid-template-columns: 1.2fr 0.9fr;
-      gap: 2.2rem;
+      gap: 2rem;
       align-items: start;
     }
 
+    @media (max-width: 768px) {
+      .two-column {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .admin-wrapper {
+        padding: 1.5rem;
+      }
+    }
+
+    /* Form Panel */
     .form-panel {
-      background: #fcf9f6;
-      padding: 1.8rem 2rem;
-      border-radius: 32px;
-      border: 1px solid #e7dcd2;
-      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.8), 0 8px 18px -12px rgba(87, 67, 52, 0.2);
+      background: var(--card-gradient);
+      padding: 1.8rem;
+      border-radius: 28px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s;
+    }
+
+    .form-panel:hover {
+      box-shadow: var(--shadow-lg);
     }
 
     .input-group {
@@ -89,61 +137,64 @@
 
     label {
       display: block;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: #937f6e;
+      color: var(--text-secondary);
       margin-bottom: 0.4rem;
+      font-weight: 500;
     }
 
     input,
     select {
       width: 100%;
-      background: white;
-      border: 1px solid #dbcec2;
-      border-radius: 60px;
-      padding: 0.9rem 1.4rem;
-      font-size: 0.95rem;
-      color: #2c2824;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 0.8rem 1.2rem;
+      font-size: 0.9rem;
+      color: var(--text-primary);
       outline: none;
-      transition: 0.15s;
+      transition: all 0.3s;
     }
 
     input:focus,
     select:focus {
-      border-color: #b6987a;
-      box-shadow: 0 0 0 3px #eeddd2;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+      transform: translateX(2px);
     }
 
+    /* Icon Selector */
     .icon-selector {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.6rem;
+      gap: 0.5rem;
       margin-top: 0.4rem;
     }
 
     .icon-option {
-      background: white;
-      border: 1px solid #dacfc6;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
       border-radius: 50px;
-      padding: 0.6rem 1rem;
+      padding: 0.5rem 1rem;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       cursor: pointer;
-      transition: all 0.15s;
-      color: #3f3730;
+      transition: all 0.2s;
+      color: var(--text-primary);
     }
 
     .icon-option i {
-      font-size: 1.1rem;
-      color: #b6987a;
+      font-size: 1rem;
+      color: var(--accent);
     }
 
     .icon-option.selected {
-      background: #b6987a;
-      border-color: #b6987a;
+      background: var(--accent-gradient);
+      border-color: var(--accent);
       color: white;
     }
 
@@ -152,105 +203,146 @@
     }
 
     .icon-option:hover {
-      border-color: #b6987a;
-      background: #f5ede6;
+      border-color: var(--accent);
+      transform: translateY(-2px);
     }
 
+    /* File Upload */
     .file-input-area {
-      background: #f7f2ec;
-      border: 1px dashed #cbb9aa;
-      border-radius: 34px;
-      padding: 1.2rem 1.4rem;
+      background: var(--bg-secondary);
+      border: 1px dashed var(--border);
+      border-radius: 28px;
+      padding: 1rem;
       text-align: center;
-      color: #7a6a5c;
+      color: var(--text-secondary);
       cursor: pointer;
-      transition: 0.2s;
+      transition: all 0.2s;
     }
 
     .file-input-area:hover {
-      background: #f1e8df;
-      border-color: #b6987a;
+      border-color: var(--accent);
+      background: var(--hover-bg);
     }
 
     .file-input-area i {
-      font-size: 1.8rem;
-      color: #b6987a;
-      margin-bottom: 6px;
+      font-size: 1.5rem;
+      color: var(--accent);
+      margin-bottom: 5px;
     }
 
     #imagePreview {
-      margin-top: 12px;
+      margin-top: 10px;
       display: flex;
       align-items: center;
-      gap: 15px;
-      background: #fff5ed;
-      padding: 0.6rem 1.2rem;
+      gap: 12px;
+      background: var(--bg-secondary);
+      padding: 0.5rem 1rem;
       border-radius: 40px;
-      border: 1px solid #e2d3c6;
+      border: 1px solid var(--border);
     }
 
     #imagePreview img {
-      width: 48px;
-      height: 48px;
-      border-radius: 30px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
       object-fit: cover;
-      background: #e5d8ce;
     }
 
+    /* Buttons */
     .btn-primary {
-      background: #b6987a;
+      background: var(--accent-gradient);
       border: none;
-      color: white;
-      padding: 1rem 2.2rem;
-      border-radius: 60px;
-      font-size: 1rem;
+      color: var(--bg-primary);
+      padding: 0.9rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      font-weight: 500;
+      font-weight: 600;
       width: 100%;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      margin-top: 1rem;
+      transition: all 0.3s;
+      margin-top: 0.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-primary:hover::before {
+      width: 300px;
+      height: 300px;
     }
 
     .btn-primary:hover {
-      background: #a07d63;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
     }
 
     .btn-primary:active {
-      transform: scale(0.98);
+      transform: translateY(1px);
     }
 
+    /* List Panel */
     .list-panel {
-      background: #fcf9f6;
-      padding: 1.8rem 1.5rem;
-      border-radius: 32px;
-      border: 1px solid #e7dcd2;
-      max-height: 540px;
+      background: var(--card-gradient);
+      padding: 1.5rem;
+      border-radius: 28px;
+      border: 1px solid var(--border);
+      max-height: 550px;
       overflow-y: auto;
+      box-shadow: var(--shadow-md);
+    }
+
+    .list-panel::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .list-panel::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+      border-radius: 3px;
+    }
+
+    .list-panel::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 3px;
     }
 
     .admin-product-item {
       display: flex;
       align-items: center;
       gap: 1rem;
-      padding: 1rem 0.8rem;
-      border-bottom: 1px solid #ece0d6;
+      padding: 0.8rem;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.2s;
     }
 
-    .admin-product-item:last-child {
-      border-bottom: none;
+    .admin-product-item:hover {
+      background: var(--hover-bg);
+      border-radius: 16px;
+      transform: translateX(5px);
     }
 
     .admin-product-img {
-      width: 54px;
-      height: 54px;
-      background: #e9dfd6;
-      border-radius: 40px;
+      width: 50px;
+      height: 50px;
+      background: var(--bg-secondary);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -265,8 +357,8 @@
     }
 
     .admin-product-img i {
-      font-size: 2rem;
-      color: #8f7c6b;
+      font-size: 1.6rem;
+      color: var(--accent);
     }
 
     .admin-product-info {
@@ -275,67 +367,84 @@
 
     .admin-product-title {
       font-weight: 500;
-      font-size: 1.1rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-size: 1rem;
+      color: var(--text-primary);
     }
 
     .admin-product-brand {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       text-transform: uppercase;
-      color: #b6987a;
+      color: var(--accent);
       letter-spacing: 0.1em;
     }
 
     .admin-product-price {
-      font-weight: 350;
-      color: #3f3730;
+      font-weight: 500;
+      color: var(--accent-dark);
+      font-size: 0.9rem;
     }
 
     .admin-product-price::before {
-      content: '€';
-      margin-right: 2px;
-      color: #887b70;
+      content: 'TND ';
+      font-size: 0.7rem;
+      color: var(--text-secondary);
     }
 
     .delete-btn {
       background: none;
       border: none;
-      color: #b7a597;
-      font-size: 1.2rem;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
       cursor: pointer;
-      transition: color 0.15s;
-      padding: 6px;
+      transition: all 0.2s;
+      padding: 8px;
+      border-radius: 50%;
     }
 
     .delete-btn:hover {
       color: #c1654c;
+      background: var(--hover-bg);
+      transform: scale(1.1);
     }
 
     .empty-list {
-      color: #ad9f93;
       text-align: center;
+      padding: 2rem;
+      color: var(--text-secondary);
       font-style: italic;
-      padding: 2rem 0;
     }
 
+    /* Gate Panel */
     .gate {
-      background: #fcf9f6;
-      border-radius: 48px;
-      padding: 2.5rem 2rem;
+      background: var(--card-gradient);
+      border-radius: 40px;
+      padding: 2rem;
       text-align: center;
-      border: 1px solid #ece0d6;
+      border: 1px solid var(--border);
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     .gate h2 {
-      margin-bottom: 1.8rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
     }
 
     .password-input {
       display: flex;
       gap: 10px;
-      max-width: 360px;
+      max-width: 320px;
       margin: 0 auto;
     }
 
@@ -344,47 +453,60 @@
     }
 
     .password-input button {
-      background: #b6987a;
+      background: var(--accent-gradient);
       border: none;
-      color: white;
-      padding: 0 1.6rem;
-      border-radius: 60px;
+      color: var(--bg-primary);
+      padding: 0 1.5rem;
+      border-radius: 50px;
       font-weight: 500;
       cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .password-input button:hover {
+      transform: scale(1.02);
     }
 
     .hint {
       margin-top: 1rem;
-      color: #a49182;
+      color: var(--text-secondary);
       font-size: 0.8rem;
     }
 
     .back-link {
-      margin-top: 2rem;
+      margin-top: 1.5rem;
       display: inline-block;
-      color: #b6987a;
+      color: var(--accent);
       text-decoration: none;
-      border-bottom: 1px dotted;
+      border-bottom: 1px dotted var(--accent);
+      transition: all 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--accent-dark);
+      transform: translateX(-3px);
     }
 
     hr {
-      border: 0.5px solid #ece0d6;
-      margin: 1.5rem 0;
+      border: 0.5px solid var(--border);
+      margin: 1.2rem 0;
     }
 
+    /* Toast */
     .admin-toast {
       position: fixed;
       bottom: 30px;
       left: 30px;
-      background: #2c2824;
-      color: #f0e7de;
-      padding: 0.9rem 2rem;
+      background: var(--accent-gradient);
+      color: var(--bg-primary);
+      padding: 0.8rem 1.5rem;
       border-radius: 60px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-lg);
       opacity: 0;
       transform: translateY(80px);
-      transition: 0.2s;
+      transition: 0.3s;
       z-index: 1000;
+      font-weight: 500;
     }
 
     .admin-toast.show {
@@ -394,37 +516,127 @@
 
     .loading-spinner {
       text-align: center;
-      padding: 2rem;
-      color: #b6987a;
+      padding: 1.5rem;
+      color: var(--accent);
+    }
+
+    /* Theme Variables */
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #fffbf5;
+      --bg-gradient: linear-gradient(135deg, #fff9f0 0%, #ffffff 100%);
+      --text-primary: #2e2a28;
+      --text-secondary: #6b5c4f;
+      --accent: #d4af37;
+      --accent-dark: #b4942c;
+      --accent-gradient: linear-gradient(135deg, #d4af37 0%, #f5d742 50%, #d4af37 100%);
+      --border: rgba(212, 175, 55, 0.2);
+      --card-gradient: linear-gradient(145deg, #ffffff 0%, #fffaf2 100%);
+      --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.03);
+      --shadow-md: 0 5px 20px rgba(212, 175, 55, 0.1);
+      --shadow-lg: 0 10px 30px rgba(212, 175, 55, 0.15);
+      --shadow-xl: 0 20px 40px rgba(212, 175, 55, 0.2);
+      --input-bg: #ffffff;
+      --hover-bg: rgba(212, 175, 55, 0.05);
+    }
+
+    body.dark {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #141414;
+      --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #141414 100%);
+      --text-primary: #f5f5f5;
+      --text-secondary: #b8b8b8;
+      --accent: #ffd700;
+      --accent-dark: #e6c300;
+      --accent-gradient: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+      --border: rgba(255, 215, 0, 0.2);
+      --card-gradient: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+      --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 5px 20px rgba(255, 215, 0, 0.1);
+      --shadow-lg: 0 10px 30px rgba(255, 215, 0, 0.15);
+      --shadow-xl: 0 20px 40px rgba(255, 215, 0, 0.2);
+      --input-bg: #2a2a2a;
+      --hover-bg: rgba(255, 215, 0, 0.1);
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      font-size: 1.3rem;
+      color: var(--accent);
+      background: var(--bg-primary);
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+      z-index: 1000;
+    }
+
+    .theme-toggle:hover {
+      transform: rotate(15deg) scale(1.05);
+      box-shadow: var(--shadow-lg);
+    }
+
+    @media (max-width: 480px) {
+      .admin-wrapper {
+        padding: 1.2rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .theme-toggle {
+        top: 15px;
+        right: 15px;
+        width: 38px;
+        height: 38px;
+        font-size: 1.1rem;
+      }
     }
   </style>
 </head>
 
 <body>
+  <!-- Theme Toggle Button -->
+  <div class="theme-toggle" id="themeToggle">
+    <i class="fas fa-sun"></i>
+    <i class="fas fa-moon" style="display: none;"></i>
+  </div>
+
   <div class="admin-wrapper" id="adminWrapper">
-    <!-- PAGE DE VERROUILLAGE -->
+    <!-- GATE PANEL -->
     <div id="gatePanel" class="gate">
-      <i class="fas fa-lock" style="font-size: 2.8rem; color: #b6987a; margin-bottom: 1rem;"></i>
+      <i class="fas fa-lock" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem;"></i>
       <h2>Espace propriétaire</h2>
       <div class="password-input">
         <input type="password" id="passwordInput" placeholder="Mot de passe" value="">
         <button id="unlockBtn"><i class="fas fa-arrow-right"></i></button>
       </div>
-      <div class="hint">🔐 Indice : le mot de passe est <strong>sillage</strong> (démo)</div>
-      <a href="#" id="backToShopLink" class="back-link"><i class="fas fa-arrow-left"></i> retour à la boutique</a>
+      <div class="hint">🔐 Mot de passe: <strong>sillage</strong></div>
+      <a href="index.html" id="backToShopLink" class="back-link"><i class="fas fa-arrow-left"></i> Retour à la
+        boutique</a>
     </div>
 
-    <!-- PANEL ADMIN -->
+    <!-- ADMIN PANEL -->
     <div id="adminPanel" style="display: none;">
       <h1>
         <i class="fas fa-pen-nib"></i> Sillage · Gérer les produits
-        <span style="flex:1; text-align: right; font-size: 0.8rem; opacity:0.7;" id="loggedInAs"></span>
+        <span style="flex:1; text-align: right; font-size: 0.7rem; opacity:0.7;" id="loggedInAs"></span>
       </h1>
 
       <div class="two-column">
-        <!-- FORMULAIRE AJOUT PRODUIT -->
+        <!-- ADD PRODUCT FORM -->
         <div class="form-panel">
-          <h2><i class="fas fa-plus-circle" style="margin-right: 10px;"></i>Ajouter un parfum</h2>
+          <h2><i class="fas fa-plus-circle"></i> Ajouter un parfum</h2>
           <div class="input-group">
             <label>Nom du produit</label>
             <input type="text" id="productName" placeholder="ex. Bois d'Argent" autocomplete="off">
@@ -434,11 +646,11 @@
             <input type="text" id="productBrand" placeholder="PHYSALIS / NAEVE ...">
           </div>
           <div class="input-group">
-            <label>Prix (€)</label>
-            <input type="number" id="productPrice" step="0.01" min="0" value="89.00">
+            <label>Prix (TND)</label>
+            <input type="number" id="productPrice" step="0.001" min="0" value="89.000">
           </div>
 
-          <!-- Sélection d'icône -->
+          <!-- Icon Selection -->
           <div class="input-group">
             <label>Icône (si pas d'image)</label>
             <div class="icon-selector" id="iconSelector">
@@ -451,9 +663,9 @@
             </div>
           </div>
 
-          <!-- Téléchargement d'image -->
+          <!-- Image Upload -->
           <div class="input-group">
-            <label>Image du produit (optionnelle)</label>
+            <label>Image du produit</label>
             <div class="file-input-area" id="fileInputArea">
               <i class="fas fa-cloud-upload-alt"></i>
               <p>Cliquez pour sélectionner une image</p>
@@ -462,19 +674,20 @@
             <div id="imagePreview" style="display: none;">
               <img id="previewImg" src="#" alt="aperçu">
               <span id="previewFilename"></span>
-              <i class="fas fa-times" id="clearPreview" style="margin-left: auto; cursor:pointer; color:#b6987a;"></i>
+              <i class="fas fa-times" id="clearPreview"
+                style="margin-left: auto; cursor:pointer; color:var(--accent);"></i>
             </div>
           </div>
 
           <button class="btn-primary" id="addProductBtn"><i class="fas fa-gem"></i> Enregistrer le produit</button>
           <hr>
-          <p style="font-size:0.75rem; color:#aa9b8e;"><i class="fas fa-info-circle"></i> Les images sont stockées en
-            Base64 dans la base de données.</p>
+          <p style="font-size:0.7rem; color:var(--text-secondary);"><i class="fas fa-info-circle"></i> Les images sont
+            stockées en Base64</p>
         </div>
 
-        <!-- LISTE DES PRODUITS -->
+        <!-- PRODUCTS LIST -->
         <div class="list-panel">
-          <h2><i class="fas fa-box-open" style="margin-right: 10px;"></i>Parfums existants</h2>
+          <h2><i class="fas fa-box-open"></i> Parfums existants</h2>
           <div id="loadingAdmin" class="loading-spinner" style="display: none;">
             <i class="fas fa-spinner fa-spin"></i> Chargement...
           </div>
@@ -482,27 +695,58 @@
         </div>
       </div>
       <div style="margin-top: 1.5rem; text-align: right;">
-        <button id="logoutBtn"
-          style="background:none; border:none; color:#b6987a; cursor:pointer; text-decoration:underline;"><i
-            class="fas fa-sign-out-alt"></i> se déconnecter</button>
+        <button id="logoutBtn" class="logout-btn"
+          style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:0.85rem;">
+          <i class="fas fa-sign-out-alt"></i> Se déconnecter
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- toast -->
   <div id="adminToast" class="admin-toast">✨ Enregistré</div>
 
   <script>
     (function () {
-      // ---------- CONFIGURATION SUPABASE ----------
-      // REMPLACEZ CES VALEURS PAR VOS PROPRES CLÉS SUPABASE
-      const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';  // Your actual project URL
-      const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';  // Your actual key
-
-      // Initialiser le client Supabase
+      // Supabase Config
+      const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
+      const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-      // ---------- PROTECTION PAR MOT DE PASSE ----------
+      // Theme Switcher
+      function initTheme() {
+        const saved = localStorage.getItem('theme') || 'light';
+        if (saved === 'dark') {
+          document.body.classList.add('dark');
+          const sun = document.querySelector('#themeToggle .fa-sun');
+          const moon = document.querySelector('#themeToggle .fa-moon');
+          if (sun) sun.style.display = 'none';
+          if (moon) moon.style.display = 'inline-block';
+        }
+      }
+
+      function toggleTheme() {
+        if (document.body.classList.contains('dark')) {
+          document.body.classList.remove('dark');
+          localStorage.setItem('theme', 'light');
+          const sun = document.querySelector('#themeToggle .fa-sun');
+          const moon = document.querySelector('#themeToggle .fa-moon');
+          if (sun) sun.style.display = 'inline-block';
+          if (moon) moon.style.display = 'none';
+        } else {
+          document.body.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+          const sun = document.querySelector('#themeToggle .fa-sun');
+          const moon = document.querySelector('#themeToggle .fa-moon');
+          if (sun) sun.style.display = 'none';
+          if (moon) moon.style.display = 'inline-block';
+        }
+      }
+
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+      initTheme();
+
+      // Password Gate
       const GATE_PASSWORD = 'sillage';
       const gatePanel = document.getElementById('gatePanel');
       const adminPanel = document.getElementById('adminPanel');
@@ -514,14 +758,14 @@
       const loadingAdmin = document.getElementById('loadingAdmin');
       const adminListContainer = document.getElementById('adminProductListContainer');
 
-      // Éléments du formulaire
+      // Form Elements
       const productName = document.getElementById('productName');
       const productBrand = document.getElementById('productBrand');
       const productPrice = document.getElementById('productPrice');
       const iconOptions = document.querySelectorAll('.icon-option');
       let selectedIcon = 'fa-leaf';
 
-      // Upload d'image
+      // Image Upload
       const fileInput = document.getElementById('imageUpload');
       const fileArea = document.getElementById('fileInputArea');
       const imagePreview = document.getElementById('imagePreview');
@@ -530,15 +774,14 @@
       const clearPreview = document.getElementById('clearPreview');
       let uploadedImageBase64 = null;
 
-      // ---------- FONCTIONS ----------
       function showAdminToast(msg) {
         const toast = document.getElementById('adminToast');
         toast.textContent = msg;
         toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2000);
+        setTimeout(() => toast.classList.remove('show'), 2500);
       }
 
-      // Charger les produits depuis Supabase
+      // Load Products
       async function loadAdminProducts() {
         try {
           adminListContainer.innerHTML = '';
@@ -560,22 +803,22 @@
 
           let html = '';
           data.forEach(prod => {
-            const priceStr = parseFloat(prod.price).toFixed(2).replace('.', ',');
+            const priceStr = parseFloat(prod.price).toFixed(3).replace('.', ',');
             const iconOrImage = prod.image
               ? `<img src="${prod.image}" alt="${prod.name}">`
               : `<i class="fas ${prod.icon || 'fa-leaf'}"></i>`;
 
             html += `
-            <div class="admin-product-item" data-id="${prod.id}">
-              <div class="admin-product-img">${iconOrImage}</div>
-              <div class="admin-product-info">
-                <div class="admin-product-title">${prod.name}</div>
-                <div class="admin-product-brand">${prod.brand}</div>
-                <div class="admin-product-price">${priceStr}</div>
+              <div class="admin-product-item" data-id="${prod.id}">
+                <div class="admin-product-img">${iconOrImage}</div>
+                <div class="admin-product-info">
+                  <div class="admin-product-title">${prod.name}</div>
+                  <div class="admin-product-brand">${prod.brand}</div>
+                  <div class="admin-product-price">${priceStr} TND</div>
+                </div>
+                <button class="delete-btn" data-id="${prod.id}" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
               </div>
-              <button class="delete-btn" data-id="${prod.id}" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
-            </div>
-          `;
+            `;
           });
           adminListContainer.innerHTML = html;
         } catch (error) {
@@ -586,7 +829,7 @@
         }
       }
 
-      // Ajouter un produit
+      // Add Product
       async function addProduct() {
         const name = productName.value.trim();
         const brand = productBrand.value.trim();
@@ -612,10 +855,10 @@
 
           if (error) throw error;
 
-          // Réinitialiser le formulaire
+          // Reset form
           productName.value = '';
           productBrand.value = '';
-          productPrice.value = '89.00';
+          productPrice.value = '89.000';
 
           iconOptions.forEach(o => o.classList.remove('selected'));
           document.querySelector('.icon-option[data-icon="fa-leaf"]').classList.add('selected');
@@ -626,14 +869,14 @@
           fileInput.value = '';
 
           showAdminToast('✅ Produit ajouté');
-          loadAdminProducts(); // Recharger la liste
+          loadAdminProducts();
         } catch (error) {
           console.error('Erreur ajout:', error);
           showAdminToast('❌ Erreur lors de l\'ajout');
         }
       }
 
-      // Supprimer un produit
+      // Delete Product
       async function deleteProduct(id) {
         if (!confirm('Supprimer ce produit ?')) return;
 
@@ -653,7 +896,7 @@
         }
       }
 
-      // ---------- GESTIONNAIRES D'ÉVÉNEMENTS ----------
+      // Event Listeners
       unlockBtn.addEventListener('click', () => {
         if (passwordInput.value === GATE_PASSWORD) {
           gatePanel.style.display = 'none';
@@ -677,11 +920,10 @@
 
       backLink.addEventListener('click', (e) => {
         e.preventDefault();
-        window.location.href = '#'; // À remplacer par l'URL de votre boutique
-        alert('Retour à la boutique (à configurer)');
+        window.location.href = 'index.html';
       });
 
-      // Sélecteur d'icônes
+      // Icon selector
       iconOptions.forEach(opt => {
         opt.addEventListener('click', () => {
           iconOptions.forEach(o => o.classList.remove('selected'));
@@ -690,7 +932,7 @@
         });
       });
 
-      // Upload d'image
+      // Image upload
       fileArea.addEventListener('click', () => fileInput.click());
 
       fileInput.addEventListener('change', function (e) {
@@ -713,10 +955,8 @@
         fileInput.value = '';
       });
 
-      // Bouton d'ajout
       document.getElementById('addProductBtn').addEventListener('click', addProduct);
 
-      // Suppression (délégation)
       adminListContainer.addEventListener('click', (e) => {
         const deleteBtn = e.target.closest('.delete-btn');
         if (deleteBtn) {
