@@ -1316,14 +1316,14 @@
         const deliveredOrdersEl = document.getElementById('deliveredOrders');
         const ordersListEl = document.getElementById('ordersList');
         const logoutBtn = document.getElementById('logoutBtn');
+        const authLink = document.getElementById('authLink');
+        const profileLink = document.getElementById('profileLink');
 
         let currentUser = null;
         let allOrders = [];
 
         async function updateUserDisplay() {
             const { data: { user } } = await supabase.auth.getUser();
-            const authLink = document.getElementById('authLink');
-            const profileLink = document.getElementById('profileLink');
             if (user) {
                 if (authLink) authLink.style.display = 'none';
                 if (profileLink) profileLink.style.display = 'block';
@@ -1369,6 +1369,7 @@
                 updateStats();
                 displayOrders('all');
             } catch (error) {
+                console.error('Error loading orders:', error);
                 ordersListEl.innerHTML = '<div class="empty-orders">Erreur lors du chargement</div>';
             }
         }
