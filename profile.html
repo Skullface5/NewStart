@@ -512,22 +512,8 @@
             max-width: 1200px;
             margin: 1rem auto;
             padding: 0 1rem;
-            animation: fadeIn 0.5s ease-out;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Profile Header - Responsive */
         .profile-header {
             background: var(--card-gradient);
             border-radius: 24px;
@@ -567,13 +553,11 @@
             font-weight: 500;
             color: var(--text-primary);
             margin-bottom: 0.2rem;
-            word-break: break-word;
         }
 
         .profile-info p {
             color: var(--text-secondary);
             font-size: 0.85rem;
-            word-break: break-all;
         }
 
         .profile-info p i {
@@ -603,7 +587,6 @@
             color: var(--bg-primary);
         }
 
-        /* Stats Cards - Responsive Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -658,7 +641,6 @@
             letter-spacing: 0.05em;
         }
 
-        /* Orders Section - Responsive */
         .orders-section {
             background: var(--card-gradient);
             border-radius: 24px;
@@ -686,7 +668,6 @@
             color: var(--text-primary);
         }
 
-        /* Order Filters - Responsive */
         .order-filters {
             display: flex;
             gap: 0.6rem;
@@ -717,7 +698,6 @@
             color: var(--bg-primary);
         }
 
-        /* Orders List - Responsive */
         .orders-list {
             display: flex;
             flex-direction: column;
@@ -955,7 +935,6 @@
             margin-top: 2rem;
         }
 
-        /* Theme Variables */
         :root {
             --bg-primary: #ffffff;
             --bg-secondary: #fffbf5;
@@ -1156,332 +1135,347 @@
     </footer>
 
     <script>
-        // Language Menu
-        const langMenu = document.getElementById('langMenu');
-        if (langMenu) {
-            const langCurrent = langMenu.querySelector('.lang-current');
-            langCurrent.addEventListener('click', (e) => {
-                e.stopPropagation();
-                langMenu.classList.toggle('active');
-            });
-            document.querySelectorAll('.lang-option').forEach(opt => {
-                opt.addEventListener('click', () => langMenu.classList.remove('active'));
-            });
-            document.addEventListener('click', () => langMenu.classList.remove('active'));
-        }
+        (function () {
+            // Supabase Config
+            const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
+            const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Menu Toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-        const menuOverlay = document.getElementById('menuOverlay');
+            // DOM Elements
+            const profileContainer = document.getElementById('profileContainer');
+            const notLoggedIn = document.getElementById('notLoggedIn');
+            const userName = document.getElementById('userName');
+            const userEmail = document.getElementById('userEmail');
+            const totalOrdersEl = document.getElementById('totalOrders');
+            const pendingOrdersEl = document.getElementById('pendingOrders');
+            const deliveredOrdersEl = document.getElementById('deliveredOrders');
+            const ordersListEl = document.getElementById('ordersList');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const authLink = document.getElementById('authLink');
+            const profileLink = document.getElementById('profileLink');
 
-        function toggleMenu() {
-            navLinks.classList.toggle('active');
-            menuOverlay.classList.toggle('active');
-            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
-        }
-        if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
-        if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
-        if (navLinks) {
-            navLinks.querySelectorAll('a, .lang-current, .lang-option').forEach(el => {
-                el.addEventListener('click', () => {
-                    navLinks.classList.remove('active');
-                    menuOverlay.classList.remove('active');
-                    document.body.style.overflow = '';
+            // Menu Elements
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const langMenu = document.getElementById('langMenu');
+            const themeToggle = document.getElementById('themeToggle');
+
+            // Cart Elements
+            const cartToggle = document.getElementById('cartToggle');
+            const cartSidebar = document.getElementById('cartSidebar');
+            const cartOverlayEl = document.getElementById('cartOverlay');
+            const closeCartBtn = document.getElementById('closeCartBtn');
+            const cartCountSpan = document.getElementById('cartCount');
+            const cartItemsContainer = document.getElementById('cartItemsContainer');
+            const cartTotalSpan = document.getElementById('cartTotalPrice');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            const toast = document.getElementById('toast');
+
+            let cart = JSON.parse(localStorage.getItem('sillage_cart')) || [];
+            let currentUser = null;
+            let allOrders = [];
+
+            // Language Menu
+            if (langMenu) {
+                const langCurrent = langMenu.querySelector('.lang-current');
+                if (langCurrent) {
+                    langCurrent.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        langMenu.classList.toggle('active');
+                    });
+                }
+                document.querySelectorAll('.lang-option').forEach(opt => {
+                    opt.addEventListener('click', () => langMenu.classList.remove('active'));
                 });
-            });
-        }
-
-        // Cart Functions
-        let cart = JSON.parse(localStorage.getItem('sillage_cart')) || [];
-        const cartSidebar = document.getElementById('cartSidebar');
-        const cartOverlayEl = document.getElementById('cartOverlay');
-        const cartToggle = document.getElementById('cartToggle');
-        const closeCartBtn = document.getElementById('closeCartBtn');
-        const cartCountSpan = document.getElementById('cartCount');
-        const cartItemsContainer = document.getElementById('cartItemsContainer');
-        const cartTotalSpan = document.getElementById('cartTotalPrice');
-        const toast = document.getElementById('toast');
-        const checkoutBtn = document.getElementById('checkoutBtn');
-
-        function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
-
-        function updateCartCount() {
-            const total = cart.reduce((acc, i) => acc + (i.quantity || 1), 0);
-            if (cartCountSpan) cartCountSpan.textContent = total;
-        }
-
-        function renderCart() {
-            if (!cartItemsContainer) return;
-            if (cart.length === 0) {
-                cartItemsContainer.innerHTML = '<div class="empty-cart-message">Votre panier est vide.</div>';
-                if (cartTotalSpan) cartTotalSpan.textContent = '0,000 TND';
-                return;
+                document.addEventListener('click', () => langMenu?.classList.remove('active'));
             }
-            let html = '', total = 0;
-            cart.forEach(item => {
-                const subtotal = item.price * (item.quantity || 1);
-                total += subtotal;
-                html += `
-                    <div class="cart-item" data-id="${item.id}">
-                        <div class="cart-item-icon"><i class="fas ${item.icon || 'fa-leaf'}"></i></div>
-                        <div class="cart-item-info">
-                            <div class="cart-item-title">${item.name}</div>
-                            <div class="cart-item-price">${formatPrice(item.price)}</div>
-                            <div class="cart-item-quantity">
-                                <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
-                                <span class="quantity-value">${item.quantity || 1}</span>
-                                <button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button>
-                            </div>
-                        </div>
-                        <button class="cart-item-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
-                    </div>
-                `;
-            });
-            cartItemsContainer.innerHTML = html;
-            if (cartTotalSpan) cartTotalSpan.textContent = formatPrice(total);
-        }
 
-        function saveCart() {
-            localStorage.setItem('sillage_cart', JSON.stringify(cart));
-            updateCartCount();
-            renderCart();
-        }
-
-        function showToast(msg) {
-            if (!toast) return;
-            toast.textContent = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
-        }
-
-        function removeFromCart(id) {
-            cart = cart.filter(i => i.id !== id);
-            saveCart();
-            showToast('🗑️ Article retiré');
-        }
-
-        function updateQuantity(id, action) {
-            const item = cart.find(i => i.id === id);
-            if (!item) return;
-            if (action === 'increase') item.quantity = (item.quantity || 1) + 1;
-            else if (action === 'decrease') {
-                if (item.quantity > 1) item.quantity -= 1;
-                else removeFromCart(id);
+            // Menu Toggle
+            function toggleMenu() {
+                if (!navLinks) return;
+                navLinks.classList.toggle('active');
+                if (menuOverlay) menuOverlay.classList.toggle('active');
+                document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
             }
-            saveCart();
-        }
-
-        function openCart() {
-            if (cartSidebar) cartSidebar.classList.add('open');
-            if (cartOverlayEl) cartOverlayEl.classList.add('active');
-            if (navLinks.classList.contains('active')) toggleMenu();
-        }
-
-        function closeCart() {
-            if (cartSidebar) cartSidebar.classList.remove('open');
-            if (cartOverlayEl) cartOverlayEl.classList.remove('active');
-        }
-
-        if (cartToggle) cartToggle.addEventListener('click', openCart);
-        if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
-        if (cartOverlayEl) cartOverlayEl.addEventListener('click', closeCart);
-        if (cartItemsContainer) {
-            cartItemsContainer.addEventListener('click', (e) => {
-                const remove = e.target.closest('.cart-item-remove');
-                if (remove) removeFromCart(remove.dataset.id);
-                const qty = e.target.closest('.quantity-btn');
-                if (qty) updateQuantity(qty.dataset.id, qty.dataset.action);
-            });
-        }
-        if (checkoutBtn) {
-            checkoutBtn.addEventListener('click', () => {
-                if (cart.length === 0) showToast('🛒 Votre panier est vide');
-                else window.location.href = 'index.html';
-            });
-        }
-
-        // Supabase
-        const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        // Profile Functions
-        const profileContainer = document.getElementById('profileContainer');
-        const notLoggedIn = document.getElementById('notLoggedIn');
-        const userName = document.getElementById('userName');
-        const userEmail = document.getElementById('userEmail');
-        const totalOrdersEl = document.getElementById('totalOrders');
-        const pendingOrdersEl = document.getElementById('pendingOrders');
-        const deliveredOrdersEl = document.getElementById('deliveredOrders');
-        const ordersListEl = document.getElementById('ordersList');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const authLink = document.getElementById('authLink');
-        const profileLink = document.getElementById('profileLink');
-
-        let currentUser = null;
-        let allOrders = [];
-
-        async function updateUserDisplay() {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                if (authLink) authLink.style.display = 'none';
-                if (profileLink) profileLink.style.display = 'block';
-            } else {
-                if (authLink) authLink.style.display = 'block';
-                if (profileLink) profileLink.style.display = 'none';
+            if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
+            if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
+            if (navLinks) {
+                navLinks.querySelectorAll('a, .lang-current, .lang-option').forEach(el => {
+                    el.addEventListener('click', () => {
+                        navLinks.classList.remove('active');
+                        if (menuOverlay) menuOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    });
+                });
             }
-        }
-        updateUserDisplay();
-        supabase.auth.onAuthStateChange(() => updateUserDisplay());
 
-        async function checkUser() {
-            try {
-                const { data: { user } } = await supabase.auth.getUser();
-                if (!user) {
-                    profileContainer.style.display = 'none';
-                    notLoggedIn.style.display = 'block';
+            // Cart Functions
+            function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
+
+            function updateCartCount() {
+                const total = cart.reduce((acc, i) => acc + (i.quantity || 1), 0);
+                if (cartCountSpan) cartCountSpan.textContent = total;
+            }
+
+            function renderCart() {
+                if (!cartItemsContainer) return;
+                if (cart.length === 0) {
+                    cartItemsContainer.innerHTML = '<div class="empty-cart-message">Votre panier est vide.</div>';
+                    if (cartTotalSpan) cartTotalSpan.textContent = '0,000 TND';
                     return;
                 }
-                currentUser = user;
-                profileContainer.style.display = 'block';
-                notLoggedIn.style.display = 'none';
-                userName.textContent = user.email?.split('@')[0] || 'Client';
-                userEmail.textContent = user.email;
-                await loadOrders();
-            } catch (err) {
-                console.error(err);
-                profileContainer.style.display = 'none';
-                notLoggedIn.style.display = 'block';
-            }
-        }
-
-        async function loadOrders() {
-            try {
-                ordersListEl.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Chargement...</div>';
-                const { data, error } = await supabase
-                    .from('orders')
-                    .select('*')
-                    .eq('user_id', currentUser.id)
-                    .order('created_at', { ascending: false });
-                if (error) throw error;
-                allOrders = data || [];
-                updateStats();
-                displayOrders('all');
-            } catch (error) {
-                console.error('Error loading orders:', error);
-                ordersListEl.innerHTML = '<div class="empty-orders">Erreur lors du chargement</div>';
-            }
-        }
-
-        function updateStats() {
-            totalOrdersEl.textContent = allOrders.length;
-            const pending = allOrders.filter(o => ['pending', 'review', 'shipped'].includes(o.status)).length;
-            const delivered = allOrders.filter(o => o.status === 'delivered').length;
-            pendingOrdersEl.textContent = pending;
-            deliveredOrdersEl.textContent = delivered;
-        }
-
-        function displayOrders(filter) {
-            let filtered = filter === 'all' ? allOrders : allOrders.filter(o => o.status === filter);
-            if (filtered.length === 0) {
-                ordersListEl.innerHTML = `<div class="empty-orders"><i class="fas fa-box-open"></i><p>Aucune commande trouvée</p><a href="index.html" class="shop-now-btn">Découvrir nos parfums</a></div>`;
-                return;
-            }
-            let html = '';
-            filtered.forEach((order, idx) => {
-                const statusText = { pending: 'En attente', review: 'En révision', shipped: 'Expédiée', delivered: 'Livrée', cancelled: 'Annulée' }[order.status];
-                const statusClass = `status-${order.status}`;
-                const date = new Date(order.created_at).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-                let itemsHtml = '';
-                order.items.forEach(item => {
-                    itemsHtml += `
-                        <div class="order-item">
-                            <div class="order-item-name">
-                                <i class="fas fa-leaf"></i>
-                                <span>${item.name}</span>
-                                <span class="order-item-quantity">x${item.quantity}</span>
+                let html = '', total = 0;
+                cart.forEach(item => {
+                    const subtotal = item.price * (item.quantity || 1);
+                    total += subtotal;
+                    html += `
+                        <div class="cart-item" data-id="${item.id}">
+                            <div class="cart-item-icon"><i class="fas ${item.icon || 'fa-leaf'}"></i></div>
+                            <div class="cart-item-info">
+                                <div class="cart-item-title">${item.name}</div>
+                                <div class="cart-item-price">${formatPrice(item.price)}</div>
+                                <div class="cart-item-quantity">
+                                    <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
+                                    <span class="quantity-value">${item.quantity || 1}</span>
+                                    <button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button>
+                                </div>
                             </div>
-                            <span class="order-item-price">${item.price.toFixed(3).replace('.', ',')} TND</span>
+                            <button class="cart-item-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
                         </div>
                     `;
                 });
-                html += `
-                    <div class="order-card">
-                        <div class="order-header">
-                            <div class="order-id"><i class="fas fa-receipt"></i> ${order.id.slice(0, 8)}...</div>
-                            <div class="order-date"><i class="fas fa-calendar-alt"></i> ${date}</div>
-                            <div class="order-status ${statusClass}"><i class="fas ${statusClass === 'status-pending' ? 'fa-clock' : statusClass === 'status-review' ? 'fa-search' : statusClass === 'status-shipped' ? 'fa-truck' : statusClass === 'status-delivered' ? 'fa-check-circle' : 'fa-times-circle'}"></i> ${statusText}</div>
-                        </div>
-                        <div class="order-items">${itemsHtml}</div>
-                        <div class="order-total"><span>Total</span><span>${order.total.toFixed(3).replace('.', ',')} TND</span></div>
-                        ${order.status === 'pending' ? `<div style="text-align: right;"><button onclick="cancelOrder('${order.id}')" class="cancel-btn"><i class="fas fa-times"></i> Annuler</button></div>` : ''}
-                    </div>
-                `;
-            });
-            ordersListEl.innerHTML = html;
-        }
+                cartItemsContainer.innerHTML = html;
+                if (cartTotalSpan) cartTotalSpan.textContent = formatPrice(total);
+            }
 
-        window.cancelOrder = async function (orderId) {
-            if (!confirm('Annuler cette commande ?')) return;
-            try {
-                const { error } = await supabase.from('orders').update({ status: 'cancelled' }).eq('id', orderId).eq('user_id', currentUser.id);
-                if (error) throw error;
-                alert('✅ Commande annulée');
-                await loadOrders();
-            } catch (err) { alert('❌ Erreur'); }
-        };
+            function saveCart() {
+                localStorage.setItem('sillage_cart', JSON.stringify(cart));
+                updateCartCount();
+                renderCart();
+            }
 
-        window.filterOrders = function (filter) {
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            displayOrders(filter);
-        };
+            function showToast(msg) {
+                if (!toast) return;
+                toast.textContent = msg;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            }
 
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', async () => {
-                if (confirm('Se déconnecter ?')) {
-                    await supabase.auth.signOut();
-                    window.location.reload();
+            function removeFromCart(id) {
+                cart = cart.filter(i => i.id !== id);
+                saveCart();
+                showToast('🗑️ Article retiré');
+            }
+
+            function updateQuantity(id, action) {
+                const item = cart.find(i => i.id === id);
+                if (!item) return;
+                if (action === 'increase') item.quantity = (item.quantity || 1) + 1;
+                else if (action === 'decrease') {
+                    if (item.quantity > 1) item.quantity -= 1;
+                    else removeFromCart(id);
                 }
+                saveCart();
+            }
+
+            function openCart() {
+                if (cartSidebar) cartSidebar.classList.add('open');
+                if (cartOverlayEl) cartOverlayEl.classList.add('active');
+                if (navLinks?.classList.contains('active')) toggleMenu();
+            }
+
+            function closeCart() {
+                if (cartSidebar) cartSidebar.classList.remove('open');
+                if (cartOverlayEl) cartOverlayEl.classList.remove('active');
+            }
+
+            if (cartToggle) cartToggle.addEventListener('click', openCart);
+            if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
+            if (cartOverlayEl) cartOverlayEl.addEventListener('click', closeCart);
+            if (cartItemsContainer) {
+                cartItemsContainer.addEventListener('click', (e) => {
+                    const remove = e.target.closest('.cart-item-remove');
+                    if (remove) removeFromCart(remove.dataset.id);
+                    const qty = e.target.closest('.quantity-btn');
+                    if (qty) updateQuantity(qty.dataset.id, qty.dataset.action);
+                });
+            }
+            if (checkoutBtn) {
+                checkoutBtn.addEventListener('click', () => {
+                    if (cart.length === 0) showToast('🛒 Votre panier est vide');
+                    else window.location.href = 'index.html';
+                });
+            }
+
+            // Auth Functions
+            async function updateUserDisplay() {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user) {
+                    if (authLink) authLink.style.display = 'none';
+                    if (profileLink) profileLink.style.display = 'block';
+                } else {
+                    if (authLink) authLink.style.display = 'block';
+                    if (profileLink) profileLink.style.display = 'none';
+                }
+            }
+
+            async function checkUser() {
+                try {
+                    const { data: { user } } = await supabase.auth.getUser();
+                    if (!user) {
+                        if (profileContainer) profileContainer.style.display = 'none';
+                        if (notLoggedIn) notLoggedIn.style.display = 'block';
+                        return;
+                    }
+                    currentUser = user;
+                    if (profileContainer) profileContainer.style.display = 'block';
+                    if (notLoggedIn) notLoggedIn.style.display = 'none';
+                    if (userName) userName.textContent = user.email?.split('@')[0] || 'Client';
+                    if (userEmail) userEmail.textContent = user.email;
+                    await loadOrders();
+                } catch (err) {
+                    console.error(err);
+                    if (profileContainer) profileContainer.style.display = 'none';
+                    if (notLoggedIn) notLoggedIn.style.display = 'block';
+                }
+            }
+
+            async function loadOrders() {
+                if (!ordersListEl) return;
+                try {
+                    ordersListEl.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Chargement...</div>';
+                    const { data, error } = await supabase
+                        .from('orders')
+                        .select('*')
+                        .eq('user_id', currentUser.id)
+                        .order('created_at', { ascending: false });
+                    if (error) throw error;
+                    allOrders = data || [];
+                    updateStats();
+                    displayOrders('all');
+                } catch (error) {
+                    console.error('Error loading orders:', error);
+                    ordersListEl.innerHTML = '<div class="empty-orders">Erreur lors du chargement</div>';
+                }
+            }
+
+            function updateStats() {
+                if (totalOrdersEl) totalOrdersEl.textContent = allOrders.length;
+                const pending = allOrders.filter(o => ['pending', 'review', 'shipped'].includes(o.status)).length;
+                const delivered = allOrders.filter(o => o.status === 'delivered').length;
+                if (pendingOrdersEl) pendingOrdersEl.textContent = pending;
+                if (deliveredOrdersEl) deliveredOrdersEl.textContent = delivered;
+            }
+
+            function displayOrders(filter) {
+                if (!ordersListEl) return;
+                let filtered = filter === 'all' ? allOrders : allOrders.filter(o => o.status === filter);
+                if (filtered.length === 0) {
+                    ordersListEl.innerHTML = `<div class="empty-orders"><i class="fas fa-box-open"></i><p>Aucune commande trouvée</p><a href="index.html" class="shop-now-btn">Découvrir nos parfums</a></div>`;
+                    return;
+                }
+                let html = '';
+                filtered.forEach((order) => {
+                    const statusText = { pending: 'En attente', review: 'En révision', shipped: 'Expédiée', delivered: 'Livrée', cancelled: 'Annulée' }[order.status];
+                    const statusClass = `status-${order.status}`;
+                    const date = new Date(order.created_at).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    let itemsHtml = '';
+                    order.items.forEach(item => {
+                        itemsHtml += `
+                            <div class="order-item">
+                                <div class="order-item-name">
+                                    <i class="fas fa-leaf"></i>
+                                    <span>${item.name}</span>
+                                    <span class="order-item-quantity">x${item.quantity}</span>
+                                </div>
+                                <span class="order-item-price">${item.price.toFixed(3).replace('.', ',')} TND</span>
+                            </div>
+                        `;
+                    });
+                    html += `
+                        <div class="order-card">
+                            <div class="order-header">
+                                <div class="order-id"><i class="fas fa-receipt"></i> ${order.id.slice(0, 8)}...</div>
+                                <div class="order-date"><i class="fas fa-calendar-alt"></i> ${date}</div>
+                                <div class="order-status ${statusClass}"><i class="fas ${statusClass === 'status-pending' ? 'fa-clock' : statusClass === 'status-review' ? 'fa-search' : statusClass === 'status-shipped' ? 'fa-truck' : statusClass === 'status-delivered' ? 'fa-check-circle' : 'fa-times-circle'}"></i> ${statusText}</div>
+                            </div>
+                            <div class="order-items">${itemsHtml}</div>
+                            <div class="order-total"><span>Total</span><span>${order.total.toFixed(3).replace('.', ',')} TND</span></div>
+                            ${order.status === 'pending' ? `<div style="text-align: right;"><button onclick="cancelOrder('${order.id}')" class="cancel-btn"><i class="fas fa-times"></i> Annuler</button></div>` : ''}
+                        </div>
+                    `;
+                });
+                ordersListEl.innerHTML = html;
+            }
+
+            window.cancelOrder = async function (orderId) {
+                if (!confirm('Annuler cette commande ?')) return;
+                try {
+                    const { error } = await supabase.from('orders').update({ status: 'cancelled' }).eq('id', orderId).eq('user_id', currentUser.id);
+                    if (error) throw error;
+                    alert('✅ Commande annulée');
+                    await loadOrders();
+                } catch (err) { alert('❌ Erreur'); }
+            };
+
+            window.filterOrders = function (filter) {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                event.target.classList.add('active');
+                displayOrders(filter);
+            };
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async () => {
+                    if (confirm('Se déconnecter ?')) {
+                        await supabase.auth.signOut();
+                        window.location.reload();
+                    }
+                });
+            }
+
+            // Theme Switcher
+            function initTheme() {
+                const saved = localStorage.getItem('theme') || 'light';
+                if (saved === 'dark') {
+                    document.body.classList.add('dark');
+                    const sun = document.querySelector('#themeToggle .fa-sun');
+                    const moon = document.querySelector('#themeToggle .fa-moon');
+                    if (sun) sun.style.display = 'none';
+                    if (moon) moon.style.display = 'inline-block';
+                }
+            }
+
+            function toggleTheme() {
+                if (document.body.classList.contains('dark')) {
+                    document.body.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                    const sun = document.querySelector('#themeToggle .fa-sun');
+                    const moon = document.querySelector('#themeToggle .fa-moon');
+                    if (sun) sun.style.display = 'inline-block';
+                    if (moon) moon.style.display = 'none';
+                } else {
+                    document.body.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                    const sun = document.querySelector('#themeToggle .fa-sun');
+                    const moon = document.querySelector('#themeToggle .fa-moon');
+                    if (sun) sun.style.display = 'none';
+                    if (moon) moon.style.display = 'inline-block';
+                }
+            }
+
+            if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+
+            // Initialize
+            initTheme();
+            checkUser();
+            updateUserDisplay();
+            supabase.auth.onAuthStateChange(() => {
+                updateUserDisplay();
+                checkUser();
             });
-        }
-
-        // Theme Switcher
-        function initTheme() {
-            const saved = localStorage.getItem('theme') || 'light';
-            if (saved === 'dark') {
-                document.body.classList.add('dark');
-                const sun = document.querySelector('#themeToggle .fa-sun');
-                const moon = document.querySelector('#themeToggle .fa-moon');
-                if (sun) sun.style.display = 'none';
-                if (moon) moon.style.display = 'inline-block';
-            }
-        }
-
-        function toggleTheme() {
-            if (document.body.classList.contains('dark')) {
-                document.body.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-                const sun = document.querySelector('#themeToggle .fa-sun');
-                const moon = document.querySelector('#themeToggle .fa-moon');
-                if (sun) sun.style.display = 'inline-block';
-                if (moon) moon.style.display = 'none';
-            } else {
-                document.body.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-                const sun = document.querySelector('#themeToggle .fa-sun');
-                const moon = document.querySelector('#themeToggle .fa-moon');
-                if (sun) sun.style.display = 'none';
-                if (moon) moon.style.display = 'inline-block';
-            }
-        }
-
-        const themeToggle = document.getElementById('themeToggle');
-        if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
-        initTheme();
-        checkUser();
-        saveCart();
+            saveCart();
+        })();
     </script>
 </body>
 
