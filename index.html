@@ -17,37 +17,6 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    /* Language Switcher */
-    .language-switcher {
-      display: flex;
-      gap: 5px;
-      margin-right: 10px;
-    }
-
-    .lang-btn {
-      background: none;
-      border: 1px solid var(--border, #dbcec2);
-      color: var(--text-secondary, #5f5348);
-      padding: 6px 12px;
-      border-radius: 30px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 500;
-      transition: all 0.2s;
-    }
-
-    .lang-btn:hover {
-      background: var(--hover-bg, #f5f0ea);
-      border-color: var(--accent, #b6987a);
-      color: var(--accent, #b6987a);
-    }
-
-    .lang-btn.active {
-      background: var(--accent, #b6987a);
-      color: white;
-      border-color: var(--accent, #b6987a);
-    }
-
     body {
       background: var(--bg-gradient);
       color: var(--text-primary);
@@ -121,18 +90,6 @@
       color: var(--accent);
     }
 
-    .theme-toggle {
-      cursor: pointer;
-      font-size: 1.3rem;
-      color: var(--accent);
-      margin-right: 15px;
-      transition: transform 0.3s ease;
-    }
-
-    .theme-toggle:hover {
-      transform: rotate(15deg);
-    }
-
     .cart-icon {
       position: relative;
       cursor: pointer;
@@ -183,7 +140,7 @@
       position: absolute;
       top: 100%;
       right: 0;
-      width: 250px;
+      width: 260px;
       background: var(--bg-primary);
       backdrop-filter: blur(10px);
       gap: 0;
@@ -199,7 +156,7 @@
     }
 
     .nav-links.active {
-      max-height: 300px;
+      max-height: 400px;
       opacity: 1;
       padding: 0.5rem 0;
     }
@@ -236,6 +193,73 @@
       border-left: 8px solid transparent;
       border-right: 8px solid transparent;
       border-bottom: 8px solid var(--bg-primary);
+    }
+
+    /* Language Dropdown inside menu */
+    .lang-menu {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .lang-current {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 1rem 1.5rem;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .lang-current:hover {
+      background: var(--hover-bg);
+      color: var(--accent);
+    }
+
+    .lang-current i {
+      font-size: 0.8rem;
+      transition: transform 0.2s;
+    }
+
+    .lang-menu.active .lang-current i {
+      transform: rotate(180deg);
+    }
+
+    .lang-options {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      background: var(--bg-primary);
+    }
+
+    .lang-menu.active .lang-options {
+      max-height: 150px;
+    }
+
+    .lang-option {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.8rem 1.5rem 0.8rem 2.5rem;
+      background: none;
+      border: none;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .lang-option:hover {
+      background: var(--hover-bg);
+      color: var(--accent);
+    }
+
+    .lang-option.active {
+      color: var(--accent);
     }
 
     .menu-overlay {
@@ -989,7 +1013,6 @@
       }
     }
 
-    /* Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
     }
@@ -1048,22 +1071,6 @@
       --hover-bg: rgba(255, 215, 0, 0.1);
     }
 
-    /* Header right side group */
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .cart-icon {
-      position: relative;
-      cursor: pointer;
-      font-size: 1.6rem;
-      color: var(--accent);
-      transition: color 0.2s;
-      z-index: 102;
-    }
-
     .theme-toggle {
       cursor: pointer;
       font-size: 1.3rem;
@@ -1074,22 +1081,14 @@
     .theme-toggle:hover {
       transform: rotate(15deg);
     }
-
-    .language-switcher {
-      display: flex;
-      gap: 5px;
-    }
   </style>
 </head>
 
 <body>
-  <!-- Menu overlay for mobile -->
   <div id="menuOverlay" class="menu-overlay"></div>
-
-  <!-- NOTIFICATION TOAST -->
   <div id="toast" class="notification">✨ Article ajouté</div>
 
-  <!-- Checkout Form Modal -->
+  <!-- Checkout Modal -->
   <div id="checkoutModal" class="modal-overlay">
     <div class="modal-content">
       <div class="modal-header">
@@ -1138,11 +1137,11 @@
     </div>
   </div>
 
-  <!-- OVERLAY & PANIER LATÉRAL -->
+  <!-- Cart Sidebar -->
   <div id="cartOverlay" class="cart-overlay"></div>
   <aside id="cartSidebar" class="cart-sidebar">
     <div class="cart-header">
-      <h3><i class="fas fa-bag-shopping" style="margin-right: 8px;"></i> Votre panier</h3>
+      <h3><i class="fas fa-bag-shopping"></i> Votre panier</h3>
       <button class="close-cart" id="closeCartBtn"><i class="fas fa-times"></i></button>
     </div>
     <div id="cartItemsContainer" class="cart-items">
@@ -1153,12 +1152,11 @@
         <span>Total</span>
         <span id="cartTotalPrice">0,000 TND</span>
       </div>
-      <button class="checkout-btn" id="checkoutBtn">PAIEMENT <i class="fas fa-arrow-right"
-          style="margin-left: 8px;"></i></button>
+      <button class="checkout-btn" id="checkoutBtn">PAIEMENT <i class="fas fa-arrow-right"></i></button>
     </div>
   </aside>
 
-  <!-- PAGE PRINCIPALE -->
+  <!-- Header -->
   <header>
     <div class="container header-flex">
       <div class="logo">
@@ -1166,22 +1164,9 @@
         <h1>SILLAGE</h1>
       </div>
 
-      <div class="header-right">
-        <div class="language-switcher">
-          <button class="lang-btn" data-lang="fr">FR</button>
-          <button class="lang-btn" data-lang="en">EN</button>
-          <button class="lang-btn" data-lang="ar">AR</button>
-        </div>
-
-        <div class="cart-icon" id="cartToggle">
-          <i class="fas fa-bag-shopping"></i>
-          <span id="cartCount" class="cart-count">0</span>
-        </div>
-
-        <div class="theme-toggle" id="themeToggle">
-          <i class="fas fa-sun"></i>
-          <i class="fas fa-moon" style="display: none;"></i>
-        </div>
+      <div class="cart-icon" id="cartToggle">
+        <i class="fas fa-bag-shopping"></i>
+        <span id="cartCount" class="cart-count">0</span>
       </div>
 
       <button class="menu-toggle" id="menuToggle">
@@ -1192,6 +1177,20 @@
         <a href="#">COLLECTION</a>
         <a href="#">EXCLUSIVITÉS</a>
         <a href="#">COFFRETS</a>
+
+        <!-- Language Dropdown INSIDE the menu -->
+        <div class="lang-menu" id="langMenu">
+          <button class="lang-current" id="langCurrentBtn">
+            <span id="currentLangText">FRANÇAIS</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="lang-options">
+            <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
+            <button class="lang-option" data-lang="en">🇬🇧 English</button>
+            <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
+          </div>
+        </div>
+
         <a href="login146.html" id="authLink">Se connecter</a>
         <span id="userEmailDisplay" style="display: none; color: var(--accent); cursor: pointer;"></span>
       </div>
@@ -1204,7 +1203,7 @@
       <p>Parfums de niche sélectionnés à la main – intemporels, sensuels, authentiques.</p>
     </section>
 
-    <!-- CATEGORY CARDS -->
+    <!-- Category Cards -->
     <div class="categories-section">
       <div class="category-grid">
         <a href="man.html" class="category-card cat-man">
@@ -1236,6 +1235,36 @@
   <footer>
     <p>© Sillage Atelier – impressions éthérées depuis 2026-2027</p>
   </footer>
+
+  <script>
+    // Language Menu Dropdown
+    const langMenu = document.getElementById('langMenu');
+    const langCurrentBtn = document.getElementById('langCurrentBtn');
+    const currentLangText = document.getElementById('currentLangText');
+
+    langCurrentBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      langMenu.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.lang-option').forEach(option => {
+      option.addEventListener('click', (e) => {
+        const lang = option.getAttribute('data-lang');
+        const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+        currentLangText.textContent = langNames[lang];
+        langMenu.classList.remove('active');
+        // Here you would call your translation function
+        console.log('Language changed to:', lang);
+      });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!langMenu.contains(e.target)) {
+        langMenu.classList.remove('active');
+      }
+    });
+  </script>
 
   <script>
     (function () {
