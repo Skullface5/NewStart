@@ -22,19 +22,68 @@
       color: var(--text-primary);
       transition: background 0.3s ease, color 0.3s ease;
       line-height: 1.5;
+      position: relative;
+      overflow-x: hidden;
     }
 
+    /* Animated background with floating particles */
     body::before {
       content: '';
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc0IiBudW1PY3RhdmVzPSIzIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNmKSIgb3BhY2l0eT0iMC4wMjUiIC8+PC9zdmc+');
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
       pointer-events: none;
-      z-index: 9999;
-      opacity: 0.3;
+      z-index: -1;
+      animation: backgroundPulse 8s ease-in-out infinite;
+    }
+
+    @keyframes backgroundPulse {
+
+      0%,
+      100% {
+        opacity: 0.6;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.02);
+      }
+    }
+
+    /* Floating gold particles */
+    .particle {
+      position: fixed;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+      animation: floatParticle 12s infinite;
+      z-index: 0;
+    }
+
+    @keyframes floatParticle {
+      0% {
+        opacity: 0;
+        transform: translateY(100vh) rotate(0deg);
+      }
+
+      10% {
+        opacity: 0.3;
+      }
+
+      90% {
+        opacity: 0.3;
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-20vh) rotate(360deg);
+      }
     }
 
     h1,
@@ -54,6 +103,8 @@
       max-width: 1300px;
       margin: 0 auto;
       padding: 1.5rem 2rem;
+      position: relative;
+      z-index: 10;
     }
 
     header {
@@ -1085,6 +1136,23 @@
 </head>
 
 <body>
+  <!-- Floating Gold Particles -->
+  <script>
+    // Create floating gold particles
+    for (let i = 0; i < 40; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      const size = Math.random() * 6 + 2;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 15 + 's';
+      particle.style.animationDuration = Math.random() * 10 + 8 + 's';
+      particle.style.opacity = Math.random() * 0.4 + 0.1;
+      document.body.appendChild(particle);
+    }
+  </script>
+
   <div id="menuOverlay" class="menu-overlay"></div>
   <div id="toast" class="notification">✨ Article ajouté</div>
 
