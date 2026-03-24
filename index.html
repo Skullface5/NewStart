@@ -1557,7 +1557,7 @@
           if (user) orderData.user_id = user.id;
           const { data: order, error } = await supabase.from('orders').insert([orderData]).select().single();
           if (error) throw error;
-          await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/functions/v1/smart-responder', {
+          await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/functions/v1/send-order-email', {
             method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_' },
             body: JSON.stringify({ order: order, customerEmail: customerEmail })
           });
