@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Sillage · Console Administrateur</title>
+  <title>Rosa Fragrances · Console Administrateur</title>
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- Supabase client library -->
@@ -26,9 +26,11 @@
       justify-content: center;
       padding: 1.5rem;
       transition: background 0.3s ease, color 0.3s ease;
+      position: relative;
+      overflow-x: hidden;
     }
 
-    /* Animated background */
+    /* Animated background with floating particles */
     body::before {
       content: '';
       position: fixed;
@@ -40,6 +42,52 @@
         radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
       pointer-events: none;
       z-index: -1;
+      animation: backgroundPulse 8s ease-in-out infinite;
+    }
+
+    @keyframes backgroundPulse {
+
+      0%,
+      100% {
+        opacity: 0.6;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.02);
+      }
+    }
+
+    /* Floating gold particles */
+    .particle {
+      position: fixed;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+      animation: floatParticle 12s infinite;
+      z-index: 0;
+    }
+
+    @keyframes floatParticle {
+      0% {
+        opacity: 0;
+        transform: translateY(100vh) rotate(0deg);
+      }
+
+      10% {
+        opacity: 0.3;
+      }
+
+      90% {
+        opacity: 0.3;
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-20vh) rotate(360deg);
+      }
     }
 
     .admin-wrapper {
@@ -55,6 +103,8 @@
       padding: 2.2rem 2.5rem;
       transition: all 0.3s ease;
       animation: slideUp 0.6s ease-out;
+      position: relative;
+      z-index: 10;
     }
 
     @keyframes slideUp {
@@ -129,6 +179,7 @@
 
     .form-panel:hover {
       box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
     }
 
     .input-group {
@@ -222,6 +273,7 @@
     .file-input-area:hover {
       border-color: var(--accent);
       background: var(--hover-bg);
+      transform: translateY(-2px);
     }
 
     .file-input-area i {
@@ -606,6 +658,23 @@
 </head>
 
 <body>
+  <!-- Floating Gold Particles -->
+  <script>
+    // Create floating gold particles
+    for (let i = 0; i < 40; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      const size = Math.random() * 6 + 2;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 15 + 's';
+      particle.style.animationDuration = Math.random() * 10 + 8 + 's';
+      particle.style.opacity = Math.random() * 0.4 + 0.1;
+      document.body.appendChild(particle);
+    }
+  </script>
+
   <!-- Theme Toggle Button -->
   <div class="theme-toggle" id="themeToggle">
     <i class="fas fa-sun"></i>
@@ -615,13 +684,13 @@
   <div class="admin-wrapper" id="adminWrapper">
     <!-- GATE PANEL -->
     <div id="gatePanel" class="gate">
-      <i class="fas fa-lock" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem;"></i>
+      <i class="fas fa-spa" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem;"></i>
       <h2>Espace propriétaire</h2>
       <div class="password-input">
         <input type="password" id="passwordInput" placeholder="Mot de passe" value="">
         <button id="unlockBtn"><i class="fas fa-arrow-right"></i></button>
       </div>
-      <div class="hint">🔐 Mot de passe: <strong>sillage</strong></div>
+      <div class="hint">🔐 Mot de passe: <strong>rosa</strong></div>
       <a href="index.html" id="backToShopLink" class="back-link"><i class="fas fa-arrow-left"></i> Retour à la
         boutique</a>
     </div>
@@ -629,7 +698,7 @@
     <!-- ADMIN PANEL -->
     <div id="adminPanel" style="display: none;">
       <h1>
-        <i class="fas fa-pen-nib"></i> Sillage · Gérer les produits
+        <i class="fas fa-spa"></i> Rosa Fragrances · Gérer les produits
         <span style="flex:1; text-align: right; font-size: 0.7rem; opacity:0.7;" id="loggedInAs"></span>
       </h1>
 
@@ -747,7 +816,7 @@
       initTheme();
 
       // Password Gate
-      const GATE_PASSWORD = 'sillage';
+      const GATE_PASSWORD = 'rosa';
       const gatePanel = document.getElementById('gatePanel');
       const adminPanel = document.getElementById('adminPanel');
       const unlockBtn = document.getElementById('unlockBtn');
