@@ -477,115 +477,80 @@
     }
 
     /* Product Grid */
+    /* Product Grid - Default (PC/Desktop) */
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 2rem 1.5rem;
       margin: 2rem 0;
+      /* This prevents the last row from stretching */
+      justify-content: start;
     }
 
-    @media (max-width: 480px) {
+    /* For 3 columns on medium screens */
+    @media (max-width: 1024px) {
       .product-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
       }
     }
 
-    .product-card {
-      background: var(--card-gradient);
-      border-radius: 28px;
-      padding: 1.5rem 1rem;
-      box-shadow: var(--shadow-md);
-      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      border: 1px solid var(--border);
-      position: relative;
-      overflow: hidden;
+    /* For 2 columns on tablets */
+    @media (max-width: 768px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+      }
     }
 
-    .product-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
-      transition: left 0.6s ease;
+    /* For 2 columns on mobile (stays 2 columns) */
+    @media (max-width: 480px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .product-card {
+        padding: 1rem 0.8rem;
+      }
+
+      .product-img {
+        width: 100px;
+        height: 100px;
+      }
+
+      .product-img i {
+        font-size: 3rem;
+      }
+
+      .product-title {
+        font-size: 1rem;
+      }
+
+      .product-brand {
+        font-size: 0.6rem;
+      }
+
+      .product-price {
+        font-size: 1.1rem;
+      }
+
+      .add-to-cart {
+        padding: 0.5rem 1rem;
+        font-size: 0.7rem;
+      }
     }
 
-    .product-card:hover::before {
-      left: 100%;
-    }
+    /* For very small screens (less than 380px) - falls back to 1 column */
+    @media (max-width: 380px) {
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
 
-    .product-card:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--shadow-hover);
-      border-color: var(--accent);
-    }
-
-    .product-img {
-      width: 140px;
-      height: 140px;
-      background: var(--bg-secondary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-      box-shadow: 0 15px 25px -12px rgba(212, 175, 55, 0.2);
-      transition: all 0.3s ease;
-    }
-
-    .product-card:hover .product-img {
-      transform: scale(1.05);
-      box-shadow: 0 20px 30px -12px rgba(212, 175, 55, 0.4);
-    }
-
-    .product-img i {
-      font-size: 4rem;
-      color: var(--accent-dark);
-    }
-
-    .product-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-
-    .product-title {
-      font-size: 1.3rem;
-      font-weight: 400;
-      margin-bottom: 0.25rem;
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-dark) 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: inline-block;
-    }
-
-    body.dark .product-title {
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-    }
-
-    .product-brand {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      color: var(--accent);
-      margin-bottom: 0.5rem;
-    }
-
-    .product-price {
-      font-size: 1.4rem;
-      font-weight: 350;
-      color: var(--text-primary);
-      margin: 0.5rem 0 1rem;
+      .product-img {
+        width: 120px;
+        height: 120px;
+      }
     }
 
     .add-to-cart {
