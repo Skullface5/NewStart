@@ -923,7 +923,6 @@
       box-shadow: var(--shadow-lg);
     }
 
-    /* Modal Buttons - Fixed size */
     .modal-buttons {
       display: flex;
       gap: 10px;
@@ -1115,6 +1114,7 @@
       gap: 8px;
       box-shadow: var(--shadow-md);
       white-space: nowrap;
+      min-width: 180px;
     }
 
     .btn-primary:hover {
@@ -1149,6 +1149,23 @@
       background: var(--hover-bg);
       border-color: var(--accent);
       color: var(--accent);
+    }
+
+    .loading-spinner-small {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     @keyframes slideUp {
@@ -1660,9 +1677,13 @@
         event.preventDefault();
         const submitBtn = document.getElementById('submitOrderBtn');
         const originalText = submitBtn.innerHTML;
+        const originalWidth = submitBtn.offsetWidth;
+
+        // Set fixed width to prevent expansion
+        submitBtn.style.width = originalWidth + 'px';
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="loading-spinner" style="width: 18px; height: 18px;"></span> Traitement...';
-        submitBtn.style.width = 'auto';
+        submitBtn.innerHTML = '<span class="loading-spinner-small"></span> Traitement...';
+
         try {
           const { data: { user } } = await supabase.auth.getUser();
           let customerEmail = user ? user.email : document.getElementById('customerEmail').value;
@@ -1684,8 +1705,14 @@
           cart = []; localStorage.removeItem('RosaFragrances_cart'); saveCart();
           closeCheckoutModal(); closeCart();
           showToast('✅ Commande confirmée! Un email vous a été envoyé.');
-        } catch (error) { console.error('Order error:', error); showToast('❌ Erreur lors de la commande'); }
-        finally { submitBtn.disabled = false; submitBtn.innerHTML = originalText; submitBtn.style.width = ''; }
+        } catch (error) {
+          console.error('Order error:', error);
+          showToast('❌ Erreur lors de la commande');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+          submitBtn.style.width = '';
+        }
       };
 
       if (productGrid) {
