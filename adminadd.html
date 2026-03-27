@@ -1473,7 +1473,8 @@
       }
     };
 
-    let currentLanguage = localStorage.getItem('adminLanguage') || 'fr';
+    // Get saved language from localStorage (shared across all pages)
+    let currentLanguage = localStorage.getItem('language') || 'fr';
 
     function translatePage(targetLang) {
       if (targetLang === currentLanguage) return;
@@ -1494,7 +1495,7 @@
       if (authLink) authLink.textContent = t.seConnecter;
       if (profileLink) profileLink.textContent = t.monProfil;
 
-      // Translate admin title (full title)
+      // Translate admin title
       const adminTitle = document.querySelector('h1');
       if (adminTitle) {
         const icon = adminTitle.querySelector('i');
@@ -1633,7 +1634,8 @@
       }
 
       currentLanguage = targetLang;
-      localStorage.setItem('adminLanguage', targetLang);
+      // Save to localStorage with the same key used across all pages
+      localStorage.setItem('language', targetLang);
     }
 
     // Setup language switcher
@@ -1657,10 +1659,26 @@
       });
     }
 
-    // Initialize
+    // Initialize - this will run on page load and apply the saved language
+    function initLanguage() {
+      // Get the saved language from localStorage (shared with index.html)
+      const savedLang = localStorage.getItem('language');
+      if (savedLang && savedLang !== 'fr') {
+        currentLanguage = savedLang;
+        translatePage(savedLang);
+      }
+      // Update the language dropdown display
+      const langCurrent = document.querySelector('#langMenu .lang-current span');
+      const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+      if (langCurrent) {
+        langCurrent.textContent = langNames[currentLanguage] || 'FRANÇAIS';
+      }
+    }
+
+    // Run after DOM loads
     document.addEventListener('DOMContentLoaded', () => {
       setupLanguageSwitcher();
-      translatePage(currentLanguage);
+      initLanguage();
     });
   </script>
 
