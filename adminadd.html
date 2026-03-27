@@ -21,13 +21,10 @@
       background: var(--bg-gradient);
       color: var(--text-primary);
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
       transition: background 0.3s ease, color 0.3s ease;
       position: relative;
       overflow-x: hidden;
+      padding-top: 80px;
     }
 
     /* Animated background with floating particles */
@@ -90,6 +87,250 @@
       }
     }
 
+    /* Header */
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-sm);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+    }
+
+    body.dark header {
+      background: rgba(10, 10, 10, 0.95);
+    }
+
+    .header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0.8rem 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .logo i {
+      font-size: 1.8rem;
+      color: var(--accent);
+    }
+
+    .logo h1 {
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-weight: 350;
+      color: var(--text-primary);
+    }
+
+    .right-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cart-icon {
+      position: relative;
+      cursor: pointer;
+      font-size: 1.4rem;
+      color: var(--accent);
+    }
+
+    .theme-toggle {
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: var(--accent);
+      transition: transform 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: rotate(15deg);
+    }
+
+    .menu-toggle {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: color 0.2s;
+      padding: 0.3rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .menu-toggle:hover {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      right: 1rem;
+      width: 240px;
+      background: var(--bg-primary);
+      backdrop-filter: blur(10px);
+      gap: 0;
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+      z-index: 101;
+      border-radius: 16px;
+    }
+
+    .nav-links.active {
+      max-height: 380px;
+      opacity: 1;
+      padding: 0.5rem 0;
+    }
+
+    .nav-links a {
+      padding: 0.8rem 1.2rem;
+      width: 100%;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.2s;
+    }
+
+    .nav-links a:last-child {
+      border-bottom: none;
+    }
+
+    .nav-links a:hover {
+      background: var(--hover-bg);
+      color: var(--accent);
+      padding-left: 1.5rem;
+    }
+
+    .lang-menu {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .lang-current {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .lang-current:hover {
+      background: var(--hover-bg);
+      color: var(--accent);
+    }
+
+    .lang-current i {
+      font-size: 0.7rem;
+      transition: transform 0.2s;
+    }
+
+    .lang-menu.active .lang-current i {
+      transform: rotate(180deg);
+    }
+
+    .lang-options {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      background: var(--bg-primary);
+    }
+
+    .lang-menu.active .lang-options {
+      max-height: 140px;
+    }
+
+    .lang-option {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.6rem 1.2rem 0.6rem 2rem;
+      background: none;
+      border: none;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .lang-option:hover {
+      background: var(--hover-bg);
+      color: var(--accent);
+    }
+
+    .menu-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(2px);
+      z-index: 99;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .menu-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding-top: 65px;
+      }
+
+      .header-flex {
+        padding: 0.6rem 1rem;
+      }
+
+      .logo h1 {
+        font-size: 1.2rem;
+      }
+
+      .logo i {
+        font-size: 1.5rem;
+      }
+
+      .right-group {
+        gap: 8px;
+      }
+
+      .nav-links {
+        width: 200px;
+        right: 0.5rem;
+      }
+    }
+
     .admin-wrapper {
       max-width: 1100px;
       width: 100%;
@@ -105,6 +346,7 @@
       animation: slideUp 0.6s ease-out;
       position: relative;
       z-index: 10;
+      margin: 1rem auto;
     }
 
     @keyframes slideUp {
@@ -214,6 +456,48 @@
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
       transform: translateX(2px);
+    }
+
+    /* Season Buttons (like icon selector) */
+    .season-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.4rem;
+    }
+
+    .season-option {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 0.5rem 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-primary);
+    }
+
+    .season-option i {
+      font-size: 0.9rem;
+      color: var(--accent);
+    }
+
+    .season-option.selected {
+      background: var(--accent-gradient);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .season-option.selected i {
+      color: white;
+    }
+
+    .season-option:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
     }
 
     /* File Upload */
@@ -400,7 +684,6 @@
       color: var(--text-secondary);
     }
 
-    .product-category-badge,
     .product-season-badge {
       font-size: 0.7rem;
       color: var(--text-secondary);
@@ -575,57 +858,12 @@
       --input-bg: #2a2a2a;
       --hover-bg: rgba(255, 215, 0, 0.1);
     }
-
-    /* Theme Toggle Button */
-    .theme-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      cursor: pointer;
-      font-size: 1.3rem;
-      color: var(--accent);
-      background: var(--bg-primary);
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      box-shadow: var(--shadow-md);
-      border: 1px solid var(--border);
-      z-index: 1000;
-    }
-
-    .theme-toggle:hover {
-      transform: rotate(15deg) scale(1.05);
-      box-shadow: var(--shadow-lg);
-    }
-
-    @media (max-width: 480px) {
-      .admin-wrapper {
-        padding: 1.2rem;
-      }
-
-      h1 {
-        font-size: 1.5rem;
-      }
-
-      .theme-toggle {
-        top: 15px;
-        right: 15px;
-        width: 38px;
-        height: 38px;
-        font-size: 1.1rem;
-      }
-    }
   </style>
 </head>
 
 <body>
   <!-- Floating Gold Particles -->
   <script>
-    // Create floating gold particles
     for (let i = 0; i < 40; i++) {
       const particle = document.createElement('div');
       particle.className = 'particle';
@@ -640,11 +878,45 @@
     }
   </script>
 
-  <!-- Theme Toggle Button -->
-  <div class="theme-toggle" id="themeToggle">
-    <i class="fas fa-sun"></i>
-    <i class="fas fa-moon" style="display: none;"></i>
-  </div>
+  <div id="menuOverlay" class="menu-overlay"></div>
+
+  <!-- Header with Dropdown -->
+  <header>
+    <div class="header-flex">
+      <a href="index.html" class="logo">
+        <i class="fas fa-spa"></i>
+        <h1>Rosa Fragrances</h1>
+      </a>
+      <div class="right-group">
+        <div class="theme-toggle" id="themeToggle">
+          <i class="fas fa-sun"></i>
+          <i class="fas fa-moon" style="display: none;"></i>
+        </div>
+        <button class="menu-toggle" id="menuToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html">ACCUEIL</a>
+        <a href="#">COLLECTION</a>
+        <a href="#">EXCLUSIVITÉS</a>
+        <a href="#">COFFRETS</a>
+        <div class="lang-menu" id="langMenu">
+          <button class="lang-current">
+            <span id="currentLangText">FRANÇAIS</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="lang-options">
+            <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
+            <button class="lang-option" data-lang="en">🇬🇧 English</button>
+            <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
+          </div>
+        </div>
+        <a href="login146.html" id="authLink">Se connecter</a>
+        <a href="profile.html" id="profileLink" style="display: none;">Mon Profil</a>
+      </div>
+    </div>
+  </header>
 
   <div class="admin-wrapper" id="adminWrapper">
     <!-- GATE PANEL -->
@@ -687,29 +959,18 @@
             <input type="number" id="productPrice" step="0.001" min="0" value="89.000">
           </div>
 
-          <!-- Category Dropdown -->
-          <div class="input-group">
-            <label>Catégorie</label>
-            <select id="productCategory">
-              <option value="men">Homme</option>
-              <option value="women">Femme</option>
-              <option value="unisex">Unisexe</option>
-              <option value="kids">Enfants</option>
-            </select>
-          </div>
-
-          <!-- Season Dropdown -->
+          <!-- Season Buttons (like icon selector) -->
           <div class="input-group">
             <label>Saison / Occasion</label>
-            <select id="productSeason">
-              <option value="all">Toutes saisons</option>
-              <option value="summer">Été / Frais</option>
-              <option value="winter">Hiver / Chaud</option>
-              <option value="spring">Printemps / Fleuri</option>
-              <option value="autumn">Automne / Épicé</option>
-              <option value="evening">Soirée / Intense</option>
-              <option value="day">Jour / Léger</option>
-            </select>
+            <div class="season-selector" id="seasonSelector">
+              <div class="season-option selected" data-season="all"><i class="fas fa-globe"></i> Toutes</div>
+              <div class="season-option" data-season="summer"><i class="fas fa-sun"></i> Été</div>
+              <div class="season-option" data-season="winter"><i class="fas fa-snowflake"></i> Hiver</div>
+              <div class="season-option" data-season="spring"><i class="fas fa-seedling"></i> Printemps</div>
+              <div class="season-option" data-season="autumn"><i class="fas fa-leaf"></i> Automne</div>
+              <div class="season-option" data-season="evening"><i class="fas fa-moon"></i> Soirée</div>
+              <div class="season-option" data-season="day"><i class="fas fa-sun"></i> Jour</div>
+            </div>
           </div>
 
           <!-- Image Upload -->
@@ -761,6 +1022,55 @@
       const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
+      // Menu Toggle
+      const menuToggle = document.getElementById('menuToggle');
+      const navLinks = document.getElementById('navLinks');
+      const menuOverlay = document.getElementById('menuOverlay');
+
+      function toggleMenu() {
+        if (!navLinks) return;
+        navLinks.classList.toggle('active');
+        if (menuOverlay) menuOverlay.classList.toggle('active');
+        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+      }
+
+      if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
+      if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
+      if (navLinks) {
+        navLinks.querySelectorAll('a, .lang-current, .lang-option').forEach(el => {
+          el.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            if (menuOverlay) menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+          });
+        });
+      }
+
+      document.addEventListener('click', (e) => {
+        if (navLinks && !navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+          navLinks.classList.remove('active');
+          if (menuOverlay) menuOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+
+      // Language Menu
+      const langMenu = document.getElementById('langMenu');
+      if (langMenu) {
+        const langCurrent = langMenu.querySelector('.lang-current');
+        if (langCurrent) {
+          langCurrent.addEventListener('click', (e) => {
+            e.stopPropagation();
+            langMenu.classList.toggle('active');
+          });
+        }
+        document.querySelectorAll('.lang-option').forEach(opt => {
+          opt.addEventListener('click', () => langMenu.classList.remove('active'));
+        });
+        document.addEventListener('click', () => langMenu?.classList.remove('active'));
+        langMenu.addEventListener('click', (e) => e.stopPropagation());
+      }
+
       // Theme Switcher
       function initTheme() {
         const saved = localStorage.getItem('theme') || 'light';
@@ -811,8 +1121,18 @@
       const productName = document.getElementById('productName');
       const productBrand = document.getElementById('productBrand');
       const productPrice = document.getElementById('productPrice');
-      const productCategory = document.getElementById('productCategory');
-      const productSeason = document.getElementById('productSeason');
+
+      // Season Buttons
+      const seasonOptions = document.querySelectorAll('.season-option');
+      let selectedSeason = 'all';
+
+      seasonOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          seasonOptions.forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          selectedSeason = opt.dataset.season;
+        });
+      });
 
       // Image Upload
       const fileInput = document.getElementById('imageUpload');
@@ -829,6 +1149,13 @@
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 2500);
       }
+
+      // Season name mapping
+      const seasonNames = {
+        all: 'Toutes saisons', summer: 'Été', winter: 'Hiver',
+        spring: 'Printemps', autumn: 'Automne',
+        evening: 'Soirée', day: 'Jour'
+      };
 
       // Load Products
       async function loadAdminProducts() {
@@ -857,17 +1184,15 @@
               ? `<img src="${prod.image}" alt="${prod.name}">`
               : `<i class="fas fa-crown"></i>`;
 
-            // Get category name
-            const categoryNames = { men: 'Homme', women: 'Femme', unisex: 'Unisexe', kids: 'Enfants' };
-            const categoryName = categoryNames[prod.category] || prod.category || 'Non catégorisé';
-
-            // Get season name
-            const seasonNames = {
-              all: 'Toutes saisons', summer: 'Été / Frais', winter: 'Hiver / Chaud',
-              spring: 'Printemps / Fleuri', autumn: 'Automne / Épicé',
-              evening: 'Soirée / Intense', day: 'Jour / Léger'
-            };
             const seasonName = seasonNames[prod.season] || prod.season || 'Non spécifié';
+            let seasonIcon = '';
+            if (prod.season === 'summer') seasonIcon = '<i class="fas fa-sun"></i> ';
+            else if (prod.season === 'winter') seasonIcon = '<i class="fas fa-snowflake"></i> ';
+            else if (prod.season === 'spring') seasonIcon = '<i class="fas fa-seedling"></i> ';
+            else if (prod.season === 'autumn') seasonIcon = '<i class="fas fa-leaf"></i> ';
+            else if (prod.season === 'evening') seasonIcon = '<i class="fas fa-moon"></i> ';
+            else if (prod.season === 'day') seasonIcon = '<i class="fas fa-sun"></i> ';
+            else seasonIcon = '<i class="fas fa-globe"></i> ';
 
             html += `
               <div class="admin-product-item" data-id="${prod.id}">
@@ -876,8 +1201,7 @@
                   <div class="admin-product-title">${prod.name}</div>
                   <div class="admin-product-brand">${prod.brand}</div>
                   <div class="admin-product-price">${priceStr} TND</div>
-                  <div class="product-category-badge"><i class="fas fa-tag"></i> ${categoryName}</div>
-                  <div class="product-season-badge"><i class="fas fa-calendar-alt"></i> ${seasonName}</div>
+                  <div class="product-season-badge">${seasonIcon}${seasonName}</div>
                 </div>
                 <button class="delete-btn" data-id="${prod.id}" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
               </div>
@@ -897,8 +1221,6 @@
         const name = productName.value.trim();
         const brand = productBrand.value.trim();
         const price = parseFloat(productPrice.value);
-        const category = productCategory.value;
-        const season = productSeason.value;
 
         if (!name || !brand || isNaN(price) || price <= 0) {
           showAdminToast('❌ Nom, marque et prix valides requis');
@@ -910,9 +1232,8 @@
             name: name,
             brand: brand,
             price: price,
-            icon: 'fa-crown', // Always prestige crown icon
-            category: category,
-            season: season,
+            icon: 'fa-crown',
+            season: selectedSeason,
             image: uploadedImageBase64 || null
           };
 
@@ -926,8 +1247,11 @@
           productName.value = '';
           productBrand.value = '';
           productPrice.value = '89.000';
-          productCategory.value = 'men';
-          productSeason.value = 'all';
+
+          // Reset season selector to default
+          seasonOptions.forEach(o => o.classList.remove('selected'));
+          document.querySelector('.season-option[data-season="all"]').classList.add('selected');
+          selectedSeason = 'all';
 
           uploadedImageBase64 = null;
           imagePreview.style.display = 'none';
