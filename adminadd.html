@@ -1369,9 +1369,14 @@
 
 
   <script>
-    // Language translations for admin page
-    const staticTranslations = {
+    // Simple translation for admin page
+    const translations = {
       fr: {
+        // Gate panel
+        gateTitle: 'Espace propriétaire',
+        passwordPlaceholder: 'Mot de passe',
+        hint: '🔐 Mot de passe: rosa',
+        backToShop: 'Retour à la boutique',
         // Navigation
         accueil: 'ACCUEIL',
         collection: 'COLLECTION',
@@ -1379,7 +1384,7 @@
         coffrets: 'COFFRETS',
         seConnecter: 'Se connecter',
         monProfil: 'Mon Profil',
-        // Admin page
+        // Admin panel
         adminTitle: 'Rosa Fragrances · Gérer les produits',
         addProduct: 'Ajouter un parfum',
         productName: 'Nom du produit',
@@ -1396,18 +1401,16 @@
         save: 'Enregistrer le produit',
         existingProducts: 'Parfums existants',
         logout: 'Se déconnecter',
-        // Gate panel
-        adminAccess: 'Espace propriétaire',
-        passwordPlaceholder: 'Mot de passe',
-        backToShop: 'Retour à la boutique',
-        hint: '🔐 Mot de passe: rosa',
         infoText: 'Les images sont stockées en Base64',
-        // Placeholders
         namePlaceholder: 'ex. Bois d\'Argent',
         brandPlaceholder: 'PHYSALIS / NAEVE ...',
         pricePlaceholder: '0.000'
       },
       en: {
+        gateTitle: 'Admin area',
+        passwordPlaceholder: 'Password',
+        hint: '🔐 Password: rosa',
+        backToShop: 'Back to shop',
         accueil: 'HOME',
         collection: 'COLLECTION',
         exclusivites: 'EXCLUSIVES',
@@ -1430,16 +1433,16 @@
         save: 'Save product',
         existingProducts: 'Existing perfumes',
         logout: 'Logout',
-        adminAccess: 'Admin area',
-        passwordPlaceholder: 'Password',
-        backToShop: 'Back to shop',
-        hint: '🔐 Password: rosa',
         infoText: 'Images are stored in Base64',
         namePlaceholder: 'ex. Bois d\'Argent',
         brandPlaceholder: 'PHYSALIS / NAEVE ...',
         pricePlaceholder: '0.000'
       },
       ar: {
+        gateTitle: 'مساحة المالك',
+        passwordPlaceholder: 'كلمة المرور',
+        hint: '🔐 كلمة المرور: rosa',
+        backToShop: 'العودة إلى المتجر',
         accueil: 'الرئيسية',
         collection: 'المجموعة',
         exclusivites: 'الحصريات',
@@ -1462,10 +1465,6 @@
         save: 'حفظ المنتج',
         existingProducts: 'المنتجات الموجودة',
         logout: 'تسجيل الخروج',
-        adminAccess: 'مساحة المالك',
-        passwordPlaceholder: 'كلمة المرور',
-        backToShop: 'العودة إلى المتجر',
-        hint: '🔐 كلمة المرور: rosa',
         infoText: 'يتم تخزين الصور في Base64',
         namePlaceholder: 'مثال: Bois d\'Argent',
         brandPlaceholder: 'PHYSALIS / NAEVE ...',
@@ -1473,22 +1472,25 @@
       }
     };
 
-    // Get saved language from localStorage (shared across all pages)
-    let currentLanguage = localStorage.getItem('language') || 'fr';
+    // Get saved language
+    let currentLang = localStorage.getItem('language') || 'fr';
 
-    // Function to translate the gate panel
-    function translateGatePanel(targetLang) {
-      const t = staticTranslations[targetLang];
+    // Function to translate everything
+    function translatePage(lang) {
+      if (lang === currentLang) return;
+
+      const t = translations[lang];
       if (!t) return;
 
+      // Translate gate panel
       const gateTitle = document.querySelector('.gate h2');
-      if (gateTitle) gateTitle.textContent = t.adminAccess;
+      if (gateTitle) gateTitle.textContent = t.gateTitle;
 
       const passwordInput = document.getElementById('passwordInput');
       if (passwordInput) passwordInput.placeholder = t.passwordPlaceholder;
 
-      const hintText = document.querySelector('.gate .hint');
-      if (hintText) hintText.textContent = t.hint;
+      const hint = document.querySelector('.gate .hint');
+      if (hint) hint.textContent = t.hint;
 
       const backLink = document.getElementById('backToShopLink');
       if (backLink) {
@@ -1501,27 +1503,21 @@
           backLink.textContent = t.backToShop;
         }
       }
-    }
 
-    // Function to translate the admin panel (after login)
-    function translateAdminPanel(targetLang) {
-      const t = staticTranslations[targetLang];
-      if (!t) return;
-
-      // Translate navigation links
+      // Translate navigation
       const navLinks = document.querySelectorAll('#navLinks a');
-      if (navLinks[0] && !navLinks[0].closest('.lang-menu')) navLinks[0].textContent = t.accueil;
-      if (navLinks[1] && !navLinks[1].closest('.lang-menu')) navLinks[1].textContent = t.collection;
-      if (navLinks[2] && !navLinks[2].closest('.lang-menu')) navLinks[2].textContent = t.exclusivites;
-      if (navLinks[3] && !navLinks[3].closest('.lang-menu')) navLinks[3].textContent = t.coffrets;
+      if (navLinks[0]) navLinks[0].textContent = t.accueil;
+      if (navLinks[1]) navLinks[1].textContent = t.collection;
+      if (navLinks[2]) navLinks[2].textContent = t.exclusivites;
+      if (navLinks[3]) navLinks[3].textContent = t.coffrets;
 
-      // Translate auth links
       const authLink = document.getElementById('authLink');
-      const profileLink = document.getElementById('profileLink');
       if (authLink) authLink.textContent = t.seConnecter;
+
+      const profileLink = document.getElementById('profileLink');
       if (profileLink) profileLink.textContent = t.monProfil;
 
-      // Translate admin title
+      // Translate admin panel elements (if they exist)
       const adminTitle = document.querySelector('#adminPanel h1');
       if (adminTitle) {
         const icon = adminTitle.querySelector('i');
@@ -1534,20 +1530,19 @@
         }
       }
 
-      // Translate add product title
-      const addProductTitle = document.querySelector('.form-panel h2');
-      if (addProductTitle) {
-        const icon = addProductTitle.querySelector('i');
+      const addTitle = document.querySelector('.form-panel h2');
+      if (addTitle) {
+        const icon = addTitle.querySelector('i');
         if (icon) {
-          addProductTitle.innerHTML = '';
-          addProductTitle.appendChild(icon.cloneNode(true));
-          addProductTitle.appendChild(document.createTextNode(' ' + t.addProduct));
+          addTitle.innerHTML = '';
+          addTitle.appendChild(icon.cloneNode(true));
+          addTitle.appendChild(document.createTextNode(' ' + t.addProduct));
         } else {
-          addProductTitle.textContent = t.addProduct;
+          addTitle.textContent = t.addProduct;
         }
       }
 
-      // Translate form labels
+      // Form labels
       const labels = document.querySelectorAll('.form-panel label');
       if (labels[0]) labels[0].textContent = t.productName;
       if (labels[1]) labels[1].textContent = t.productBrand;
@@ -1555,19 +1550,19 @@
       if (labels[3]) labels[3].textContent = t.season;
       if (labels[4]) labels[4].textContent = t.imageUpload;
 
-      // Translate input PLACEHOLDERS
+      // Placeholders
       const nameInput = document.getElementById('productName');
-      const brandInput = document.getElementById('productBrand');
-      const priceInput = document.getElementById('productPrice');
-
       if (nameInput) nameInput.placeholder = t.namePlaceholder;
+
+      const brandInput = document.getElementById('productBrand');
       if (brandInput) brandInput.placeholder = t.brandPlaceholder;
+
+      const priceInput = document.getElementById('productPrice');
       if (priceInput) priceInput.placeholder = t.pricePlaceholder;
 
-      // Translate season buttons
-      const seasonOptions = document.querySelectorAll('.season-option');
+      // Season buttons
       const seasonMap = { all: t.allSeasons, summer: t.summer, winter: t.winter, spring: t.spring, autumn: t.autumn };
-      seasonOptions.forEach(opt => {
+      document.querySelectorAll('.season-option').forEach(opt => {
         const season = opt.dataset.season;
         if (seasonMap[season]) {
           const icon = opt.querySelector('i');
@@ -1581,11 +1576,9 @@
         }
       });
 
-      // Translate file upload area
       const uploadText = document.querySelector('.file-input-area p');
       if (uploadText) uploadText.textContent = t.clickToUpload;
 
-      // Translate save button
       const saveBtn = document.getElementById('addProductBtn');
       if (saveBtn) {
         const icon = saveBtn.querySelector('i');
@@ -1598,7 +1591,6 @@
         }
       }
 
-      // Translate list panel title
       const listTitle = document.querySelector('.list-panel h2');
       if (listTitle) {
         const icon = listTitle.querySelector('i');
@@ -1611,57 +1603,23 @@
         }
       }
 
-      // Translate logout button
-      const logoutButton = document.getElementById('logoutBtn');
-      if (logoutButton) {
-        const icon = logoutButton.querySelector('i');
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        const icon = logoutBtn.querySelector('i');
         if (icon) {
-          logoutButton.innerHTML = '';
-          logoutButton.appendChild(icon.cloneNode(true));
-          logoutButton.appendChild(document.createTextNode(' ' + t.logout));
+          logoutBtn.innerHTML = '';
+          logoutBtn.appendChild(icon.cloneNode(true));
+          logoutBtn.appendChild(document.createTextNode(' ' + t.logout));
         } else {
-          logoutButton.textContent = t.logout;
+          logoutBtn.textContent = t.logout;
         }
       }
 
-      // Translate info text at bottom
       const infoText = document.querySelector('.form-panel hr + p');
       if (infoText) infoText.innerHTML = `<i class="fas fa-info-circle"></i> ${t.infoText}`;
-    }
 
-    // Main translate function
-    function translatePage(targetLang) {
-      if (targetLang === currentLanguage) return;
-
-      const t = staticTranslations[targetLang];
-      if (!t) return;
-
-      // Check if we're in gate panel or admin panel
-      const gatePanel = document.getElementById('gatePanel');
-      const adminPanel = document.getElementById('adminPanel');
-
-      if (gatePanel && gatePanel.style.display !== 'none') {
-        translateGatePanel(targetLang);
-      }
-
-      if (adminPanel && adminPanel.style.display !== 'none') {
-        translateAdminPanel(targetLang);
-      }
-
-      // Translate navigation (common to both)
-      const navLinks = document.querySelectorAll('#navLinks a');
-      if (navLinks[0] && !navLinks[0].closest('.lang-menu')) navLinks[0].textContent = t.accueil;
-      if (navLinks[1] && !navLinks[1].closest('.lang-menu')) navLinks[1].textContent = t.collection;
-      if (navLinks[2] && !navLinks[2].closest('.lang-menu')) navLinks[2].textContent = t.exclusivites;
-      if (navLinks[3] && !navLinks[3].closest('.lang-menu')) navLinks[3].textContent = t.coffrets;
-
-      const authLink = document.getElementById('authLink');
-      const profileLink = document.getElementById('profileLink');
-      if (authLink) authLink.textContent = t.seConnecter;
-      if (profileLink) profileLink.textContent = t.monProfil;
-
-      // Handle RTL for Arabic
-      if (targetLang === 'ar') {
+      // RTL for Arabic
+      if (lang === 'ar') {
         document.body.style.direction = 'rtl';
         document.body.style.textAlign = 'right';
       } else {
@@ -1669,73 +1627,37 @@
         document.body.style.textAlign = 'left';
       }
 
-      currentLanguage = targetLang;
-      localStorage.setItem('language', targetLang);
+      currentLang = lang;
+      localStorage.setItem('language', lang);
     }
 
     // Setup language switcher
-    function setupLanguageSwitcher() {
-      const langMenu = document.getElementById('langMenu');
-      const langCurrent = langMenu?.querySelector('.lang-current span');
+    function setupLangSwitcher() {
       const langOptions = document.querySelectorAll('.lang-option');
+      const langCurrentSpan = document.querySelector('#langMenu .lang-current span');
       const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
 
-      if (langCurrent) {
-        langCurrent.textContent = langNames[currentLanguage] || 'FRANÇAIS';
+      if (langCurrentSpan) {
+        langCurrentSpan.textContent = langNames[currentLang] || 'FRANÇAIS';
       }
 
-      langOptions.forEach(option => {
-        option.addEventListener('click', () => {
-          const lang = option.getAttribute('data-lang');
-          if (langCurrent) langCurrent.textContent = langNames[lang];
-          langMenu.classList.remove('active');
+      langOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          const lang = opt.dataset.lang;
+          if (langCurrentSpan) langCurrentSpan.textContent = langNames[lang];
+          document.getElementById('langMenu').classList.remove('active');
           translatePage(lang);
         });
       });
     }
 
-    // Observe for admin panel becoming visible (after login)
-    function observeAdminPanel() {
-      const adminPanel = document.getElementById('adminPanel');
-      const observer = new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
-          if (mutation.attributeName === 'style') {
-            if (adminPanel.style.display !== 'none') {
-              // Admin panel became visible, translate it
-              translateAdminPanel(currentLanguage);
-            }
-          }
-        });
-      });
-
-      if (adminPanel) {
-        observer.observe(adminPanel, { attributes: true });
-      }
-    }
-
-    // Initialize
-    function initLanguage() {
+    // Load saved language on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      setupLangSwitcher();
       const savedLang = localStorage.getItem('language');
       if (savedLang && savedLang !== 'fr') {
-        currentLanguage = savedLang;
-        setTimeout(() => translatePage(savedLang), 100);
+        translatePage(savedLang);
       }
-
-      // Update dropdown display
-      const langCurrent = document.querySelector('#langMenu .lang-current span');
-      const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-      if (langCurrent) {
-        langCurrent.textContent = langNames[currentLanguage] || 'FRANÇAIS';
-      }
-
-      // Watch for admin panel
-      observeAdminPanel();
-    }
-
-    // Run after DOM loads
-    document.addEventListener('DOMContentLoaded', () => {
-      setupLanguageSwitcher();
-      initLanguage();
     });
   </script>
 
