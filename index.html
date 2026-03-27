@@ -1237,6 +1237,21 @@
       --input-bg: #2a2a2a;
       --hover-bg: rgba(255, 215, 0, 0.1);
     }
+
+    /* Contact Section */
+    .contact-section {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .contact-section:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .contact-section a:hover {
+      color: var(--accent) !important;
+      transition: color 0.2s;
+    }
   </style>
 </head>
 
@@ -1433,6 +1448,64 @@
   </main>
 
   <footer>
+    <!-- Contact Section -->
+    <div class="contact-section"
+      style="background: var(--card-gradient); border-radius: 32px; padding: 2rem; margin: 3rem 0 1rem; border: 1px solid var(--border);">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <h3 style="font-size: 1.5rem; color: var(--accent); margin-bottom: 0.5rem;">📞 Contactez-nous</h3>
+        <p style="color: var(--text-secondary);">Une question ? Besoin d'aide ? Nous sommes là pour vous.</p>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem;">
+        <!-- Email -->
+        <div style="text-align: center; min-width: 180px;">
+          <div
+            style="width: 50px; height: 50px; background: var(--bg-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+            <i class="fas fa-envelope" style="font-size: 1.5rem; color: var(--accent);"></i>
+          </div>
+          <p style="font-weight: 600; margin-bottom: 0.3rem;">Email</p>
+          <a href="mailto:rosafragrances.tn@gmail.com"
+            style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">rosafragrances.tn@gmail.com</a>
+        </div>
+
+        <!-- Phone -->
+        <div style="text-align: center; min-width: 180px;">
+          <div
+            style="width: 50px; height: 50px; background: var(--bg-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+            <i class="fas fa-phone-alt" style="font-size: 1.5rem; color: var(--accent);"></i>
+          </div>
+          <p style="font-weight: 600; margin-bottom: 0.3rem;">Téléphone</p>
+          <a href="tel:+21612345678"
+            style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">+216 12 345 678</a>
+        </div>
+
+        <!-- WhatsApp -->
+        <div style="text-align: center; min-width: 180px;">
+          <div
+            style="width: 50px; height: 50px; background: var(--bg-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+            <i class="fab fa-whatsapp" style="font-size: 1.5rem; color: #25D366;"></i>
+          </div>
+          <p style="font-weight: 600; margin-bottom: 0.3rem;">WhatsApp</p>
+          <a href="https://wa.me/21612345678" target="_blank"
+            style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">+216 12 345 678</a>
+        </div>
+
+        <!-- Social Media -->
+        <div style="text-align: center; min-width: 180px;">
+          <div
+            style="width: 50px; height: 50px; background: var(--bg-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+            <i class="fab fa-instagram" style="font-size: 1.5rem; color: var(--accent);"></i>
+          </div>
+          <p style="font-weight: 600; margin-bottom: 0.3rem;">Instagram</p>
+          <a href="#" target="_blank"
+            style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">@rosafragrances</a>
+        </div>
+      </div>
+
+      <!-- Small divider -->
+      <div style="width: 60px; height: 2px; background: var(--accent); margin: 1.5rem auto 0; border-radius: 2px;">
+      </div>
+    </div>
     <p>© Rosa Fragrances Atelier – impressions éthérées depuis 2026-2027</p>
   </footer>
 
