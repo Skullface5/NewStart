@@ -1363,214 +1363,232 @@
     })();
 
 
-    // Translation functionality for admin page
+
+    // Language translations for static content
+    const staticTranslations = {
+      fr: {
+        accueil: 'ACCUEIL',
+        collection: 'COLLECTION',
+        exclusivites: 'EXCLUSIVITÉS',
+        coffrets: 'COFFRETS',
+        seConnecter: 'Se connecter',
+        monProfil: 'Mon Profil',
+        cart: 'Votre panier',
+        emptyCart: 'Votre panier est vide.',
+        total: 'Total',
+        payment: 'PAIEMENT',
+        adminTitle: 'Rosa Fragrances · Gérer les produits',
+        addProduct: 'Ajouter un parfum',
+        productName: 'Nom du produit',
+        productBrand: 'Marque / Maison',
+        price: 'Prix (TND)',
+        season: 'Saison',
+        allSeasons: 'Toutes saisons',
+        summer: 'Été',
+        winter: 'Hiver',
+        spring: 'Printemps',
+        autumn: 'Automne',
+        imageUpload: 'Image du produit',
+        clickToUpload: 'Cliquez pour sélectionner une image',
+        save: 'Enregistrer le produit',
+        existingProducts: 'Parfums existants',
+        logout: 'Se déconnecter',
+        adminAccess: 'Espace propriétaire',
+        password: 'Mot de passe',
+        backToShop: 'Retour à la boutique',
+        hint: '🔐 Mot de passe: rosa'
+      },
+      en: {
+        accueil: 'HOME',
+        collection: 'COLLECTION',
+        exclusivites: 'EXCLUSIVES',
+        coffrets: 'GIFTS',
+        seConnecter: 'Sign in',
+        monProfil: 'My Profile',
+        cart: 'Your cart',
+        emptyCart: 'Your cart is empty.',
+        total: 'Total',
+        payment: 'PAYMENT',
+        adminTitle: 'Rosa Fragrances · Manage Products',
+        addProduct: 'Add a perfume',
+        productName: 'Product name',
+        productBrand: 'Brand / House',
+        price: 'Price (TND)',
+        season: 'Season',
+        allSeasons: 'All seasons',
+        summer: 'Summer',
+        winter: 'Winter',
+        spring: 'Spring',
+        autumn: 'Autumn',
+        imageUpload: 'Product image',
+        clickToUpload: 'Click to select an image',
+        save: 'Save product',
+        existingProducts: 'Existing perfumes',
+        logout: 'Logout',
+        adminAccess: 'Admin area',
+        password: 'Password',
+        backToShop: 'Back to shop',
+        hint: '🔐 Password: rosa'
+      },
+      ar: {
+        accueil: 'الرئيسية',
+        collection: 'المجموعة',
+        exclusivites: 'الحصريات',
+        coffrets: 'الهدايا',
+        seConnecter: 'تسجيل الدخول',
+        monProfil: 'ملفي الشخصي',
+        cart: 'سلة التسوق',
+        emptyCart: 'سلة التسوق فارغة.',
+        total: 'المجموع',
+        payment: 'الدفع',
+        adminTitle: 'روزا فراجرانس · إدارة المنتجات',
+        addProduct: 'إضافة عطر',
+        productName: 'اسم المنتج',
+        productBrand: 'العلامة التجارية',
+        price: 'السعر (TND)',
+        season: 'الموسم',
+        allSeasons: 'جميع الفصول',
+        summer: 'الصيف',
+        winter: 'الشتاء',
+        spring: 'الربيع',
+        autumn: 'الخريف',
+        imageUpload: 'صورة المنتج',
+        clickToUpload: 'انقر لتحديد صورة',
+        save: 'حفظ المنتج',
+        existingProducts: 'المنتجات الموجودة',
+        logout: 'تسجيل الخروج',
+        adminAccess: 'مساحة المالك',
+        password: 'كلمة المرور',
+        backToShop: 'العودة إلى المتجر',
+        hint: '🔐 كلمة المرور: rosa'
+      }
+    };
+
     let currentLanguage = localStorage.getItem('adminLanguage') || 'fr';
-    let originalTexts = new Map();
 
-    // Store original French texts - ONLY for specific elements
-    function storeOriginalTexts() {
-      // Only store text from specific elements, not everything
-      const elementsToStore = [
-        // Main headings
-        document.querySelector('h1'),
-        document.querySelectorAll('h2'),
-        // Gate panel
-        document.querySelector('.gate h2'),
-        document.querySelector('.gate .hint'),
-        document.querySelector('#backToShopLink'),
-        // Buttons
-        document.querySelector('#logoutBtn'),
-        document.querySelector('#addProductBtn'),
-        // Form labels
-        document.querySelector('label[for="productName"]'),
-        document.querySelector('label[for="productBrand"]'),
-        document.querySelector('label[for="productPrice"]'),
-        document.querySelector('.input-group:nth-child(4) label'),
-        document.querySelector('.input-group:nth-child(5) label'),
-        // Season buttons text (keep icons)
-        ...document.querySelectorAll('.season-option'),
-        // Product list headers
-        document.querySelector('.list-panel h2'),
-        // Other static text
-        document.querySelector('.form-panel h2'),
-        document.querySelector('.form-panel hr + p'),
-        document.querySelector('.gate .gate i') // Skip the icon
-      ];
+    function translatePage(targetLang) {
+      if (targetLang === currentLanguage) return;
 
-      elementsToStore.forEach(el => {
-        if (el && el.textContent && el.textContent.trim() && !originalTexts.has(el)) {
-          // Skip if it's an icon or contains only icons
-          if (!el.querySelector('i') && !el.classList.contains('fa') && !el.classList.contains('fas')) {
-            originalTexts.set(el, el.textContent);
-          } else if (el.classList.contains('season-option')) {
-            // Store season button text without the icon
-            const text = el.childNodes[1]?.textContent || el.textContent.replace(/[^\w\s]/g, '').trim();
-            if (text) originalTexts.set(el, text);
+      const t = staticTranslations[targetLang];
+      if (!t) return;
+
+      // Translate navigation
+      const navLinks = document.querySelectorAll('#navLinks a');
+      if (navLinks[0]) navLinks[0].textContent = t.accueil;
+      if (navLinks[1]) navLinks[1].textContent = t.collection;
+      if (navLinks[2]) navLinks[2].textContent = t.exclusivites;
+      if (navLinks[3]) navLinks[3].textContent = t.coffrets;
+
+      // Translate auth links
+      const authLink = document.getElementById('authLink');
+      const profileLink = document.getElementById('profileLink');
+      if (authLink) authLink.textContent = t.seConnecter;
+      if (profileLink) profileLink.textContent = t.monProfil;
+
+      // Translate admin page
+      const adminTitle = document.querySelector('h1');
+      if (adminTitle) adminTitle.innerHTML = `<i class="fas fa-spa"></i> ${t.adminTitle}`;
+
+      const addProductTitle = document.querySelector('.form-panel h2');
+      if (addProductTitle) addProductTitle.innerHTML = `<i class="fas fa-plus-circle"></i> ${t.addProduct}`;
+
+      const nameLabel = document.querySelector('label[for="productName"]');
+      if (nameLabel) nameLabel.textContent = t.productName;
+
+      const brandLabel = document.querySelector('label[for="productBrand"]');
+      if (brandLabel) brandLabel.textContent = t.productBrand;
+
+      const priceLabel = document.querySelector('label[for="productPrice"]');
+      if (priceLabel) priceLabel.textContent = t.price;
+
+      const seasonLabel = document.querySelector('.input-group:nth-child(4) label');
+      if (seasonLabel) seasonLabel.textContent = t.season;
+
+      // Translate season buttons
+      const seasonOptions = document.querySelectorAll('.season-option');
+      const seasonMap = { all: t.allSeasons, summer: t.summer, winter: t.winter, spring: t.spring, autumn: t.autumn };
+      seasonOptions.forEach(opt => {
+        const season = opt.dataset.season;
+        if (seasonMap[season]) {
+          const icon = opt.querySelector('i');
+          if (icon) {
+            opt.innerHTML = '';
+            opt.appendChild(icon.cloneNode(true));
+            opt.appendChild(document.createTextNode(' ' + seasonMap[season]));
           }
         }
       });
-    }
 
-    // Reset to French
-    function resetToFrench() {
-      originalTexts.forEach((originalText, element) => {
-        if (element && element.isConnected) {
-          if (element.classList.contains('season-option')) {
-            // Keep the icon, restore text
-            const icon = element.querySelector('i');
-            if (icon) {
-              element.innerHTML = '';
-              element.appendChild(icon.cloneNode(true));
-              element.appendChild(document.createTextNode(' ' + originalText));
-            } else {
-              element.textContent = originalText;
-            }
-          } else {
-            element.textContent = originalText;
-          }
-        }
-      });
-      document.body.style.direction = 'ltr';
-      document.body.style.textAlign = 'left';
-      currentLanguage = 'fr';
-      localStorage.setItem('adminLanguage', 'fr');
-    }
+      const uploadLabel = document.querySelector('.file-input-area p');
+      if (uploadLabel) uploadLabel.textContent = t.clickToUpload;
 
-    // Translate page
-    async function translatePage(targetLang) {
-      if (targetLang === 'fr') {
-        resetToFrench();
-        return;
+      const imageLabel = document.querySelector('.input-group:nth-child(5) label');
+      if (imageLabel) imageLabel.textContent = t.imageUpload;
+
+      const saveBtn = document.getElementById('addProductBtn');
+      if (saveBtn) saveBtn.innerHTML = `<i class="fas fa-gem"></i> ${t.save}`;
+
+      const listTitle = document.querySelector('.list-panel h2');
+      if (listTitle) listTitle.innerHTML = `<i class="fas fa-box-open"></i> ${t.existingProducts}`;
+
+      const logoutButton = document.getElementById('logoutBtn');
+      if (logoutButton) logoutButton.innerHTML = `<i class="fas fa-sign-out-alt"></i> ${t.logout}`;
+
+      // Translate gate panel
+      const gateTitle = document.querySelector('.gate h2');
+      if (gateTitle) gateTitle.textContent = t.adminAccess;
+
+      const passwordHint = document.querySelector('.gate .hint');
+      if (passwordHint) passwordHint.textContent = t.hint;
+
+      const backLink = document.getElementById('backToShopLink');
+      if (backLink) backLink.innerHTML = `<i class="fas fa-arrow-left"></i> ${t.backToShop}`;
+
+      const passwordPlaceholder = document.querySelector('#passwordInput');
+      if (passwordPlaceholder) passwordPlaceholder.placeholder = t.password;
+
+      const unlockButton = document.querySelector('#unlockBtn');
+      if (unlockButton) unlockButton.innerHTML = '<i class="fas fa-arrow-right"></i>';
+
+      // Handle RTL for Arabic
+      if (targetLang === 'ar') {
+        document.body.style.direction = 'rtl';
+        document.body.style.textAlign = 'right';
+      } else {
+        document.body.style.direction = 'ltr';
+        document.body.style.textAlign = 'left';
       }
 
-      if (targetLang === currentLanguage && currentLanguage !== 'fr') return;
-
-      const toast = document.getElementById('adminToast');
-      if (toast) {
-        toast.textContent = '🌍 Traduction en cours...';
-        toast.classList.add('show');
-      }
-
-      if (originalTexts.size === 0) storeOriginalTexts();
-
-      const elementsToTranslate = [];
-      const textsToTranslate = [];
-
-      originalTexts.forEach((originalText, element) => {
-        if (element && element.isConnected && originalText && originalText.trim()) {
-          textsToTranslate.push(originalText);
-          elementsToTranslate.push(element);
-        }
-      });
-
-      if (textsToTranslate.length === 0) {
-        if (toast) toast.classList.remove('show');
-        return;
-      }
-
-      try {
-        const response = await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/functions/v1/translate', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_'
-          },
-          body: JSON.stringify({
-            texts: textsToTranslate,
-            targetLang: targetLang,
-            sourceLang: 'FR'
-          })
-        });
-
-        const data = await response.json();
-
-        if (data.success && data.translations) {
-          elementsToTranslate.forEach((element, index) => {
-            const translated = data.translations[index];
-            if (translated && translated !== element.textContent) {
-              if (element.classList.contains('season-option')) {
-                // Keep the icon, update text
-                const icon = element.querySelector('i');
-                if (icon) {
-                  element.innerHTML = '';
-                  element.appendChild(icon.cloneNode(true));
-                  element.appendChild(document.createTextNode(' ' + translated));
-                } else {
-                  element.textContent = translated;
-                }
-              } else {
-                element.textContent = translated;
-              }
-            }
-          });
-        }
-
-        if (targetLang === 'ar') {
-          document.body.style.direction = 'rtl';
-          document.body.style.textAlign = 'right';
-        } else {
-          document.body.style.direction = 'ltr';
-          document.body.style.textAlign = 'left';
-        }
-
-        currentLanguage = targetLang;
-        localStorage.setItem('adminLanguage', targetLang);
-
-        if (toast) {
-          toast.textContent = '✅ Traduction terminée!';
-          setTimeout(() => toast.classList.remove('show'), 1500);
-        }
-
-      } catch (error) {
-        console.error('Translation error:', error);
-        if (toast) {
-          toast.textContent = '❌ Erreur de traduction';
-          setTimeout(() => toast.classList.remove('show'), 2000);
-        }
-      }
+      currentLanguage = targetLang;
+      localStorage.setItem('adminLanguage', targetLang);
     }
 
     // Setup language switcher
     function setupLanguageSwitcher() {
+      const langMenu = document.getElementById('langMenu');
+      const langCurrent = langMenu?.querySelector('.lang-current span');
       const langOptions = document.querySelectorAll('.lang-option');
-      const currentLangSpan = document.getElementById('currentLangText');
+      const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+
+      if (langCurrent) {
+        langCurrent.textContent = langNames[currentLanguage] || 'FRANÇAIS';
+      }
 
       langOptions.forEach(option => {
-        option.addEventListener('click', async () => {
+        option.addEventListener('click', () => {
           const lang = option.getAttribute('data-lang');
-          const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-          if (currentLangSpan) currentLangSpan.textContent = langNames[lang];
-          await translatePage(lang);
+          if (langCurrent) langCurrent.textContent = langNames[lang];
+          langMenu.classList.remove('active');
+          translatePage(lang);
         });
       });
     }
 
     // Initialize
-    function initLanguage() {
-      // Small delay to ensure DOM is fully loaded
-      setTimeout(() => {
-        storeOriginalTexts();
-        const savedLang = localStorage.getItem('adminLanguage') || 'fr';
-        const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-        const currentLangSpan = document.getElementById('currentLangText');
-        if (currentLangSpan) currentLangSpan.textContent = langNames[savedLang];
-        if (savedLang !== 'fr') translatePage(savedLang);
-      }, 100);
-    }
-
-    // Call after DOM loads
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => {
-        setupLanguageSwitcher();
-        initLanguage();
-      });
-    } else {
+    document.addEventListener('DOMContentLoaded', () => {
       setupLanguageSwitcher();
-      initLanguage();
-    }
-
-
-
+      translatePage(currentLanguage);
+    });
   </script>
 
 </body>
