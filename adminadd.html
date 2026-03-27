@@ -1363,25 +1363,49 @@
     })();
 
 
-
     // Translation functionality for admin page
     let currentLanguage = localStorage.getItem('adminLanguage') || 'fr';
     let originalTexts = new Map();
 
-    // Store original French texts
+    // Store original French texts - ONLY for specific elements
     function storeOriginalTexts() {
+      // Only store text from specific elements, not everything
       const elementsToStore = [
-        ...document.querySelectorAll('h1, h2, h3, h4, label, p, a, button, span, div'),
-        ...document.querySelectorAll('.gate h2, .gate .hint, .back-link'),
-        ...document.querySelectorAll('#logoutBtn, .btn-primary, .season-option'),
-        ...document.querySelectorAll('.admin-product-title, .admin-product-brand, .admin-product-price, .product-season-badge')
+        // Main headings
+        document.querySelector('h1'),
+        document.querySelectorAll('h2'),
+        // Gate panel
+        document.querySelector('.gate h2'),
+        document.querySelector('.gate .hint'),
+        document.querySelector('#backToShopLink'),
+        // Buttons
+        document.querySelector('#logoutBtn'),
+        document.querySelector('#addProductBtn'),
+        // Form labels
+        document.querySelector('label[for="productName"]'),
+        document.querySelector('label[for="productBrand"]'),
+        document.querySelector('label[for="productPrice"]'),
+        document.querySelector('.input-group:nth-child(4) label'),
+        document.querySelector('.input-group:nth-child(5) label'),
+        // Season buttons text (keep icons)
+        ...document.querySelectorAll('.season-option'),
+        // Product list headers
+        document.querySelector('.list-panel h2'),
+        // Other static text
+        document.querySelector('.form-panel h2'),
+        document.querySelector('.form-panel hr + p'),
+        document.querySelector('.gate .gate i') // Skip the icon
       ];
 
       elementsToStore.forEach(el => {
         if (el && el.textContent && el.textContent.trim() && !originalTexts.has(el)) {
-          // Skip elements with icons or that shouldn't be translated
-          if (!el.classList.contains('fa') && !el.classList.contains('fas') && !el.classList.contains('fab')) {
+          // Skip if it's an icon or contains only icons
+          if (!el.querySelector('i') && !el.classList.contains('fa') && !el.classList.contains('fas')) {
             originalTexts.set(el, el.textContent);
+          } else if (el.classList.contains('season-option')) {
+            // Store season button text without the icon
+            const text = el.childNodes[1]?.textContent || el.textContent.replace(/[^\w\s]/g, '').trim();
+            if (text) originalTexts.set(el, text);
           }
         }
       });
@@ -1390,8 +1414,20 @@
     // Reset to French
     function resetToFrench() {
       originalTexts.forEach((originalText, element) => {
-        if (element && element.isConnected && element.textContent) {
-          element.textContent = originalText;
+        if (element && element.isConnected) {
+          if (element.classList.contains('season-option')) {
+            // Keep the icon, restore text
+            const icon = element.querySelector('i');
+            if (icon) {
+              element.innerHTML = '';
+              element.appendChild(icon.cloneNode(true));
+              element.appendChild(document.createTextNode(' ' + originalText));
+            } else {
+              element.textContent = originalText;
+            }
+          } else {
+            element.textContent = originalText;
+          }
         }
       });
       document.body.style.direction = 'ltr';
@@ -1452,26 +1488,19 @@
           elementsToTranslate.forEach((element, index) => {
             const translated = data.translations[index];
             if (translated && translated !== element.textContent) {
-              element.textContent = translated;
-            }
-          });
-        }
-
-        // Update season buttons text
-        const seasonNames = {
-          fr: { all: 'Toutes saisons', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne' },
-          en: { all: 'All seasons', summer: 'Summer', winter: 'Winter', spring: 'Spring', autumn: 'Autumn' },
-          ar: { all: 'جميع الفصول', summer: 'الصيف', winter: 'الشتاء', spring: 'الربيع', autumn: 'الخريف' }
-        };
-
-        if (seasonNames[targetLang]) {
-          document.querySelectorAll('.season-option').forEach(opt => {
-            const season = opt.dataset.season;
-            if (seasonNames[targetLang][season]) {
-              const icon = opt.querySelector('i').cloneNode(true);
-              opt.innerHTML = '';
-              opt.appendChild(icon);
-              opt.appendChild(document.createTextNode(' ' + seasonNames[targetLang][season]));
+              if (element.classList.contains('season-option')) {
+                // Keep the icon, update text
+                const icon = element.querySelector('i');
+                if (icon) {
+                  element.innerHTML = '';
+                  element.appendChild(icon.cloneNode(true));
+                  element.appendChild(document.createTextNode(' ' + translated));
+                } else {
+                  element.textContent = translated;
+                }
+              } else {
+                element.textContent = translated;
+              }
             }
           });
         }
@@ -1518,12 +1547,15 @@
 
     // Initialize
     function initLanguage() {
-      storeOriginalTexts();
-      const savedLang = localStorage.getItem('adminLanguage') || 'fr';
-      const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-      const currentLangSpan = document.getElementById('currentLangText');
-      if (currentLangSpan) currentLangSpan.textContent = langNames[savedLang];
-      if (savedLang !== 'fr') translatePage(savedLang);
+      // Small delay to ensure DOM is fully loaded
+      setTimeout(() => {
+        storeOriginalTexts();
+        const savedLang = localStorage.getItem('adminLanguage') || 'fr';
+        const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+        const currentLangSpan = document.getElementById('currentLangText');
+        if (currentLangSpan) currentLangSpan.textContent = langNames[savedLang];
+        if (savedLang !== 'fr') translatePage(savedLang);
+      }, 100);
     }
 
     // Call after DOM loads
@@ -1536,6 +1568,9 @@
       setupLanguageSwitcher();
       initLanguage();
     }
+
+
+
   </script>
 
 </body>
