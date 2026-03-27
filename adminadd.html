@@ -1369,15 +1369,17 @@
 
 
   <script>
-    // Language translations for admin page - ONLY static text, no placeholders or values
+    // Language translations for admin page
     const staticTranslations = {
       fr: {
+        // Navigation
         accueil: 'ACCUEIL',
         collection: 'COLLECTION',
         exclusivites: 'EXCLUSIVITÉS',
         coffrets: 'COFFRETS',
         seConnecter: 'Se connecter',
         monProfil: 'Mon Profil',
+        // Admin page
         adminTitle: 'Rosa Fragrances · Gérer les produits',
         addProduct: 'Ajouter un parfum',
         productName: 'Nom du produit',
@@ -1394,11 +1396,16 @@
         save: 'Enregistrer le produit',
         existingProducts: 'Parfums existants',
         logout: 'Se déconnecter',
+        // Gate panel
         adminAccess: 'Espace propriétaire',
         passwordPlaceholder: 'Mot de passe',
         backToShop: 'Retour à la boutique',
         hint: '🔐 Mot de passe: rosa',
-        infoText: 'Les images sont stockées en Base64'
+        infoText: 'Les images sont stockées en Base64',
+        // Placeholders
+        namePlaceholder: 'ex. Bois d\'Argent',
+        brandPlaceholder: 'PHYSALIS / NAEVE ...',
+        pricePlaceholder: '89.000'
       },
       en: {
         accueil: 'HOME',
@@ -1427,7 +1434,10 @@
         passwordPlaceholder: 'Password',
         backToShop: 'Back to shop',
         hint: '🔐 Password: rosa',
-        infoText: 'Images are stored in Base64'
+        infoText: 'Images are stored in Base64',
+        namePlaceholder: 'ex. Bois d\'Argent',
+        brandPlaceholder: 'PHYSALIS / NAEVE ...',
+        pricePlaceholder: '89.000'
       },
       ar: {
         accueil: 'الرئيسية',
@@ -1456,7 +1466,10 @@
         passwordPlaceholder: 'كلمة المرور',
         backToShop: 'العودة إلى المتجر',
         hint: '🔐 كلمة المرور: rosa',
-        infoText: 'يتم تخزين الصور في Base64'
+        infoText: 'يتم تخزين الصور في Base64',
+        namePlaceholder: 'مثال: Bois d\'Argent',
+        brandPlaceholder: 'PHYSALIS / NAEVE ...',
+        pricePlaceholder: '89.000'
       }
     };
 
@@ -1467,6 +1480,10 @@
 
       const t = staticTranslations[targetLang];
       if (!t) return;
+
+      // Translate site name in header (logo)
+      const logoText = document.querySelector('.logo h1');
+      if (logoText) logoText.textContent = 'Rosa Fragrances'; // Keep brand name, don't translate
 
       // Translate navigation - ONLY text, NOT the language dropdown
       const navLinks = document.querySelectorAll('#navLinks a');
@@ -1514,6 +1531,19 @@
       if (labels[2]) labels[2].textContent = t.price;
       if (labels[3]) labels[3].textContent = t.season;
       if (labels[4]) labels[4].textContent = t.imageUpload;
+
+      // Translate input PLACEHOLDERS (not the values)
+      const nameInput = document.getElementById('productName');
+      const brandInput = document.getElementById('productBrand');
+      const priceInput = document.getElementById('productPrice');
+
+      if (nameInput) nameInput.placeholder = t.namePlaceholder;
+      if (brandInput) brandInput.placeholder = t.brandPlaceholder;
+      if (priceInput) priceInput.placeholder = t.pricePlaceholder;
+      // DO NOT change the value (keep the number)
+      if (priceInput && priceInput.value === '89.000') {
+        // Keep the value, only change placeholder
+      }
 
       // Translate season buttons
       const seasonOptions = document.querySelectorAll('.season-option');
