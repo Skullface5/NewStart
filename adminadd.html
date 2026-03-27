@@ -1348,7 +1348,183 @@
         }
       });
     })();
+
+
+
+    // Translation functionality for admin page
+    let currentLanguage = localStorage.getItem('adminLanguage') || 'fr';
+    let originalTexts = new Map();
+
+    // Store original French texts
+    function storeOriginalTexts() {
+      const elementsToStore = [
+        ...document.querySelectorAll('h1, h2, h3, h4, label, p, a, button, span, div'),
+        ...document.querySelectorAll('.gate h2, .gate .hint, .back-link'),
+        ...document.querySelectorAll('#logoutBtn, .btn-primary, .season-option'),
+        ...document.querySelectorAll('.admin-product-title, .admin-product-brand, .admin-product-price, .product-season-badge')
+      ];
+
+      elementsToStore.forEach(el => {
+        if (el && el.textContent && el.textContent.trim() && !originalTexts.has(el)) {
+          // Skip elements with icons or that shouldn't be translated
+          if (!el.classList.contains('fa') && !el.classList.contains('fas') && !el.classList.contains('fab')) {
+            originalTexts.set(el, el.textContent);
+          }
+        }
+      });
+    }
+
+    // Reset to French
+    function resetToFrench() {
+      originalTexts.forEach((originalText, element) => {
+        if (element && element.isConnected && element.textContent) {
+          element.textContent = originalText;
+        }
+      });
+      document.body.style.direction = 'ltr';
+      document.body.style.textAlign = 'left';
+      currentLanguage = 'fr';
+      localStorage.setItem('adminLanguage', 'fr');
+    }
+
+    // Translate page
+    async function translatePage(targetLang) {
+      if (targetLang === 'fr') {
+        resetToFrench();
+        return;
+      }
+
+      if (targetLang === currentLanguage && currentLanguage !== 'fr') return;
+
+      const toast = document.getElementById('adminToast');
+      if (toast) {
+        toast.textContent = '🌍 Traduction en cours...';
+        toast.classList.add('show');
+      }
+
+      if (originalTexts.size === 0) storeOriginalTexts();
+
+      const elementsToTranslate = [];
+      const textsToTranslate = [];
+
+      originalTexts.forEach((originalText, element) => {
+        if (element && element.isConnected && originalText && originalText.trim()) {
+          textsToTranslate.push(originalText);
+          elementsToTranslate.push(element);
+        }
+      });
+
+      if (textsToTranslate.length === 0) {
+        if (toast) toast.classList.remove('show');
+        return;
+      }
+
+      try {
+        const response = await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/functions/v1/translate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_'
+          },
+          body: JSON.stringify({
+            texts: textsToTranslate,
+            targetLang: targetLang,
+            sourceLang: 'FR'
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success && data.translations) {
+          elementsToTranslate.forEach((element, index) => {
+            const translated = data.translations[index];
+            if (translated && translated !== element.textContent) {
+              element.textContent = translated;
+            }
+          });
+        }
+
+        // Update season buttons text
+        const seasonNames = {
+          fr: { all: 'Toutes saisons', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne' },
+          en: { all: 'All seasons', summer: 'Summer', winter: 'Winter', spring: 'Spring', autumn: 'Autumn' },
+          ar: { all: 'جميع الفصول', summer: 'الصيف', winter: 'الشتاء', spring: 'الربيع', autumn: 'الخريف' }
+        };
+
+        if (seasonNames[targetLang]) {
+          document.querySelectorAll('.season-option').forEach(opt => {
+            const season = opt.dataset.season;
+            if (seasonNames[targetLang][season]) {
+              const icon = opt.querySelector('i').cloneNode(true);
+              opt.innerHTML = '';
+              opt.appendChild(icon);
+              opt.appendChild(document.createTextNode(' ' + seasonNames[targetLang][season]));
+            }
+          });
+        }
+
+        if (targetLang === 'ar') {
+          document.body.style.direction = 'rtl';
+          document.body.style.textAlign = 'right';
+        } else {
+          document.body.style.direction = 'ltr';
+          document.body.style.textAlign = 'left';
+        }
+
+        currentLanguage = targetLang;
+        localStorage.setItem('adminLanguage', targetLang);
+
+        if (toast) {
+          toast.textContent = '✅ Traduction terminée!';
+          setTimeout(() => toast.classList.remove('show'), 1500);
+        }
+
+      } catch (error) {
+        console.error('Translation error:', error);
+        if (toast) {
+          toast.textContent = '❌ Erreur de traduction';
+          setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+      }
+    }
+
+    // Setup language switcher
+    function setupLanguageSwitcher() {
+      const langOptions = document.querySelectorAll('.lang-option');
+      const currentLangSpan = document.getElementById('currentLangText');
+
+      langOptions.forEach(option => {
+        option.addEventListener('click', async () => {
+          const lang = option.getAttribute('data-lang');
+          const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+          if (currentLangSpan) currentLangSpan.textContent = langNames[lang];
+          await translatePage(lang);
+        });
+      });
+    }
+
+    // Initialize
+    function initLanguage() {
+      storeOriginalTexts();
+      const savedLang = localStorage.getItem('adminLanguage') || 'fr';
+      const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+      const currentLangSpan = document.getElementById('currentLangText');
+      if (currentLangSpan) currentLangSpan.textContent = langNames[savedLang];
+      if (savedLang !== 'fr') translatePage(savedLang);
+    }
+
+    // Call after DOM loads
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        setupLanguageSwitcher();
+        initLanguage();
+      });
+    } else {
+      setupLanguageSwitcher();
+      initLanguage();
+    }
   </script>
+
 </body>
 
 </html>
