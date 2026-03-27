@@ -1242,7 +1242,7 @@
             if (!t) return;
 
             // Translate navigation links
-            const navLinks = document.querySelectorAll('#navLinks a');
+            const navLinks = document.querySelectorAll('#navLinks a:not(.lang-current):not(.lang-option)');
             if (navLinks[0]) navLinks[0].textContent = t.accueil;
             if (navLinks[1]) navLinks[1].textContent = t.collection;
             if (navLinks[2]) navLinks[2].textContent = t.exclusivites;
@@ -1258,9 +1258,6 @@
             const cartHeader = document.querySelector('.cart-header h3');
             if (cartHeader) cartHeader.innerHTML = `<i class="fas fa-bag-shopping"></i> ${t.cart}`;
 
-            const emptyCartMsg = document.querySelector('.empty-cart-message');
-            if (emptyCartMsg && cart.length === 0) emptyCartMsg.textContent = t.emptyCart;
-
             const cartTotalLabel = document.querySelector('.cart-total span:first-child');
             if (cartTotalLabel) cartTotalLabel.textContent = t.total;
 
@@ -1268,9 +1265,6 @@
             if (checkoutButton) checkoutButton.innerHTML = `${t.payment} <i class="fas fa-arrow-right"></i>`;
 
             // Translate profile page
-            const profileTitle = document.querySelector('.profile-info h2');
-            const profileEmailLabel = document.querySelector('.profile-info p');
-
             const statsLabels = document.querySelectorAll('.stat-content p');
             if (statsLabels[0]) statsLabels[0].textContent = t.totalOrders;
             if (statsLabels[1]) statsLabels[1].textContent = t.pendingOrders;
@@ -1285,13 +1279,6 @@
             if (filterBtns[2]) filterBtns[2].textContent = t.review;
             if (filterBtns[3]) filterBtns[3].textContent = t.shipped;
             if (filterBtns[4]) filterBtns[4].textContent = t.delivered;
-
-            const cancelButtons = document.querySelectorAll('.cancel-btn');
-            cancelButtons.forEach(btn => {
-                const span = btn.querySelector('span');
-                if (span) span.textContent = t.cancel;
-                else btn.innerHTML = `<i class="fas fa-times"></i> ${t.cancel}`;
-            });
 
             const logoutButton = document.getElementById('logoutBtn');
             if (logoutButton) logoutButton.innerHTML = `<i class="fas fa-sign-out-alt"></i> ${t.logout}`;
@@ -1316,39 +1303,13 @@
             if (targetLang === 'ar') {
                 document.body.style.direction = 'rtl';
                 document.body.style.textAlign = 'right';
-                const profileInfo = document.querySelector('.profile-info');
-                if (profileInfo) profileInfo.style.textAlign = 'right';
             } else {
                 document.body.style.direction = 'ltr';
                 document.body.style.textAlign = 'left';
-                const profileInfo = document.querySelector('.profile-info');
-                if (profileInfo) profileInfo.style.textAlign = 'left';
             }
 
             currentLanguage = targetLang;
             localStorage.setItem('profileLanguage', targetLang);
-        }
-
-        // Setup language switcher
-        function setupLanguageSwitcher() {
-            const langMenu = document.getElementById('langMenu');
-            const langCurrent = langMenu?.querySelector('.lang-current span');
-            const langOptions = document.querySelectorAll('.lang-option');
-            const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-
-            // Set current language display
-            if (langCurrent) {
-                langCurrent.textContent = langNames[currentLanguage] || 'FRANÇAIS';
-            }
-
-            langOptions.forEach(option => {
-                option.addEventListener('click', () => {
-                    const lang = option.getAttribute('data-lang');
-                    if (langCurrent) langCurrent.textContent = langNames[lang];
-                    langMenu.classList.remove('active');
-                    translatePage(lang);
-                });
-            });
         }
 
         (function () {
@@ -1392,7 +1353,7 @@
             let currentUser = null;
             let allOrders = [];
 
-            // Language Menu Click Handler
+            // Language Menu Click Handler - PREVENTS MAIN MENU FROM CLOSING
             if (langMenu) {
                 const langCurrent = langMenu.querySelector('.lang-current');
                 if (langCurrent) {
@@ -1401,27 +1362,56 @@
                         langMenu.classList.toggle('active');
                     });
                 }
-                document.addEventListener('click', () => langMenu?.classList.remove('active'));
+
+                // Language options - also prevent main menu from closing
+                document.querySelectorAll('.lang-option').forEach(opt => {
+                    opt.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const lang = opt.getAttribute('data-lang');
+                        const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+                        const currentLangSpan = document.getElementById('currentLangText');
+                        if (currentLangSpan) currentLangSpan.textContent = langNames[lang];
+                        langMenu.classList.remove('active');
+                        translatePage(lang);
+                    });
+                });
+
+                // Prevent clicks inside language menu from closing main menu
+                langMenu.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
             }
 
-            // Menu Toggle
+            // Menu Toggle - UPDATED to NOT close when clicking language dropdown
             function toggleMenu() {
                 if (!navLinks) return;
                 navLinks.classList.toggle('active');
                 if (menuOverlay) menuOverlay.classList.toggle('active');
                 document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
             }
+
             if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
             if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
+
+            // Close main menu when clicking on regular links (NOT language dropdown)
             if (navLinks) {
-                navLinks.querySelectorAll('a, .lang-current, .lang-option').forEach(el => {
-                    el.addEventListener('click', () => {
+                navLinks.querySelectorAll('a:not(.lang-current):not(.lang-option)').forEach(link => {
+                    link.addEventListener('click', () => {
                         navLinks.classList.remove('active');
                         if (menuOverlay) menuOverlay.classList.remove('active');
                         document.body.style.overflow = '';
                     });
                 });
             }
+
+            // Close main menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (navLinks && !navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                    if (menuOverlay) menuOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
 
             // Cart Functions
             function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
@@ -1433,8 +1423,8 @@
 
             function renderCart() {
                 if (!cartItemsContainer) return;
+                const t = staticTranslations[currentLanguage];
                 if (cart.length === 0) {
-                    const t = staticTranslations[currentLanguage];
                     cartItemsContainer.innerHTML = `<div class="empty-cart-message">${t?.emptyCart || 'Votre panier est vide.'}</div>`;
                     if (cartTotalSpan) cartTotalSpan.textContent = '0,000 TND';
                     return;
@@ -1625,13 +1615,13 @@
             }
 
             window.cancelOrder = async function (orderId) {
-                if (!confirm(staticTranslations[currentLanguage]?.cancelConfirm || 'Annuler cette commande ?')) return;
+                if (!confirm('Annuler cette commande ?')) return;
                 try {
                     const { error } = await supabase.from('orders').update({ status: 'cancelled' }).eq('id', orderId).eq('user_id', currentUser.id);
                     if (error) throw error;
-                    alert('✅ ' + (staticTranslations[currentLanguage]?.orderCancelled || 'Commande annulée'));
+                    alert('✅ Commande annulée');
                     await loadOrders();
-                } catch (err) { alert('❌ ' + (staticTranslations[currentLanguage]?.error || 'Erreur')); }
+                } catch (err) { alert('❌ Erreur'); }
             };
 
             window.filterOrders = function (filter) {
@@ -1642,7 +1632,7 @@
 
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', async () => {
-                    if (confirm(staticTranslations[currentLanguage]?.logoutConfirm || 'Se déconnecter ?')) {
+                    if (confirm('Se déconnecter ?')) {
                         await supabase.auth.signOut();
                         window.location.reload();
                     }
@@ -1683,7 +1673,14 @@
 
             // Initialize
             initTheme();
-            setupLanguageSwitcher();
+
+            // Set current language text in dropdown
+            const currentLangSpan = document.getElementById('currentLangText');
+            if (currentLangSpan) {
+                const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+                currentLangSpan.textContent = langNames[currentLanguage] || 'FRANÇAIS';
+            }
+
             translatePage(currentLanguage);
             checkUser();
             updateUserDisplay();
