@@ -1785,6 +1785,198 @@
       if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
       initTheme();
     });
+
+
+    let currentLanguage = localStorage.getItem('language') || 'fr';
+
+    // Language names for display
+    const langNames = {
+      fr: 'FRANÇAIS',
+      en: 'ENGLISH',
+      ar: 'العربية'
+    };
+
+    // Function to translate page using DeepL
+    async function translatePage(targetLang) {
+      if (targetLang === currentLanguage && targetLang !== 'fr') return;
+
+      // Show loading indicator
+      const toast = document.getElementById('toast');
+      if (toast) {
+        toast.textContent = '🌍 Traduction en cours...';
+        toast.classList.add('show');
+      }
+
+      // Get all elements with text that need translation
+      // Exclude elements that shouldn't be translated (inputs, buttons with icons, etc.)
+      const elementsToTranslate = [];
+
+      // Get all text nodes within the main content
+      const mainContainer = document.querySelector('main');
+      if (!mainContainer) return;
+
+      function extractTextNodes(element) {
+        const walker = document.createTreeWalker(
+          element,
+          NodeFilter.SHOW_TEXT,
+          {
+            acceptNode: function (node) {
+              // Skip empty text, script tags, style tags
+              if (!node.textContent.trim()) return NodeFilter.FILTER_REJECT;
+              if (node.parentElement.tagName === 'SCRIPT') return NodeFilter.FILTER_REJECT;
+              if (node.parentElement.tagName === 'STYLE') return NodeFilter.FILTER_REJECT;
+              // Skip input values
+              if (node.parentElement.tagName === 'INPUT') return NodeFilter.FILTER_REJECT;
+              // Skip buttons that contain icons
+              if (node.parentElement.classList?.contains('add-to-cart')) return NodeFilter.FILTER_REJECT;
+              if (node.parentElement.classList?.contains('btn-primary')) return NodeFilter.FILTER_REJECT;
+              if (node.parentElement.classList?.contains('btn-secondary')) return NodeFilter.FILTER_REJECT;
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          }
+        );
+
+        let node;
+        while (node = walker.nextNode()) {
+          if (node.textContent.trim()) {
+            elementsToTranslate.push({
+              node: node,
+              original: node.textContent
+            });
+          }
+        }
+      }
+
+      extractTextNodes(mainContainer);
+
+      // Also translate header navigation
+      const navLinks = document.querySelectorAll('#navLinks a');
+      navLinks.forEach(link => {
+        if (link.textContent.trim() && !link.id && !link.classList.contains('lang-current')) {
+          elementsToTranslate.push({
+            node: link,
+            original: link.textContent
+          });
+        }
+      });
+
+      if (elementsToTranslate.length === 0) return;
+
+      try {
+        // Send all texts to DeepL via Edge Function
+        const response = await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/functions/v1/translate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_'
+          },
+          body: JSON.stringify({
+            texts: elementsToTranslate.map(el => el.original),
+            targetLang: targetLang,
+            sourceLang: 'FR'
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success && data.translations) {
+          // Update each element with translated text
+          elementsToTranslate.forEach((item, index) => {
+            const translated = data.translations[index];
+            if (translated && translated !== item.original) {
+              item.node.textContent = translated;
+            }
+          });
+        }
+
+        // Update dynamic elements (product buttons)
+        const t = {
+          fr: { addToCart: 'Ajouter au panier', payment: 'PAIEMENT', seConnecter: 'Se connecter', monProfil: 'Mon Profil' },
+          en: { addToCart: 'Add to cart', payment: 'PAYMENT', seConnecter: 'Sign in', monProfil: 'My Profile' },
+          ar: { addToCart: 'أضف إلى السلة', payment: 'الدفع', seConnecter: 'تسجيل الدخول', monProfil: 'ملفي الشخصي' }
+        };
+
+        document.querySelectorAll('.add-to-cart').forEach(btn => {
+          btn.textContent = t[targetLang]?.addToCart || t.fr.addToCart;
+        });
+
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        if (checkoutBtn) {
+          checkoutBtn.innerHTML = `${t[targetLang]?.payment || t.fr.payment} <i class="fas fa-arrow-right"></i>`;
+        }
+
+        const authLink = document.getElementById('authLink');
+        if (authLink) {
+          authLink.textContent = t[targetLang]?.seConnecter || t.fr.seConnecter;
+        }
+
+        const profileLink = document.getElementById('profileLink');
+        if (profileLink) {
+          profileLink.textContent = t[targetLang]?.monProfil || t.fr.monProfil;
+        }
+
+        // Handle RTL for Arabic
+        if (targetLang === 'ar') {
+          document.body.style.direction = 'rtl';
+          document.body.style.textAlign = 'right';
+        } else {
+          document.body.style.direction = 'ltr';
+          document.body.style.textAlign = 'left';
+        }
+
+        currentLanguage = targetLang;
+        localStorage.setItem('language', targetLang);
+
+        if (toast) {
+          toast.textContent = '✅ Traduction terminée!';
+          setTimeout(() => toast.classList.remove('show'), 1500);
+        }
+
+      } catch (error) {
+        console.error('Translation error:', error);
+        if (toast) {
+          toast.textContent = '❌ Erreur de traduction';
+          setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+      }
+    }
+
+    // Setup language switcher
+    function setupLanguageSwitcher() {
+      const langOptions = document.querySelectorAll('.lang-option');
+      const currentLangSpan = document.getElementById('currentLangText');
+
+      langOptions.forEach(option => {
+        option.addEventListener('click', async () => {
+          const lang = option.getAttribute('data-lang');
+          if (currentLangSpan) {
+            currentLangSpan.textContent = langNames[lang];
+          }
+          await translatePage(lang);
+        });
+      });
+    }
+
+    // Initialize language on page load
+    async function initLanguage() {
+      const savedLang = localStorage.getItem('language') || 'fr';
+      const currentLangSpan = document.getElementById('currentLangText');
+
+      if (currentLangSpan) {
+        currentLangSpan.textContent = langNames[savedLang];
+      }
+
+      // Translate page to saved language if not French
+      if (savedLang !== 'fr') {
+        await translatePage(savedLang);
+      }
+    }
+
+    // Call initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      setupLanguageSwitcher();
+      initLanguage();
+    });
   </script>
 </body>
 
