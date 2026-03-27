@@ -1405,7 +1405,7 @@
         // Placeholders
         namePlaceholder: 'ex. Bois d\'Argent',
         brandPlaceholder: 'PHYSALIS / NAEVE ...',
-        pricePlaceholder: '89.000'
+        pricePlaceholder: '0.000'
       },
       en: {
         accueil: 'HOME',
@@ -1437,7 +1437,7 @@
         infoText: 'Images are stored in Base64',
         namePlaceholder: 'ex. Bois d\'Argent',
         brandPlaceholder: 'PHYSALIS / NAEVE ...',
-        pricePlaceholder: '89.000'
+        pricePlaceholder: '0.000'
       },
       ar: {
         accueil: 'الرئيسية',
@@ -1469,7 +1469,7 @@
         infoText: 'يتم تخزين الصور في Base64',
         namePlaceholder: 'مثال: Bois d\'Argent',
         brandPlaceholder: 'PHYSALIS / NAEVE ...',
-        pricePlaceholder: '89.000'
+        pricePlaceholder: '0.000'
       }
     };
 
@@ -1481,10 +1481,7 @@
       const t = staticTranslations[targetLang];
       if (!t) return;
 
-      // DO NOT translate site name - keep as "Rosa Fragrances"
-      // The logo text stays the same in all languages
-
-      // Translate navigation - ONLY text, NOT the language dropdown
+      // Translate navigation links
       const navLinks = document.querySelectorAll('#navLinks a');
       if (navLinks[0] && !navLinks[0].closest('.lang-menu')) navLinks[0].textContent = t.accueil;
       if (navLinks[1] && !navLinks[1].closest('.lang-menu')) navLinks[1].textContent = t.collection;
@@ -1497,14 +1494,16 @@
       if (authLink) authLink.textContent = t.seConnecter;
       if (profileLink) profileLink.textContent = t.monProfil;
 
-      // Translate admin title (keep the icon, title includes "Rosa Fragrances" which stays)
+      // Translate admin title (full title)
       const adminTitle = document.querySelector('h1');
       if (adminTitle) {
         const icon = adminTitle.querySelector('i');
         if (icon) {
           adminTitle.innerHTML = '';
           adminTitle.appendChild(icon.cloneNode(true));
-          adminTitle.appendChild(document.createTextNode(' Rosa Fragrances · ' + t.adminTitle.split('·')[1]?.trim() || t.adminTitle));
+          adminTitle.appendChild(document.createTextNode(' ' + t.adminTitle));
+        } else {
+          adminTitle.textContent = t.adminTitle;
         }
       }
 
