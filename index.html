@@ -1788,17 +1788,85 @@
 
 
     let currentLanguage = localStorage.getItem('language') || 'fr';
+    let originalTexts = new Map(); // Store original French text
 
-    // Language names for display
-    const langNames = {
-      fr: 'FRANÇAIS',
-      en: 'ENGLISH',
-      ar: 'العربية'
-    };
+    // Function to store original French texts
+    function storeOriginalTexts() {
+      // Store all text elements that should be translated
+      const elementsToStore = [
+        ...document.querySelectorAll('#navLinks a:not(.lang-current)'),
+        ...document.querySelectorAll('.hero h2, .hero p'),
+        ...document.querySelectorAll('.category-card h3, .category-card p'),
+        ...document.querySelectorAll('.cart-header h3, .cart-total span:first-child'),
+        ...document.querySelectorAll('.modal-header h3'),
+        ...document.querySelectorAll('#checkoutForm .form-group label'),
+        ...document.querySelectorAll('.order-summary h4'),
+        ...document.querySelectorAll('.value-proposition p')
+      ];
+
+      elementsToStore.forEach(el => {
+        if (el.textContent && !originalTexts.has(el)) {
+          originalTexts.set(el, el.textContent);
+        }
+      });
+
+      // Also store product button texts
+      document.querySelectorAll('.add-to-cart').forEach(btn => {
+        if (!originalTexts.has(btn)) {
+          originalTexts.set(btn, 'Ajouter au panier');
+        }
+      });
+    }
+
+    // Function to reset page to French
+    function resetToFrench() {
+      // Reset all stored elements to original French
+      originalTexts.forEach((originalText, element) => {
+        if (element && element.textContent) {
+          element.textContent = originalText;
+        }
+      });
+
+      // Reset product buttons
+      document.querySelectorAll('.add-to-cart').forEach(btn => {
+        btn.textContent = 'Ajouter au panier';
+      });
+
+      const checkoutBtn = document.getElementById('checkoutBtn');
+      if (checkoutBtn) {
+        checkoutBtn.innerHTML = 'PAIEMENT <i class="fas fa-arrow-right"></i>';
+      }
+
+      const authLink = document.getElementById('authLink');
+      if (authLink) {
+        authLink.textContent = 'Se connecter';
+      }
+
+      const profileLink = document.getElementById('profileLink');
+      if (profileLink) {
+        profileLink.textContent = 'Mon Profil';
+      }
+
+      // Reset RTL
+      document.body.style.direction = 'ltr';
+      document.body.style.textAlign = 'left';
+
+      currentLanguage = 'fr';
+      localStorage.setItem('language', 'fr');
+    }
 
     // Function to translate page using DeepL
     async function translatePage(targetLang) {
-      if (targetLang === currentLanguage && targetLang !== 'fr') return;
+      // If switching back to French, just reset
+      if (targetLang === 'fr') {
+        resetToFrench();
+        return;
+      }
+
+      // If already in this language, do nothing
+      if (targetLang === currentLanguage && currentLanguage !== 'fr') {
+        return;
+      }
 
       // Show loading indicator
       const toast = document.getElementById('toast');
@@ -1807,60 +1875,27 @@
         toast.classList.add('show');
       }
 
-      // Get all elements with text that need translation
-      // Exclude elements that shouldn't be translated (inputs, buttons with icons, etc.)
-      const elementsToTranslate = [];
-
-      // Get all text nodes within the main content
-      const mainContainer = document.querySelector('main');
-      if (!mainContainer) return;
-
-      function extractTextNodes(element) {
-        const walker = document.createTreeWalker(
-          element,
-          NodeFilter.SHOW_TEXT,
-          {
-            acceptNode: function (node) {
-              // Skip empty text, script tags, style tags
-              if (!node.textContent.trim()) return NodeFilter.FILTER_REJECT;
-              if (node.parentElement.tagName === 'SCRIPT') return NodeFilter.FILTER_REJECT;
-              if (node.parentElement.tagName === 'STYLE') return NodeFilter.FILTER_REJECT;
-              // Skip input values
-              if (node.parentElement.tagName === 'INPUT') return NodeFilter.FILTER_REJECT;
-              // Skip buttons that contain icons
-              if (node.parentElement.classList?.contains('add-to-cart')) return NodeFilter.FILTER_REJECT;
-              if (node.parentElement.classList?.contains('btn-primary')) return NodeFilter.FILTER_REJECT;
-              if (node.parentElement.classList?.contains('btn-secondary')) return NodeFilter.FILTER_REJECT;
-              return NodeFilter.FILTER_ACCEPT;
-            }
-          }
-        );
-
-        let node;
-        while (node = walker.nextNode()) {
-          if (node.textContent.trim()) {
-            elementsToTranslate.push({
-              node: node,
-              original: node.textContent
-            });
-          }
-        }
+      // Make sure we have original texts stored
+      if (originalTexts.size === 0) {
+        storeOriginalTexts();
       }
 
-      extractTextNodes(mainContainer);
+      // Get all elements that need translation (use original French text)
+      const elementsToTranslate = [];
+      const textsToTranslate = [];
 
-      // Also translate header navigation
-      const navLinks = document.querySelectorAll('#navLinks a');
-      navLinks.forEach(link => {
-        if (link.textContent.trim() && !link.id && !link.classList.contains('lang-current')) {
-          elementsToTranslate.push({
-            node: link,
-            original: link.textContent
-          });
+      originalTexts.forEach((originalText, element) => {
+        // Only translate if element still exists and has content
+        if (element && element.isConnected && originalText && originalText.trim()) {
+          textsToTranslate.push(originalText);
+          elementsToTranslate.push(element);
         }
       });
 
-      if (elementsToTranslate.length === 0) return;
+      if (textsToTranslate.length === 0) {
+        if (toast) toast.classList.remove('show');
+        return;
+      }
 
       try {
         // Send all texts to DeepL via Edge Function
@@ -1871,7 +1906,7 @@
             'Authorization': 'Bearer sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_'
           },
           body: JSON.stringify({
-            texts: elementsToTranslate.map(el => el.original),
+            texts: textsToTranslate,
             targetLang: targetLang,
             sourceLang: 'FR'
           })
@@ -1881,38 +1916,37 @@
 
         if (data.success && data.translations) {
           // Update each element with translated text
-          elementsToTranslate.forEach((item, index) => {
+          elementsToTranslate.forEach((element, index) => {
             const translated = data.translations[index];
-            if (translated && translated !== item.original) {
-              item.node.textContent = translated;
+            if (translated && translated !== element.textContent) {
+              element.textContent = translated;
             }
           });
         }
 
-        // Update dynamic elements (product buttons)
+        // Update dynamic elements (product buttons, etc.)
         const t = {
-          fr: { addToCart: 'Ajouter au panier', payment: 'PAIEMENT', seConnecter: 'Se connecter', monProfil: 'Mon Profil' },
           en: { addToCart: 'Add to cart', payment: 'PAYMENT', seConnecter: 'Sign in', monProfil: 'My Profile' },
           ar: { addToCart: 'أضف إلى السلة', payment: 'الدفع', seConnecter: 'تسجيل الدخول', monProfil: 'ملفي الشخصي' }
         };
 
         document.querySelectorAll('.add-to-cart').forEach(btn => {
-          btn.textContent = t[targetLang]?.addToCart || t.fr.addToCart;
+          btn.textContent = t[targetLang]?.addToCart || 'Add to cart';
         });
 
         const checkoutBtn = document.getElementById('checkoutBtn');
         if (checkoutBtn) {
-          checkoutBtn.innerHTML = `${t[targetLang]?.payment || t.fr.payment} <i class="fas fa-arrow-right"></i>`;
+          checkoutBtn.innerHTML = `${t[targetLang]?.payment || 'PAYMENT'} <i class="fas fa-arrow-right"></i>`;
         }
 
         const authLink = document.getElementById('authLink');
         if (authLink) {
-          authLink.textContent = t[targetLang]?.seConnecter || t.fr.seConnecter;
+          authLink.textContent = t[targetLang]?.seConnecter || 'Sign in';
         }
 
         const profileLink = document.getElementById('profileLink');
         if (profileLink) {
-          profileLink.textContent = t[targetLang]?.monProfil || t.fr.monProfil;
+          profileLink.textContent = t[targetLang]?.monProfil || 'My Profile';
         }
 
         // Handle RTL for Arabic
@@ -1949,9 +1983,12 @@
       langOptions.forEach(option => {
         option.addEventListener('click', async () => {
           const lang = option.getAttribute('data-lang');
+          const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+
           if (currentLangSpan) {
             currentLangSpan.textContent = langNames[lang];
           }
+
           await translatePage(lang);
         });
       });
@@ -1959,24 +1996,35 @@
 
     // Initialize language on page load
     async function initLanguage() {
+      // Store original texts first
+      storeOriginalTexts();
+
       const savedLang = localStorage.getItem('language') || 'fr';
+      const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
       const currentLangSpan = document.getElementById('currentLangText');
 
       if (currentLangSpan) {
         currentLangSpan.textContent = langNames[savedLang];
       }
 
-      // Translate page to saved language if not French
+      // If saved language is not French, translate
       if (savedLang !== 'fr') {
         await translatePage(savedLang);
       }
     }
 
-    // Call initialization
-    document.addEventListener('DOMContentLoaded', () => {
+    // Call initialization when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        setupLanguageSwitcher();
+        initLanguage();
+      });
+    } else {
       setupLanguageSwitcher();
       initLanguage();
-    });
+    }
+
+
   </script>
 </body>
 
