@@ -216,48 +216,6 @@
       transform: translateX(2px);
     }
 
-    /* Icon Selector */
-    .icon-selector {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 0.4rem;
-    }
-
-    .icon-option {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 50px;
-      padding: 0.5rem 1rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: var(--text-primary);
-    }
-
-    .icon-option i {
-      font-size: 1rem;
-      color: var(--accent);
-    }
-
-    .icon-option.selected {
-      background: var(--accent-gradient);
-      border-color: var(--accent);
-      color: white;
-    }
-
-    .icon-option.selected i {
-      color: white;
-    }
-
-    .icon-option:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-
     /* File Upload */
     .file-input-area {
       background: var(--bg-secondary);
@@ -440,6 +398,13 @@
       content: 'TND ';
       font-size: 0.7rem;
       color: var(--text-secondary);
+    }
+
+    .product-category-badge,
+    .product-season-badge {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin-top: 0.2rem;
     }
 
     .delete-btn {
@@ -706,30 +671,45 @@
         <!-- ADD PRODUCT FORM -->
         <div class="form-panel">
           <h2><i class="fas fa-plus-circle"></i> Ajouter un parfum</h2>
+
           <div class="input-group">
             <label>Nom du produit</label>
             <input type="text" id="productName" placeholder="ex. Bois d'Argent" autocomplete="off">
           </div>
+
           <div class="input-group">
             <label>Marque / Maison</label>
             <input type="text" id="productBrand" placeholder="PHYSALIS / NAEVE ...">
           </div>
+
           <div class="input-group">
             <label>Prix (TND)</label>
             <input type="number" id="productPrice" step="0.001" min="0" value="89.000">
           </div>
 
-          <!-- Icon Selection -->
+          <!-- Category Dropdown -->
           <div class="input-group">
-            <label>Icône (si pas d'image)</label>
-            <div class="icon-selector" id="iconSelector">
-              <div class="icon-option selected" data-icon="fa-leaf"><i class="fas fa-leaf"></i> Feuille</div>
-              <div class="icon-option" data-icon="fa-plant-wilt"><i class="fas fa-plant-wilt"></i> Plante</div>
-              <div class="icon-option" data-icon="fa-tree"><i class="fas fa-tree"></i> Bois</div>
-              <div class="icon-option" data-icon="fa-flower"><i class="fas fa-flower"></i> Fleur</div>
-              <div class="icon-option" data-icon="fa-cloud-moon"><i class="fas fa-cloud-moon"></i> Fumée</div>
-              <div class="icon-option" data-icon="fa-crown"><i class="fas fa-crown"></i> Prestige</div>
-            </div>
+            <label>Catégorie</label>
+            <select id="productCategory">
+              <option value="men">Homme</option>
+              <option value="women">Femme</option>
+              <option value="unisex">Unisexe</option>
+              <option value="kids">Enfants</option>
+            </select>
+          </div>
+
+          <!-- Season Dropdown -->
+          <div class="input-group">
+            <label>Saison / Occasion</label>
+            <select id="productSeason">
+              <option value="all">Toutes saisons</option>
+              <option value="summer">Été / Frais</option>
+              <option value="winter">Hiver / Chaud</option>
+              <option value="spring">Printemps / Fleuri</option>
+              <option value="autumn">Automne / Épicé</option>
+              <option value="evening">Soirée / Intense</option>
+              <option value="day">Jour / Léger</option>
+            </select>
           </div>
 
           <!-- Image Upload -->
@@ -831,8 +811,8 @@
       const productName = document.getElementById('productName');
       const productBrand = document.getElementById('productBrand');
       const productPrice = document.getElementById('productPrice');
-      const iconOptions = document.querySelectorAll('.icon-option');
-      let selectedIcon = 'fa-leaf';
+      const productCategory = document.getElementById('productCategory');
+      const productSeason = document.getElementById('productSeason');
 
       // Image Upload
       const fileInput = document.getElementById('imageUpload');
@@ -875,7 +855,19 @@
             const priceStr = parseFloat(prod.price).toFixed(3).replace('.', ',');
             const iconOrImage = prod.image
               ? `<img src="${prod.image}" alt="${prod.name}">`
-              : `<i class="fas ${prod.icon || 'fa-leaf'}"></i>`;
+              : `<i class="fas fa-crown"></i>`;
+
+            // Get category name
+            const categoryNames = { men: 'Homme', women: 'Femme', unisex: 'Unisexe', kids: 'Enfants' };
+            const categoryName = categoryNames[prod.category] || prod.category || 'Non catégorisé';
+
+            // Get season name
+            const seasonNames = {
+              all: 'Toutes saisons', summer: 'Été / Frais', winter: 'Hiver / Chaud',
+              spring: 'Printemps / Fleuri', autumn: 'Automne / Épicé',
+              evening: 'Soirée / Intense', day: 'Jour / Léger'
+            };
+            const seasonName = seasonNames[prod.season] || prod.season || 'Non spécifié';
 
             html += `
               <div class="admin-product-item" data-id="${prod.id}">
@@ -884,6 +876,8 @@
                   <div class="admin-product-title">${prod.name}</div>
                   <div class="admin-product-brand">${prod.brand}</div>
                   <div class="admin-product-price">${priceStr} TND</div>
+                  <div class="product-category-badge"><i class="fas fa-tag"></i> ${categoryName}</div>
+                  <div class="product-season-badge"><i class="fas fa-calendar-alt"></i> ${seasonName}</div>
                 </div>
                 <button class="delete-btn" data-id="${prod.id}" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
               </div>
@@ -903,6 +897,8 @@
         const name = productName.value.trim();
         const brand = productBrand.value.trim();
         const price = parseFloat(productPrice.value);
+        const category = productCategory.value;
+        const season = productSeason.value;
 
         if (!name || !brand || isNaN(price) || price <= 0) {
           showAdminToast('❌ Nom, marque et prix valides requis');
@@ -914,7 +910,9 @@
             name: name,
             brand: brand,
             price: price,
-            icon: selectedIcon,
+            icon: 'fa-crown', // Always prestige crown icon
+            category: category,
+            season: season,
             image: uploadedImageBase64 || null
           };
 
@@ -928,10 +926,8 @@
           productName.value = '';
           productBrand.value = '';
           productPrice.value = '89.000';
-
-          iconOptions.forEach(o => o.classList.remove('selected'));
-          document.querySelector('.icon-option[data-icon="fa-leaf"]').classList.add('selected');
-          selectedIcon = 'fa-leaf';
+          productCategory.value = 'men';
+          productSeason.value = 'all';
 
           uploadedImageBase64 = null;
           imagePreview.style.display = 'none';
@@ -990,15 +986,6 @@
       backLink.addEventListener('click', (e) => {
         e.preventDefault();
         window.location.href = 'index.html';
-      });
-
-      // Icon selector
-      iconOptions.forEach(opt => {
-        opt.addEventListener('click', () => {
-          iconOptions.forEach(o => o.classList.remove('selected'));
-          opt.classList.add('selected');
-          selectedIcon = opt.dataset.icon;
-        });
       });
 
       // Image upload
