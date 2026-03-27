@@ -1363,8 +1363,13 @@
     })();
 
 
+  </script>
 
-    // Language translations for static content
+
+
+
+  <script>
+    // Language translations for admin page - ONLY static text, no placeholders or values
     const staticTranslations = {
       fr: {
         accueil: 'ACCUEIL',
@@ -1373,10 +1378,6 @@
         coffrets: 'COFFRETS',
         seConnecter: 'Se connecter',
         monProfil: 'Mon Profil',
-        cart: 'Votre panier',
-        emptyCart: 'Votre panier est vide.',
-        total: 'Total',
-        payment: 'PAIEMENT',
         adminTitle: 'Rosa Fragrances · Gérer les produits',
         addProduct: 'Ajouter un parfum',
         productName: 'Nom du produit',
@@ -1394,9 +1395,10 @@
         existingProducts: 'Parfums existants',
         logout: 'Se déconnecter',
         adminAccess: 'Espace propriétaire',
-        password: 'Mot de passe',
+        passwordPlaceholder: 'Mot de passe',
         backToShop: 'Retour à la boutique',
-        hint: '🔐 Mot de passe: rosa'
+        hint: '🔐 Mot de passe: rosa',
+        infoText: 'Les images sont stockées en Base64'
       },
       en: {
         accueil: 'HOME',
@@ -1405,10 +1407,6 @@
         coffrets: 'GIFTS',
         seConnecter: 'Sign in',
         monProfil: 'My Profile',
-        cart: 'Your cart',
-        emptyCart: 'Your cart is empty.',
-        total: 'Total',
-        payment: 'PAYMENT',
         adminTitle: 'Rosa Fragrances · Manage Products',
         addProduct: 'Add a perfume',
         productName: 'Product name',
@@ -1426,9 +1424,10 @@
         existingProducts: 'Existing perfumes',
         logout: 'Logout',
         adminAccess: 'Admin area',
-        password: 'Password',
+        passwordPlaceholder: 'Password',
         backToShop: 'Back to shop',
-        hint: '🔐 Password: rosa'
+        hint: '🔐 Password: rosa',
+        infoText: 'Images are stored in Base64'
       },
       ar: {
         accueil: 'الرئيسية',
@@ -1437,10 +1436,6 @@
         coffrets: 'الهدايا',
         seConnecter: 'تسجيل الدخول',
         monProfil: 'ملفي الشخصي',
-        cart: 'سلة التسوق',
-        emptyCart: 'سلة التسوق فارغة.',
-        total: 'المجموع',
-        payment: 'الدفع',
         adminTitle: 'روزا فراجرانس · إدارة المنتجات',
         addProduct: 'إضافة عطر',
         productName: 'اسم المنتج',
@@ -1458,9 +1453,10 @@
         existingProducts: 'المنتجات الموجودة',
         logout: 'تسجيل الخروج',
         adminAccess: 'مساحة المالك',
-        password: 'كلمة المرور',
+        passwordPlaceholder: 'كلمة المرور',
         backToShop: 'العودة إلى المتجر',
-        hint: '🔐 كلمة المرور: rosa'
+        hint: '🔐 كلمة المرور: rosa',
+        infoText: 'يتم تخزين الصور في Base64'
       }
     };
 
@@ -1472,12 +1468,12 @@
       const t = staticTranslations[targetLang];
       if (!t) return;
 
-      // Translate navigation
+      // Translate navigation - ONLY text, NOT the language dropdown
       const navLinks = document.querySelectorAll('#navLinks a');
-      if (navLinks[0]) navLinks[0].textContent = t.accueil;
-      if (navLinks[1]) navLinks[1].textContent = t.collection;
-      if (navLinks[2]) navLinks[2].textContent = t.exclusivites;
-      if (navLinks[3]) navLinks[3].textContent = t.coffrets;
+      if (navLinks[0] && !navLinks[0].closest('.lang-menu')) navLinks[0].textContent = t.accueil;
+      if (navLinks[1] && !navLinks[1].closest('.lang-menu')) navLinks[1].textContent = t.collection;
+      if (navLinks[2] && !navLinks[2].closest('.lang-menu')) navLinks[2].textContent = t.exclusivites;
+      if (navLinks[3] && !navLinks[3].closest('.lang-menu')) navLinks[3].textContent = t.coffrets;
 
       // Translate auth links
       const authLink = document.getElementById('authLink');
@@ -1485,24 +1481,39 @@
       if (authLink) authLink.textContent = t.seConnecter;
       if (profileLink) profileLink.textContent = t.monProfil;
 
-      // Translate admin page
+      // Translate admin title (keep the icon)
       const adminTitle = document.querySelector('h1');
-      if (adminTitle) adminTitle.innerHTML = `<i class="fas fa-spa"></i> ${t.adminTitle}`;
+      if (adminTitle) {
+        const icon = adminTitle.querySelector('i');
+        if (icon) {
+          adminTitle.innerHTML = '';
+          adminTitle.appendChild(icon.cloneNode(true));
+          adminTitle.appendChild(document.createTextNode(' ' + t.adminTitle));
+        } else {
+          adminTitle.textContent = t.adminTitle;
+        }
+      }
 
+      // Translate add product title
       const addProductTitle = document.querySelector('.form-panel h2');
-      if (addProductTitle) addProductTitle.innerHTML = `<i class="fas fa-plus-circle"></i> ${t.addProduct}`;
+      if (addProductTitle) {
+        const icon = addProductTitle.querySelector('i');
+        if (icon) {
+          addProductTitle.innerHTML = '';
+          addProductTitle.appendChild(icon.cloneNode(true));
+          addProductTitle.appendChild(document.createTextNode(' ' + t.addProduct));
+        } else {
+          addProductTitle.textContent = t.addProduct;
+        }
+      }
 
-      const nameLabel = document.querySelector('label[for="productName"]');
-      if (nameLabel) nameLabel.textContent = t.productName;
-
-      const brandLabel = document.querySelector('label[for="productBrand"]');
-      if (brandLabel) brandLabel.textContent = t.productBrand;
-
-      const priceLabel = document.querySelector('label[for="productPrice"]');
-      if (priceLabel) priceLabel.textContent = t.price;
-
-      const seasonLabel = document.querySelector('.input-group:nth-child(4) label');
-      if (seasonLabel) seasonLabel.textContent = t.season;
+      // Translate form labels (ONLY labels, not input values)
+      const labels = document.querySelectorAll('.form-panel label');
+      if (labels[0]) labels[0].textContent = t.productName;
+      if (labels[1]) labels[1].textContent = t.productBrand;
+      if (labels[2]) labels[2].textContent = t.price;
+      if (labels[3]) labels[3].textContent = t.season;
+      if (labels[4]) labels[4].textContent = t.imageUpload;
 
       // Translate season buttons
       const seasonOptions = document.querySelectorAll('.season-option');
@@ -1515,40 +1526,80 @@
             opt.innerHTML = '';
             opt.appendChild(icon.cloneNode(true));
             opt.appendChild(document.createTextNode(' ' + seasonMap[season]));
+          } else {
+            opt.textContent = seasonMap[season];
           }
         }
       });
 
-      const uploadLabel = document.querySelector('.file-input-area p');
-      if (uploadLabel) uploadLabel.textContent = t.clickToUpload;
+      // Translate file upload area
+      const uploadText = document.querySelector('.file-input-area p');
+      if (uploadText) uploadText.textContent = t.clickToUpload;
 
-      const imageLabel = document.querySelector('.input-group:nth-child(5) label');
-      if (imageLabel) imageLabel.textContent = t.imageUpload;
-
+      // Translate save button
       const saveBtn = document.getElementById('addProductBtn');
-      if (saveBtn) saveBtn.innerHTML = `<i class="fas fa-gem"></i> ${t.save}`;
+      if (saveBtn) {
+        const icon = saveBtn.querySelector('i');
+        if (icon) {
+          saveBtn.innerHTML = '';
+          saveBtn.appendChild(icon.cloneNode(true));
+          saveBtn.appendChild(document.createTextNode(' ' + t.save));
+        } else {
+          saveBtn.textContent = t.save;
+        }
+      }
 
+      // Translate list panel title
       const listTitle = document.querySelector('.list-panel h2');
-      if (listTitle) listTitle.innerHTML = `<i class="fas fa-box-open"></i> ${t.existingProducts}`;
+      if (listTitle) {
+        const icon = listTitle.querySelector('i');
+        if (icon) {
+          listTitle.innerHTML = '';
+          listTitle.appendChild(icon.cloneNode(true));
+          listTitle.appendChild(document.createTextNode(' ' + t.existingProducts));
+        } else {
+          listTitle.textContent = t.existingProducts;
+        }
+      }
 
+      // Translate logout button
       const logoutButton = document.getElementById('logoutBtn');
-      if (logoutButton) logoutButton.innerHTML = `<i class="fas fa-sign-out-alt"></i> ${t.logout}`;
+      if (logoutButton) {
+        const icon = logoutButton.querySelector('i');
+        if (icon) {
+          logoutButton.innerHTML = '';
+          logoutButton.appendChild(icon.cloneNode(true));
+          logoutButton.appendChild(document.createTextNode(' ' + t.logout));
+        } else {
+          logoutButton.textContent = t.logout;
+        }
+      }
 
       // Translate gate panel
       const gateTitle = document.querySelector('.gate h2');
       if (gateTitle) gateTitle.textContent = t.adminAccess;
 
-      const passwordHint = document.querySelector('.gate .hint');
-      if (passwordHint) passwordHint.textContent = t.hint;
+      const passwordInput = document.getElementById('passwordInput');
+      if (passwordInput) passwordInput.placeholder = t.passwordPlaceholder;
+
+      const hintText = document.querySelector('.gate .hint');
+      if (hintText) hintText.textContent = t.hint;
 
       const backLink = document.getElementById('backToShopLink');
-      if (backLink) backLink.innerHTML = `<i class="fas fa-arrow-left"></i> ${t.backToShop}`;
+      if (backLink) {
+        const icon = backLink.querySelector('i');
+        if (icon) {
+          backLink.innerHTML = '';
+          backLink.appendChild(icon.cloneNode(true));
+          backLink.appendChild(document.createTextNode(' ' + t.backToShop));
+        } else {
+          backLink.textContent = t.backToShop;
+        }
+      }
 
-      const passwordPlaceholder = document.querySelector('#passwordInput');
-      if (passwordPlaceholder) passwordPlaceholder.placeholder = t.password;
-
-      const unlockButton = document.querySelector('#unlockBtn');
-      if (unlockButton) unlockButton.innerHTML = '<i class="fas fa-arrow-right"></i>';
+      // Translate info text at bottom
+      const infoText = document.querySelector('.form-panel hr + p');
+      if (infoText) infoText.innerHTML = `<i class="fas fa-info-circle"></i> ${t.infoText}`;
 
       // Handle RTL for Arabic
       if (targetLang === 'ar') {
