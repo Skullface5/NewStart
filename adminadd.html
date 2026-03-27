@@ -140,13 +140,6 @@
       gap: 12px;
     }
 
-    .cart-icon {
-      position: relative;
-      cursor: pointer;
-      font-size: 1.4rem;
-      color: var(--accent);
-    }
-
     .theme-toggle {
       cursor: pointer;
       font-size: 1.2rem;
@@ -438,8 +431,7 @@
       font-weight: 500;
     }
 
-    input,
-    select {
+    input {
       width: 100%;
       background: var(--input-bg);
       border: 1px solid var(--border);
@@ -451,14 +443,13 @@
       transition: all 0.3s;
     }
 
-    input:focus,
-    select:focus {
+    input:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
       transform: translateX(2px);
     }
 
-    /* Season Buttons (like icon selector) */
+    /* Season Buttons */
     .season-selector {
       display: flex;
       flex-wrap: wrap;
@@ -959,17 +950,15 @@
             <input type="number" id="productPrice" step="0.001" min="0" value="89.000">
           </div>
 
-          <!-- Season Buttons (like icon selector) -->
+          <!-- Season Buttons - 4 Seasons -->
           <div class="input-group">
-            <label>Saison / Occasion</label>
+            <label>Saison</label>
             <div class="season-selector" id="seasonSelector">
-              <div class="season-option selected" data-season="all"><i class="fas fa-globe"></i> Toutes</div>
+              <div class="season-option selected" data-season="all"><i class="fas fa-globe"></i> Toutes saisons</div>
               <div class="season-option" data-season="summer"><i class="fas fa-sun"></i> Été</div>
               <div class="season-option" data-season="winter"><i class="fas fa-snowflake"></i> Hiver</div>
               <div class="season-option" data-season="spring"><i class="fas fa-seedling"></i> Printemps</div>
               <div class="season-option" data-season="autumn"><i class="fas fa-leaf"></i> Automne</div>
-              <div class="season-option" data-season="evening"><i class="fas fa-moon"></i> Soirée</div>
-              <div class="season-option" data-season="day"><i class="fas fa-sun"></i> Jour</div>
             </div>
           </div>
 
@@ -1022,10 +1011,11 @@
       const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-      // Menu Toggle
+      // Menu Toggle - FIXED: Language menu stays open
       const menuToggle = document.getElementById('menuToggle');
       const navLinks = document.getElementById('navLinks');
       const menuOverlay = document.getElementById('menuOverlay');
+      const langMenu = document.getElementById('langMenu');
 
       function toggleMenu() {
         if (!navLinks) return;
@@ -1036,9 +1026,11 @@
 
       if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
       if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
+
+      // Close main menu when clicking on regular links (NOT language dropdown)
       if (navLinks) {
-        navLinks.querySelectorAll('a, .lang-current, .lang-option').forEach(el => {
-          el.addEventListener('click', () => {
+        navLinks.querySelectorAll('a:not(.lang-current):not(.lang-option)').forEach(link => {
+          link.addEventListener('click', () => {
             navLinks.classList.remove('active');
             if (menuOverlay) menuOverlay.classList.remove('active');
             document.body.style.overflow = '';
@@ -1046,16 +1038,7 @@
         });
       }
 
-      document.addEventListener('click', (e) => {
-        if (navLinks && !navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
-          navLinks.classList.remove('active');
-          if (menuOverlay) menuOverlay.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-      });
-
-      // Language Menu
-      const langMenu = document.getElementById('langMenu');
+      // Language menu handling - prevents main menu from closing
       if (langMenu) {
         const langCurrent = langMenu.querySelector('.lang-current');
         if (langCurrent) {
@@ -1064,12 +1047,32 @@
             langMenu.classList.toggle('active');
           });
         }
+
         document.querySelectorAll('.lang-option').forEach(opt => {
-          opt.addEventListener('click', () => langMenu.classList.remove('active'));
+          opt.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const lang = opt.getAttribute('data-lang');
+            const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+            const currentLangSpan = document.getElementById('currentLangText');
+            if (currentLangSpan) currentLangSpan.textContent = langNames[lang];
+            langMenu.classList.remove('active');
+          });
         });
-        document.addEventListener('click', () => langMenu?.classList.remove('active'));
-        langMenu.addEventListener('click', (e) => e.stopPropagation());
+
+        // Prevent clicks inside language menu from closing main menu
+        langMenu.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
       }
+
+      // Close main menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (navLinks && !navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+          navLinks.classList.remove('active');
+          if (menuOverlay) menuOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
 
       // Theme Switcher
       function initTheme() {
@@ -1152,9 +1155,11 @@
 
       // Season name mapping
       const seasonNames = {
-        all: 'Toutes saisons', summer: 'Été', winter: 'Hiver',
-        spring: 'Printemps', autumn: 'Automne',
-        evening: 'Soirée', day: 'Jour'
+        all: 'Toutes saisons',
+        summer: 'Été',
+        winter: 'Hiver',
+        spring: 'Printemps',
+        autumn: 'Automne'
       };
 
       // Load Products
@@ -1184,14 +1189,12 @@
               ? `<img src="${prod.image}" alt="${prod.name}">`
               : `<i class="fas fa-crown"></i>`;
 
-            const seasonName = seasonNames[prod.season] || prod.season || 'Non spécifié';
+            const seasonName = seasonNames[prod.season] || prod.season || 'Toutes saisons';
             let seasonIcon = '';
             if (prod.season === 'summer') seasonIcon = '<i class="fas fa-sun"></i> ';
             else if (prod.season === 'winter') seasonIcon = '<i class="fas fa-snowflake"></i> ';
             else if (prod.season === 'spring') seasonIcon = '<i class="fas fa-seedling"></i> ';
             else if (prod.season === 'autumn') seasonIcon = '<i class="fas fa-leaf"></i> ';
-            else if (prod.season === 'evening') seasonIcon = '<i class="fas fa-moon"></i> ';
-            else if (prod.season === 'day') seasonIcon = '<i class="fas fa-sun"></i> ';
             else seasonIcon = '<i class="fas fa-globe"></i> ';
 
             html += `
