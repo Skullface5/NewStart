@@ -960,7 +960,7 @@
 
           <div class="input-group">
             <label>Prix (TND)</label>
-            <input type="number" id="productPrice" step="0.001" min="0" value="89.000">
+            <input type="number" id="productPrice" step="0.001" min="0" placeholder="0.000">
           </div>
 
           <!-- Season Buttons - 4 Seasons -->
@@ -1262,7 +1262,7 @@
           // Reset form
           productName.value = '';
           productBrand.value = '';
-          productPrice.value = '89.000';
+          productPrice.value = '';
 
           // Reset season selector to default
           seasonOptions.forEach(o => o.classList.remove('selected'));
@@ -1481,9 +1481,8 @@
       const t = staticTranslations[targetLang];
       if (!t) return;
 
-      // Translate site name in header (logo)
-      const logoText = document.querySelector('.logo h1');
-      if (logoText) logoText.textContent = 'Rosa Fragrances'; // Keep brand name, don't translate
+      // DO NOT translate site name - keep as "Rosa Fragrances"
+      // The logo text stays the same in all languages
 
       // Translate navigation - ONLY text, NOT the language dropdown
       const navLinks = document.querySelectorAll('#navLinks a');
@@ -1498,16 +1497,14 @@
       if (authLink) authLink.textContent = t.seConnecter;
       if (profileLink) profileLink.textContent = t.monProfil;
 
-      // Translate admin title (keep the icon)
+      // Translate admin title (keep the icon, title includes "Rosa Fragrances" which stays)
       const adminTitle = document.querySelector('h1');
       if (adminTitle) {
         const icon = adminTitle.querySelector('i');
         if (icon) {
           adminTitle.innerHTML = '';
           adminTitle.appendChild(icon.cloneNode(true));
-          adminTitle.appendChild(document.createTextNode(' ' + t.adminTitle));
-        } else {
-          adminTitle.textContent = t.adminTitle;
+          adminTitle.appendChild(document.createTextNode(' Rosa Fragrances · ' + t.adminTitle.split('·')[1]?.trim() || t.adminTitle));
         }
       }
 
@@ -1524,7 +1521,7 @@
         }
       }
 
-      // Translate form labels (ONLY labels, not input values)
+      // Translate form labels
       const labels = document.querySelectorAll('.form-panel label');
       if (labels[0]) labels[0].textContent = t.productName;
       if (labels[1]) labels[1].textContent = t.productBrand;
@@ -1532,7 +1529,7 @@
       if (labels[3]) labels[3].textContent = t.season;
       if (labels[4]) labels[4].textContent = t.imageUpload;
 
-      // Translate input PLACEHOLDERS (not the values)
+      // Translate input PLACEHOLDERS
       const nameInput = document.getElementById('productName');
       const brandInput = document.getElementById('productBrand');
       const priceInput = document.getElementById('productPrice');
@@ -1540,10 +1537,6 @@
       if (nameInput) nameInput.placeholder = t.namePlaceholder;
       if (brandInput) brandInput.placeholder = t.brandPlaceholder;
       if (priceInput) priceInput.placeholder = t.pricePlaceholder;
-      // DO NOT change the value (keep the number)
-      if (priceInput && priceInput.value === '89.000') {
-        // Keep the value, only change placeholder
-      }
 
       // Translate season buttons
       const seasonOptions = document.querySelectorAll('.season-option');
