@@ -449,6 +449,17 @@
       transform: translateX(2px);
     }
 
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+
     /* Season Buttons */
     .season-selector {
       display: flex;
@@ -850,17 +861,48 @@
       --hover-bg: rgba(255, 215, 0, 0.1);
     }
 
-
-    /* Remove number input spinners */
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+    /* Theme Toggle Button */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      font-size: 1.3rem;
+      color: var(--accent);
+      background: var(--bg-primary);
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+      z-index: 1000;
     }
 
-    input[type="number"] {
-      -moz-appearance: textfield;
-      appearance: textfield;
+    .theme-toggle:hover {
+      transform: rotate(15deg) scale(1.05);
+      box-shadow: var(--shadow-lg);
+    }
+
+    @media (max-width: 480px) {
+      .admin-wrapper {
+        padding: 1.2rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .theme-toggle {
+        top: 15px;
+        right: 15px;
+        width: 38px;
+        height: 38px;
+        font-size: 1.1rem;
+      }
     }
   </style>
 </head>
@@ -882,45 +924,11 @@
     }
   </script>
 
-  <div id="menuOverlay" class="menu-overlay"></div>
-
-  <!-- Header with Dropdown -->
-  <header>
-    <div class="header-flex">
-      <a href="index.html" class="logo">
-        <i class="fas fa-spa"></i>
-        <h1>Rosa Fragrances</h1>
-      </a>
-      <div class="right-group">
-        <div class="theme-toggle" id="themeToggle">
-          <i class="fas fa-sun"></i>
-          <i class="fas fa-moon" style="display: none;"></i>
-        </div>
-        <button class="menu-toggle" id="menuToggle">
-          <i class="fas fa-bars"></i>
-        </button>
-      </div>
-      <div class="nav-links" id="navLinks">
-        <a href="index.html">ACCUEIL</a>
-        <a href="#">COLLECTION</a>
-        <a href="#">EXCLUSIVITÉS</a>
-        <a href="#">COFFRETS</a>
-        <div class="lang-menu" id="langMenu">
-          <button class="lang-current">
-            <span id="currentLangText">FRANÇAIS</span>
-            <i class="fas fa-chevron-down"></i>
-          </button>
-          <div class="lang-options">
-            <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
-            <button class="lang-option" data-lang="en">🇬🇧 English</button>
-            <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
-          </div>
-        </div>
-        <a href="login146.html" id="authLink">Se connecter</a>
-        <a href="profile.html" id="profileLink" style="display: none;">Mon Profil</a>
-      </div>
-    </div>
-  </header>
+  <!-- Theme Toggle Button -->
+  <div class="theme-toggle" id="themeToggle">
+    <i class="fas fa-sun"></i>
+    <i class="fas fa-moon" style="display: none;"></i>
+  </div>
 
   <div class="admin-wrapper" id="adminWrapper">
     <!-- GATE PANEL -->
@@ -931,7 +939,7 @@
         <input type="password" id="passwordInput" placeholder="Mot de passe" value="">
         <button id="unlockBtn"><i class="fas fa-arrow-right"></i></button>
       </div>
-      <div class="hint">🔐 Mot de passe: <strong>rosa</strong></div>
+      <div class="hint">🔐 Mot de passe: rosa</div>
       <a href="index.html" id="backToShopLink" class="back-link"><i class="fas fa-arrow-left"></i> Retour à la
         boutique</a>
     </div>
@@ -963,7 +971,7 @@
             <input type="number" id="productPrice" step="0.001" min="0" placeholder="0.000">
           </div>
 
-          <!-- Season Buttons - 4 Seasons -->
+          <!-- Season Buttons -->
           <div class="input-group">
             <label>Saison</label>
             <div class="season-selector" id="seasonSelector">
@@ -1018,357 +1026,291 @@
   <div id="adminToast" class="admin-toast">✨ Enregistré</div>
 
   <script>
-    (function () {
-      // Supabase Config
-      const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
-      const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
-      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    // Supabase Config
+    const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-      // Menu Toggle - FIXED: Language menu stays open
-      const menuToggle = document.getElementById('menuToggle');
-      const navLinks = document.getElementById('navLinks');
-      const menuOverlay = document.getElementById('menuOverlay');
-      const langMenu = document.getElementById('langMenu');
-
-      function toggleMenu() {
-        if (!navLinks) return;
-        navLinks.classList.toggle('active');
-        if (menuOverlay) menuOverlay.classList.toggle('active');
-        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+    // Theme Switcher
+    function initTheme() {
+      const saved = localStorage.getItem('theme') || 'light';
+      if (saved === 'dark') {
+        document.body.classList.add('dark');
+        const sun = document.querySelector('#themeToggle .fa-sun');
+        const moon = document.querySelector('#themeToggle .fa-moon');
+        if (sun) sun.style.display = 'none';
+        if (moon) moon.style.display = 'inline-block';
       }
+    }
 
-      if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
-      if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
-
-      // Close main menu when clicking on regular links (NOT language dropdown)
-      if (navLinks) {
-        navLinks.querySelectorAll('a:not(.lang-current):not(.lang-option)').forEach(link => {
-          link.addEventListener('click', () => {
-            navLinks.classList.remove('active');
-            if (menuOverlay) menuOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-          });
-        });
+    function toggleTheme() {
+      if (document.body.classList.contains('dark')) {
+        document.body.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+        const sun = document.querySelector('#themeToggle .fa-sun');
+        const moon = document.querySelector('#themeToggle .fa-moon');
+        if (sun) sun.style.display = 'inline-block';
+        if (moon) moon.style.display = 'none';
+      } else {
+        document.body.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+        const sun = document.querySelector('#themeToggle .fa-sun');
+        const moon = document.querySelector('#themeToggle .fa-moon');
+        if (sun) sun.style.display = 'none';
+        if (moon) moon.style.display = 'inline-block';
       }
+    }
 
-      // Language menu handling - prevents main menu from closing
-      if (langMenu) {
-        const langCurrent = langMenu.querySelector('.lang-current');
-        if (langCurrent) {
-          langCurrent.addEventListener('click', (e) => {
-            e.stopPropagation();
-            langMenu.classList.toggle('active');
-          });
-        }
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+    initTheme();
 
-        document.querySelectorAll('.lang-option').forEach(opt => {
-          opt.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const lang = opt.getAttribute('data-lang');
-            const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-            const currentLangSpan = document.getElementById('currentLangText');
-            if (currentLangSpan) currentLangSpan.textContent = langNames[lang];
-            langMenu.classList.remove('active');
-          });
-        });
+    // Password Gate
+    const GATE_PASSWORD = 'rosa';
+    const gatePanel = document.getElementById('gatePanel');
+    const adminPanel = document.getElementById('adminPanel');
+    const unlockBtn = document.getElementById('unlockBtn');
+    const passwordInput = document.getElementById('passwordInput');
+    const backLink = document.getElementById('backToShopLink');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const loggedInSpan = document.getElementById('loggedInAs');
+    const loadingAdmin = document.getElementById('loadingAdmin');
+    const adminListContainer = document.getElementById('adminProductListContainer');
 
-        // Prevent clicks inside language menu from closing main menu
-        langMenu.addEventListener('click', (e) => {
-          e.stopPropagation();
-        });
-      }
+    // Form Elements
+    const productName = document.getElementById('productName');
+    const productBrand = document.getElementById('productBrand');
+    const productPrice = document.getElementById('productPrice');
+    const seasonOptions = document.querySelectorAll('.season-option');
+    let selectedSeason = 'all';
 
-      // Close main menu when clicking outside
-      document.addEventListener('click', (e) => {
-        if (navLinks && !navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
-          navLinks.classList.remove('active');
-          if (menuOverlay) menuOverlay.classList.remove('active');
-          document.body.style.overflow = '';
-        }
+    seasonOptions.forEach(opt => {
+      opt.addEventListener('click', () => {
+        seasonOptions.forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        selectedSeason = opt.dataset.season;
       });
+    });
 
-      // Theme Switcher
-      function initTheme() {
-        const saved = localStorage.getItem('theme') || 'light';
-        if (saved === 'dark') {
-          document.body.classList.add('dark');
-          const sun = document.querySelector('#themeToggle .fa-sun');
-          const moon = document.querySelector('#themeToggle .fa-moon');
-          if (sun) sun.style.display = 'none';
-          if (moon) moon.style.display = 'inline-block';
-        }
-      }
+    // Image Upload
+    const fileInput = document.getElementById('imageUpload');
+    const fileArea = document.getElementById('fileInputArea');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const previewFilename = document.getElementById('previewFilename');
+    const clearPreview = document.getElementById('clearPreview');
+    let uploadedImageBase64 = null;
 
-      function toggleTheme() {
-        if (document.body.classList.contains('dark')) {
-          document.body.classList.remove('dark');
-          localStorage.setItem('theme', 'light');
-          const sun = document.querySelector('#themeToggle .fa-sun');
-          const moon = document.querySelector('#themeToggle .fa-moon');
-          if (sun) sun.style.display = 'inline-block';
-          if (moon) moon.style.display = 'none';
-        } else {
-          document.body.classList.add('dark');
-          localStorage.setItem('theme', 'dark');
-          const sun = document.querySelector('#themeToggle .fa-sun');
-          const moon = document.querySelector('#themeToggle .fa-moon');
-          if (sun) sun.style.display = 'none';
-          if (moon) moon.style.display = 'inline-block';
-        }
-      }
+    function showAdminToast(msg) {
+      const toast = document.getElementById('adminToast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
 
-      const themeToggle = document.getElementById('themeToggle');
-      if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
-      initTheme();
+    // Load Products
+    async function loadAdminProducts() {
+      try {
+        adminListContainer.innerHTML = '';
+        loadingAdmin.style.display = 'block';
 
-      // Password Gate
-      const GATE_PASSWORD = 'rosa';
-      const gatePanel = document.getElementById('gatePanel');
-      const adminPanel = document.getElementById('adminPanel');
-      const unlockBtn = document.getElementById('unlockBtn');
-      const passwordInput = document.getElementById('passwordInput');
-      const backLink = document.getElementById('backToShopLink');
-      const logoutBtn = document.getElementById('logoutBtn');
-      const loggedInSpan = document.getElementById('loggedInAs');
-      const loadingAdmin = document.getElementById('loadingAdmin');
-      const adminListContainer = document.getElementById('adminProductListContainer');
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .order('created_at', { ascending: true });
 
-      // Form Elements
-      const productName = document.getElementById('productName');
-      const productBrand = document.getElementById('productBrand');
-      const productPrice = document.getElementById('productPrice');
+        if (error) throw error;
 
-      // Season Buttons
-      const seasonOptions = document.querySelectorAll('.season-option');
-      let selectedSeason = 'all';
+        loadingAdmin.style.display = 'none';
 
-      seasonOptions.forEach(opt => {
-        opt.addEventListener('click', () => {
-          seasonOptions.forEach(o => o.classList.remove('selected'));
-          opt.classList.add('selected');
-          selectedSeason = opt.dataset.season;
-        });
-      });
-
-      // Image Upload
-      const fileInput = document.getElementById('imageUpload');
-      const fileArea = document.getElementById('fileInputArea');
-      const imagePreview = document.getElementById('imagePreview');
-      const previewImg = document.getElementById('previewImg');
-      const previewFilename = document.getElementById('previewFilename');
-      const clearPreview = document.getElementById('clearPreview');
-      let uploadedImageBase64 = null;
-
-      function showAdminToast(msg) {
-        const toast = document.getElementById('adminToast');
-        toast.textContent = msg;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2500);
-      }
-
-      // Season name mapping
-      const seasonNames = {
-        all: 'Toutes saisons',
-        summer: 'Été',
-        winter: 'Hiver',
-        spring: 'Printemps',
-        autumn: 'Automne'
-      };
-
-      // Load Products
-      async function loadAdminProducts() {
-        try {
-          adminListContainer.innerHTML = '';
-          loadingAdmin.style.display = 'block';
-
-          const { data, error } = await supabase
-            .from('products')
-            .select('*')
-            .order('created_at', { ascending: true });
-
-          if (error) throw error;
-
-          loadingAdmin.style.display = 'none';
-
-          if (!data || data.length === 0) {
-            adminListContainer.innerHTML = '<div class="empty-list">✨ Aucun parfum. Ajoutez le premier.</div>';
-            return;
-          }
-
-          let html = '';
-          data.forEach(prod => {
-            const priceStr = parseFloat(prod.price).toFixed(3).replace('.', ',');
-            const iconOrImage = prod.image
-              ? `<img src="${prod.image}" alt="${prod.name}">`
-              : `<i class="fas fa-crown"></i>`;
-
-            const seasonName = seasonNames[prod.season] || prod.season || 'Toutes saisons';
-            let seasonIcon = '';
-            if (prod.season === 'summer') seasonIcon = '<i class="fas fa-sun"></i> ';
-            else if (prod.season === 'winter') seasonIcon = '<i class="fas fa-snowflake"></i> ';
-            else if (prod.season === 'spring') seasonIcon = '<i class="fas fa-seedling"></i> ';
-            else if (prod.season === 'autumn') seasonIcon = '<i class="fas fa-leaf"></i> ';
-            else seasonIcon = '<i class="fas fa-globe"></i> ';
-
-            html += `
-              <div class="admin-product-item" data-id="${prod.id}">
-                <div class="admin-product-img">${iconOrImage}</div>
-                <div class="admin-product-info">
-                  <div class="admin-product-title">${prod.name}</div>
-                  <div class="admin-product-brand">${prod.brand}</div>
-                  <div class="admin-product-price">${priceStr} TND</div>
-                  <div class="product-season-badge">${seasonIcon}${seasonName}</div>
-                </div>
-                <button class="delete-btn" data-id="${prod.id}" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
-              </div>
-            `;
-          });
-          adminListContainer.innerHTML = html;
-        } catch (error) {
-          console.error('Erreur chargement:', error);
-          loadingAdmin.style.display = 'none';
-          adminListContainer.innerHTML = '<div class="empty-list">❌ Erreur de chargement</div>';
-          showAdminToast('❌ Erreur chargement produits');
-        }
-      }
-
-      // Add Product
-      async function addProduct() {
-        const name = productName.value.trim();
-        const brand = productBrand.value.trim();
-        const price = parseFloat(productPrice.value);
-
-        if (!name || !brand || isNaN(price) || price <= 0) {
-          showAdminToast('❌ Nom, marque et prix valides requis');
+        if (!data || data.length === 0) {
+          adminListContainer.innerHTML = '<div class="empty-list">✨ Aucun parfum. Ajoutez le premier.</div>';
           return;
         }
 
-        try {
-          const newProduct = {
-            name: name,
-            brand: brand,
-            price: price,
-            icon: 'fa-crown',
-            season: selectedSeason,
-            image: uploadedImageBase64 || null
-          };
+        const seasonNames = { all: 'Toutes saisons', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne' };
 
-          const { error } = await supabase
-            .from('products')
-            .insert([newProduct]);
+        let html = '';
+        data.forEach(prod => {
+          const priceStr = parseFloat(prod.price).toFixed(3).replace('.', ',');
+          const iconOrImage = prod.image
+            ? `<img src="${prod.image}" alt="${prod.name}">`
+            : `<i class="fas fa-crown"></i>`;
 
-          if (error) throw error;
+          const seasonName = seasonNames[prod.season] || prod.season || 'Toutes saisons';
+          let seasonIcon = '';
+          if (prod.season === 'summer') seasonIcon = '<i class="fas fa-sun"></i> ';
+          else if (prod.season === 'winter') seasonIcon = '<i class="fas fa-snowflake"></i> ';
+          else if (prod.season === 'spring') seasonIcon = '<i class="fas fa-seedling"></i> ';
+          else if (prod.season === 'autumn') seasonIcon = '<i class="fas fa-leaf"></i> ';
+          else seasonIcon = '<i class="fas fa-globe"></i> ';
 
-          // Reset form
-          productName.value = '';
-          productBrand.value = '';
-          productPrice.value = '';
+          html += `
+            <div class="admin-product-item" data-id="${prod.id}">
+              <div class="admin-product-img">${iconOrImage}</div>
+              <div class="admin-product-info">
+                <div class="admin-product-title">${prod.name}</div>
+                <div class="admin-product-brand">${prod.brand}</div>
+                <div class="admin-product-price">${priceStr} TND</div>
+                <div class="product-season-badge">${seasonIcon}${seasonName}</div>
+              </div>
+              <button class="delete-btn" data-id="${prod.id}" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
+            </div>
+          `;
+        });
+        adminListContainer.innerHTML = html;
+      } catch (error) {
+        console.error('Erreur chargement:', error);
+        loadingAdmin.style.display = 'none';
+        adminListContainer.innerHTML = '<div class="empty-list">❌ Erreur de chargement</div>';
+        showAdminToast('❌ Erreur chargement produits');
+      }
+    }
 
-          // Reset season selector to default
-          seasonOptions.forEach(o => o.classList.remove('selected'));
-          document.querySelector('.season-option[data-season="all"]').classList.add('selected');
-          selectedSeason = 'all';
+    // Add Product
+    async function addProduct() {
+      const name = productName.value.trim();
+      const brand = productBrand.value.trim();
+      const price = parseFloat(productPrice.value);
 
-          uploadedImageBase64 = null;
-          imagePreview.style.display = 'none';
-          fileInput.value = '';
-
-          showAdminToast('✅ Produit ajouté');
-          loadAdminProducts();
-        } catch (error) {
-          console.error('Erreur ajout:', error);
-          showAdminToast('❌ Erreur lors de l\'ajout');
-        }
+      if (!name || !brand || isNaN(price) || price <= 0) {
+        showAdminToast('❌ Nom, marque et prix valides requis');
+        return;
       }
 
-      // Delete Product
-      async function deleteProduct(id) {
-        if (!confirm('Supprimer ce produit ?')) return;
-
-        try {
-          const { error } = await supabase
-            .from('products')
-            .delete()
-            .match({ id });
-
-          if (error) throw error;
-
-          showAdminToast('🗑️ Produit supprimé');
-          loadAdminProducts();
-        } catch (error) {
-          console.error('Erreur suppression:', error);
-          showAdminToast('❌ Erreur lors de la suppression');
-        }
-      }
-
-      // Event Listeners
-      unlockBtn.addEventListener('click', () => {
-        if (passwordInput.value === GATE_PASSWORD) {
-          gatePanel.style.display = 'none';
-          adminPanel.style.display = 'block';
-          loggedInSpan.textContent = '⚡ propriétaire · ' + new Date().toLocaleDateString('fr-FR');
-          loadAdminProducts();
-        } else {
-          alert('❌ Mot de passe incorrect');
-        }
-      });
-
-      passwordInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') unlockBtn.click();
-      });
-
-      logoutBtn.addEventListener('click', () => {
-        adminPanel.style.display = 'none';
-        gatePanel.style.display = 'block';
-        passwordInput.value = '';
-      });
-
-      backLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.location.href = 'index.html';
-      });
-
-      // Image upload
-      fileArea.addEventListener('click', () => fileInput.click());
-
-      fileInput.addEventListener('change', function (e) {
-        const file = e.target.files[0];
-        if (!file || !file.type.startsWith('image/')) return;
-
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          uploadedImageBase64 = ev.target.result;
-          previewImg.src = ev.target.result;
-          previewFilename.textContent = file.name.length > 20 ? file.name.substr(0, 18) + '…' : file.name;
-          imagePreview.style.display = 'flex';
+      try {
+        const newProduct = {
+          name: name,
+          brand: brand,
+          price: price,
+          icon: 'fa-crown',
+          season: selectedSeason,
+          image: uploadedImageBase64 || null
         };
-        reader.readAsDataURL(file);
-      });
 
-      clearPreview.addEventListener('click', () => {
+        const { error } = await supabase
+          .from('products')
+          .insert([newProduct]);
+
+        if (error) throw error;
+
+        // Reset form
+        productName.value = '';
+        productBrand.value = '';
+        productPrice.value = '';
+
+        seasonOptions.forEach(o => o.classList.remove('selected'));
+        document.querySelector('.season-option[data-season="all"]').classList.add('selected');
+        selectedSeason = 'all';
+
         uploadedImageBase64 = null;
         imagePreview.style.display = 'none';
         fileInput.value = '';
-      });
 
-      document.getElementById('addProductBtn').addEventListener('click', addProduct);
+        showAdminToast('✅ Produit ajouté');
+        loadAdminProducts();
+      } catch (error) {
+        console.error('Erreur ajout:', error);
+        showAdminToast('❌ Erreur lors de l\'ajout');
+      }
+    }
 
-      adminListContainer.addEventListener('click', (e) => {
-        const deleteBtn = e.target.closest('.delete-btn');
-        if (deleteBtn) {
-          const id = deleteBtn.dataset.id;
-          deleteProduct(id);
-        }
-      });
-    })();
+    // Delete Product
+    async function deleteProduct(id) {
+      if (!confirm('Supprimer ce produit ?')) return;
 
+      try {
+        const { error } = await supabase
+          .from('products')
+          .delete()
+          .match({ id });
 
-  </script>
+        if (error) throw error;
 
+        showAdminToast('🗑️ Produit supprimé');
+        loadAdminProducts();
+      } catch (error) {
+        console.error('Erreur suppression:', error);
+        showAdminToast('❌ Erreur lors de la suppression');
+      }
+    }
 
+    // Event Listeners
+    unlockBtn.addEventListener('click', () => {
+      if (passwordInput.value === GATE_PASSWORD) {
+        gatePanel.style.display = 'none';
+        adminPanel.style.display = 'block';
+        loggedInSpan.textContent = '⚡ propriétaire · ' + new Date().toLocaleDateString('fr-FR');
+        loadAdminProducts();
+      } else {
+        alert('❌ Mot de passe incorrect');
+      }
+    });
 
+    passwordInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') unlockBtn.click();
+    });
 
-  <script>
+    logoutBtn.addEventListener('click', () => {
+      adminPanel.style.display = 'none';
+      gatePanel.style.display = 'block';
+      passwordInput.value = '';
+    });
+
+    backLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = 'index.html';
+    });
+
+    // Image upload
+    fileArea.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file || !file.type.startsWith('image/')) return;
+
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        uploadedImageBase64 = ev.target.result;
+        previewImg.src = ev.target.result;
+        previewFilename.textContent = file.name.length > 20 ? file.name.substr(0, 18) + '…' : file.name;
+        imagePreview.style.display = 'flex';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    clearPreview.addEventListener('click', () => {
+      uploadedImageBase64 = null;
+      imagePreview.style.display = 'none';
+      fileInput.value = '';
+    });
+
+    document.getElementById('addProductBtn').addEventListener('click', addProduct);
+
+    adminListContainer.addEventListener('click', (e) => {
+      const deleteBtn = e.target.closest('.delete-btn');
+      if (deleteBtn) {
+        const id = deleteBtn.dataset.id;
+        deleteProduct(id);
+      }
+    });
+
+    // Menu Toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const langMenu = document.getElementById('langMenu');
+
+    function toggleMenu() {
+      if (!navLinks) return;
+      navLinks.classList.toggle('active');
+      if (menuOverlay) menuOverlay.classList.toggle('active');
+      document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+    }
+
+    if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
+    if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
+
     // Language translations
     const translations = {
       fr: {
@@ -1469,10 +1411,7 @@
       }
     };
 
-    // Get saved language
-    const savedLanguage = localStorage.getItem('language') || 'fr';
-
-    // Function to translate page
+    // Apply translation function
     function applyTranslation(lang) {
       const t = translations[lang];
       if (!t) return;
@@ -1480,29 +1419,29 @@
       // Gate panel
       const gateTitle = document.querySelector('.gate h2');
       if (gateTitle) gateTitle.textContent = t.gateTitle;
-      const passwordInput = document.getElementById('passwordInput');
-      if (passwordInput) passwordInput.placeholder = t.passwordPlaceholder;
+      const pwdInput = document.getElementById('passwordInput');
+      if (pwdInput) pwdInput.placeholder = t.passwordPlaceholder;
       const hint = document.querySelector('.gate .hint');
       if (hint) hint.textContent = t.hint;
-      const backLink = document.getElementById('backToShopLink');
-      if (backLink) backLink.innerHTML = `<i class="fas fa-arrow-left"></i> ${t.backToShop}`;
+      const backLinkEl = document.getElementById('backToShopLink');
+      if (backLinkEl) backLinkEl.innerHTML = `<i class="fas fa-arrow-left"></i> ${t.backToShop}`;
 
       // Navigation
-      const navLinks = document.querySelectorAll('#navLinks a');
-      if (navLinks[0]) navLinks[0].textContent = t.accueil;
-      if (navLinks[1]) navLinks[1].textContent = t.collection;
-      if (navLinks[2]) navLinks[2].textContent = t.exclusivites;
-      if (navLinks[3]) navLinks[3].textContent = t.coffrets;
-      const authLink = document.getElementById('authLink');
-      if (authLink) authLink.textContent = t.seConnecter;
-      const profileLink = document.getElementById('profileLink');
-      if (profileLink) profileLink.textContent = t.monProfil;
+      const navItems = document.querySelectorAll('#navLinks a');
+      if (navItems[0]) navItems[0].textContent = t.accueil;
+      if (navItems[1]) navItems[1].textContent = t.collection;
+      if (navItems[2]) navItems[2].textContent = t.exclusivites;
+      if (navItems[3]) navItems[3].textContent = t.coffrets;
+      const authLinkEl = document.getElementById('authLink');
+      if (authLinkEl) authLinkEl.textContent = t.seConnecter;
+      const profileLinkEl = document.getElementById('profileLink');
+      if (profileLinkEl) profileLinkEl.textContent = t.monProfil;
 
       // Admin panel
-      const adminTitle = document.querySelector('#adminPanel h1');
-      if (adminTitle) adminTitle.innerHTML = `<i class="fas fa-spa"></i> ${t.adminTitle}`;
-      const addTitle = document.querySelector('.form-panel h2');
-      if (addTitle) addTitle.innerHTML = `<i class="fas fa-plus-circle"></i> ${t.addProduct}`;
+      const adminTitleEl = document.querySelector('#adminPanel h1');
+      if (adminTitleEl) adminTitleEl.innerHTML = `<i class="fas fa-spa"></i> ${t.adminTitle}`;
+      const addTitleEl = document.querySelector('.form-panel h2');
+      if (addTitleEl) addTitleEl.innerHTML = `<i class="fas fa-plus-circle"></i> ${t.addProduct}`;
 
       // Form labels
       const labels = document.querySelectorAll('.form-panel label');
@@ -1513,12 +1452,12 @@
       if (labels[4]) labels[4].textContent = t.imageUpload;
 
       // Placeholders
-      const nameInput = document.getElementById('productName');
-      if (nameInput) nameInput.placeholder = t.namePlaceholder;
-      const brandInput = document.getElementById('productBrand');
-      if (brandInput) brandInput.placeholder = t.brandPlaceholder;
-      const priceInput = document.getElementById('productPrice');
-      if (priceInput) priceInput.placeholder = t.pricePlaceholder;
+      const nameInp = document.getElementById('productName');
+      if (nameInp) nameInp.placeholder = t.namePlaceholder;
+      const brandInp = document.getElementById('productBrand');
+      if (brandInp) brandInp.placeholder = t.brandPlaceholder;
+      const priceInp = document.getElementById('productPrice');
+      if (priceInp) priceInp.placeholder = t.pricePlaceholder;
 
       // Season buttons
       const seasonMap = { all: t.allSeasons, summer: t.summer, winter: t.winter, spring: t.spring, autumn: t.autumn };
@@ -1540,8 +1479,8 @@
       if (saveBtn) saveBtn.innerHTML = `<i class="fas fa-gem"></i> ${t.save}`;
       const listTitle = document.querySelector('.list-panel h2');
       if (listTitle) listTitle.innerHTML = `<i class="fas fa-box-open"></i> ${t.existingProducts}`;
-      const logoutBtn = document.getElementById('logoutBtn');
-      if (logoutBtn) logoutBtn.innerHTML = `<i class="fas fa-sign-out-alt"></i> ${t.logout}`;
+      const logoutBtnEl = document.getElementById('logoutBtn');
+      if (logoutBtnEl) logoutBtnEl.innerHTML = `<i class="fas fa-sign-out-alt"></i> ${t.logout}`;
       const infoText = document.querySelector('.form-panel hr + p');
       if (infoText) infoText.innerHTML = `<i class="fas fa-info-circle"></i> ${t.infoText}`;
 
@@ -1554,14 +1493,14 @@
         document.body.style.textAlign = 'left';
       }
 
-      // Update dropdown
-      const langCurrentSpan = document.querySelector('#langMenu .lang-current span');
+      // Update dropdown display
+      const langSpan = document.querySelector('#langMenu .lang-current span');
       const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-      if (langCurrentSpan) langCurrentSpan.textContent = langNames[lang];
+      if (langSpan) langSpan.textContent = langNames[lang];
     }
 
-    // Setup language switcher
-    function setupSwitcher() {
+    // Language switcher
+    function setupLangSwitcher() {
       const langOptions = document.querySelectorAll('.lang-option');
       langOptions.forEach(opt => {
         opt.addEventListener('click', () => {
@@ -1573,27 +1512,31 @@
       });
     }
 
-    // Watch for admin panel after login
-    function watchAdminPanel() {
-      const adminPanel = document.getElementById('adminPanel');
-      if (!adminPanel) return;
+    // Watch for admin panel
+    function watchAdminPanelForTranslation() {
+      const adminPanelEl = document.getElementById('adminPanel');
+      if (!adminPanelEl) return;
       const observer = new MutationObserver(() => {
-        if (adminPanel.style.display !== 'none') {
-          applyTranslation(savedLanguage);
+        if (adminPanelEl.style.display !== 'none') {
+          const savedLang = localStorage.getItem('language') || 'fr';
+          applyTranslation(savedLang);
           observer.disconnect();
         }
       });
-      observer.observe(adminPanel, { attributes: true });
+      observer.observe(adminPanelEl, { attributes: true });
     }
 
-    // Run on load
-    document.addEventListener('DOMContentLoaded', () => {
-      setupSwitcher();
-      watchAdminPanel();
-      applyTranslation(savedLanguage);
-    });
-  </script>
+    // Initialize translation on page load
+    function initTranslation() {
+      const savedLang = localStorage.getItem('language') || 'fr';
+      applyTranslation(savedLang);
+      setupLangSwitcher();
+      watchAdminPanelForTranslation();
+    }
 
+    // Start translation
+    initTranslation();
+  </script>
 </body>
 
 </html>
