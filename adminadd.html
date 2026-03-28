@@ -18,48 +18,428 @@
     }
 
     body {
-      background: var(--bg-gradient);
-      color: var(--text-primary);
+      background: #f4efe9;
+      color: #2c2824;
       min-height: 100vh;
-      transition: background 0.3s ease, color 0.3s ease;
-      position: relative;
-      overflow-x: hidden;
-      padding-top: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
     }
 
-    /* Animated background with floating particles */
-    body::before {
-      content: '';
+    .admin-wrapper {
+      max-width: 1100px;
+      width: 100%;
+      background: #ffffffd9;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 42px;
+      box-shadow: 0 30px 50px -25px rgba(98, 78, 62, 0.3);
+      border: 1px solid #ede3da;
+      overflow: hidden;
+      padding: 2.2rem 2.5rem;
+    }
+
+    h1 {
+      font-weight: 320;
+      font-size: 2.2rem;
+      letter-spacing: 0.02em;
+      color: #3f3730;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #e3d8cf;
+      padding-bottom: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    h1 i {
+      color: #b6987a;
+      font-size: 2.4rem;
+    }
+
+    h2 {
+      font-weight: 350;
+      font-size: 1.4rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #5f5348;
+      margin-bottom: 1.2rem;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr;
+      gap: 2.2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .two-column {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .admin-wrapper {
+        padding: 1.5rem;
+      }
+    }
+
+    .form-panel {
+      background: #fcf9f6;
+      padding: 1.8rem 2rem;
+      border-radius: 32px;
+      border: 1px solid #e7dcd2;
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.8), 0 8px 18px -12px rgba(87, 67, 52, 0.2);
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #937f6e;
+      margin-bottom: 0.4rem;
+    }
+
+    input,
+    select {
+      width: 100%;
+      background: white;
+      border: 1px solid #dbcec2;
+      border-radius: 60px;
+      padding: 0.9rem 1.4rem;
+      font-size: 0.95rem;
+      color: #2c2824;
+      outline: none;
+      transition: 0.15s;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #b6987a;
+      box-shadow: 0 0 0 3px #eeddd2;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    .icon-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.4rem;
+    }
+
+    .icon-option {
+      background: white;
+      border: 1px solid #dacfc6;
+      border-radius: 50px;
+      padding: 0.6rem 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: #3f3730;
+    }
+
+    .icon-option i {
+      font-size: 1.1rem;
+      color: #b6987a;
+    }
+
+    .icon-option.selected {
+      background: #b6987a;
+      border-color: #b6987a;
+      color: white;
+    }
+
+    .icon-option.selected i {
+      color: white;
+    }
+
+    .icon-option:hover {
+      border-color: #b6987a;
+      background: #f5ede6;
+    }
+
+    .file-input-area {
+      background: #f7f2ec;
+      border: 1px dashed #cbb9aa;
+      border-radius: 34px;
+      padding: 1.2rem 1.4rem;
+      text-align: center;
+      color: #7a6a5c;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .file-input-area:hover {
+      background: #f1e8df;
+      border-color: #b6987a;
+    }
+
+    .file-input-area i {
+      font-size: 1.8rem;
+      color: #b6987a;
+      margin-bottom: 6px;
+    }
+
+    #imagePreview {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: #fff5ed;
+      padding: 0.6rem 1.2rem;
+      border-radius: 40px;
+      border: 1px solid #e2d3c6;
+    }
+
+    #imagePreview img {
+      width: 48px;
+      height: 48px;
+      border-radius: 30px;
+      object-fit: cover;
+    }
+
+    .btn-primary {
+      background: #b6987a;
+      border: none;
+      color: white;
+      padding: 1rem 2.2rem;
+      border-radius: 60px;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+      width: 100%;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-primary:hover {
+      background: #a07d63;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .list-panel {
+      background: #fcf9f6;
+      padding: 1.8rem 1.5rem;
+      border-radius: 32px;
+      border: 1px solid #e7dcd2;
+      max-height: 540px;
+      overflow-y: auto;
+    }
+
+    .admin-product-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0.8rem;
+      border-bottom: 1px solid #ece0d6;
+    }
+
+    .admin-product-item:last-child {
+      border-bottom: none;
+    }
+
+    .admin-product-img {
+      width: 54px;
+      height: 54px;
+      background: #e9dfd6;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .admin-product-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .admin-product-img i {
+      font-size: 2rem;
+      color: #8f7c6b;
+    }
+
+    .admin-product-info {
+      flex: 1;
+    }
+
+    .admin-product-title {
+      font-weight: 500;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .admin-product-brand {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #b6987a;
+      letter-spacing: 0.1em;
+    }
+
+    .admin-product-price {
+      font-weight: 350;
+      color: #3f3730;
+    }
+
+    .admin-product-price::before {
+      content: '€';
+      margin-right: 2px;
+      color: #887b70;
+    }
+
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #b7a597;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: color 0.15s;
+      padding: 6px;
+    }
+
+    .delete-btn:hover {
+      color: #c1654c;
+    }
+
+    .empty-list {
+      color: #ad9f93;
+      text-align: center;
+      font-style: italic;
+      padding: 2rem 0;
+    }
+
+    .gate {
+      background: #fcf9f6;
+      border-radius: 48px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      border: 1px solid #ece0d6;
+    }
+
+    .gate h2 {
+      margin-bottom: 1.8rem;
+    }
+
+    .password-input {
+      display: flex;
+      gap: 10px;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    .password-input input {
+      flex: 1;
+    }
+
+    .password-input button {
+      background: #b6987a;
+      border: none;
+      color: white;
+      padding: 0 1.6rem;
+      border-radius: 60px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .hint {
+      margin-top: 1rem;
+      color: #a49182;
+      font-size: 0.8rem;
+    }
+
+    .back-link {
+      margin-top: 2rem;
+      display: inline-block;
+      color: #b6987a;
+      text-decoration: none;
+      border-bottom: 1px dotted;
+    }
+
+    hr {
+      border: 0.5px solid #ece0d6;
+      margin: 1.5rem 0;
+    }
+
+    .admin-toast {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
-      pointer-events: none;
-      z-index: -1;
-      animation: backgroundPulse 8s ease-in-out infinite;
+      bottom: 30px;
+      left: 30px;
+      background: #2c2824;
+      color: #f0e7de;
+      padding: 0.9rem 2rem;
+      border-radius: 60px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      transform: translateY(80px);
+      transition: 0.2s;
+      z-index: 1000;
     }
 
-    @keyframes backgroundPulse {
-
-      0%,
-      100% {
-        opacity: 0.6;
-        transform: scale(1);
-      }
-
-      50% {
-        opacity: 1;
-        transform: scale(1.02);
-      }
+    .admin-toast.show {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    /* Floating gold particles */
+    .loading-spinner {
+      text-align: center;
+      padding: 2rem;
+      color: #b6987a;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Floating Gold Particles -->
+  <script>
+    for (let i = 0; i < 40; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      const size = Math.random() * 6 + 2;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 15 + 's';
+      particle.style.animationDuration = Math.random() * 10 + 8 + 's';
+      particle.style.opacity = Math.random() * 0.4 + 0.1;
+      document.body.appendChild(particle);
+    }
+  </script>
+
+  <style>
     .particle {
       position: fixed;
-      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      background: radial-gradient(circle, #d4af37 0%, transparent 70%);
       border-radius: 50%;
       pointer-events: none;
       opacity: 0;
@@ -86,860 +466,18 @@
         transform: translateY(-20vh) rotate(360deg);
       }
     }
-
-    /* Header */
-    header {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: var(--shadow-sm);
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      border-bottom: 1px solid var(--border);
-    }
-
-    body.dark header {
-      background: rgba(10, 10, 10, 0.95);
-    }
-
-    .header-flex {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 0.8rem 2rem;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      text-decoration: none;
-    }
-
-    .logo i {
-      font-size: 1.8rem;
-      color: var(--accent);
-    }
-
-    .logo h1 {
-      font-size: 1.5rem;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      font-weight: 350;
-      color: var(--text-primary);
-    }
-
-    .right-group {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .theme-toggle {
-      cursor: pointer;
-      font-size: 1.2rem;
-      color: var(--accent);
-      transition: transform 0.3s ease;
-    }
-
-    .theme-toggle:hover {
-      transform: rotate(15deg);
-    }
-
-    .menu-toggle {
-      background: none;
-      border: none;
-      font-size: 1.6rem;
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: color 0.2s;
-      padding: 0.3rem;
-      display: flex;
-      align-items: center;
-    }
-
-    .menu-toggle:hover {
-      color: var(--accent);
-    }
-
-    .nav-links {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      top: 100%;
-      right: 1rem;
-      width: 240px;
-      background: var(--bg-primary);
-      backdrop-filter: blur(10px);
-      gap: 0;
-      padding: 0;
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
-      box-shadow: var(--shadow-md);
-      border: 1px solid var(--border);
-      z-index: 101;
-      border-radius: 16px;
-    }
-
-    .nav-links.active {
-      max-height: 380px;
-      opacity: 1;
-      padding: 0.5rem 0;
-    }
-
-    .nav-links a {
-      padding: 0.8rem 1.2rem;
-      width: 100%;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.9rem;
-      letter-spacing: 0.05em;
-      text-decoration: none;
-      color: var(--text-primary);
-      transition: all 0.2s;
-    }
-
-    .nav-links a:last-child {
-      border-bottom: none;
-    }
-
-    .nav-links a:hover {
-      background: var(--hover-bg);
-      color: var(--accent);
-      padding-left: 1.5rem;
-    }
-
-    .lang-menu {
-      border-bottom: 1px solid var(--border);
-    }
-
-    .lang-current {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      background: none;
-      border: none;
-      padding: 0.8rem 1.2rem;
-      font-size: 0.9rem;
-      letter-spacing: 0.05em;
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .lang-current:hover {
-      background: var(--hover-bg);
-      color: var(--accent);
-    }
-
-    .lang-current i {
-      font-size: 0.7rem;
-      transition: transform 0.2s;
-    }
-
-    .lang-menu.active .lang-current i {
-      transform: rotate(180deg);
-    }
-
-    .lang-options {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease-out;
-      background: var(--bg-primary);
-    }
-
-    .lang-menu.active .lang-options {
-      max-height: 140px;
-    }
-
-    .lang-option {
-      display: block;
-      width: 100%;
-      text-align: left;
-      padding: 0.6rem 1.2rem 0.6rem 2rem;
-      background: none;
-      border: none;
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .lang-option:hover {
-      background: var(--hover-bg);
-      color: var(--accent);
-    }
-
-    .menu-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(2px);
-      z-index: 99;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .menu-overlay.active {
-      display: block;
-      opacity: 1;
-    }
-
-    @media (max-width: 768px) {
-      body {
-        padding-top: 65px;
-      }
-
-      .header-flex {
-        padding: 0.6rem 1rem;
-      }
-
-      .logo h1 {
-        font-size: 1.2rem;
-      }
-
-      .logo i {
-        font-size: 1.5rem;
-      }
-
-      .right-group {
-        gap: 8px;
-      }
-
-      .nav-links {
-        width: 200px;
-        right: 0.5rem;
-      }
-    }
-
-    .admin-wrapper {
-      max-width: 1100px;
-      width: 100%;
-      background: var(--bg-primary);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 42px;
-      box-shadow: var(--shadow-xl);
-      border: 1px solid var(--border);
-      overflow: hidden;
-      padding: 2.2rem 2.5rem;
-      transition: all 0.3s ease;
-      animation: slideUp 0.6s ease-out;
-      position: relative;
-      z-index: 10;
-      margin: 1rem auto;
-    }
-
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    h1 {
-      font-weight: 320;
-      font-size: 2rem;
-      letter-spacing: 0.02em;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 1.2rem;
-      margin-bottom: 2rem;
-    }
-
-    h1 i {
-      color: var(--accent);
-      font-size: 2.2rem;
-    }
-
-    h2 {
-      font-weight: 350;
-      font-size: 1.3rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.2rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .two-column {
-      display: grid;
-      grid-template-columns: 1.2fr 0.9fr;
-      gap: 2rem;
-      align-items: start;
-    }
-
-    @media (max-width: 768px) {
-      .two-column {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
-
-      .admin-wrapper {
-        padding: 1.5rem;
-      }
-    }
-
-    /* Form Panel */
-    .form-panel {
-      background: var(--card-gradient);
-      padding: 1.8rem;
-      border-radius: 28px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-md);
-      transition: all 0.3s;
-    }
-
-    .form-panel:hover {
-      box-shadow: var(--shadow-lg);
-      transform: translateY(-2px);
-    }
-
-    .input-group {
-      margin-bottom: 1.5rem;
-    }
-
-    label {
-      display: block;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-secondary);
-      margin-bottom: 0.4rem;
-      font-weight: 500;
-    }
-
-    input {
-      width: 100%;
-      background: var(--input-bg);
-      border: 1px solid var(--border);
-      border-radius: 50px;
-      padding: 0.8rem 1.2rem;
-      font-size: 0.9rem;
-      color: var(--text-primary);
-      outline: none;
-      transition: all 0.3s;
-    }
-
-    input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
-      transform: translateX(2px);
-    }
-
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    input[type="number"] {
-      -moz-appearance: textfield;
-      appearance: textfield;
-    }
-
-    /* Season Buttons */
-    .season-selector {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 0.4rem;
-    }
-
-    .season-option {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 50px;
-      padding: 0.5rem 1rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: var(--text-primary);
-    }
-
-    .season-option i {
-      font-size: 0.9rem;
-      color: var(--accent);
-    }
-
-    .season-option.selected {
-      background: var(--accent-gradient);
-      border-color: var(--accent);
-      color: white;
-    }
-
-    .season-option.selected i {
-      color: white;
-    }
-
-    .season-option:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    /* File Upload */
-    .file-input-area {
-      background: var(--bg-secondary);
-      border: 1px dashed var(--border);
-      border-radius: 28px;
-      padding: 1rem;
-      text-align: center;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .file-input-area:hover {
-      border-color: var(--accent);
-      background: var(--hover-bg);
-      transform: translateY(-2px);
-    }
-
-    .file-input-area i {
-      font-size: 1.5rem;
-      color: var(--accent);
-      margin-bottom: 5px;
-    }
-
-    #imagePreview {
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--bg-secondary);
-      padding: 0.5rem 1rem;
-      border-radius: 40px;
-      border: 1px solid var(--border);
-    }
-
-    #imagePreview img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    /* Buttons */
-    .btn-primary {
-      background: var(--accent-gradient);
-      border: none;
-      color: var(--bg-primary);
-      padding: 0.9rem;
-      border-radius: 50px;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 600;
-      width: 100%;
-      cursor: pointer;
-      transition: all 0.3s;
-      margin-top: 0.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn-primary::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
-    }
-
-    .btn-primary:hover::before {
-      width: 300px;
-      height: 300px;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .btn-primary:active {
-      transform: translateY(1px);
-    }
-
-    /* List Panel */
-    .list-panel {
-      background: var(--card-gradient);
-      padding: 1.5rem;
-      border-radius: 28px;
-      border: 1px solid var(--border);
-      max-height: 550px;
-      overflow-y: auto;
-      box-shadow: var(--shadow-md);
-    }
-
-    .list-panel::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .list-panel::-webkit-scrollbar-track {
-      background: var(--bg-secondary);
-      border-radius: 3px;
-    }
-
-    .list-panel::-webkit-scrollbar-thumb {
-      background: var(--accent);
-      border-radius: 3px;
-    }
-
-    .admin-product-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 0.8rem;
-      border-bottom: 1px solid var(--border);
-      transition: all 0.2s;
-    }
-
-    .admin-product-item:hover {
-      background: var(--hover-bg);
-      border-radius: 16px;
-      transform: translateX(5px);
-    }
-
-    .admin-product-img {
-      width: 50px;
-      height: 50px;
-      background: var(--bg-secondary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      overflow: hidden;
-    }
-
-    .admin-product-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .admin-product-img i {
-      font-size: 1.6rem;
-      color: var(--accent);
-    }
-
-    .admin-product-info {
-      flex: 1;
-    }
-
-    .admin-product-title {
-      font-weight: 500;
-      font-size: 1rem;
-      color: var(--text-primary);
-    }
-
-    .admin-product-brand {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-    }
-
-    .admin-product-price {
-      font-weight: 500;
-      color: var(--accent-dark);
-      font-size: 0.9rem;
-    }
-
-    .admin-product-price::before {
-      content: 'TND ';
-      font-size: 0.7rem;
-      color: var(--text-secondary);
-    }
-
-    .product-season-badge {
-      font-size: 0.7rem;
-      color: var(--text-secondary);
-      margin-top: 0.2rem;
-    }
-
-    .delete-btn {
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      padding: 8px;
-      border-radius: 50%;
-    }
-
-    .delete-btn:hover {
-      color: #c1654c;
-      background: var(--hover-bg);
-      transform: scale(1.1);
-    }
-
-    .empty-list {
-      text-align: center;
-      padding: 2rem;
-      color: var(--text-secondary);
-      font-style: italic;
-    }
-
-    /* Gate Panel */
-    .gate {
-      background: var(--card-gradient);
-      border-radius: 40px;
-      padding: 2rem;
-      text-align: center;
-      border: 1px solid var(--border);
-      animation: fadeIn 0.5s ease-out;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    .gate h2 {
-      justify-content: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .password-input {
-      display: flex;
-      gap: 10px;
-      max-width: 320px;
-      margin: 0 auto;
-    }
-
-    .password-input input {
-      flex: 1;
-    }
-
-    .password-input button {
-      background: var(--accent-gradient);
-      border: none;
-      color: var(--bg-primary);
-      padding: 0 1.5rem;
-      border-radius: 50px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .password-input button:hover {
-      transform: scale(1.02);
-    }
-
-    .hint {
-      margin-top: 1rem;
-      color: var(--text-secondary);
-      font-size: 0.8rem;
-    }
-
-    .back-link {
-      margin-top: 1.5rem;
-      display: inline-block;
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px dotted var(--accent);
-      transition: all 0.2s;
-    }
-
-    .back-link:hover {
-      color: var(--accent-dark);
-      transform: translateX(-3px);
-    }
-
-    hr {
-      border: 0.5px solid var(--border);
-      margin: 1.2rem 0;
-    }
-
-    /* Toast */
-    .admin-toast {
-      position: fixed;
-      bottom: 30px;
-      left: 30px;
-      background: var(--accent-gradient);
-      color: var(--bg-primary);
-      padding: 0.8rem 1.5rem;
-      border-radius: 60px;
-      box-shadow: var(--shadow-lg);
-      opacity: 0;
-      transform: translateY(80px);
-      transition: 0.3s;
-      z-index: 1000;
-      font-weight: 500;
-    }
-
-    .admin-toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .loading-spinner {
-      text-align: center;
-      padding: 1.5rem;
-      color: var(--accent);
-    }
-
-    /* Theme Variables */
-    :root {
-      --bg-primary: #ffffff;
-      --bg-secondary: #fffbf5;
-      --bg-gradient: linear-gradient(135deg, #fff9f0 0%, #ffffff 100%);
-      --text-primary: #2e2a28;
-      --text-secondary: #6b5c4f;
-      --accent: #d4af37;
-      --accent-dark: #b4942c;
-      --accent-gradient: linear-gradient(135deg, #d4af37 0%, #f5d742 50%, #d4af37 100%);
-      --border: rgba(212, 175, 55, 0.2);
-      --card-gradient: linear-gradient(145deg, #ffffff 0%, #fffaf2 100%);
-      --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.03);
-      --shadow-md: 0 5px 20px rgba(212, 175, 55, 0.1);
-      --shadow-lg: 0 10px 30px rgba(212, 175, 55, 0.15);
-      --shadow-xl: 0 20px 40px rgba(212, 175, 55, 0.2);
-      --input-bg: #ffffff;
-      --hover-bg: rgba(212, 175, 55, 0.05);
-    }
-
-    body.dark {
-      --bg-primary: #0a0a0a;
-      --bg-secondary: #141414;
-      --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #141414 100%);
-      --text-primary: #f5f5f5;
-      --text-secondary: #b8b8b8;
-      --accent: #ffd700;
-      --accent-dark: #e6c300;
-      --accent-gradient: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
-      --border: rgba(255, 215, 0, 0.2);
-      --card-gradient: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
-      --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.2);
-      --shadow-md: 0 5px 20px rgba(255, 215, 0, 0.1);
-      --shadow-lg: 0 10px 30px rgba(255, 215, 0, 0.15);
-      --shadow-xl: 0 20px 40px rgba(255, 215, 0, 0.2);
-      --input-bg: #2a2a2a;
-      --hover-bg: rgba(255, 215, 0, 0.1);
-    }
-
-    /* Theme Toggle Button */
-    .theme-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      cursor: pointer;
-      font-size: 1.3rem;
-      color: var(--accent);
-      background: var(--bg-primary);
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      box-shadow: var(--shadow-md);
-      border: 1px solid var(--border);
-      z-index: 1000;
-    }
-
-    .theme-toggle:hover {
-      transform: rotate(15deg) scale(1.05);
-      box-shadow: var(--shadow-lg);
-    }
-
-    @media (max-width: 480px) {
-      .admin-wrapper {
-        padding: 1.2rem;
-      }
-
-      h1 {
-        font-size: 1.5rem;
-      }
-
-      .theme-toggle {
-        top: 15px;
-        right: 15px;
-        width: 38px;
-        height: 38px;
-        font-size: 1.1rem;
-      }
-    }
   </style>
-</head>
-
-<body>
-  <!-- Floating Gold Particles -->
-  <script>
-    for (let i = 0; i < 40; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
-      const size = Math.random() * 6 + 2;
-      particle.style.width = size + 'px';
-      particle.style.height = size + 'px';
-      particle.style.left = Math.random() * 100 + '%';
-      particle.style.animationDelay = Math.random() * 15 + 's';
-      particle.style.animationDuration = Math.random() * 10 + 8 + 's';
-      particle.style.opacity = Math.random() * 0.4 + 0.1;
-      document.body.appendChild(particle);
-    }
-  </script>
-
-  <!-- Theme Toggle Button -->
-  <div class="theme-toggle" id="themeToggle">
-    <i class="fas fa-sun"></i>
-    <i class="fas fa-moon" style="display: none;"></i>
-  </div>
 
   <div class="admin-wrapper" id="adminWrapper">
     <!-- GATE PANEL -->
     <div id="gatePanel" class="gate">
-      <i class="fas fa-spa" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem;"></i>
+      <i class="fas fa-spa" style="font-size: 2.5rem; color: #b6987a; margin-bottom: 1rem;"></i>
       <h2>Espace propriétaire</h2>
       <div class="password-input">
         <input type="password" id="passwordInput" placeholder="Mot de passe" value="">
         <button id="unlockBtn"><i class="fas fa-arrow-right"></i></button>
       </div>
-      <div class="hint">🔐 Mot de passe: rosa</div>
+      <div class="hint">🔐 Mot de passe: <strong>rosa</strong></div>
       <a href="index.html" id="backToShopLink" class="back-link"><i class="fas fa-arrow-left"></i> Retour à la
         boutique</a>
     </div>
@@ -947,43 +485,41 @@
     <!-- ADMIN PANEL -->
     <div id="adminPanel" style="display: none;">
       <h1>
-        <i class="fas fa-spa"></i> Rosa Fragrances · Gérer les produits
-        <span style="flex:1; text-align: right; font-size: 0.7rem; opacity:0.7;" id="loggedInAs"></span>
+        <i class="fas fa-pen-nib"></i> Rosa Fragrances · Gérer les produits
+        <span style="flex:1; text-align: right; font-size: 0.8rem; opacity:0.7;" id="loggedInAs"></span>
       </h1>
 
       <div class="two-column">
-        <!-- ADD PRODUCT FORM -->
+        <!-- FORMULAIRE AJOUT PRODUIT -->
         <div class="form-panel">
-          <h2><i class="fas fa-plus-circle"></i> Ajouter un parfum</h2>
-
+          <h2><i class="fas fa-plus-circle" style="margin-right: 10px;"></i>Ajouter un parfum</h2>
           <div class="input-group">
             <label>Nom du produit</label>
             <input type="text" id="productName" placeholder="ex. Bois d'Argent" autocomplete="off">
           </div>
-
           <div class="input-group">
             <label>Marque / Maison</label>
             <input type="text" id="productBrand" placeholder="PHYSALIS / NAEVE ...">
           </div>
-
           <div class="input-group">
             <label>Prix (TND)</label>
             <input type="number" id="productPrice" step="0.001" min="0" placeholder="0.000">
           </div>
 
-          <!-- Season Buttons -->
+          <!-- Sélection d'icône -->
           <div class="input-group">
-            <label>Saison</label>
-            <div class="season-selector" id="seasonSelector">
-              <div class="season-option selected" data-season="all"><i class="fas fa-globe"></i> Toutes saisons</div>
-              <div class="season-option" data-season="summer"><i class="fas fa-sun"></i> Été</div>
-              <div class="season-option" data-season="winter"><i class="fas fa-snowflake"></i> Hiver</div>
-              <div class="season-option" data-season="spring"><i class="fas fa-seedling"></i> Printemps</div>
-              <div class="season-option" data-season="autumn"><i class="fas fa-leaf"></i> Automne</div>
+            <label>Icône (si pas d'image)</label>
+            <div class="icon-selector" id="iconSelector">
+              <div class="icon-option selected" data-icon="fa-leaf"><i class="fas fa-leaf"></i> Feuille</div>
+              <div class="icon-option" data-icon="fa-plant-wilt"><i class="fas fa-plant-wilt"></i> Plante</div>
+              <div class="icon-option" data-icon="fa-tree"><i class="fas fa-tree"></i> Bois</div>
+              <div class="icon-option" data-icon="fa-flower"><i class="fas fa-flower"></i> Fleur</div>
+              <div class="icon-option" data-icon="fa-cloud-moon"><i class="fas fa-cloud-moon"></i> Fumée</div>
+              <div class="icon-option" data-icon="fa-crown"><i class="fas fa-crown"></i> Prestige</div>
             </div>
           </div>
 
-          <!-- Image Upload -->
+          <!-- Téléchargement d'image -->
           <div class="input-group">
             <label>Image du produit</label>
             <div class="file-input-area" id="fileInputArea">
@@ -994,20 +530,19 @@
             <div id="imagePreview" style="display: none;">
               <img id="previewImg" src="#" alt="aperçu">
               <span id="previewFilename"></span>
-              <i class="fas fa-times" id="clearPreview"
-                style="margin-left: auto; cursor:pointer; color:var(--accent);"></i>
+              <i class="fas fa-times" id="clearPreview" style="margin-left: auto; cursor:pointer; color:#b6987a;"></i>
             </div>
           </div>
 
           <button class="btn-primary" id="addProductBtn"><i class="fas fa-gem"></i> Enregistrer le produit</button>
           <hr>
-          <p style="font-size:0.7rem; color:var(--text-secondary);"><i class="fas fa-info-circle"></i> Les images sont
-            stockées en Base64</p>
+          <p style="font-size:0.75rem; color:#aa9b8e;"><i class="fas fa-info-circle"></i> Les images sont stockées en
+            Base64</p>
         </div>
 
-        <!-- PRODUCTS LIST -->
+        <!-- LISTE DES PRODUITS -->
         <div class="list-panel">
-          <h2><i class="fas fa-box-open"></i> Parfums existants</h2>
+          <h2><i class="fas fa-box-open" style="margin-right: 10px;"></i>Parfums existants</h2>
           <div id="loadingAdmin" class="loading-spinner" style="display: none;">
             <i class="fas fa-spinner fa-spin"></i> Chargement...
           </div>
@@ -1015,9 +550,9 @@
         </div>
       </div>
       <div style="margin-top: 1.5rem; text-align: right;">
-        <button id="logoutBtn" class="logout-btn"
-          style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:0.85rem;">
-          <i class="fas fa-sign-out-alt"></i> Se déconnecter
+        <button id="logoutBtn"
+          style="background:none; border:none; color:#b6987a; cursor:pointer; text-decoration:underline;">
+          <i class="fas fa-sign-out-alt"></i> se déconnecter
         </button>
       </div>
     </div>
@@ -1026,515 +561,388 @@
   <div id="adminToast" class="admin-toast">✨ Enregistré</div>
 
   <script>
-    // ========== SUPABASE SETUP ==========
-    const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
-    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    (function () {
+      // Supabase Config
+      const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
+      const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-    // ========== THEME SWITCHER ==========
-    function initTheme() {
-      const saved = localStorage.getItem('theme') || 'light';
-      if (saved === 'dark') {
-        document.body.classList.add('dark');
-        const sun = document.querySelector('#themeToggle .fa-sun');
-        const moon = document.querySelector('#themeToggle .fa-moon');
-        if (sun) sun.style.display = 'none';
-        if (moon) moon.style.display = 'inline-block';
+      // Password Gate
+      const GATE_PASSWORD = 'rosa';
+      const gatePanel = document.getElementById('gatePanel');
+      const adminPanel = document.getElementById('adminPanel');
+      const unlockBtn = document.getElementById('unlockBtn');
+      const passwordInput = document.getElementById('passwordInput');
+      const backLink = document.getElementById('backToShopLink');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const loggedInSpan = document.getElementById('loggedInAs');
+      const loadingAdmin = document.getElementById('loadingAdmin');
+      const adminListContainer = document.getElementById('adminProductListContainer');
+
+      // Form Elements
+      const productName = document.getElementById('productName');
+      const productBrand = document.getElementById('productBrand');
+      const productPrice = document.getElementById('productPrice');
+      const iconOptions = document.querySelectorAll('.icon-option');
+      let selectedIcon = 'fa-leaf';
+
+      // Image Upload
+      const fileInput = document.getElementById('imageUpload');
+      const fileArea = document.getElementById('fileInputArea');
+      const imagePreview = document.getElementById('imagePreview');
+      const previewImg = document.getElementById('previewImg');
+      const previewFilename = document.getElementById('previewFilename');
+      const clearPreview = document.getElementById('clearPreview');
+      let uploadedImageBase64 = null;
+
+      function showAdminToast(msg) {
+        const toast = document.getElementById('adminToast');
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
       }
-    }
 
-    function toggleTheme() {
-      if (document.body.classList.contains('dark')) {
-        document.body.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-        const sun = document.querySelector('#themeToggle .fa-sun');
-        const moon = document.querySelector('#themeToggle .fa-moon');
-        if (sun) sun.style.display = 'inline-block';
-        if (moon) moon.style.display = 'none';
-      } else {
-        document.body.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-        const sun = document.querySelector('#themeToggle .fa-sun');
-        const moon = document.querySelector('#themeToggle .fa-moon');
-        if (sun) sun.style.display = 'none';
-        if (moon) moon.style.display = 'inline-block';
+      // Load Products
+      async function loadAdminProducts() {
+        try {
+          adminListContainer.innerHTML = '';
+          loadingAdmin.style.display = 'block';
+
+          const { data, error } = await supabase
+            .from('products')
+            .select('*')
+            .order('created_at', { ascending: true });
+
+          if (error) throw error;
+
+          loadingAdmin.style.display = 'none';
+
+          if (!data || data.length === 0) {
+            adminListContainer.innerHTML = '<div class="empty-list">✨ Aucun parfum. Ajoutez le premier.</div>';
+            return;
+          }
+
+          let html = '';
+          data.forEach(prod => {
+            const priceStr = parseFloat(prod.price).toFixed(3).replace('.', ',');
+            const iconOrImage = prod.image
+              ? `<img src="${prod.image}" alt="${prod.name}">`
+              : `<i class="fas ${prod.icon || 'fa-leaf'}"></i>`;
+
+            html += `
+              <div class="admin-product-item" data-id="${prod.id}">
+                <div class="admin-product-img">${iconOrImage}</div>
+                <div class="admin-product-info">
+                  <div class="admin-product-title">${prod.name}</div>
+                  <div class="admin-product-brand">${prod.brand}</div>
+                  <div class="admin-product-price">${priceStr} TND</div>
+                </div>
+                <button class="delete-btn" data-id="${prod.id}" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
+              </div>
+            `;
+          });
+          adminListContainer.innerHTML = html;
+        } catch (error) {
+          console.error('Erreur chargement:', error);
+          loadingAdmin.style.display = 'none';
+          adminListContainer.innerHTML = '<div class="empty-list">❌ Erreur de chargement</div>';
+          showAdminToast('❌ Erreur chargement produits');
+        }
       }
-    }
 
-    const themeToggleBtn = document.getElementById('themeToggle');
-    if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
-    initTheme();
+      // Add Product
+      async function addProduct() {
+        const name = productName.value.trim();
+        const brand = productBrand.value.trim();
+        const price = parseFloat(productPrice.value);
 
-    // ========== PASSWORD GATE ==========
-    const GATE_PASSWORD = 'rosa';
-    const gatePanel = document.getElementById('gatePanel');
-    const adminPanel = document.getElementById('adminPanel');
-    const unlockBtn = document.getElementById('unlockBtn');
-    const passwordInputField = document.getElementById('passwordInput');
-    const backToShopLink = document.getElementById('backToShopLink');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const loggedInSpan = document.getElementById('loggedInAs');
-    const loadingAdmin = document.getElementById('loadingAdmin');
-    const adminListContainer = document.getElementById('adminProductListContainer');
-
-    // ========== FORM ELEMENTS ==========
-    const productNameInput = document.getElementById('productName');
-    const productBrandInput = document.getElementById('productBrand');
-    const productPriceInput = document.getElementById('productPrice');
-    const seasonOptions = document.querySelectorAll('.season-option');
-    let selectedSeason = 'all';
-
-    seasonOptions.forEach(opt => {
-      opt.addEventListener('click', () => {
-        seasonOptions.forEach(o => o.classList.remove('selected'));
-        opt.classList.add('selected');
-        selectedSeason = opt.dataset.season;
-      });
-    });
-
-    // ========== IMAGE UPLOAD ==========
-    const fileInput = document.getElementById('imageUpload');
-    const fileArea = document.getElementById('fileInputArea');
-    const imagePreview = document.getElementById('imagePreview');
-    const previewImg = document.getElementById('previewImg');
-    const previewFilename = document.getElementById('previewFilename');
-    const clearPreview = document.getElementById('clearPreview');
-    let uploadedImageBase64 = null;
-
-    function showAdminToast(msg) {
-      const toast = document.getElementById('adminToast');
-      toast.textContent = msg;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2500);
-    }
-
-    // ========== LOAD PRODUCTS ==========
-    async function loadAdminProducts() {
-      try {
-        adminListContainer.innerHTML = '';
-        loadingAdmin.style.display = 'block';
-
-        const { data, error } = await supabase
-          .from('products')
-          .select('*')
-          .order('created_at', { ascending: true });
-
-        if (error) throw error;
-
-        loadingAdmin.style.display = 'none';
-
-        if (!data || data.length === 0) {
-          adminListContainer.innerHTML = '<div class="empty-list">✨ Aucun parfum. Ajoutez le premier.</div>';
+        if (!name || !brand || isNaN(price) || price <= 0) {
+          showAdminToast('❌ Nom, marque et prix valides requis');
           return;
         }
 
-        const seasonNames = { all: 'Toutes saisons', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne' };
+        try {
+          const newProduct = {
+            name: name,
+            brand: brand,
+            price: price,
+            icon: selectedIcon,
+            image: uploadedImageBase64 || null
+          };
 
-        let html = '';
-        data.forEach(prod => {
-          const priceStr = parseFloat(prod.price).toFixed(3).replace('.', ',');
-          const iconOrImage = prod.image
-            ? `<img src="${prod.image}" alt="${prod.name}">`
-            : `<i class="fas fa-crown"></i>`;
+          const { error } = await supabase
+            .from('products')
+            .insert([newProduct]);
 
-          const seasonName = seasonNames[prod.season] || prod.season || 'Toutes saisons';
-          let seasonIcon = '';
-          if (prod.season === 'summer') seasonIcon = '<i class="fas fa-sun"></i> ';
-          else if (prod.season === 'winter') seasonIcon = '<i class="fas fa-snowflake"></i> ';
-          else if (prod.season === 'spring') seasonIcon = '<i class="fas fa-seedling"></i> ';
-          else if (prod.season === 'autumn') seasonIcon = '<i class="fas fa-leaf"></i> ';
-          else seasonIcon = '<i class="fas fa-globe"></i> ';
+          if (error) throw error;
 
-          html += `
-            <div class="admin-product-item" data-id="${prod.id}">
-              <div class="admin-product-img">${iconOrImage}</div>
-              <div class="admin-product-info">
-                <div class="admin-product-title">${prod.name}</div>
-                <div class="admin-product-brand">${prod.brand}</div>
-                <div class="admin-product-price">${priceStr} TND</div>
-                <div class="product-season-badge">${seasonIcon}${seasonName}</div>
-              </div>
-              <button class="delete-btn" data-id="${prod.id}" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
-            </div>
-          `;
-        });
-        adminListContainer.innerHTML = html;
-      } catch (error) {
-        console.error('Erreur chargement:', error);
-        loadingAdmin.style.display = 'none';
-        adminListContainer.innerHTML = '<div class="empty-list">❌ Erreur de chargement</div>';
-        showAdminToast('❌ Erreur chargement produits');
+          productName.value = '';
+          productBrand.value = '';
+          productPrice.value = '';
+
+          iconOptions.forEach(o => o.classList.remove('selected'));
+          document.querySelector('.icon-option[data-icon="fa-leaf"]').classList.add('selected');
+          selectedIcon = 'fa-leaf';
+
+          uploadedImageBase64 = null;
+          imagePreview.style.display = 'none';
+          fileInput.value = '';
+
+          showAdminToast('✅ Produit ajouté');
+          loadAdminProducts();
+        } catch (error) {
+          console.error('Erreur ajout:', error);
+          showAdminToast('❌ Erreur lors de l\'ajout');
+        }
       }
+
+      // Delete Product
+      async function deleteProduct(id) {
+        if (!confirm('Supprimer ce produit ?')) return;
+
+        try {
+          const { error } = await supabase
+            .from('products')
+            .delete()
+            .match({ id });
+
+          if (error) throw error;
+
+          showAdminToast('🗑️ Produit supprimé');
+          loadAdminProducts();
+        } catch (error) {
+          console.error('Erreur suppression:', error);
+          showAdminToast('❌ Erreur lors de la suppression');
+        }
+      }
+
+      // Event Listeners
+      unlockBtn.addEventListener('click', () => {
+        if (passwordInput.value === GATE_PASSWORD) {
+          gatePanel.style.display = 'none';
+          adminPanel.style.display = 'block';
+          loggedInSpan.textContent = '⚡ propriétaire · ' + new Date().toLocaleDateString('fr-FR');
+          loadAdminProducts();
+        } else {
+          alert('❌ Mot de passe incorrect');
+        }
+      });
+
+      passwordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') unlockBtn.click();
+      });
+
+      logoutBtn.addEventListener('click', () => {
+        adminPanel.style.display = 'none';
+        gatePanel.style.display = 'block';
+        passwordInput.value = '';
+      });
+
+      backLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = 'index.html';
+      });
+
+      // Icon selector
+      iconOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          iconOptions.forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          selectedIcon = opt.dataset.icon;
+        });
+      });
+
+      // Image upload
+      fileArea.addEventListener('click', () => fileInput.click());
+
+      fileInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!file || !file.type.startsWith('image/')) return;
+
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          uploadedImageBase64 = ev.target.result;
+          previewImg.src = ev.target.result;
+          previewFilename.textContent = file.name.length > 20 ? file.name.substr(0, 18) + '…' : file.name;
+          imagePreview.style.display = 'flex';
+        };
+        reader.readAsDataURL(file);
+      });
+
+      clearPreview.addEventListener('click', () => {
+        uploadedImageBase64 = null;
+        imagePreview.style.display = 'none';
+        fileInput.value = '';
+      });
+
+      document.getElementById('addProductBtn').addEventListener('click', addProduct);
+
+      adminListContainer.addEventListener('click', (e) => {
+        const deleteBtn = e.target.closest('.delete-btn');
+        if (deleteBtn) {
+          const id = deleteBtn.dataset.id;
+          deleteProduct(id);
+        }
+      });
+    })();
+
+    // ========== DEEPL TRANSLATION ==========
+    let currentLanguage = localStorage.getItem('language') || 'fr';
+    let originalTexts = new Map();
+
+    function storeOriginalTexts() {
+      const elementsToStore = [
+        document.querySelector('.gate h2'),
+        document.querySelector('#passwordInput'),
+        document.querySelector('.gate .hint'),
+        document.querySelector('#backToShopLink'),
+        document.querySelector('#authLink'),
+        document.querySelector('#profileLink'),
+        document.querySelector('#adminPanel h1'),
+        document.querySelector('.form-panel h2'),
+        ...document.querySelectorAll('.form-panel label'),
+        document.querySelector('#productName'),
+        document.querySelector('#productBrand'),
+        document.querySelector('#productPrice'),
+        document.querySelector('.file-input-area p'),
+        document.querySelector('#addProductBtn'),
+        document.querySelector('.list-panel h2'),
+        document.querySelector('#logoutBtn'),
+        document.querySelector('.form-panel hr + p'),
+        ...document.querySelectorAll('.icon-option')
+      ];
+
+      elementsToStore.forEach(el => {
+        if (el && el.textContent && el.textContent.trim() && !originalTexts.has(el)) {
+          originalTexts.set(el, el.textContent);
+        }
+      });
     }
 
-    // ========== ADD PRODUCT ==========
-    async function addProduct() {
-      const name = productNameInput.value.trim();
-      const brand = productBrandInput.value.trim();
-      const price = parseFloat(productPriceInput.value);
+    function resetToFrench() {
+      originalTexts.forEach((originalText, element) => {
+        if (element && element.isConnected) {
+          if (element.tagName === 'INPUT') {
+            element.placeholder = originalText;
+          } else {
+            element.textContent = originalText;
+          }
+        }
+      });
+      document.body.style.direction = 'ltr';
+      currentLanguage = 'fr';
+      localStorage.setItem('language', 'fr');
+    }
 
-      if (!name || !brand || isNaN(price) || price <= 0) {
-        showAdminToast('❌ Nom, marque et prix valides requis');
+    async function translatePage(targetLang) {
+      if (targetLang === 'fr') {
+        resetToFrench();
+        return;
+      }
+      if (targetLang === currentLanguage && currentLanguage !== 'fr') return;
+
+      const toast = document.getElementById('adminToast');
+      if (toast) {
+        toast.textContent = '🌍 Traduction en cours...';
+        toast.classList.add('show');
+      }
+
+      if (originalTexts.size === 0) storeOriginalTexts();
+
+      const elementsToTranslate = [];
+      const textsToTranslate = [];
+
+      originalTexts.forEach((originalText, element) => {
+        if (element && element.isConnected && originalText && originalText.trim()) {
+          textsToTranslate.push(originalText);
+          elementsToTranslate.push(element);
+        }
+      });
+
+      if (textsToTranslate.length === 0) {
+        if (toast) toast.classList.remove('show');
         return;
       }
 
       try {
-        const newProduct = {
-          name: name,
-          brand: brand,
-          price: price,
-          icon: 'fa-crown',
-          season: selectedSeason,
-          image: uploadedImageBase64 || null
-        };
+        const response = await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/functions/v1/translate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_'
+          },
+          body: JSON.stringify({
+            texts: textsToTranslate,
+            targetLang: targetLang,
+            sourceLang: 'FR'
+          })
+        });
 
-        const { error } = await supabase
-          .from('products')
-          .insert([newProduct]);
+        const data = await response.json();
 
-        if (error) throw error;
-
-        // Reset form
-        productNameInput.value = '';
-        productBrandInput.value = '';
-        productPriceInput.value = '';
-
-        seasonOptions.forEach(o => o.classList.remove('selected'));
-        document.querySelector('.season-option[data-season="all"]').classList.add('selected');
-        selectedSeason = 'all';
-
-        uploadedImageBase64 = null;
-        imagePreview.style.display = 'none';
-        fileInput.value = '';
-
-        showAdminToast('✅ Produit ajouté');
-        loadAdminProducts();
-      } catch (error) {
-        console.error('Erreur ajout:', error);
-        showAdminToast('❌ Erreur lors de l\'ajout');
-      }
-    }
-
-    // ========== DELETE PRODUCT ==========
-    async function deleteProduct(id) {
-      if (!confirm('Supprimer ce produit ?')) return;
-
-      try {
-        const { error } = await supabase
-          .from('products')
-          .delete()
-          .match({ id });
-
-        if (error) throw error;
-
-        showAdminToast('🗑️ Produit supprimé');
-        loadAdminProducts();
-      } catch (error) {
-        console.error('Erreur suppression:', error);
-        showAdminToast('❌ Erreur lors de la suppression');
-      }
-    }
-
-    // ========== EVENT LISTENERS ==========
-    unlockBtn.addEventListener('click', () => {
-      if (passwordInputField.value === GATE_PASSWORD) {
-        gatePanel.style.display = 'none';
-        adminPanel.style.display = 'block';
-        loggedInSpan.textContent = '⚡ propriétaire · ' + new Date().toLocaleDateString('fr-FR');
-        loadAdminProducts();
-      } else {
-        alert('❌ Mot de passe incorrect');
-      }
-    });
-
-    passwordInputField.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') unlockBtn.click();
-    });
-
-    logoutBtn.addEventListener('click', () => {
-      adminPanel.style.display = 'none';
-      gatePanel.style.display = 'block';
-      passwordInputField.value = '';
-    });
-
-    backToShopLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.location.href = 'index.html';
-    });
-
-    // Image upload
-    fileArea.addEventListener('click', () => fileInput.click());
-
-    fileInput.addEventListener('change', function (e) {
-      const file = e.target.files[0];
-      if (!file || !file.type.startsWith('image/')) return;
-
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        uploadedImageBase64 = ev.target.result;
-        previewImg.src = ev.target.result;
-        previewFilename.textContent = file.name.length > 20 ? file.name.substr(0, 18) + '…' : file.name;
-        imagePreview.style.display = 'flex';
-      };
-      reader.readAsDataURL(file);
-    });
-
-    clearPreview.addEventListener('click', () => {
-      uploadedImageBase64 = null;
-      imagePreview.style.display = 'none';
-      fileInput.value = '';
-    });
-
-    document.getElementById('addProductBtn').addEventListener('click', addProduct);
-
-    adminListContainer.addEventListener('click', (e) => {
-      const deleteBtn = e.target.closest('.delete-btn');
-      if (deleteBtn) {
-        const id = deleteBtn.dataset.id;
-        deleteProduct(id);
-      }
-    });
-
-    // ========== MENU TOGGLE ==========
-    const menuToggle = document.getElementById('menuToggle');
-    const navLinks = document.getElementById('navLinks');
-    const menuOverlay = document.getElementById('menuOverlay');
-    const langMenu = document.getElementById('langMenu');
-
-    function toggleMenu() {
-      if (!navLinks) return;
-      navLinks.classList.toggle('active');
-      if (menuOverlay) menuOverlay.classList.toggle('active');
-      document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
-    }
-
-    if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
-    if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
-
-    // ========== TRANSLATIONS ==========
-    const translations = {
-      fr: {
-        gateTitle: 'Espace propriétaire',
-        passwordPlaceholder: 'Mot de passe',
-        hint: '🔐 Mot de passe: rosa',
-        backToShop: 'Retour à la boutique',
-        accueil: 'ACCUEIL',
-        collection: 'COLLECTION',
-        exclusivites: 'EXCLUSIVITÉS',
-        coffrets: 'COFFRETS',
-        seConnecter: 'Se connecter',
-        monProfil: 'Mon Profil',
-        adminTitle: 'Rosa Fragrances · Gérer les produits',
-        addProduct: 'Ajouter un parfum',
-        productName: 'Nom du produit',
-        productBrand: 'Marque / Maison',
-        price: 'Prix (TND)',
-        season: 'Saison',
-        allSeasons: 'Toutes saisons',
-        summer: 'Été',
-        winter: 'Hiver',
-        spring: 'Printemps',
-        autumn: 'Automne',
-        imageUpload: 'Image du produit',
-        clickToUpload: 'Cliquez pour sélectionner une image',
-        save: 'Enregistrer le produit',
-        existingProducts: 'Parfums existants',
-        logout: 'Se déconnecter',
-        infoText: 'Les images sont stockées en Base64',
-        namePlaceholder: 'ex. Bois d\'Argent',
-        brandPlaceholder: 'PHYSALIS / NAEVE ...',
-        pricePlaceholder: '0.000'
-      },
-      en: {
-        gateTitle: 'Admin area',
-        passwordPlaceholder: 'Password',
-        hint: '🔐 Password: rosa',
-        backToShop: 'Back to shop',
-        accueil: 'HOME',
-        collection: 'COLLECTION',
-        exclusivites: 'EXCLUSIVES',
-        coffrets: 'GIFTS',
-        seConnecter: 'Sign in',
-        monProfil: 'My Profile',
-        adminTitle: 'Rosa Fragrances · Manage Products',
-        addProduct: 'Add a perfume',
-        productName: 'Product name',
-        productBrand: 'Brand / House',
-        price: 'Price (TND)',
-        season: 'Season',
-        allSeasons: 'All seasons',
-        summer: 'Summer',
-        winter: 'Winter',
-        spring: 'Spring',
-        autumn: 'Autumn',
-        imageUpload: 'Product image',
-        clickToUpload: 'Click to select an image',
-        save: 'Save product',
-        existingProducts: 'Existing perfumes',
-        logout: 'Logout',
-        infoText: 'Images are stored in Base64',
-        namePlaceholder: 'ex. Bois d\'Argent',
-        brandPlaceholder: 'PHYSALIS / NAEVE ...',
-        pricePlaceholder: '0.000'
-      },
-      ar: {
-        gateTitle: 'مساحة المالك',
-        passwordPlaceholder: 'كلمة المرور',
-        hint: '🔐 كلمة المرور: rosa',
-        backToShop: 'العودة إلى المتجر',
-        accueil: 'الرئيسية',
-        collection: 'المجموعة',
-        exclusivites: 'الحصريات',
-        coffrets: 'الهدايا',
-        seConnecter: 'تسجيل الدخول',
-        monProfil: 'ملفي الشخصي',
-        adminTitle: 'روزا فراجرانس · إدارة المنتجات',
-        addProduct: 'إضافة عطر',
-        productName: 'اسم المنتج',
-        productBrand: 'العلامة التجارية',
-        price: 'السعر (TND)',
-        season: 'الموسم',
-        allSeasons: 'جميع الفصول',
-        summer: 'الصيف',
-        winter: 'الشتاء',
-        spring: 'الربيع',
-        autumn: 'الخريف',
-        imageUpload: 'صورة المنتج',
-        clickToUpload: 'انقر لتحديد صورة',
-        save: 'حفظ المنتج',
-        existingProducts: 'المنتجات الموجودة',
-        logout: 'تسجيل الخروج',
-        infoText: 'يتم تخزين الصور في Base64',
-        namePlaceholder: 'مثال: Bois d\'Argent',
-        brandPlaceholder: 'PHYSALIS / NAEVE ...',
-        pricePlaceholder: '0.000'
-      }
-    };
-
-    // Apply translation
-    function applyTranslation(lang) {
-      const t = translations[lang];
-      if (!t) return;
-
-      // Gate panel
-      const gateTitle = document.querySelector('.gate h2');
-      if (gateTitle) gateTitle.textContent = t.gateTitle;
-      const pwdField = document.getElementById('passwordInput');
-      if (pwdField) pwdField.placeholder = t.passwordPlaceholder;
-      const hintText = document.querySelector('.gate .hint');
-      if (hintText) hintText.textContent = t.hint;
-      const backLinkEl = document.getElementById('backToShopLink');
-      if (backLinkEl) backLinkEl.innerHTML = `<i class="fas fa-arrow-left"></i> ${t.backToShop}`;
-
-      // Navigation
-      const navItems = document.querySelectorAll('#navLinks a');
-      if (navItems[0]) navItems[0].textContent = t.accueil;
-      if (navItems[1]) navItems[1].textContent = t.collection;
-      if (navItems[2]) navItems[2].textContent = t.exclusivites;
-      if (navItems[3]) navItems[3].textContent = t.coffrets;
-      const authLink = document.getElementById('authLink');
-      if (authLink) authLink.textContent = t.seConnecter;
-      const profileLink = document.getElementById('profileLink');
-      if (profileLink) profileLink.textContent = t.monProfil;
-
-      // Admin panel
-      const adminTitleEl = document.querySelector('#adminPanel h1');
-      if (adminTitleEl) adminTitleEl.innerHTML = `<i class="fas fa-spa"></i> ${t.adminTitle}`;
-      const addTitleEl = document.querySelector('.form-panel h2');
-      if (addTitleEl) addTitleEl.innerHTML = `<i class="fas fa-plus-circle"></i> ${t.addProduct}`;
-
-      // Form labels
-      const labels = document.querySelectorAll('.form-panel label');
-      if (labels[0]) labels[0].textContent = t.productName;
-      if (labels[1]) labels[1].textContent = t.productBrand;
-      if (labels[2]) labels[2].textContent = t.price;
-      if (labels[3]) labels[3].textContent = t.season;
-      if (labels[4]) labels[4].textContent = t.imageUpload;
-
-      // Placeholders
-      const nameInp = document.getElementById('productName');
-      if (nameInp) nameInp.placeholder = t.namePlaceholder;
-      const brandInp = document.getElementById('productBrand');
-      if (brandInp) brandInp.placeholder = t.brandPlaceholder;
-      const priceInp = document.getElementById('productPrice');
-      if (priceInp) priceInp.placeholder = t.pricePlaceholder;
-
-      // Season buttons
-      const seasonMap = { all: t.allSeasons, summer: t.summer, winter: t.winter, spring: t.spring, autumn: t.autumn };
-      document.querySelectorAll('.season-option').forEach(opt => {
-        const season = opt.dataset.season;
-        if (seasonMap[season]) {
-          const icon = opt.querySelector('i');
-          if (icon) {
-            opt.innerHTML = '';
-            opt.appendChild(icon.cloneNode(true));
-            opt.appendChild(document.createTextNode(' ' + seasonMap[season]));
-          }
+        if (data.success && data.translations) {
+          elementsToTranslate.forEach((element, index) => {
+            const translated = data.translations[index];
+            if (translated && translated !== element.textContent) {
+              if (element.tagName === 'INPUT') {
+                element.placeholder = translated;
+              } else {
+                element.textContent = translated;
+              }
+            }
+          });
         }
-      });
 
-      const uploadText = document.querySelector('.file-input-area p');
-      if (uploadText) uploadText.textContent = t.clickToUpload;
-      const saveBtn = document.getElementById('addProductBtn');
-      if (saveBtn) saveBtn.innerHTML = `<i class="fas fa-gem"></i> ${t.save}`;
-      const listTitle = document.querySelector('.list-panel h2');
-      if (listTitle) listTitle.innerHTML = `<i class="fas fa-box-open"></i> ${t.existingProducts}`;
-      const logoutBtnEl = document.getElementById('logoutBtn');
-      if (logoutBtnEl) logoutBtnEl.innerHTML = `<i class="fas fa-sign-out-alt"></i> ${t.logout}`;
-      const infoText = document.querySelector('.form-panel hr + p');
-      if (infoText) infoText.innerHTML = `<i class="fas fa-info-circle"></i> ${t.infoText}`;
+        if (targetLang === 'ar') {
+          document.body.style.direction = 'rtl';
+        } else {
+          document.body.style.direction = 'ltr';
+        }
 
-      // RTL
-      if (lang === 'ar') {
-        document.body.style.direction = 'rtl';
-        document.body.style.textAlign = 'right';
-      } else {
-        document.body.style.direction = 'ltr';
-        document.body.style.textAlign = 'left';
+        currentLanguage = targetLang;
+        localStorage.setItem('language', targetLang);
+
+        if (toast) {
+          toast.textContent = '✅ Traduction terminée!';
+          setTimeout(() => toast.classList.remove('show'), 1500);
+        }
+      } catch (error) {
+        console.error('Translation error:', error);
+        if (toast) {
+          toast.textContent = '❌ Erreur de traduction';
+          setTimeout(() => toast.classList.remove('show'), 2000);
+        }
       }
-
-      // Update dropdown display
-      const langSpan = document.querySelector('#langMenu .lang-current span');
-      const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-      if (langSpan) langSpan.textContent = langNames[lang];
     }
 
-    // Language switcher
-    function setupLangSwitcher() {
+    function setupLanguageSwitcher() {
       const langOptions = document.querySelectorAll('.lang-option');
-      langOptions.forEach(opt => {
-        opt.addEventListener('click', () => {
-          const lang = opt.dataset.lang;
-          document.getElementById('langMenu').classList.remove('active');
-          applyTranslation(lang);
-          localStorage.setItem('language', lang);
+      const currentLangSpan = document.getElementById('currentLangText');
+
+      langOptions.forEach(option => {
+        option.addEventListener('click', async () => {
+          const lang = option.getAttribute('data-lang');
+          const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+          if (currentLangSpan) currentLangSpan.textContent = langNames[lang];
+          document.getElementById('langMenu')?.classList.remove('active');
+          await translatePage(lang);
         });
       });
     }
 
-    // Watch for admin panel
-    function watchAdminPanelForTranslation() {
-      const adminPanelEl = document.getElementById('adminPanel');
-      if (!adminPanelEl) return;
-      const observer = new MutationObserver(() => {
-        if (adminPanelEl.style.display !== 'none') {
-          const savedLang = localStorage.getItem('language') || 'fr';
-          applyTranslation(savedLang);
-          observer.disconnect();
-        }
-      });
-      observer.observe(adminPanelEl, { attributes: true });
-    }
-
-    // Initialize translation
-    function initTranslation() {
+    function initLanguage() {
+      storeOriginalTexts();
       const savedLang = localStorage.getItem('language') || 'fr';
-      applyTranslation(savedLang);
-      setupLangSwitcher();
-      watchAdminPanelForTranslation();
+      const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+      const currentLangSpan = document.getElementById('currentLangText');
+      if (currentLangSpan) currentLangSpan.textContent = langNames[savedLang];
+      if (savedLang !== 'fr') translatePage(savedLang);
     }
 
-    initTranslation();
+    document.addEventListener('DOMContentLoaded', () => {
+      setupLanguageSwitcher();
+      initLanguage();
+    });
   </script>
 </body>
 
