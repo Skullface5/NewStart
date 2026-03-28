@@ -1369,7 +1369,7 @@
 
 
   <script>
-    // Simple translation for admin page
+    // Language translations
     const translations = {
       fr: {
         gateTitle: 'Espace propriétaire',
@@ -1469,74 +1469,40 @@
       }
     };
 
-    // Get saved language from localStorage
-    let currentLang = localStorage.getItem('language') || 'fr';
+    // Get saved language
+    const savedLanguage = localStorage.getItem('language') || 'fr';
 
-    // Function to translate everything
-    function translatePage(lang) {
-      console.log('Translating to:', lang);
+    // Function to translate page
+    function applyTranslation(lang) {
       const t = translations[lang];
       if (!t) return;
 
-      // Translate navigation links
-      const navLinks = document.querySelectorAll('#navLinks a');
-      if (navLinks[0] && !navLinks[0].closest('.lang-menu')) navLinks[0].textContent = t.accueil;
-      if (navLinks[1] && !navLinks[1].closest('.lang-menu')) navLinks[1].textContent = t.collection;
-      if (navLinks[2] && !navLinks[2].closest('.lang-menu')) navLinks[2].textContent = t.exclusivites;
-      if (navLinks[3] && !navLinks[3].closest('.lang-menu')) navLinks[3].textContent = t.coffrets;
-
-      // Translate auth links
-      const authLink = document.getElementById('authLink');
-      const profileLink = document.getElementById('profileLink');
-      if (authLink) authLink.textContent = t.seConnecter;
-      if (profileLink) profileLink.textContent = t.monProfil;
-
-      // Translate gate panel (before login)
+      // Gate panel
       const gateTitle = document.querySelector('.gate h2');
       if (gateTitle) gateTitle.textContent = t.gateTitle;
-
       const passwordInput = document.getElementById('passwordInput');
       if (passwordInput) passwordInput.placeholder = t.passwordPlaceholder;
-
       const hint = document.querySelector('.gate .hint');
       if (hint) hint.textContent = t.hint;
-
       const backLink = document.getElementById('backToShopLink');
-      if (backLink) {
-        const icon = backLink.querySelector('i');
-        if (icon) {
-          backLink.innerHTML = '';
-          backLink.appendChild(icon.cloneNode(true));
-          backLink.appendChild(document.createTextNode(' ' + t.backToShop));
-        } else {
-          backLink.textContent = t.backToShop;
-        }
-      }
+      if (backLink) backLink.innerHTML = `<i class="fas fa-arrow-left"></i> ${t.backToShop}`;
 
-      // Translate admin panel (after login)
+      // Navigation
+      const navLinks = document.querySelectorAll('#navLinks a');
+      if (navLinks[0]) navLinks[0].textContent = t.accueil;
+      if (navLinks[1]) navLinks[1].textContent = t.collection;
+      if (navLinks[2]) navLinks[2].textContent = t.exclusivites;
+      if (navLinks[3]) navLinks[3].textContent = t.coffrets;
+      const authLink = document.getElementById('authLink');
+      if (authLink) authLink.textContent = t.seConnecter;
+      const profileLink = document.getElementById('profileLink');
+      if (profileLink) profileLink.textContent = t.monProfil;
+
+      // Admin panel
       const adminTitle = document.querySelector('#adminPanel h1');
-      if (adminTitle) {
-        const icon = adminTitle.querySelector('i');
-        if (icon) {
-          adminTitle.innerHTML = '';
-          adminTitle.appendChild(icon.cloneNode(true));
-          adminTitle.appendChild(document.createTextNode(' ' + t.adminTitle));
-        } else {
-          adminTitle.textContent = t.adminTitle;
-        }
-      }
-
+      if (adminTitle) adminTitle.innerHTML = `<i class="fas fa-spa"></i> ${t.adminTitle}`;
       const addTitle = document.querySelector('.form-panel h2');
-      if (addTitle) {
-        const icon = addTitle.querySelector('i');
-        if (icon) {
-          addTitle.innerHTML = '';
-          addTitle.appendChild(icon.cloneNode(true));
-          addTitle.appendChild(document.createTextNode(' ' + t.addProduct));
-        } else {
-          addTitle.textContent = t.addProduct;
-        }
-      }
+      if (addTitle) addTitle.innerHTML = `<i class="fas fa-plus-circle"></i> ${t.addProduct}`;
 
       // Form labels
       const labels = document.querySelectorAll('.form-panel label');
@@ -1549,10 +1515,8 @@
       // Placeholders
       const nameInput = document.getElementById('productName');
       if (nameInput) nameInput.placeholder = t.namePlaceholder;
-
       const brandInput = document.getElementById('productBrand');
       if (brandInput) brandInput.placeholder = t.brandPlaceholder;
-
       const priceInput = document.getElementById('productPrice');
       if (priceInput) priceInput.placeholder = t.pricePlaceholder;
 
@@ -1566,55 +1530,22 @@
             opt.innerHTML = '';
             opt.appendChild(icon.cloneNode(true));
             opt.appendChild(document.createTextNode(' ' + seasonMap[season]));
-          } else {
-            opt.textContent = seasonMap[season];
           }
         }
       });
 
       const uploadText = document.querySelector('.file-input-area p');
       if (uploadText) uploadText.textContent = t.clickToUpload;
-
       const saveBtn = document.getElementById('addProductBtn');
-      if (saveBtn) {
-        const icon = saveBtn.querySelector('i');
-        if (icon) {
-          saveBtn.innerHTML = '';
-          saveBtn.appendChild(icon.cloneNode(true));
-          saveBtn.appendChild(document.createTextNode(' ' + t.save));
-        } else {
-          saveBtn.textContent = t.save;
-        }
-      }
-
+      if (saveBtn) saveBtn.innerHTML = `<i class="fas fa-gem"></i> ${t.save}`;
       const listTitle = document.querySelector('.list-panel h2');
-      if (listTitle) {
-        const icon = listTitle.querySelector('i');
-        if (icon) {
-          listTitle.innerHTML = '';
-          listTitle.appendChild(icon.cloneNode(true));
-          listTitle.appendChild(document.createTextNode(' ' + t.existingProducts));
-        } else {
-          listTitle.textContent = t.existingProducts;
-        }
-      }
-
+      if (listTitle) listTitle.innerHTML = `<i class="fas fa-box-open"></i> ${t.existingProducts}`;
       const logoutBtn = document.getElementById('logoutBtn');
-      if (logoutBtn) {
-        const icon = logoutBtn.querySelector('i');
-        if (icon) {
-          logoutBtn.innerHTML = '';
-          logoutBtn.appendChild(icon.cloneNode(true));
-          logoutBtn.appendChild(document.createTextNode(' ' + t.logout));
-        } else {
-          logoutBtn.textContent = t.logout;
-        }
-      }
-
+      if (logoutBtn) logoutBtn.innerHTML = `<i class="fas fa-sign-out-alt"></i> ${t.logout}`;
       const infoText = document.querySelector('.form-panel hr + p');
       if (infoText) infoText.innerHTML = `<i class="fas fa-info-circle"></i> ${t.infoText}`;
 
-      // RTL for Arabic
+      // RTL
       if (lang === 'ar') {
         document.body.style.direction = 'rtl';
         document.body.style.textAlign = 'right';
@@ -1623,56 +1554,43 @@
         document.body.style.textAlign = 'left';
       }
 
-      // Update dropdown display
+      // Update dropdown
       const langCurrentSpan = document.querySelector('#langMenu .lang-current span');
       const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-      if (langCurrentSpan) langCurrentSpan.textContent = langNames[lang] || 'FRANÇAIS';
-
-      currentLang = lang;
-      localStorage.setItem('language', lang);
+      if (langCurrentSpan) langCurrentSpan.textContent = langNames[lang];
     }
 
     // Setup language switcher
-    function setupLangSwitcher() {
+    function setupSwitcher() {
       const langOptions = document.querySelectorAll('.lang-option');
-      const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-
-      // Update dropdown display on page load
-      const langCurrentSpan = document.querySelector('#langMenu .lang-current span');
-      if (langCurrentSpan) {
-        langCurrentSpan.textContent = langNames[currentLang] || 'FRANÇAIS';
-      }
-
       langOptions.forEach(opt => {
         opt.addEventListener('click', () => {
           const lang = opt.dataset.lang;
           document.getElementById('langMenu').classList.remove('active');
-          translatePage(lang);
+          applyTranslation(lang);
+          localStorage.setItem('language', lang);
         });
       });
     }
 
-    // Run on page load
-    document.addEventListener('DOMContentLoaded', () => {
-      setupLangSwitcher();
-
-      // Get saved language and translate
-      const savedLang = localStorage.getItem('language');
-      if (savedLang && savedLang !== 'fr') {
-        translatePage(savedLang);
-      }
-
-      // Also watch for admin panel becoming visible (after login)
+    // Watch for admin panel after login
+    function watchAdminPanel() {
       const adminPanel = document.getElementById('adminPanel');
-      if (adminPanel) {
-        const observer = new MutationObserver(() => {
-          if (adminPanel.style.display !== 'none') {
-            translatePage(currentLang);
-            observer.disconnect();
-          }
-        });
-        observer.observe(adminPanel, { attributes: true });
-      }
+      if (!adminPanel) return;
+      const observer = new MutationObserver(() => {
+        if (adminPanel.style.display !== 'none') {
+          applyTranslation(savedLanguage);
+          observer.disconnect();
+        }
+      });
+      observer.observe(adminPanel, { attributes: true });
+    }
+
+    // Run on load
+    document.addEventListener('DOMContentLoaded', () => {
+      setupSwitcher();
+      watchAdminPanel();
+      applyTranslation(savedLanguage);
     });
   </script>
 
