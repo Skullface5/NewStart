@@ -1372,19 +1372,16 @@
     // Simple translation for admin page
     const translations = {
       fr: {
-        // Gate panel
         gateTitle: 'Espace propriétaire',
         passwordPlaceholder: 'Mot de passe',
         hint: '🔐 Mot de passe: rosa',
         backToShop: 'Retour à la boutique',
-        // Navigation
         accueil: 'ACCUEIL',
         collection: 'COLLECTION',
         exclusivites: 'EXCLUSIVITÉS',
         coffrets: 'COFFRETS',
         seConnecter: 'Se connecter',
         monProfil: 'Mon Profil',
-        // Admin panel
         adminTitle: 'Rosa Fragrances · Gérer les produits',
         addProduct: 'Ajouter un parfum',
         productName: 'Nom du produit',
@@ -1472,14 +1469,29 @@
       }
     };
 
-    // Get saved language from localStorage (shared with main page)
+    // Get saved language from localStorage
     let currentLang = localStorage.getItem('language') || 'fr';
 
-    // Function to translate gate panel
-    function translateGatePanel(lang) {
+    // Function to translate everything
+    function translatePage(lang) {
+      console.log('Translating to:', lang);
       const t = translations[lang];
       if (!t) return;
 
+      // Translate navigation links
+      const navLinks = document.querySelectorAll('#navLinks a');
+      if (navLinks[0] && !navLinks[0].closest('.lang-menu')) navLinks[0].textContent = t.accueil;
+      if (navLinks[1] && !navLinks[1].closest('.lang-menu')) navLinks[1].textContent = t.collection;
+      if (navLinks[2] && !navLinks[2].closest('.lang-menu')) navLinks[2].textContent = t.exclusivites;
+      if (navLinks[3] && !navLinks[3].closest('.lang-menu')) navLinks[3].textContent = t.coffrets;
+
+      // Translate auth links
+      const authLink = document.getElementById('authLink');
+      const profileLink = document.getElementById('profileLink');
+      if (authLink) authLink.textContent = t.seConnecter;
+      if (profileLink) profileLink.textContent = t.monProfil;
+
+      // Translate gate panel (before login)
       const gateTitle = document.querySelector('.gate h2');
       if (gateTitle) gateTitle.textContent = t.gateTitle;
 
@@ -1500,14 +1512,8 @@
           backLink.textContent = t.backToShop;
         }
       }
-    }
 
-    // Function to translate admin panel
-    function translateAdminPanel(lang) {
-      const t = translations[lang];
-      if (!t) return;
-
-      // Translate admin title
+      // Translate admin panel (after login)
       const adminTitle = document.querySelector('#adminPanel h1');
       if (adminTitle) {
         const icon = adminTitle.querySelector('i');
@@ -1520,7 +1526,6 @@
         }
       }
 
-      // Translate add product title
       const addTitle = document.querySelector('.form-panel h2');
       if (addTitle) {
         const icon = addTitle.querySelector('i');
@@ -1608,45 +1613,6 @@
 
       const infoText = document.querySelector('.form-panel hr + p');
       if (infoText) infoText.innerHTML = `<i class="fas fa-info-circle"></i> ${t.infoText}`;
-    }
-
-    // Function to translate navigation (common to both)
-    function translateNavigation(lang) {
-      const t = translations[lang];
-      if (!t) return;
-
-      const navLinks = document.querySelectorAll('#navLinks a');
-      if (navLinks[0]) navLinks[0].textContent = t.accueil;
-      if (navLinks[1]) navLinks[1].textContent = t.collection;
-      if (navLinks[2]) navLinks[2].textContent = t.exclusivites;
-      if (navLinks[3]) navLinks[3].textContent = t.coffrets;
-
-      const authLink = document.getElementById('authLink');
-      if (authLink) authLink.textContent = t.seConnecter;
-
-      const profileLink = document.getElementById('profileLink');
-      if (profileLink) profileLink.textContent = t.monProfil;
-    }
-
-    // Main translate function
-    function translatePage(lang) {
-      const t = translations[lang];
-      if (!t) return;
-
-      // Translate navigation (always visible)
-      translateNavigation(lang);
-
-      // Translate gate panel (visible before login)
-      const gatePanel = document.getElementById('gatePanel');
-      if (gatePanel && gatePanel.style.display !== 'none') {
-        translateGatePanel(lang);
-      }
-
-      // Translate admin panel (visible after login)
-      const adminPanel = document.getElementById('adminPanel');
-      if (adminPanel && adminPanel.style.display !== 'none') {
-        translateAdminPanel(lang);
-      }
 
       // RTL for Arabic
       if (lang === 'ar') {
@@ -1657,13 +1623,13 @@
         document.body.style.textAlign = 'left';
       }
 
-      currentLang = lang;
-      localStorage.setItem('language', lang);
-
       // Update dropdown display
       const langCurrentSpan = document.querySelector('#langMenu .lang-current span');
       const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
       if (langCurrentSpan) langCurrentSpan.textContent = langNames[lang] || 'FRANÇAIS';
+
+      currentLang = lang;
+      localStorage.setItem('language', lang);
     }
 
     // Setup language switcher
@@ -1686,38 +1652,27 @@
       });
     }
 
-    // Watch for when admin panel becomes visible (after login)
-    function watchAdminPanel() {
-      const adminPanel = document.getElementById('adminPanel');
-      const observer = new MutationObserver(() => {
-        if (adminPanel.style.display !== 'none') {
-          translateAdminPanel(currentLang);
-          observer.disconnect();
-        }
-      });
-
-      if (adminPanel) {
-        observer.observe(adminPanel, { attributes: true });
-      }
-    }
-
-    // Load saved language on page load and check if it matches current
-    function initLanguage() {
-      const savedLang = localStorage.getItem('language');
-      if (savedLang && savedLang !== currentLang) {
-        currentLang = savedLang;
-        translatePage(savedLang);
-      } else if (savedLang && savedLang === currentLang && currentLang !== 'fr') {
-        // If language is already set but page not translated, translate it
-        translatePage(currentLang);
-      }
-    }
-
-    // Run after DOM loads
+    // Run on page load
     document.addEventListener('DOMContentLoaded', () => {
       setupLangSwitcher();
-      watchAdminPanel();
-      initLanguage();
+
+      // Get saved language and translate
+      const savedLang = localStorage.getItem('language');
+      if (savedLang && savedLang !== 'fr') {
+        translatePage(savedLang);
+      }
+
+      // Also watch for admin panel becoming visible (after login)
+      const adminPanel = document.getElementById('adminPanel');
+      if (adminPanel) {
+        const observer = new MutationObserver(() => {
+          if (adminPanel.style.display !== 'none') {
+            translatePage(currentLang);
+            observer.disconnect();
+          }
+        });
+        observer.observe(adminPanel, { attributes: true });
+      }
     });
   </script>
 
