@@ -1705,6 +1705,20 @@
         translatePage(savedLang);
       }
     });
+
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'language') {
+        const newLang = e.newValue;
+        if (newLang && newLang !== currentLang) {
+          translatePage(newLang);
+          // Update the dropdown display
+          const langCurrentSpan = document.querySelector('#langMenu .lang-current span');
+          const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+          if (langCurrentSpan) langCurrentSpan.textContent = langNames[newLang] || 'FRANÇAIS';
+        }
+      }
+    });
   </script>
 
 </body>
