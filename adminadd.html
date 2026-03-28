@@ -1472,7 +1472,7 @@
       }
     };
 
-    // Get saved language
+    // Get saved language from localStorage (shared with main page)
     let currentLang = localStorage.getItem('language') || 'fr';
 
     // Function to translate gate panel
@@ -1630,7 +1630,8 @@
 
     // Main translate function
     function translatePage(lang) {
-      if (lang === currentLang) return;
+      const t = translations[lang];
+      if (!t) return;
 
       // Translate navigation (always visible)
       translateNavigation(lang);
@@ -1658,14 +1659,20 @@
 
       currentLang = lang;
       localStorage.setItem('language', lang);
+
+      // Update dropdown display
+      const langCurrentSpan = document.querySelector('#langMenu .lang-current span');
+      const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+      if (langCurrentSpan) langCurrentSpan.textContent = langNames[lang] || 'FRANÇAIS';
     }
 
     // Setup language switcher
     function setupLangSwitcher() {
       const langOptions = document.querySelectorAll('.lang-option');
-      const langCurrentSpan = document.querySelector('#langMenu .lang-current span');
       const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
 
+      // Update dropdown display on page load
+      const langCurrentSpan = document.querySelector('#langMenu .lang-current span');
       if (langCurrentSpan) {
         langCurrentSpan.textContent = langNames[currentLang] || 'FRANÇAIS';
       }
@@ -1673,7 +1680,6 @@
       langOptions.forEach(opt => {
         opt.addEventListener('click', () => {
           const lang = opt.dataset.lang;
-          if (langCurrentSpan) langCurrentSpan.textContent = langNames[lang];
           document.getElementById('langMenu').classList.remove('active');
           translatePage(lang);
         });
@@ -1695,29 +1701,23 @@
       }
     }
 
-    // Load saved language on page load
+    // Load saved language on page load and check if it matches current
+    function initLanguage() {
+      const savedLang = localStorage.getItem('language');
+      if (savedLang && savedLang !== currentLang) {
+        currentLang = savedLang;
+        translatePage(savedLang);
+      } else if (savedLang && savedLang === currentLang && currentLang !== 'fr') {
+        // If language is already set but page not translated, translate it
+        translatePage(currentLang);
+      }
+    }
+
+    // Run after DOM loads
     document.addEventListener('DOMContentLoaded', () => {
       setupLangSwitcher();
       watchAdminPanel();
-
-      const savedLang = localStorage.getItem('language');
-      if (savedLang && savedLang !== 'fr') {
-        translatePage(savedLang);
-      }
-    });
-
-
-    window.addEventListener('storage', (e) => {
-      if (e.key === 'language') {
-        const newLang = e.newValue;
-        if (newLang && newLang !== currentLang) {
-          translatePage(newLang);
-          // Update the dropdown display
-          const langCurrentSpan = document.querySelector('#langMenu .lang-current span');
-          const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-          if (langCurrentSpan) langCurrentSpan.textContent = langNames[newLang] || 'FRANÇAIS';
-        }
-      }
+      initLanguage();
     });
   </script>
 
