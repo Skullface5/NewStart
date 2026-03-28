@@ -1026,12 +1026,12 @@
   <div id="adminToast" class="admin-toast">✨ Enregistré</div>
 
   <script>
-    // Supabase Config
+    // ========== SUPABASE SETUP ==========
     const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
     const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-    // Theme Switcher
+    // ========== THEME SWITCHER ==========
     function initTheme() {
       const saved = localStorage.getItem('theme') || 'light';
       if (saved === 'dark') {
@@ -1061,26 +1061,26 @@
       }
     }
 
-    const themeToggle = document.getElementById('themeToggle');
-    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+    const themeToggleBtn = document.getElementById('themeToggle');
+    if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
     initTheme();
 
-    // Password Gate
+    // ========== PASSWORD GATE ==========
     const GATE_PASSWORD = 'rosa';
     const gatePanel = document.getElementById('gatePanel');
     const adminPanel = document.getElementById('adminPanel');
     const unlockBtn = document.getElementById('unlockBtn');
-    const passwordInput = document.getElementById('passwordInput');
-    const backLink = document.getElementById('backToShopLink');
+    const passwordInputField = document.getElementById('passwordInput');
+    const backToShopLink = document.getElementById('backToShopLink');
     const logoutBtn = document.getElementById('logoutBtn');
     const loggedInSpan = document.getElementById('loggedInAs');
     const loadingAdmin = document.getElementById('loadingAdmin');
     const adminListContainer = document.getElementById('adminProductListContainer');
 
-    // Form Elements
-    const productName = document.getElementById('productName');
-    const productBrand = document.getElementById('productBrand');
-    const productPrice = document.getElementById('productPrice');
+    // ========== FORM ELEMENTS ==========
+    const productNameInput = document.getElementById('productName');
+    const productBrandInput = document.getElementById('productBrand');
+    const productPriceInput = document.getElementById('productPrice');
     const seasonOptions = document.querySelectorAll('.season-option');
     let selectedSeason = 'all';
 
@@ -1092,7 +1092,7 @@
       });
     });
 
-    // Image Upload
+    // ========== IMAGE UPLOAD ==========
     const fileInput = document.getElementById('imageUpload');
     const fileArea = document.getElementById('fileInputArea');
     const imagePreview = document.getElementById('imagePreview');
@@ -1108,7 +1108,7 @@
       setTimeout(() => toast.classList.remove('show'), 2500);
     }
 
-    // Load Products
+    // ========== LOAD PRODUCTS ==========
     async function loadAdminProducts() {
       try {
         adminListContainer.innerHTML = '';
@@ -1167,11 +1167,11 @@
       }
     }
 
-    // Add Product
+    // ========== ADD PRODUCT ==========
     async function addProduct() {
-      const name = productName.value.trim();
-      const brand = productBrand.value.trim();
-      const price = parseFloat(productPrice.value);
+      const name = productNameInput.value.trim();
+      const brand = productBrandInput.value.trim();
+      const price = parseFloat(productPriceInput.value);
 
       if (!name || !brand || isNaN(price) || price <= 0) {
         showAdminToast('❌ Nom, marque et prix valides requis');
@@ -1195,9 +1195,9 @@
         if (error) throw error;
 
         // Reset form
-        productName.value = '';
-        productBrand.value = '';
-        productPrice.value = '';
+        productNameInput.value = '';
+        productBrandInput.value = '';
+        productPriceInput.value = '';
 
         seasonOptions.forEach(o => o.classList.remove('selected'));
         document.querySelector('.season-option[data-season="all"]').classList.add('selected');
@@ -1215,7 +1215,7 @@
       }
     }
 
-    // Delete Product
+    // ========== DELETE PRODUCT ==========
     async function deleteProduct(id) {
       if (!confirm('Supprimer ce produit ?')) return;
 
@@ -1235,9 +1235,9 @@
       }
     }
 
-    // Event Listeners
+    // ========== EVENT LISTENERS ==========
     unlockBtn.addEventListener('click', () => {
-      if (passwordInput.value === GATE_PASSWORD) {
+      if (passwordInputField.value === GATE_PASSWORD) {
         gatePanel.style.display = 'none';
         adminPanel.style.display = 'block';
         loggedInSpan.textContent = '⚡ propriétaire · ' + new Date().toLocaleDateString('fr-FR');
@@ -1247,17 +1247,17 @@
       }
     });
 
-    passwordInput.addEventListener('keypress', (e) => {
+    passwordInputField.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') unlockBtn.click();
     });
 
     logoutBtn.addEventListener('click', () => {
       adminPanel.style.display = 'none';
       gatePanel.style.display = 'block';
-      passwordInput.value = '';
+      passwordInputField.value = '';
     });
 
-    backLink.addEventListener('click', (e) => {
+    backToShopLink.addEventListener('click', (e) => {
       e.preventDefault();
       window.location.href = 'index.html';
     });
@@ -1295,7 +1295,7 @@
       }
     });
 
-    // Menu Toggle
+    // ========== MENU TOGGLE ==========
     const menuToggle = document.getElementById('menuToggle');
     const navLinks = document.getElementById('navLinks');
     const menuOverlay = document.getElementById('menuOverlay');
@@ -1311,7 +1311,7 @@
     if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
     if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
 
-    // Language translations
+    // ========== TRANSLATIONS ==========
     const translations = {
       fr: {
         gateTitle: 'Espace propriétaire',
@@ -1411,7 +1411,7 @@
       }
     };
 
-    // Apply translation function
+    // Apply translation
     function applyTranslation(lang) {
       const t = translations[lang];
       if (!t) return;
@@ -1419,10 +1419,10 @@
       // Gate panel
       const gateTitle = document.querySelector('.gate h2');
       if (gateTitle) gateTitle.textContent = t.gateTitle;
-      const pwdInput = document.getElementById('passwordInput');
-      if (pwdInput) pwdInput.placeholder = t.passwordPlaceholder;
-      const hint = document.querySelector('.gate .hint');
-      if (hint) hint.textContent = t.hint;
+      const pwdField = document.getElementById('passwordInput');
+      if (pwdField) pwdField.placeholder = t.passwordPlaceholder;
+      const hintText = document.querySelector('.gate .hint');
+      if (hintText) hintText.textContent = t.hint;
       const backLinkEl = document.getElementById('backToShopLink');
       if (backLinkEl) backLinkEl.innerHTML = `<i class="fas fa-arrow-left"></i> ${t.backToShop}`;
 
@@ -1432,10 +1432,10 @@
       if (navItems[1]) navItems[1].textContent = t.collection;
       if (navItems[2]) navItems[2].textContent = t.exclusivites;
       if (navItems[3]) navItems[3].textContent = t.coffrets;
-      const authLinkEl = document.getElementById('authLink');
-      if (authLinkEl) authLinkEl.textContent = t.seConnecter;
-      const profileLinkEl = document.getElementById('profileLink');
-      if (profileLinkEl) profileLinkEl.textContent = t.monProfil;
+      const authLink = document.getElementById('authLink');
+      if (authLink) authLink.textContent = t.seConnecter;
+      const profileLink = document.getElementById('profileLink');
+      if (profileLink) profileLink.textContent = t.monProfil;
 
       // Admin panel
       const adminTitleEl = document.querySelector('#adminPanel h1');
@@ -1526,7 +1526,7 @@
       observer.observe(adminPanelEl, { attributes: true });
     }
 
-    // Initialize translation on page load
+    // Initialize translation
     function initTranslation() {
       const savedLang = localStorage.getItem('language') || 'fr';
       applyTranslation(savedLang);
@@ -1534,7 +1534,6 @@
       watchAdminPanelForTranslation();
     }
 
-    // Start translation
     initTranslation();
   </script>
 </body>
