@@ -1373,7 +1373,7 @@
       });
     })();
 
-    // Translation functionality - Admin title NOT translated
+    // ========== TRANSLATION - APPLIED IMMEDIATELY ==========
     let currentLanguage = localStorage.getItem('language') || 'fr';
     let originalTexts = new Map();
 
@@ -1385,6 +1385,7 @@
         document.querySelector('#backToShopLink'),
         document.querySelector('#authLink'),
         document.querySelector('#profileLink'),
+        // Admin title is NOT included - stays French
         document.querySelector('.form-panel h2'),
         ...document.querySelectorAll('.form-panel label'),
         document.querySelector('#productName'),
@@ -1534,7 +1535,7 @@
       });
     }
 
-    // Initialize translation IMMEDIATELY - runs before DOMContentLoaded
+    // Initialize translation IMMEDIATELY - runs right away
     function initLanguage() {
       storeOriginalTexts();
       const savedLang = localStorage.getItem('language') || 'fr';
@@ -1544,22 +1545,16 @@
 
       // Apply translation immediately if not French
       if (savedLang !== 'fr') {
-        // Small delay to ensure DOM is ready
-        setTimeout(() => translatePage(savedLang), 50);
+        setTimeout(() => translatePage(savedLang), 10);
       }
     }
 
     // Run immediately
     initLanguage();
 
-    // Also run on DOMContentLoaded for elements that might load later
+    // Also set up the switcher when DOM is ready
     document.addEventListener('DOMContentLoaded', () => {
       setupLanguageSwitcher();
-      // Re-run translation to catch any elements that loaded after
-      const savedLang = localStorage.getItem('language');
-      if (savedLang && savedLang !== 'fr') {
-        translatePage(savedLang);
-      }
     });
   </script>
 </body>
