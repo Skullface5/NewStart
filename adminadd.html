@@ -1385,7 +1385,6 @@
         document.querySelector('#backToShopLink'),
         document.querySelector('#authLink'),
         document.querySelector('#profileLink'),
-        // Admin panel title is NOT included - it stays French
         document.querySelector('.form-panel h2'),
         ...document.querySelectorAll('.form-panel label'),
         document.querySelector('#productName'),
@@ -1535,18 +1534,32 @@
       });
     }
 
+    // Initialize translation IMMEDIATELY - runs before DOMContentLoaded
     function initLanguage() {
       storeOriginalTexts();
       const savedLang = localStorage.getItem('language') || 'fr';
       const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
       const currentLangSpan = document.getElementById('currentLangText');
       if (currentLangSpan) currentLangSpan.textContent = langNames[savedLang];
-      if (savedLang !== 'fr') translatePage(savedLang);
+
+      // Apply translation immediately if not French
+      if (savedLang !== 'fr') {
+        // Small delay to ensure DOM is ready
+        setTimeout(() => translatePage(savedLang), 50);
+      }
     }
 
+    // Run immediately
+    initLanguage();
+
+    // Also run on DOMContentLoaded for elements that might load later
     document.addEventListener('DOMContentLoaded', () => {
       setupLanguageSwitcher();
-      initLanguage();
+      // Re-run translation to catch any elements that loaded after
+      const savedLang = localStorage.getItem('language');
+      if (savedLang && savedLang !== 'fr') {
+        translatePage(savedLang);
+      }
     });
   </script>
 </body>
