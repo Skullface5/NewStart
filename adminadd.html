@@ -140,13 +140,6 @@
       gap: 12px;
     }
 
-    .cart-icon {
-      position: relative;
-      cursor: pointer;
-      font-size: 1.4rem;
-      color: var(--accent);
-    }
-
     .theme-toggle {
       cursor: pointer;
       font-size: 1.2rem;
@@ -1380,7 +1373,7 @@
       });
     })();
 
-    // Translation functionality
+    // Translation functionality - Admin title NOT translated
     let currentLanguage = localStorage.getItem('language') || 'fr';
     let originalTexts = new Map();
 
@@ -1392,7 +1385,7 @@
         document.querySelector('#backToShopLink'),
         document.querySelector('#authLink'),
         document.querySelector('#profileLink'),
-        document.querySelector('#adminPanel h1'),
+        // Admin panel title is NOT included - it stays French
         document.querySelector('.form-panel h2'),
         ...document.querySelectorAll('.form-panel label'),
         document.querySelector('#productName'),
