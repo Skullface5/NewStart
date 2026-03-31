@@ -353,10 +353,28 @@
         grid-template-columns: repeat(3, 1fr);
       }
 
-      /* Make Enfants appear under Unisexe (3rd position) */
-      .category-card:last-child {
-        grid-column: 3 / 4;
+      /* Homme (col1), Unisexe (col2), Femme (col3) */
+      .category-card:nth-child(1) {
+        order: 1;
       }
+
+      /* Homme - column 1 */
+      .category-card:nth-child(2) {
+        order: 3;
+      }
+
+      /* Femme - column 3 */
+      .category-card:nth-child(3) {
+        order: 2;
+      }
+
+      /* Unisexe - column 2 */
+      .category-card:nth-child(4) {
+        order: 4;
+        grid-column: 2 / 3;
+      }
+
+      /* Enfants - column 2 second row */
     }
 
     /* For small tablets - 2 columns layout */
@@ -365,8 +383,21 @@
         grid-template-columns: repeat(2, 1fr);
       }
 
-      /* Reset the grid-column */
-      .category-card:last-child {
+      /* Reset order for 2 columns */
+      .category-card:nth-child(1) {
+        order: 1;
+      }
+
+      .category-card:nth-child(2) {
+        order: 2;
+      }
+
+      .category-card:nth-child(3) {
+        order: 4;
+      }
+
+      .category-card:nth-child(4) {
+        order: 3;
         grid-column: auto;
       }
     }
@@ -375,6 +406,15 @@
     @media (max-width: 480px) {
       .category-grid {
         grid-template-columns: 1fr;
+      }
+
+      /* Reset all orders */
+      .category-card:nth-child(1),
+      .category-card:nth-child(2),
+      .category-card:nth-child(3),
+      .category-card:nth-child(4) {
+        order: 0;
+        grid-column: auto;
       }
     }
 
