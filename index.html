@@ -10,7 +10,6 @@
   <!-- Supabase client library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* (Your existing CSS remains exactly the same) */
     * {
       margin: 0;
       padding: 0;
@@ -982,7 +981,6 @@
 </head>
 
 <body>
-  <!-- Floating Gold Particles -->
   <script>
     for (let i = 0; i < 40; i++) {
       const particle = document.createElement('div');
@@ -1125,7 +1123,7 @@
     <div id="loadingProducts" class="loading-spinner"><i class="fas fa-spinner fa-spin fa-3x"></i>
       <p>Chargement des parfums...</p>
     </div>
-    <div class="product-grid" id="productGrid" style="display: none;"></div>
+    <div class="product-grid" id="productGrid"></div>
   </main>
 
   <footer>
@@ -1167,6 +1165,7 @@
   </footer>
 
   <script>
+    // ========== MAIN APPLICATION ==========
     (function () {
       const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
       const SUPABASE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
@@ -1205,16 +1204,16 @@
         cart.forEach(item => {
           const sub = item.price * (item.quantity || 1);
           total += sub;
-          html += `<div class="cart-item" data-id="${item.id}"><div class="cart-item-icon"><i class="fas ${item.icon || 'fa-leaf'}"></i></div><div class="cart-item-info"><div class="cart-item-title">${item.name}</div><div class="cart-item-price">${formatPrice(item.price)}</div><div class="cart-item-quantity"><button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button><span class="quantity-value">${item.quantity || 1}</span><button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button></div></div><button class="cart-item-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button></div>`;
+          html += `<div class="cart-item" data-id="${item.id}"><div class="cart-item-icon"><i class="fas fa-crown"></i></div><div class="cart-item-info"><div class="cart-item-title">${item.name}</div><div class="cart-item-price">${formatPrice(item.price)}</div><div class="cart-item-quantity"><button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button><span class="quantity-value">${item.quantity || 1}</span><button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button></div></div><button class="cart-item-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button></div>`;
         });
         cartItemsContainer.innerHTML = html;
         if (cartTotalSpan) cartTotalSpan.textContent = formatPrice(total);
       }
 
-      function addToCart(id, name, price, icon, image) {
+      function addToCart(id, name, price, image) {
         const existing = cart.find(i => i.id === id);
         if (existing) existing.quantity = (existing.quantity || 1) + 1;
-        else cart.push({ id, name, price, icon: icon || 'fa-leaf', image, quantity: 1 });
+        else cart.push({ id, name, price, image, quantity: 1 });
         saveCart();
         showToast('✨ ' + name + ' ajouté');
       }
@@ -1252,7 +1251,7 @@
         modal.style.display = 'flex';
         const addBtn = document.getElementById('modalAddToCartBtn');
         addBtn.onclick = () => {
-          addToCart(product.id, product.name, product.price, product.icon || 'fa-crown', product.image);
+          addToCart(product.id, product.name, product.price, product.image);
           closeProductModal();
         };
       };
@@ -1264,44 +1263,35 @@
         if (modal && modal.style.display === 'flex' && e.target === modal) closeProductModal();
       });
 
-      // --------------------------------------------------------------
-      // SIMPLIFIED PRODUCT LOADING WITH RETRY (NO TIMEOUT RACE)
-      // --------------------------------------------------------------
-      async function loadProducts(retryCount = 0) {
-        console.log("🚀 loadProducts started");
-
+      // ========== LOAD PRODUCTS - SIMPLE AND RELIABLE ==========
+      async function loadProducts() {
         try {
-          const { data, error } = await supabase
-            .from('products')
-            .select('*');
-
-          console.log("✅ RESPONSE:", data);
-          console.log("❌ ERROR:", error);
+          const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: true });
+          if (error) throw error;
 
           products = data || [];
-
-          console.log("📦 PRODUCTS ARRAY:", products);
-
           renderProducts();
-
-        } catch (err) {
-          console.error('🔥 CATCH ERROR:', err);
+        } catch (error) {
+          console.error('Error loading products:', error);
+          if (loadingEl) {
+            loadingEl.innerHTML = '<div style="color: #c1654c;"><i class="fas fa-exclamation-circle"></i> Erreur de chargement. Veuillez rafraîchir la page.</div><button onclick="location.reload()" style="margin-top:1rem;padding:0.5rem 1rem;background:var(--accent);color:white;border:none;border-radius:30px;">Recharger</button>';
+          }
         }
       }
 
       function renderProducts() {
         if (!loadingEl || !productGrid) return;
         loadingEl.style.display = 'none';
+
         if (!products || products.length === 0) {
-          productGrid.style.display = 'grid';
           productGrid.innerHTML = '<div class="empty-cart-message" style="grid-column:1/-1;">Aucun parfum disponible pour le moment.</div>';
           return;
         }
-        productGrid.style.display = 'grid';
+
         let html = '';
         products.forEach(p => {
           const safeProduct = JSON.stringify(p).replace(/'/g, "\\'");
-          const imgHtml = p.image ? `<img src="${p.image}" alt="${p.name}">` : `<i class="fas ${p.icon || 'fa-leaf'}"></i>`;
+          const imgHtml = p.image ? `<img src="${p.image}" alt="${p.name}">` : `<i class="fas fa-crown"></i>`;
           html += `
             <div class="product-card">
               <div class="product-clickable" style="cursor:pointer; width:100%;" onclick='openProductModal(${safeProduct})'>
@@ -1310,7 +1300,7 @@
                 <div class="product-brand">${p.brand}</div>
                 <div class="product-price">${parseFloat(p.price).toFixed(3).replace('.', ',')} TND</div>
               </div>
-              <button class="add-to-cart" data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-icon="${p.icon || 'fa-leaf'}" data-image="${p.image || ''}">Ajouter au panier</button>
+              <button class="add-to-cart" data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-image="${p.image || ''}">Ajouter au panier</button>
             </div>
           `;
         });
@@ -1319,7 +1309,7 @@
         document.querySelectorAll('.add-to-cart').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            addToCart(btn.dataset.id, btn.dataset.name, parseFloat(btn.dataset.price), btn.dataset.icon, btn.dataset.image);
+            addToCart(btn.dataset.id, btn.dataset.name, parseFloat(btn.dataset.price), btn.dataset.image);
           });
         });
       }
@@ -1367,7 +1357,7 @@
         event.preventDefault();
         const btn = document.getElementById('submitOrderBtn');
         btn.disabled = true;
-        btn.innerHTML = '<span class="loading-spinner-small" style="display:inline-block; width:18px; height:18px; border:2px solid rgba(255,255,255,0.3); border-radius:50%; border-top-color:white; animation:spin 0.6s linear infinite;"></span> Traitement...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Traitement...';
         try {
           const { data: { user } } = await supabase.auth.getUser();
           const email = user ? user.email : document.getElementById('customerEmail').value;
@@ -1456,7 +1446,7 @@
       });
       document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
 
-      // Start loading products
+      // Start loading
       loadProducts();
       saveCart();
     })();
