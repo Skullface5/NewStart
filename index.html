@@ -1243,12 +1243,12 @@
         const imgHtml = product.image ? `<img src="${product.image}" alt="${product.name}">` : `<i class="fas fa-crown"></i>`;
         modalBody.innerHTML = `
           <div class="product-modal-image">${imgHtml}</div>
-          <h2 class="product-modal-name">${product.name}</h2>
-          <div class="product-modal-brand">${product.brand}</div>
+          <h2 class="product-modal-name">${escapeHtml(product.name)}</h2>
+          <div class="product-modal-brand">${escapeHtml(product.brand)}</div>
           <div class="product-modal-price">${formattedPrice} TND</div>
-          <div class="product-modal-description">${product.description || 'Découvrez ce parfum d\'exception, une fragrance unique qui révèle votre personnalité.'}</div>
+          <div class="product-modal-description">${escapeHtml(product.description || 'Découvrez ce parfum d\'exception, une fragrance unique qui révèle votre personnalité.')}</div>
         `;
-        modalTitle.innerHTML = `<i class="fas fa-info-circle"></i> ${product.name}`;
+        modalTitle.innerHTML = `<i class="fas fa-info-circle"></i> ${escapeHtml(product.name)}`;
         modal.style.display = 'flex';
         const addBtn = document.getElementById('modalAddToCartBtn');
         addBtn.onclick = () => {
@@ -1264,9 +1264,19 @@
         if (modal && modal.style.display === 'flex' && e.target === modal) closeProductModal();
       });
 
-      // --------------------------------------------------------------
-      // SIMPLIFIED PRODUCT LOADING WITH RETRY (NO TIMEOUT RACE)
-      // --------------------------------------------------------------
+      // Helper function to escape HTML to prevent XSS
+      function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function (m) {
+          if (m === '&') return '&amp;';
+          if (m === '<') return '&lt;';
+          if (m === '>') return '&gt;';
+          return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function (c) {
+          return c;
+        });
+      }
+
       async function loadProducts(retryCount = 0) {
         try {
           const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: true });
@@ -1276,13 +1286,11 @@
         } catch (err) {
           console.error('Product loading error:', err);
           if (retryCount < 2) {
-            // Retry after 2 seconds
             if (loadingEl) {
               loadingEl.innerHTML = `<i class="fas fa-spinner fa-spin fa-3x"></i><p>Tentative ${retryCount + 1}/2...</p>`;
             }
             setTimeout(() => loadProducts(retryCount + 1), 2000);
           } else {
-            // Final failure
             if (loadingEl) {
               loadingEl.innerHTML = '<div style="color: #c1654c;">❌ Impossible de charger les produits. Vérifiez votre connexion.</div><button onclick="location.reload()" style="margin-top:1rem;padding:0.5rem 1rem;background:var(--accent);color:white;border:none;border-radius:30px;">Recharger</button>';
             }
@@ -1304,23 +1312,38 @@
         }
         productGrid.style.display = 'grid';
         let html = '';
-        products.forEach(p => {
-          const safeProduct = JSON.stringify(p).replace(/'/g, "\\'");
-          const imgHtml = p.image ? `<img src="${p.image}" alt="${p.name}">` : `<i class="fas ${p.icon || 'fa-leaf'}"></i>`;
+        products.forEach((p, index) => {
+          const imgHtml = p.image ? `<img src="${p.image}" alt="${escapeHtml(p.name)}">` : `<i class="fas ${p.icon || 'fa-leaf'}"></i>`;
+          // Store product data as JSON in a data attribute (safe!)
           html += `
-            <div class="product-card" data-product='${encodeURIComponent(JSON.stringify(p))}'>
-              <div class="product-clickable" style="cursor:pointer;">
+            <div class="product-card" data-product-id="${p.id}" data-product-index="${index}">
+              <div class="product-clickable" style="cursor:pointer; width:100%;">
                 <div class="product-img">${imgHtml}</div>
-                <div class="product-title">${p.name}</div>
-                <div class="product-brand">${p.brand}</div>
+                <div class="product-title">${escapeHtml(p.name)}</div>
+                <div class="product-brand">${escapeHtml(p.brand)}</div>
                 <div class="product-price">${parseFloat(p.price).toFixed(3).replace('.', ',')} TND</div>
               </div>
-              <button class="add-to-cart" ...>Ajouter au panier</button>
+              <button class="add-to-cart" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${p.price}" data-icon="${p.icon || 'fa-leaf'}" data-image="${p.image || ''}">Ajouter au panier</button>
             </div>
           `;
         });
         productGrid.innerHTML = html;
 
+        // Attach click handlers to product-clickable elements
+        document.querySelectorAll('.product-clickable').forEach((el, idx) => {
+          el.addEventListener('click', (e) => {
+            // Don't trigger if clicking on add-to-cart button
+            if (e.target.closest('.add-to-cart')) return;
+            const productCard = el.closest('.product-card');
+            const productId = productCard.dataset.productId;
+            const product = products.find(p => p.id === productId);
+            if (product) {
+              openProductModal(product);
+            }
+          });
+        });
+
+        // Attach add-to-cart handlers
         document.querySelectorAll('.add-to-cart').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -1363,7 +1386,7 @@
           emailInp.required = true;
         }
         const modalItemsDiv = document.getElementById('modalCartItems');
-        modalItemsDiv.innerHTML = cart.map(i => `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed var(--border);"><span>${i.name} <span style="color:var(--accent);">x${i.quantity}</span></span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`).join('');
+        modalItemsDiv.innerHTML = cart.map(i => `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed var(--border);"><span>${escapeHtml(i.name)} <span style="color:var(--accent);">x${i.quantity}</span></span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`).join('');
         document.getElementById('modalTotal').textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND';
         document.getElementById('checkoutModal').style.display = 'flex';
       });
