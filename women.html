@@ -1391,10 +1391,8 @@
                         if (e.target.closest('.add-to-cart')) return;
                         const productCard = el.closest('.product-card');
                         const productId = productCard.dataset.productId;
-                        const product = products.find(p => p.id === productId);
-                        if (product) {
-                            openProductModal(product);
-                        }
+                        // Redirect to product page with ID
+                        window.location.href = `product.html?id=${productId}`;
                     });
                 });
 
