@@ -1106,6 +1106,9 @@
             const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
             console.log('Supabase client created:', supabase);
 
+            console.log('✅ supabase.from exists?', typeof supabase.from === 'function');
+            console.log('✅ supabase.from("products") exists?', supabase.from('products'));
+
 
             // Test Supabase connection
             async function testSupabase() {
