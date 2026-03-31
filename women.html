@@ -11,7 +11,6 @@
     <!-- Supabase client library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* Copy all CSS from your index.html here */
         * {
             margin: 0;
             padding: 0;
@@ -142,6 +141,7 @@
             font-size: 1.8rem;
             text-transform: uppercase;
             letter-spacing: 0.2em;
+            color: var(--text-primary);
         }
 
         .container {
@@ -179,11 +179,16 @@
             align-items: center;
             gap: 0.5rem;
             z-index: 102;
+            text-decoration: none;
         }
 
         .logo i {
             font-size: 2rem;
             color: var(--accent);
+        }
+
+        .logo h1 {
+            color: var(--text-primary);
         }
 
         .theme-toggle {
@@ -246,12 +251,10 @@
             max-width: 300px;
             height: 100vh;
             background: var(--bg-primary);
-            backdrop-filter: blur(10px);
             gap: 0;
             overflow-y: auto;
-            opacity: 0;
-            transition: right 0.3s ease-out, opacity 0.2s ease-out;
-            box-shadow: var(--shadow-lg);
+            transition: right 0.3s ease-out;
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
             border-left: 1px solid var(--border);
             z-index: 200;
             border-radius: 0;
@@ -260,7 +263,6 @@
 
         .nav-links.active {
             right: 0;
-            opacity: 1;
         }
 
         .nav-links a {
@@ -333,7 +335,7 @@
             color: var(--accent);
         }
 
-        /* Mobile menu overlay */
+        /* Mobile menu overlay - no blur effect */
         .menu-overlay {
             position: fixed;
             top: 0;
@@ -341,7 +343,6 @@
             right: 0;
             bottom: 0;
             background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(3px);
             z-index: 150;
             visibility: hidden;
             opacity: 0;
@@ -392,20 +393,14 @@
 
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
             margin: 2rem 0;
-        }
-
-        @media (max-width: 1024px) {
-            .product-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
         }
 
         @media (max-width: 768px) {
             .product-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
                 gap: 1rem;
             }
 
@@ -422,17 +417,16 @@
             }
         }
 
-        @media (max-width: 480px) {
+        @media (min-width: 1400px) {
             .product-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.8rem;
+                grid-template-columns: repeat(4, 1fr);
             }
         }
 
         .product-card {
             background: var(--card-gradient);
             border-radius: 28px;
-            padding: 1rem 0.8rem;
+            padding: 1rem;
             box-shadow: var(--shadow-md);
             transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             display: flex;
@@ -450,22 +444,29 @@
         }
 
         .product-img {
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 140px;
             background: var(--bg-secondary);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 0.8rem;
+            margin: 0 auto 0.8rem auto;
             transition: all 0.3s ease;
             overflow: hidden;
         }
 
+        @media (max-width: 768px) {
+            .product-img {
+                width: 110px;
+                height: 110px;
+            }
+        }
+
         @media (max-width: 480px) {
             .product-img {
-                width: 100px;
-                height: 100px;
+                width: 90px;
+                height: 90px;
             }
         }
 
@@ -492,9 +493,9 @@
             color: var(--text-primary);
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
             .product-title {
-                font-size: 0.9rem;
+                font-size: 0.95rem;
             }
         }
 
@@ -520,9 +521,9 @@
             color: var(--accent);
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
             .product-price {
-                font-size: 0.9rem;
+                font-size: 0.95rem;
             }
         }
 
@@ -543,7 +544,7 @@
             white-space: nowrap;
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
             .add-to-cart {
                 padding: 0.4rem 0.8rem;
                 font-size: 0.7rem;
@@ -562,7 +563,6 @@
             right: 0;
             bottom: 0;
             background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(3px);
             z-index: 200;
             visibility: hidden;
             opacity: 0;
@@ -582,13 +582,13 @@
             max-width: 400px;
             height: 100vh;
             background: var(--bg-primary);
-            backdrop-filter: blur(14px);
             padding: 1.5rem 1rem;
             display: flex;
             flex-direction: column;
             transition: right 0.3s ease-out;
             z-index: 250;
             border-left: 1px solid var(--border);
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
         }
 
         .cart-sidebar.open {
@@ -723,7 +723,6 @@
             right: 0;
             bottom: 0;
             background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
             z-index: 1000;
             display: none;
             align-items: center;
@@ -1084,7 +1083,7 @@
     <!-- Header -->
     <header>
         <div class="container header-flex">
-            <a href="index.html" class="logo" style="text-decoration: none;">
+            <a href="index.html" class="logo">
                 <i class="fas fa-spa"></i>
                 <h1>Rosa Fragrances</h1>
             </a>
@@ -1336,8 +1335,6 @@
 
             async function loadProducts() {
                 try {
-                    console.log('🔍 Loading products for category: women');
-
                     const response = await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/rest/v1/products?select=*&category=eq.women', {
                         headers: {
                             'apikey': SUPABASE_KEY,
@@ -1346,13 +1343,10 @@
                     });
 
                     const data = await response.json();
-                    console.log('📦 Products loaded:', data);
-                    console.log('📊 Number of products:', data?.length || 0);
-
                     products = data || [];
                     renderProducts();
                 } catch (err) {
-                    console.error('❌ Product loading error:', err);
+                    console.error('Product loading error:', err);
                     if (loadingEl) {
                         loadingEl.innerHTML = '<div style="color: #c1654c;">❌ Impossible de charger les produits.</div>';
                         loadingEl.style.display = 'block';
