@@ -1105,14 +1105,23 @@
             const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
             const SUPABASE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
 
-            // Create the Supabase client - this is the correct way
+            // Create Supabase client
             const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-            console.log('supabase object:', supabase);
-            console.log('supabase.from:', supabase.from);
-            console.log('supabase.from("products"):', supabase.from('products'));
 
             console.log('Supabase client created:', supabase);
             console.log('supabase.from exists?', typeof supabase.from === 'function');
+
+            // TEST QUERY - check if Supabase works
+            console.log('🧪 Running test query...');
+            supabase.from('products').select('*').limit(1)
+                .then(result => {
+                    console.log('✅ TEST RESULT:', result);
+                    console.log('✅ Data:', result.data);
+                    console.log('✅ Error:', result.error);
+                })
+                .catch(err => {
+                    console.error('❌ TEST ERROR:', err);
+                });
 
             let products = [];
             let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
@@ -1267,15 +1276,9 @@
             }
 
             async function loadProducts() {
-
-                // Test query immediately
-                supabase.from('products').select('*').limit(1)
-                    .then(result => console.log('TEST RESULT:', result))
-                    .catch(err => console.error('TEST ERROR:', err));
-
-
                 try {
-                    console.log('Loading products for category: man');
+                    console.log('🔍 Loading products for category: man');
+                    console.log('🔍 About to call supabase.from...');
 
                     const { data, error } = await supabase
                         .from('products')
@@ -1283,15 +1286,16 @@
                         .eq('category', 'man')
                         .order('created_at', { ascending: true });
 
-                    console.log('Data received:', data);
-                    console.log('Number of products:', data?.length || 0);
+                    console.log('🔍 After await - data:', data);
+                    console.log('🔍 After await - error:', error);
+                    console.log('📊 Number of products:', data?.length || 0);
 
                     if (error) throw error;
 
                     products = data || [];
                     renderProducts();
                 } catch (err) {
-                    console.error('Product loading error:', err);
+                    console.error('❌ Product loading error:', err);
                     if (loadingEl) {
                         loadingEl.innerHTML = '<div style="color: #c1654c;">❌ Impossible de charger les produits.</div>';
                         loadingEl.style.display = 'block';
