@@ -10,7 +10,7 @@
   <!-- Supabase client library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* Your existing CSS (unchanged) */
+    /* (Your existing CSS remains exactly the same) */
     * {
       margin: 0;
       padding: 0;
@@ -74,14 +74,16 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+      background: radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
       pointer-events: none;
       z-index: -1;
       animation: backgroundPulse 8s ease-in-out infinite;
     }
 
     body.dark::before {
-      background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+      background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
     }
 
     @keyframes backgroundPulse {
@@ -420,19 +422,19 @@
       margin: 2rem 0;
     }
 
-    @media (max-width:1024px) {
+    @media (max-width: 1024px) {
       .product-grid {
         grid-template-columns: repeat(3, 1fr);
       }
     }
 
-    @media (max-width:768px) {
+    @media (max-width: 768px) {
       .product-grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    @media (max-width:480px) {
+    @media (max-width: 480px) {
       .product-grid {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -1262,44 +1264,29 @@
         if (modal && modal.style.display === 'flex' && e.target === modal) closeProductModal();
       });
 
-      // -----------------------------------------------------------------
-      // FIXED PRODUCT LOADING WITH TIMEOUT AND RETRY
-      // -----------------------------------------------------------------
-      async function fetchProductsWithTimeout(timeoutMs = 8000) {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-        try {
-          // Use the supabase client directly – it doesn't support AbortController natively,
-          // so we'll wrap it in a Promise that can time out.
-          const fetchPromise = supabase.from('products').select('*').order('created_at', { ascending: true });
-          const timeoutPromise = new Promise((_, reject) =>
-            setTimeout(() => reject(new Error('Timeout loading products')), timeoutMs)
-          );
-          const result = await Promise.race([fetchPromise, timeoutPromise]);
-          clearTimeout(timeoutId);
-          return result;
-        } catch (err) {
-          clearTimeout(timeoutId);
-          throw err;
-        }
-      }
-
+      // --------------------------------------------------------------
+      // SIMPLIFIED PRODUCT LOADING WITH RETRY (NO TIMEOUT RACE)
+      // --------------------------------------------------------------
       async function loadProducts(retryCount = 0) {
         try {
-          const { data, error } = await fetchProductsWithTimeout(10000);
+          const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: true });
           if (error) throw error;
           products = data || [];
           renderProducts();
-        } catch (error) {
-          console.error('Erreur chargement produits:', error);
+        } catch (err) {
+          console.error('Product loading error:', err);
           if (retryCount < 2) {
             // Retry after 2 seconds
-            loadingEl.innerHTML = `<i class="fas fa-spinner fa-spin fa-3x"></i><p>Reconnexion... (tentative ${retryCount + 1}/2)</p>`;
+            if (loadingEl) {
+              loadingEl.innerHTML = `<i class="fas fa-spinner fa-spin fa-3x"></i><p>Tentative ${retryCount + 1}/2...</p>`;
+            }
             setTimeout(() => loadProducts(retryCount + 1), 2000);
           } else {
             // Final failure
             if (loadingEl) {
               loadingEl.innerHTML = '<div style="color: #c1654c;">❌ Impossible de charger les produits. Vérifiez votre connexion.</div><button onclick="location.reload()" style="margin-top:1rem;padding:0.5rem 1rem;background:var(--accent);color:white;border:none;border-radius:30px;">Recharger</button>';
+            }
+            if (productGrid) {
               productGrid.style.display = 'grid';
               productGrid.innerHTML = '<div class="empty-cart-message" style="grid-column:1/-1;">Problème de connexion. Veuillez réessayer plus tard.</div>';
             }
@@ -1474,6 +1461,7 @@
       });
       document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
 
+      // Start loading products
       loadProducts();
       saveCart();
     })();
