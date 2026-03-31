@@ -1123,6 +1123,18 @@
                     console.error('❌ TEST ERROR:', err);
                 });
 
+            // Direct fetch test
+            console.log('🔵 Direct fetch test...');
+            fetch('https://dtwciuhwwanwlwpydeko.supabase.co/rest/v1/products?select=*&limit=1', {
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': 'Bearer ' + SUPABASE_KEY
+                }
+            })
+                .then(res => res.json())
+                .then(data => console.log('🔵 DIRECT FETCH RESULT:', data))
+                .catch(err => console.error('🔵 DIRECT FETCH ERROR:', err));
+
             let products = [];
             let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
 
