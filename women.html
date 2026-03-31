@@ -235,13 +235,14 @@
             color: var(--text-primary);
             cursor: pointer;
             display: block;
+            z-index: 101;
         }
 
         .menu-toggle:hover {
             color: var(--accent);
         }
 
-        /* Mobile Menu - Fixed */
+        /* Mobile Menu */
         .nav-links {
             display: flex;
             flex-direction: column;
@@ -257,14 +258,13 @@
             transition: right 0.3s ease-out;
             box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
             border-left: 1px solid var(--border);
-            z-index: 200;
+            z-index: 1000;
             border-radius: 0;
-            padding: 0 0 2rem 0;
+            padding: 0;
         }
 
         .nav-links.active {
             right: 0;
-            z-index: 201;
         }
 
         .close-menu-btn {
@@ -276,11 +276,12 @@
             padding: 1rem;
             text-align: right;
             display: block;
+            width: 100%;
             border-bottom: 1px solid var(--border);
         }
 
-        .close-menu-btn:hover {
-            background: var(--hover-bg);
+        .close-menu-btn i {
+            pointer-events: none;
         }
 
         .nav-links a {
@@ -304,7 +305,7 @@
             padding-left: 2rem;
         }
 
-        /* Language dropdown - Fixed */
+        /* Language dropdown */
         .lang-menu {
             position: relative;
             border-bottom: 1px solid var(--border);
@@ -362,6 +363,25 @@
         .lang-option:hover {
             background: var(--hover-bg);
             color: var(--accent);
+        }
+
+        /* Overlay for when menu is open */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.2s;
+        }
+
+        .menu-overlay.active {
+            visibility: visible;
+            opacity: 1;
         }
 
         .category-hero {
@@ -1023,6 +1043,7 @@
         }
     </script>
 
+    <div id="menuOverlay" class="menu-overlay"></div>
     <div id="toast" class="notification">✨ Article ajouté</div>
 
     <!-- Checkout Modal -->
@@ -1207,6 +1228,7 @@
             const menuToggle = document.getElementById('menuToggle');
             const navLinks = document.getElementById('navLinks');
             const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const menuOverlay = document.getElementById('menuOverlay');
 
             function showToast(msg) {
                 if (toast) {
@@ -1514,15 +1536,25 @@
             updateUserDisplay();
             supabase.auth.onAuthStateChange(() => updateUserDisplay());
 
+            function closeMenu() {
+                navLinks.classList.remove('active');
+                menuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            function openMenu() {
+                navLinks.classList.add('active');
+                menuOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                closeCart();
+            }
+
             function toggleMenu() {
                 const active = navLinks.classList.contains('active');
                 if (active) {
-                    navLinks.classList.remove('active');
-                    document.body.style.overflow = '';
+                    closeMenu();
                 } else {
-                    navLinks.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                    closeCart();
+                    openMenu();
                 }
             }
 
@@ -1530,31 +1562,20 @@
 
             // Close menu when clicking close button
             if (closeMenuBtn) {
-                closeMenuBtn.addEventListener('click', function () {
-                    navLinks.classList.remove('active');
-                    document.body.style.overflow = '';
-                });
+                closeMenuBtn.addEventListener('click', closeMenu);
             }
 
-            // Close menu when clicking outside
-            document.addEventListener('click', function (e) {
-                if (navLinks.classList.contains('active') &&
-                    !navLinks.contains(e.target) &&
-                    !menuToggle.contains(e.target)) {
-                    navLinks.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-            });
+            // Close menu when clicking overlay
+            if (menuOverlay) {
+                menuOverlay.addEventListener('click', closeMenu);
+            }
 
             // Close menu when clicking a link
             document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navLinks.classList.remove('active');
-                    document.body.style.overflow = '';
-                });
+                link.addEventListener('click', closeMenu);
             });
 
-            // Language menu - fixed dropdown
+            // Language menu
             const langMenu = document.getElementById('langMenu');
             const langCurrentBtn = document.getElementById('langCurrentBtn');
 
@@ -1566,7 +1587,6 @@
                 });
             }
 
-            // Close language menu when clicking options
             document.querySelectorAll('.lang-option').forEach(opt => {
                 opt.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -1579,7 +1599,6 @@
                 });
             });
 
-            // Close language menu when clicking outside
             document.addEventListener('click', (e) => {
                 if (langMenu && !langMenu.contains(e.target)) {
                     langMenu.classList.remove('active');
