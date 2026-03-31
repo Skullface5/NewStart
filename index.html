@@ -1116,7 +1116,7 @@
       </div>
     </div>
 
-    <div class="product-grid" id="productGrid"></div>
+
   </main>
 
   <footer>
@@ -1257,12 +1257,12 @@
       // Helper function to escape HTML to prevent XSS
       function escapeHtml(str) {
         if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
+        return str.replace(/[&<>]/g, function (m) {
           if (m === '&') return '&amp;';
           if (m === '<') return '&lt;';
           if (m === '>') return '&gt;';
           return m;
-        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function (c) {
           return c;
         });
       }
