@@ -5,28 +5,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Rosa Fragrances | Atelier de Parfums</title>
-  <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Supabase client library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Inter', sans-serif;
     }
 
     body {
       background: var(--bg-gradient);
       color: var(--text-primary);
       transition: background 0.3s ease, color 0.3s ease;
-      line-height: 1.5;
-      position: relative;
       overflow-x: hidden;
+      position: relative;
     }
 
-    /* Theme Variables - LIGHT MODE (default) */
     :root {
       --bg-primary: #ffffff;
       --bg-secondary: #fffbf5;
@@ -35,19 +31,15 @@
       --text-secondary: #6b5c4f;
       --accent: #d4af37;
       --accent-dark: #b4942c;
-      --accent-light: #f7ecc8;
       --accent-gradient: linear-gradient(135deg, #d4af37 0%, #f5d742 50%, #d4af37 100%);
       --border: rgba(212, 175, 55, 0.2);
       --card-gradient: linear-gradient(145deg, #ffffff 0%, #fffaf2 100%);
       --shadow-sm: 0 5px 20px rgba(0, 0, 0, 0.03);
       --shadow-md: 0 10px 30px rgba(212, 175, 55, 0.08);
-      --shadow-lg: 0 20px 40px rgba(212, 175, 55, 0.12);
       --shadow-hover: 0 25px 40px rgba(212, 175, 55, 0.2);
-      --input-bg: #ffffff;
       --hover-bg: rgba(212, 175, 55, 0.05);
     }
 
-    /* DARK MODE */
     body.dark {
       --bg-primary: #0a0a0a;
       --bg-secondary: #141414;
@@ -56,53 +48,12 @@
       --text-secondary: #b8b8b8;
       --accent: #ffd700;
       --accent-dark: #e6c300;
-      --accent-light: #3a2e1a;
       --accent-gradient: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
       --border: rgba(255, 215, 0, 0.2);
       --card-gradient: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
-      --shadow-sm: 0 5px 20px rgba(0, 0, 0, 0.3);
-      --shadow-md: 0 10px 30px rgba(255, 215, 0, 0.08);
-      --shadow-lg: 0 20px 40px rgba(255, 215, 0, 0.12);
-      --shadow-hover: 0 25px 40px rgba(255, 215, 0, 0.2);
-      --input-bg: #2a2a2a;
       --hover-bg: rgba(255, 215, 0, 0.1);
     }
 
-    /* Animated background with floating particles */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
-      pointer-events: none;
-      z-index: -1;
-      animation: backgroundPulse 8s ease-in-out infinite;
-    }
-
-    body.dark::before {
-      background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
-    }
-
-    @keyframes backgroundPulse {
-
-      0%,
-      100% {
-        opacity: 0.6;
-        transform: scale(1);
-      }
-
-      50% {
-        opacity: 1;
-        transform: scale(1.02);
-      }
-    }
-
-    /* Floating gold particles */
     .particle {
       position: fixed;
       background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
@@ -116,7 +67,7 @@
     @keyframes floatParticle {
       0% {
         opacity: 0;
-        transform: translateY(100vh) rotate(0deg);
+        transform: translateY(100vh);
       }
 
       10% {
@@ -129,21 +80,8 @@
 
       100% {
         opacity: 0;
-        transform: translateY(-20vh) rotate(360deg);
+        transform: translateY(-20vh);
       }
-    }
-
-    h1,
-    h2,
-    h3 {
-      font-weight: 350;
-      letter-spacing: 0.03em;
-    }
-
-    h1 {
-      font-size: 1.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
     }
 
     .container {
@@ -157,12 +95,10 @@
     header {
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
-      box-shadow: var(--shadow-sm);
       position: sticky;
       top: 0;
       z-index: 100;
       border-bottom: 1px solid var(--border);
-      transition: background 0.3s ease;
     }
 
     body.dark header {
@@ -180,7 +116,8 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      z-index: 102;
+      cursor: pointer;
+      text-decoration: none;
     }
 
     .logo i {
@@ -188,12 +125,21 @@
       color: var(--accent);
     }
 
-    .theme-toggle {
+    .logo h1 {
+      font-size: 1.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-weight: 350;
+      color: var(--text-primary);
+    }
+
+    .theme-toggle,
+    .cart-icon {
       cursor: pointer;
       font-size: 1.3rem;
       color: var(--accent);
-      transition: transform 0.3s ease;
       margin-right: 15px;
+      transition: transform 0.3s;
     }
 
     .theme-toggle:hover {
@@ -202,10 +148,7 @@
 
     .cart-icon {
       position: relative;
-      cursor: pointer;
       font-size: 1.6rem;
-      color: var(--accent);
-      margin-right: 15px;
     }
 
     .cart-count {
@@ -215,14 +158,12 @@
       background: var(--accent);
       color: var(--bg-primary);
       font-size: 0.7rem;
-      font-weight: 600;
       width: 20px;
       height: 20px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 50%;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
     }
 
     .menu-toggle {
@@ -231,11 +172,6 @@
       font-size: 1.8rem;
       color: var(--text-primary);
       cursor: pointer;
-      display: block;
-    }
-
-    .menu-toggle:hover {
-      color: var(--accent);
     }
 
     .nav-links {
@@ -247,15 +183,14 @@
       width: 260px;
       background: var(--bg-primary);
       backdrop-filter: blur(10px);
-      gap: 0;
       max-height: 0;
       overflow: hidden;
       opacity: 0;
-      transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+      transition: max-height 0.3s, opacity 0.2s;
       box-shadow: var(--shadow-md);
       border: 1px solid var(--border);
-      z-index: 101;
       border-radius: 20px;
+      z-index: 101;
     }
 
     .nav-links.active {
@@ -268,13 +203,8 @@
       padding: 1rem 1.5rem;
       text-decoration: none;
       color: var(--text-primary);
-      transition: all 0.2s;
       border-bottom: 1px solid var(--border);
       display: block;
-    }
-
-    .nav-links a:last-child {
-      border-bottom: none;
     }
 
     .nav-links a:hover {
@@ -299,15 +229,10 @@
       cursor: pointer;
     }
 
-    .lang-current:hover {
-      background: var(--hover-bg);
-      color: var(--accent);
-    }
-
     .lang-options {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.3s ease-out;
+      transition: max-height 0.3s;
       background: var(--bg-primary);
     }
 
@@ -327,30 +252,19 @@
       color: var(--text-secondary);
     }
 
-    .lang-option:hover {
-      background: var(--hover-bg);
-      color: var(--accent);
-    }
-
-    /* Hero */
     .hero {
       text-align: center;
       padding: 2rem 1rem;
       background: linear-gradient(145deg, var(--bg-secondary) 0%, var(--bg-primary) 70%);
-      margin-bottom: 1rem;
-      position: relative;
       border-radius: 32px;
-    }
-
-    /* Category Cards */
-    .categories-section {
-      margin: 3rem 0;
+      margin-bottom: 1rem;
     }
 
     .category-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1.5rem;
+      margin: 3rem 0;
     }
 
     .category-card {
@@ -358,15 +272,12 @@
       padding: 2rem 1.5rem;
       text-align: center;
       text-decoration: none;
-      transition: all 0.4s ease;
-      display: block;
-      cursor: pointer;
+      transition: all 0.4s;
       background-size: cover;
       background-position: center;
       min-height: 240px;
       position: relative;
       border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
     }
 
     .category-card::before {
@@ -390,18 +301,8 @@
 
     .category-card h3 {
       font-size: 1.5rem;
-      margin-bottom: 0.5rem;
       padding-top: 3rem;
-    }
-
-    .category-card p {
-      font-size: 0.9rem;
-      opacity: 0.9;
-    }
-
-    .category-card:hover {
-      transform: translateY(-8px);
-      border-color: var(--accent);
+      margin-bottom: 0.5rem;
     }
 
     .cat-man {
@@ -420,7 +321,6 @@
       background-image: url(https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/kids.jfif);
     }
 
-    /* Product Grid */
     .product-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -440,24 +340,18 @@
       }
     }
 
-    @media (max-width: 480px) {
-      .product-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
     .product-card {
       background: var(--card-gradient);
       border-radius: 28px;
       padding: 1.5rem 1rem;
       box-shadow: var(--shadow-md);
-      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      transition: all 0.4s;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       border: 1px solid var(--border);
-      position: relative;
+      cursor: pointer;
     }
 
     .product-card:hover {
@@ -475,19 +369,13 @@
       align-items: center;
       justify-content: center;
       margin-bottom: 1rem;
-      transition: all 0.3s ease;
       overflow: hidden;
-    }
-
-    .product-card:hover .product-img {
-      transform: scale(1.05);
     }
 
     .product-img img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 50%;
     }
 
     .product-img i {
@@ -502,25 +390,17 @@
       color: var(--text-primary);
     }
 
-    body.dark .product-title {
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
     .product-brand {
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.2em;
       color: var(--accent);
-      margin-bottom: 0.5rem;
     }
 
     .product-price {
       font-size: 1.4rem;
       font-weight: 350;
-      margin: 0.5rem 0 1rem;
+      margin: 0.5rem 0;
       color: var(--accent);
     }
 
@@ -535,10 +415,6 @@
       cursor: pointer;
       transition: all 0.2s;
       margin-top: auto;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      white-space: nowrap;
     }
 
     .add-to-cart:hover {
@@ -546,7 +422,27 @@
       color: var(--bg-primary);
     }
 
-    /* Cart Sidebar */
+    .cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 400px;
+      max-width: 90vw;
+      height: 100vh;
+      background: var(--bg-primary);
+      backdrop-filter: blur(14px);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.3s;
+      z-index: 250;
+      border-left: 1px solid var(--border);
+    }
+
+    .cart-sidebar.open {
+      right: 0;
+    }
+
     .cart-overlay {
       position: fixed;
       top: 0;
@@ -566,38 +462,17 @@
       opacity: 1;
     }
 
-    .cart-sidebar {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 400px;
-      max-width: 90vw;
-      height: 100vh;
-      background: var(--bg-primary);
-      backdrop-filter: blur(14px);
-      padding: 1.5rem 1rem;
-      display: flex;
-      flex-direction: column;
-      transition: right 0.3s ease-out;
-      z-index: 250;
-      border-left: 1px solid var(--border);
-    }
-
-    .cart-sidebar.open {
-      right: 0;
-    }
-
     .cart-header {
       display: flex;
       justify-content: space-between;
       border-bottom: 1px solid var(--border);
       padding-bottom: 1rem;
-      margin-bottom: 1rem;
     }
 
     .cart-items {
       flex: 1;
       overflow-y: auto;
+      margin-top: 1rem;
     }
 
     .cart-item {
@@ -613,29 +488,14 @@
       width: 50px;
       height: 50px;
       background: var(--bg-secondary);
-      border-radius: 30px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .cart-item-icon i {
-      font-size: 1.5rem;
-      color: var(--accent);
-    }
-
     .cart-item-info {
       flex: 2;
-    }
-
-    .cart-item-title {
-      font-weight: 500;
-      color: var(--text-primary);
-    }
-
-    .cart-item-price {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
     }
 
     .cart-item-quantity {
@@ -652,32 +512,12 @@
       background: var(--bg-secondary);
       border: none;
       cursor: pointer;
-      color: var(--text-primary);
-      transition: all 0.2s;
-    }
-
-    .quantity-btn:hover {
-      background: var(--accent);
-      color: white;
-    }
-
-    .cart-item-remove {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--text-secondary);
-      font-size: 1.1rem;
-      padding: 5px;
-    }
-
-    .cart-item-remove:hover {
-      color: #c1654c;
     }
 
     .cart-footer {
       border-top: 1px solid var(--border);
       padding-top: 1rem;
-      margin-top: 0.5rem;
+      margin-top: 1rem;
     }
 
     .cart-total {
@@ -685,7 +525,6 @@
       justify-content: space-between;
       font-size: 1.2rem;
       margin-bottom: 1rem;
-      color: var(--text-primary);
     }
 
     .checkout-btn {
@@ -701,14 +540,8 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: transform 0.2s;
     }
 
-    .checkout-btn:hover {
-      transform: translateY(-2px);
-    }
-
-    /* Modals */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -734,24 +567,6 @@
       border: 1px solid var(--border);
     }
 
-    .product-modal-content {
-      max-width: 500px;
-      padding: 0;
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .product-modal-body {
-      padding: 1.5rem;
-      text-align: center;
-    }
-
     .product-modal-image {
       width: 180px;
       height: 180px;
@@ -762,109 +577,6 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
-    }
-
-    .product-modal-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .product-modal-image i {
-      font-size: 5rem;
-      color: var(--accent);
-    }
-
-    .product-modal-name {
-      font-size: 1.8rem;
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-      color: var(--text-primary);
-    }
-
-    .product-modal-brand {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      color: var(--accent);
-      margin-bottom: 0.5rem;
-    }
-
-    .product-modal-price {
-      font-size: 1.8rem;
-      color: var(--accent);
-      margin: 1rem 0;
-    }
-
-    .product-modal-description {
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin: 1rem 0;
-    }
-
-    .modal-buttons {
-      display: flex;
-      gap: 10px;
-      padding: 1rem 1.5rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .btn-primary {
-      background: var(--accent-gradient);
-      color: var(--bg-primary);
-      border: none;
-      padding: 12px 24px;
-      border-radius: 50px;
-      cursor: pointer;
-      font-weight: 600;
-      flex: 1;
-    }
-
-    .btn-secondary {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--text-primary);
-      padding: 12px 24px;
-      border-radius: 50px;
-      cursor: pointer;
-      flex: 1;
-    }
-
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.8rem;
-      margin-bottom: 0.3rem;
-      color: var(--text-secondary);
-    }
-
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      padding: 0.8rem;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: var(--input-bg);
-      color: var(--text-primary);
-    }
-
-    .order-summary {
-      background: var(--bg-secondary);
-      padding: 1rem;
-      border-radius: 15px;
-      margin: 1rem 0;
-    }
-
-    .summary-total {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 0.8rem;
-      padding-top: 0.8rem;
-      border-top: 2px solid var(--border);
-      font-weight: 600;
     }
 
     .notification {
@@ -879,7 +591,6 @@
       opacity: 0;
       transition: 0.2s;
       z-index: 300;
-      font-weight: 500;
     }
 
     .notification.show {
@@ -893,14 +604,6 @@
       color: var(--accent);
     }
 
-    .empty-cart-message {
-      text-align: center;
-      color: var(--text-secondary);
-      padding: 2rem;
-      font-style: italic;
-    }
-
-    /* Contact Section */
     .contact-section {
       background: var(--card-gradient);
       border-radius: 32px;
@@ -933,27 +636,6 @@
       margin: 0 auto 0.8rem;
     }
 
-    .contact-icon i {
-      font-size: 1.5rem;
-    }
-
-    .contact-item p:first-of-type {
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-      color: var(--text-primary);
-    }
-
-    .contact-item a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: color 0.2s;
-    }
-
-    .contact-item a:hover {
-      color: var(--accent);
-    }
-
     footer {
       text-align: center;
       padding: 2rem 1rem 1rem;
@@ -963,6 +645,46 @@
       font-size: 0.8rem;
     }
 
+    .btn-primary,
+    .btn-secondary {
+      padding: 12px 24px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent-gradient);
+      color: var(--bg-primary);
+    }
+
+    .btn-secondary {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--input-bg);
+      color: var(--text-primary);
+    }
+
+    .order-summary {
+      background: var(--bg-secondary);
+      padding: 1rem;
+      border-radius: 15px;
+      margin: 1rem 0;
+    }
+
     .close-modal {
       background: none;
       border: none;
@@ -970,534 +692,247 @@
       cursor: pointer;
       color: var(--text-secondary);
     }
-
-    .close-modal:hover {
-      color: var(--accent);
-    }
-
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: var(--bg-secondary);
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--accent);
-      border-radius: 4px;
-    }
   </style>
 </head>
 
 <body>
-  <!-- Floating Gold Particles -->
-  <script>
-    for (let i = 0; i < 40; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
-      const size = Math.random() * 6 + 2;
-      particle.style.width = size + 'px';
-      particle.style.height = size + 'px';
-      particle.style.left = Math.random() * 100 + '%';
-      particle.style.animationDelay = Math.random() * 15 + 's';
-      particle.style.animationDuration = Math.random() * 10 + 8 + 's';
-      particle.style.opacity = Math.random() * 0.4 + 0.1;
-      document.body.appendChild(particle);
-    }
-  </script>
-
-  <div id="menuOverlay" class="cart-overlay" style="z-index: 99;"></div>
+  <script>for (let i = 0; i < 40; i++) { let p = document.createElement('div'); p.className = 'particle'; let s = Math.random() * 6 + 2; p.style.width = s + 'px'; p.style.height = s + 'px'; p.style.left = Math.random() * 100 + '%'; p.style.animationDelay = Math.random() * 15 + 's'; p.style.animationDuration = Math.random() * 10 + 8 + 's'; document.body.appendChild(p); }</script>
+  <div id="menuOverlay" class="cart-overlay" style="z-index:99;"></div>
   <div id="toast" class="notification">✨ Article ajouté</div>
-
-  <!-- Checkout Modal -->
   <div id="checkoutModal" class="modal-overlay">
     <div class="modal-content">
-      <div class="modal-header">
-        <h3><i class="fas fa-truck"></i> Informations de livraison</h3>
+      <div class="modal-header" style="display:flex;justify-content:space-between;margin-bottom:1rem;">
+        <h3><i class="fas fa-truck"></i> <span data-translate="checkoutTitle">Informations de livraison</span></h3>
         <button class="close-modal" onclick="closeCheckoutModal()"><i class="fas fa-times"></i></button>
       </div>
       <form id="checkoutForm">
-        <div class="form-group"><label>Nom complet *</label><input type="text" id="customerName" required></div>
-        <div class="form-group"><label>Téléphone *</label><input type="tel" id="customerPhone" required></div>
-        <div id="emailFieldGroup" class="form-group"><label>Email *</label><input type="email" id="customerEmail"></div>
+        <div class="form-group"><label data-translate="fullName">Nom complet *</label><input type="text"
+            id="customerName" required></div>
+        <div class="form-group"><label data-translate="phone">Téléphone *</label><input type="tel" id="customerPhone"
+            required></div>
+        <div id="emailFieldGroup" class="form-group"><label data-translate="email">Email *</label><input type="email"
+            id="customerEmail"></div>
         <div id="loggedInEmailDisplay" style="display:none;" class="form-group"><label>Email</label>
           <div style="padding:0.8rem; background:var(--bg-secondary); border-radius:12px;"><i
-              class="fas fa-check-circle" style="color:#2c682c;"></i> <span id="displayEmail"></span></div>
+              class="fas fa-check-circle"></i> <span id="displayEmail"></span></div>
         </div>
-        <div class="form-group"><label>Adresse complète *</label><input type="text" id="shippingAddress" required></div>
+        <div class="form-group"><label data-translate="address">Adresse complète *</label><input type="text"
+            id="shippingAddress" required></div>
         <div class="order-summary">
-          <h4>Votre commande</h4>
+          <h4 data-translate="yourOrder">Votre commande</h4>
           <div id="modalCartItems"></div>
-          <div class="summary-total"><span>Total</span><span id="modalTotal">0 TND</span></div>
+          <div class="summary-total"><span data-translate="total">Total</span><span id="modalTotal">0 TND</span></div>
         </div>
-        <div class="modal-buttons"><button type="button" class="btn-secondary"
-            onclick="closeCheckoutModal()">Annuler</button><button type="submit" class="btn-primary"
-            id="submitOrderBtn">Confirmer</button></div>
+        <div class="modal-buttons" style="display:flex;gap:10px;"><button type="button" class="btn-secondary"
+            onclick="closeCheckoutModal()" data-translate="cancel">Annuler</button><button type="submit"
+            class="btn-primary" id="submitOrderBtn" data-translate="confirm">Confirmer</button></div>
       </form>
     </div>
   </div>
-
-  <!-- Product Modal -->
   <div id="productModal" class="modal-overlay">
     <div class="modal-content product-modal-content">
-      <div class="modal-header">
-        <h3 id="productModalTitle"><i class="fas fa-info-circle"></i> Détails du produit</h3>
-        <button class="close-modal" onclick="closeProductModal()"><i class="fas fa-times"></i></button>
+      <div class="modal-header" style="display:flex;justify-content:space-between;padding:1rem;">
+        <h3 id="productModalTitle"><i class="fas fa-info-circle"></i> Détails</h3><button class="close-modal"
+          onclick="closeProductModal()"><i class="fas fa-times"></i></button>
       </div>
-      <div id="productModalBody" class="product-modal-body"></div>
-      <div class="modal-buttons">
-        <button class="btn-secondary" onclick="closeProductModal()">Fermer</button>
-        <button class="btn-primary" id="modalAddToCartBtn">Ajouter au panier</button>
-      </div>
+      <div id="productModalBody" class="product-modal-body" style="padding:1.5rem;text-align:center;"></div>
+      <div class="modal-buttons" style="display:flex;gap:10px;padding:1rem;"><button class="btn-secondary"
+          onclick="closeProductModal()" data-translate="close">Fermer</button><button class="btn-primary"
+          id="modalAddToCartBtn" data-translate="addToCart">Ajouter au panier</button></div>
     </div>
   </div>
-
-  <!-- Cart Sidebar -->
   <div id="cartOverlay" class="cart-overlay"></div>
   <aside id="cartSidebar" class="cart-sidebar">
     <div class="cart-header">
-      <h3><i class="fas fa-bag-shopping"></i> Votre panier</h3><button class="close-cart" id="closeCartBtn"><i
-          class="fas fa-times"></i></button>
+      <h3><i class="fas fa-bag-shopping"></i> <span data-translate="yourCart">Votre panier</span></h3><button
+        class="close-cart" id="closeCartBtn"><i class="fas fa-times"></i></button>
     </div>
     <div id="cartItemsContainer" class="cart-items">
-      <div class="empty-cart-message">Votre panier est vide.</div>
+      <div class="empty-cart-message" data-translate="emptyCart">Votre panier est vide.</div>
     </div>
     <div class="cart-footer">
-      <div class="cart-total"><span>Total</span><span id="cartTotalPrice">0,000 TND</span></div><button
-        class="checkout-btn" id="checkoutBtn">PAIEMENT <i class="fas fa-arrow-right"></i></button>
+      <div class="cart-total"><span data-translate="total">Total</span><span id="cartTotalPrice">0,000 TND</span></div>
+      <button class="checkout-btn" id="checkoutBtn"><span data-translate="payment">PAIEMENT</span> <i
+          class="fas fa-arrow-right"></i></button>
     </div>
   </aside>
-
-  <!-- Header -->
   <header>
-    <div class="container header-flex">
-      <div class="logo"><i class="fas fa-spa"></i>
+    <div class="container header-flex"><a href="index.html" class="logo"><i class="fas fa-spa"></i>
         <h1>Rosa Fragrances</h1>
-      </div>
-      <div style="display: flex; align-items: center;">
+      </a>
+      <div style="display:flex;align-items:center;">
         <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon"
-            style="display: none;"></i></div>
+            style="display:none;"></i></div>
         <div class="cart-icon" id="cartToggle"><i class="fas fa-bag-shopping"></i><span id="cartCount"
-            class="cart-count">0</span></div>
-        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+            class="cart-count">0</span></div><button class="menu-toggle" id="menuToggle"><i
+            class="fas fa-bars"></i></button>
       </div>
-      <div class="nav-links" id="navLinks">
-        <a href="#">COLLECTION</a><a href="#">EXCLUSIVITÉS</a><a href="#">COFFRETS</a>
-        <div class="lang-menu" id="langMenu">
-          <button class="lang-current" id="langCurrentBtn"><span id="currentLangText">FRANÇAIS</span><i
+      <div class="nav-links" id="navLinks"><a href="index.html" data-translate="home">ACCUEIL</a><a href="#"
+          data-translate="collection">COLLECTION</a><a href="#" data-translate="exclusives">EXCLUSIVITÉS</a><a href="#"
+          data-translate="gifts">COFFRETS</a>
+        <div class="lang-menu" id="langMenu"><button class="lang-current"><span id="currentLangText">FRANÇAIS</span><i
               class="fas fa-chevron-down"></i></button>
           <div class="lang-options"><button class="lang-option" data-lang="fr">🇫🇷 Français</button><button
               class="lang-option" data-lang="en">🇬🇧 English</button><button class="lang-option" data-lang="ar">🇸🇦
               العربية</button></div>
-        </div>
-        <a href="login146.html" id="authLink">Se connecter</a><a href="profile.html" id="profileLink"
-          style="display: none;">Mon Profil</a>
+        </div><a href="login146.html" id="authLink" data-translate="signIn">Se connecter</a><a href="profile.html"
+          id="profileLink" style="display:none;" data-translate="myProfile">Mon Profil</a>
       </div>
     </div>
   </header>
-
   <main class="container">
     <section class="hero">
-      <div class="value-proposition" style="text-align:center; margin:2rem auto;">
-        <p style="font-size:1.8rem; color:var(--accent); margin-bottom:1rem;">💎</p>
-        <p style="font-size:1.3rem; font-weight:500;">L'essence du luxe, <span style="color:var(--accent);">en petit
-            format.</span></p>
-        <p style="margin:1rem 0;">Testez, comparez, adoptez. Découvrez notre collection de décants de parfums de niche.
-        </p>
-        <p style="color:var(--accent); font-weight:500;">Authentiques · Abordables · Irrésistibles</p>
-        <p style="margin-top:1rem;">✨ Votre signature olfactive vous attend ✨</p>
+      <div style="text-align:center;margin:2rem auto;">
+        <p style="font-size:1.8rem;color:var(--accent);margin-bottom:1rem;">💎</p>
+        <p style="font-size:1.3rem;font-weight:500;"><span data-translate="heroLine1">L'essence du luxe</span>, <span
+            style="color:var(--accent);"><span data-translate="heroLine2">en petit format.</span></span></p>
+        <p style="margin:1rem 0;" data-translate="heroDesc">Testez, comparez, adoptez. Découvrez notre collection de
+          décants de parfums de niche.</p>
+        <p style="color:var(--accent);font-weight:500;" data-translate="heroFeatures">Authentiques · Abordables ·
+          Irrésistibles</p>
+        <p style="margin-top:1rem;" data-translate="heroTagline">✨ Votre signature olfactive vous attend ✨</p>
       </div>
     </section>
-
-    <div class="categories-section">
-      <div class="category-grid">
-        <a href="man.html" class="category-card cat-man">
-          <h3>Homme</h3>
-          <p>Parfums boisés & épicés</p>
-        </a>
-        <a href="women.html" class="category-card cat-women">
-          <h3>Femme</h3>
-          <p>Parfums floraux & sensuels</p>
-        </a>
-        <a href="unisexe.html" class="category-card cat-unisex">
-          <h3>Unisexe</h3>
-          <p>Pour toutes et tous</p>
-        </a>
-        <a href="kids.html" class="category-card cat-kids">
-          <h3>Enfants</h3>
-          <p>Douceurs & légèreté</p>
-        </a>
-      </div>
-    </div>
-
+    <div class="category-grid"><a href="man.html" class="category-card cat-man">
+        <h3 data-translate="men">Homme</h3>
+        <p data-translate="menDesc">Parfums boisés & épicés</p>
+      </a><a href="women.html" class="category-card cat-women">
+        <h3 data-translate="women">Femme</h3>
+        <p data-translate="womenDesc">Parfums floraux & sensuels</p>
+      </a><a href="unisexe.html" class="category-card cat-unisex">
+        <h3 data-translate="unisex">Unisexe</h3>
+        <p data-translate="unisexDesc">Pour toutes et tous</p>
+      </a><a href="kids.html" class="category-card cat-kids">
+        <h3 data-translate="kids">Enfants</h3>
+        <p data-translate="kidsDesc">Douceurs & légèreté</p>
+      </a></div>
     <div id="loadingProducts" class="loading-spinner"><i class="fas fa-spinner fa-spin fa-3x"></i>
-      <p>Chargement des parfums...</p>
+      <p data-translate="loading">Chargement des parfums...</p>
     </div>
-    <div class="product-grid" id="productGrid" style="display: none;"></div>
+    <div class="product-grid" id="productGrid" style="display:none;"></div>
   </main>
-
   <footer>
     <div class="contact-section">
-      <div style="text-align:center; margin-bottom:1.5rem;">
-        <h3 style="color:var(--accent);">📞 Contactez-nous</h3>
-        <p style="color:var(--text-secondary);">Une question ? Besoin d'aide ? Nous sommes là pour vous.</p>
+      <div style="text-align:center;margin-bottom:1.5rem;">
+        <h3 style="color:var(--accent);"><span data-translate="contactUs">📞 Contactez-nous</span></h3>
+        <p data-translate="contactDesc">Une question ? Besoin d'aide ? Nous sommes là pour vous.</p>
       </div>
       <div class="contact-grid">
         <div class="contact-item">
           <div class="contact-icon"><i class="fas fa-envelope" style="color:var(--accent);"></i></div>
-          <p>Email</p>
-          <a href="mailto:rosafragrances.tn@gmail.com">rosafragrances.tn@gmail.com</a>
+          <p>Email</p><a href="mailto:rosafragrances.tn@gmail.com">rosafragrances.tn@gmail.com</a>
         </div>
         <div class="contact-item">
           <div class="contact-icon"><i class="fas fa-phone-alt" style="color:var(--accent);"></i></div>
-          <p>Téléphone</p>
-          <a href="tel:+21696163366">+216 96 163 366</a>
+          <p>Téléphone</p><a href="tel:+21696163366">+216 96 163 366</a>
         </div>
         <div class="contact-item">
           <div class="contact-icon"><i class="fab fa-whatsapp" style="color:#25D366;"></i></div>
-          <p>WhatsApp</p>
-          <a href="https://wa.me/21696163366" target="_blank">+216 96 163 366</a>
+          <p>WhatsApp</p><a href="https://wa.me/21696163366" target="_blank">+216 96 163 366</a>
         </div>
         <div class="contact-item">
           <div class="contact-icon"><i class="fab fa-instagram" style="color:var(--accent);"></i></div>
-          <p>Instagram</p>
-          <a href="https://instagram.com/rosafragrances" target="_blank">@rosafragrances</a>
+          <p>Instagram</p><a href="https://instagram.com/rosafragrances" target="_blank">@rosafragrances</a>
         </div>
         <div class="contact-item">
           <div class="contact-icon"><i class="fab fa-facebook-f" style="color:#1877F2;"></i></div>
-          <p>Facebook</p>
-          <a href="https://facebook.com/rosafragrances" target="_blank">Rosa Fragrances</a>
+          <p>Facebook</p><a href="https://facebook.com/rosafragrances" target="_blank">Rosa Fragrances</a>
         </div>
       </div>
-      <div style="width:60px; height:2px; background:var(--accent); margin:1.5rem auto 0; border-radius:2px;"></div>
+      <div style="width:60px;height:2px;background:var(--accent);margin:1.5rem auto 0;border-radius:2px;"></div>
     </div>
     <p>© Rosa Fragrances Atelier – impressions éthérées depuis 2026-2027</p>
   </footer>
-
   <script>
-    (function () {
-      const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
-      const SUPABASE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
-      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-      let products = [];
-      let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
-
-      // DOM elements
-      const productGrid = document.getElementById('productGrid');
-      const loadingEl = document.getElementById('loadingProducts');
-      const cartSidebar = document.getElementById('cartSidebar');
-      const cartOverlay = document.getElementById('cartOverlay');
-      const cartToggle = document.getElementById('cartToggle');
-      const closeCartBtn = document.getElementById('closeCartBtn');
-      const cartCountSpan = document.getElementById('cartCount');
-      const cartItemsContainer = document.getElementById('cartItemsContainer');
-      const cartTotalSpan = document.getElementById('cartTotalPrice');
-      const toast = document.getElementById('toast');
-      const checkoutBtn = document.getElementById('checkoutBtn');
-      const menuToggle = document.getElementById('menuToggle');
-      const navLinks = document.getElementById('navLinks');
-      const menuOverlay = document.getElementById('menuOverlay');
-
-      function showToast(msg) { if (toast) { toast.textContent = msg; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2000); } }
-      function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
-      function calculateTotal() { return cart.reduce((sum, i) => sum + (i.price * i.quantity), 0); }
-
-      function updateCartCount() { const total = cart.reduce((acc, i) => acc + (i.quantity || 1), 0); if (cartCountSpan) cartCountSpan.textContent = total; }
-      function saveCart() { localStorage.setItem('RosaFragrances_cart', JSON.stringify(cart)); updateCartCount(); renderCart(); }
-
-      function renderCart() {
-        if (!cartItemsContainer) return;
-        if (cart.length === 0) { cartItemsContainer.innerHTML = '<div class="empty-cart-message">Votre panier est vide.</div>'; if (cartTotalSpan) cartTotalSpan.textContent = '0,000 TND'; return; }
-        let html = ''; let total = 0;
-        cart.forEach(item => {
-          const sub = item.price * (item.quantity || 1);
-          total += sub;
-          html += `<div class="cart-item" data-id="${item.id}"><div class="cart-item-icon"><i class="fas ${item.icon || 'fa-leaf'}"></i></div><div class="cart-item-info"><div class="cart-item-title">${item.name}</div><div class="cart-item-price">${formatPrice(item.price)}</div><div class="cart-item-quantity"><button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button><span class="quantity-value">${item.quantity || 1}</span><button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button></div></div><button class="cart-item-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button></div>`;
-        });
-        cartItemsContainer.innerHTML = html;
-        if (cartTotalSpan) cartTotalSpan.textContent = formatPrice(total);
+    // GLOBAL TRANSLATION SYSTEM
+    const translations = {
+      fr: {
+        home: 'ACCUEIL', collection: 'COLLECTION', exclusives: 'EXCLUSIVITÉS', gifts: 'COFFRETS',
+        signIn: 'Se connecter', myProfile: 'Mon Profil', yourCart: 'Votre panier', emptyCart: 'Votre panier est vide.',
+        total: 'Total', payment: 'PAIEMENT', close: 'Fermer', addToCart: 'Ajouter au panier',
+        cancel: 'Annuler', confirm: 'Confirmer', yourOrder: 'Votre commande', fullName: 'Nom complet *',
+        phone: 'Téléphone *', email: 'Email *', address: 'Adresse complète *', checkoutTitle: 'Informations de livraison',
+        loading: 'Chargement des parfums...', heroLine1: "L'essence du luxe", heroLine2: "en petit format.",
+        heroDesc: "Testez, comparez, adoptez. Découvrez notre collection de décants de parfums de niche.",
+        heroFeatures: "Authentiques · Abordables · Irrésistibles", heroTagline: "✨ Votre signature olfactive vous attend ✨",
+        men: 'Homme', menDesc: 'Parfums boisés & épicés', women: 'Femme', womenDesc: 'Parfums floraux & sensuels',
+        unisex: 'Unisexe', unisexDesc: 'Pour toutes et tous', kids: 'Enfants', kidsDesc: 'Douceurs & légèreté',
+        contactUs: '📞 Contactez-nous', contactDesc: 'Une question ? Besoin d\'aide ? Nous sommes là pour vous.'
+      },
+      en: {
+        home: 'HOME', collection: 'COLLECTION', exclusives: 'EXCLUSIVES', gifts: 'GIFTS',
+        signIn: 'Sign in', myProfile: 'My Profile', yourCart: 'Your cart', emptyCart: 'Your cart is empty.',
+        total: 'Total', payment: 'PAYMENT', close: 'Close', addToCart: 'Add to cart',
+        cancel: 'Cancel', confirm: 'Confirm', yourOrder: 'Your order', fullName: 'Full name *',
+        phone: 'Phone *', email: 'Email *', address: 'Full address *', checkoutTitle: 'Delivery information',
+        loading: 'Loading perfumes...', heroLine1: "The essence of luxury", heroLine2: "in small format.",
+        heroDesc: "Test, compare, adopt. Discover our collection of niche perfume decants.",
+        heroFeatures: "Authentic · Affordable · Irresistible", heroTagline: "✨ Your olfactory signature awaits ✨",
+        men: 'Men', menDesc: 'Woody & spicy fragrances', women: 'Women', womenDesc: 'Floral & sensual fragrances',
+        unisex: 'Unisex', unisexDesc: 'For everyone', kids: 'Kids', kidsDesc: 'Sweetness & lightness',
+        contactUs: '📞 Contact us', contactDesc: 'A question? Need help? We are here for you.'
+      },
+      ar: {
+        home: 'الرئيسية', collection: 'المجموعة', exclusives: 'الحصريات', gifts: 'الهدايا',
+        signIn: 'تسجيل الدخول', myProfile: 'ملفي الشخصي', yourCart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.',
+        total: 'المجموع', payment: 'الدفع', close: 'إغلاق', addToCart: 'أضف إلى السلة',
+        cancel: 'إلغاء', confirm: 'تأكيد', yourOrder: 'طلبك', fullName: 'الاسم الكامل *',
+        phone: 'الهاتف *', email: 'البريد الإلكتروني *', address: 'العنوان الكامل *', checkoutTitle: 'معلومات التسليم',
+        loading: 'جاري تحميل العطور...', heroLine1: "جوهر الفخامة", heroLine2: "بحجم صغير.",
+        heroDesc: "اختبر، قارن، اختر. اكتشف مجموعتنا من عطور النيش.",
+        heroFeatures: "أصلية · بأسعار معقولة · لا تقاوم", heroTagline: "✨ بصمتك العطرية في انتظارك ✨",
+        men: 'رجالي', menDesc: 'عطور خشبية وحارة', women: 'نسائي', womenDesc: 'عطور زهرية وحسية',
+        unisex: 'للجنسين', unisexDesc: 'للجميع', kids: 'أطفال', kidsDesc: 'حلاوة وخفة',
+        contactUs: '📞 اتصل بنا', contactDesc: 'سؤال؟ بحاجة إلى مساعدة؟ نحن هنا من أجلك.'
       }
-
-      function addToCart(id, name, price, icon, image) {
-        const existing = cart.find(i => i.id === id);
-        if (existing) existing.quantity = (existing.quantity || 1) + 1;
-        else cart.push({ id, name, price, icon: icon || 'fa-leaf', image, quantity: 1 });
-        saveCart();
-        showToast('✨ ' + name + ' ajouté');
-      }
-
-      function removeFromCart(id) { cart = cart.filter(i => i.id !== id); saveCart(); showToast('🗑️ Retiré'); }
-
-      function updateQuantity(id, action) {
-        const item = cart.find(i => i.id === id);
-        if (!item) return;
-        if (action === 'increase') item.quantity = (item.quantity || 1) + 1;
-        else if (action === 'decrease') {
-          if (item.quantity > 1) item.quantity -= 1;
-          else { removeFromCart(id); return; }
-        }
-        saveCart();
-      }
-
-      function openCart() { cartSidebar?.classList.add('open'); cartOverlay?.classList.add('active'); }
-      function closeCart() { cartSidebar?.classList.remove('open'); cartOverlay?.classList.remove('active'); }
-
-      // Product modal functions
-      window.openProductModal = function (product) {
-        const modal = document.getElementById('productModal');
-        const modalBody = document.getElementById('productModalBody');
-        const modalTitle = document.getElementById('productModalTitle');
-        const formattedPrice = product.price.toFixed(3).replace('.', ',');
-        const imgHtml = product.image ? `<img src="${product.image}" alt="${product.name}">` : `<i class="fas fa-crown"></i>`;
-        modalBody.innerHTML = `
-          <div class="product-modal-image">${imgHtml}</div>
-          <h2 class="product-modal-name">${product.name}</h2>
-          <div class="product-modal-brand">${product.brand}</div>
-          <div class="product-modal-price">${formattedPrice} TND</div>
-          <div class="product-modal-description">${product.description || 'Découvrez ce parfum d\'exception, une fragrance unique qui révèle votre personnalité.'}</div>
-        `;
-        modalTitle.innerHTML = `<i class="fas fa-info-circle"></i> ${product.name}`;
-        modal.style.display = 'flex';
-        const addBtn = document.getElementById('modalAddToCartBtn');
-        addBtn.onclick = () => {
-          addToCart(product.id, product.name, product.price, product.icon || 'fa-crown', product.image);
-          closeProductModal();
-        };
-      };
-
-      window.closeProductModal = function () { document.getElementById('productModal').style.display = 'none'; };
-
-      document.addEventListener('click', (e) => {
-        const modal = document.getElementById('productModal');
-        if (modal && modal.style.display === 'flex' && e.target === modal) closeProductModal();
-      });
-
-      // Load products from Supabase
-      async function loadProducts() {
-        try {
-          const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: true });
-          if (error) throw error;
-          products = data || [];
-          renderProducts();
-        } catch (error) {
-          console.error('Erreur chargement produits:', error);
-          if (loadingEl) loadingEl.innerHTML = '<div style="color: #c1654c;">❌ Erreur chargement des produits</div>';
-        }
-      }
-
-      function renderProducts() {
-        loadingEl.style.display = 'none';
-        if (!products || products.length === 0) {
-          productGrid.style.display = 'grid';
-          productGrid.innerHTML = '<div class="empty-cart-message" style="grid-column:1/-1;">Aucun parfum disponible pour le moment.</div>';
-          return;
-        }
-        productGrid.style.display = 'grid';
-        let html = '';
-        products.forEach(p => {
-          const imgHtml = p.image ? `<img src="${p.image}" alt="${p.name}">` : `<i class="fas ${p.icon || 'fa-leaf'}"></i>`;
-          html += `
-            <div class="product-card">
-              <div class="product-clickable" style="cursor:pointer; width:100%;" onclick='openProductModal(${JSON.stringify(p).replace(/'/g, "\\'")})'>
-                <div class="product-img">${imgHtml}</div>
-                <div class="product-title">${p.name}</div>
-                <div class="product-brand">${p.brand}</div>
-                <div class="product-price">${parseFloat(p.price).toFixed(3).replace('.', ',')} TND</div>
-              </div>
-              <button class="add-to-cart" data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-icon="${p.icon || 'fa-leaf'}" data-image="${p.image || ''}">Ajouter au panier</button>
-            </div>
-          `;
-        });
-        productGrid.innerHTML = html;
-
-        // Attach cart button event listeners
-        document.querySelectorAll('.add-to-cart').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            addToCart(btn.dataset.id, btn.dataset.name, parseFloat(btn.dataset.price), btn.dataset.icon, btn.dataset.image);
-          });
-        });
-      }
-
-      // Cart event listeners
-      if (cartItemsContainer) {
-        cartItemsContainer.addEventListener('click', (e) => {
-          const rm = e.target.closest('.cart-item-remove');
-          if (rm) { removeFromCart(rm.dataset.id); return; }
-          const qtyBtn = e.target.closest('.quantity-btn');
-          if (qtyBtn) updateQuantity(qtyBtn.dataset.id, qtyBtn.dataset.action);
-        });
-      }
-
-      if (cartToggle) cartToggle.addEventListener('click', openCart);
-      if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
-      if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
-
-      // Checkout modal
-      window.closeCheckoutModal = () => document.getElementById('checkoutModal').style.display = 'none';
-
-      checkoutBtn?.addEventListener('click', async () => {
-        if (cart.length === 0) { showToast('🛒 Votre panier est vide'); return; }
-        const { data: { user } } = await supabase.auth.getUser();
-        const emailField = document.getElementById('emailFieldGroup');
-        const loggedDiv = document.getElementById('loggedInEmailDisplay');
-        const emailInp = document.getElementById('customerEmail');
-        if (user) {
-          emailField.style.display = 'none';
-          loggedDiv.style.display = 'block';
-          document.getElementById('displayEmail').textContent = user.email;
-          emailInp.required = false;
-        } else {
-          emailField.style.display = 'block';
-          loggedDiv.style.display = 'none';
-          emailInp.required = true;
-        }
-        const modalItemsDiv = document.getElementById('modalCartItems');
-        modalItemsDiv.innerHTML = cart.map(i => `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed var(--border);"><span>${i.name} <span style="color:var(--accent);">x${i.quantity}</span></span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`).join('');
-        document.getElementById('modalTotal').textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND';
-        document.getElementById('checkoutModal').style.display = 'flex';
-      });
-
-      window.processOrder = async (event) => {
-        event.preventDefault();
-        const btn = document.getElementById('submitOrderBtn');
-        btn.disabled = true;
-        btn.innerHTML = '<span class="loading-spinner-small" style="display:inline-block; width:18px; height:18px; border:2px solid rgba(255,255,255,0.3); border-radius:50%; border-top-color:white; animation:spin 0.6s linear infinite;"></span> Traitement...';
-        try {
-          const { data: { user } } = await supabase.auth.getUser();
-          const email = user ? user.email : document.getElementById('customerEmail').value;
-          const orderData = {
-            items: cart,
-            total: calculateTotal(),
-            customer_name: document.getElementById('customerName').value,
-            customer_phone: document.getElementById('customerPhone').value,
-            customer_email: email,
-            shipping_address: document.getElementById('shippingAddress').value,
-            status: 'pending'
-          };
-          if (user) orderData.user_id = user.id;
-          const { error } = await supabase.from('orders').insert([orderData]);
-          if (error) throw error;
-          await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/functions/v1/send-order-email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_' },
-            body: JSON.stringify({ order: orderData, customerEmail: email })
-          });
-          cart = [];
-          localStorage.removeItem('RosaFragrances_cart');
-          saveCart();
-          closeCheckoutModal();
-          closeCart();
-          showToast('✅ Commande confirmée! Un email vous a été envoyé.');
-        } catch (error) {
-          console.error('Order error:', error);
-          showToast('❌ Erreur lors de la commande');
-        } finally {
-          btn.disabled = false;
-          btn.innerHTML = 'Confirmer';
-        }
-      };
-
-      document.getElementById('checkoutForm')?.addEventListener('submit', window.processOrder);
-
-      // Auth display
-      async function updateUserDisplay() {
-        const { data: { user } } = await supabase.auth.getUser();
-        const authLink = document.getElementById('authLink');
-        const profileLink = document.getElementById('profileLink');
-        if (user) {
-          if (authLink) authLink.style.display = 'none';
-          if (profileLink) profileLink.style.display = 'block';
-        } else {
-          if (authLink) authLink.style.display = 'block';
-          if (profileLink) profileLink.style.display = 'none';
-        }
-      }
-      updateUserDisplay();
-      supabase.auth.onAuthStateChange(() => updateUserDisplay());
-
-      // Menu toggle
-      function toggleMenu() {
-        const active = navLinks.classList.contains('active');
-        if (active) {
-          navLinks.classList.remove('active');
-          menuOverlay.classList.remove('active');
-          document.body.style.overflow = '';
-        } else {
-          navLinks.classList.add('active');
-          menuOverlay.classList.add('active');
-          document.body.style.overflow = 'hidden';
-          closeCart();
-        }
-      }
-      if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
-      if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
-
-      // Language menu UI
-      const langMenu = document.getElementById('langMenu');
-      const langCurrentBtn = document.getElementById('langCurrentBtn');
-      if (langCurrentBtn) {
-        langCurrentBtn.addEventListener('click', (e) => { e.stopPropagation(); langMenu.classList.toggle('active'); });
-      }
-      document.querySelectorAll('.lang-option').forEach(opt => {
-        opt.addEventListener('click', () => {
-          const lang = opt.dataset.lang;
-          const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-          const currentLangSpan = document.getElementById('currentLangText');
-          if (currentLangSpan) currentLangSpan.textContent = names[lang];
-          langMenu.classList.remove('active');
-          localStorage.setItem('language', lang);
-        });
-      });
-      document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
-
-      loadProducts();
-      saveCart();
-    })();
-
-    // Theme switcher
-    function initTheme() {
-      const savedTheme = localStorage.getItem('theme') || 'light';
-      if (savedTheme === 'dark') {
-        document.body.classList.add('dark');
-        const sunIcon = document.querySelector('#themeToggle .fa-sun');
-        const moonIcon = document.querySelector('#themeToggle .fa-moon');
-        if (sunIcon) sunIcon.style.display = 'none';
-        if (moonIcon) moonIcon.style.display = 'inline-block';
-      } else {
-        document.body.classList.remove('dark');
-        const sunIcon = document.querySelector('#themeToggle .fa-sun');
-        const moonIcon = document.querySelector('#themeToggle .fa-moon');
-        if (sunIcon) sunIcon.style.display = 'inline-block';
-        if (moonIcon) moonIcon.style.display = 'none';
-      }
-    }
-
-    function toggleTheme() {
-      if (document.body.classList.contains('dark')) {
-        document.body.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-        const sunIcon = document.querySelector('#themeToggle .fa-sun');
-        const moonIcon = document.querySelector('#themeToggle .fa-moon');
-        if (sunIcon) sunIcon.style.display = 'inline-block';
-        if (moonIcon) moonIcon.style.display = 'none';
-      } else {
-        document.body.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-        const sunIcon = document.querySelector('#themeToggle .fa-sun');
-        const moonIcon = document.querySelector('#themeToggle .fa-moon');
-        if (sunIcon) sunIcon.style.display = 'none';
-        if (moonIcon) moonIcon.style.display = 'inline-block';
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const themeToggle = document.getElementById('themeToggle');
-      if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
-      initTheme();
-    });
+    };
+    let currentLang = localStorage.getItem('language') || 'fr';
+    function applyTranslations() { document.querySelectorAll('[data-translate]').forEach(el => { const key = el.getAttribute('data-translate'); if (translations[currentLang][key]) el.textContent = translations[currentLang][key]; }); document.body.style.direction = currentLang === 'ar' ? 'rtl' : 'ltr'; document.body.style.textAlign = currentLang === 'ar' ? 'right' : 'left'; }
+    function setLanguage(lang) { currentLang = lang; localStorage.setItem('language', lang); applyTranslations(); }
+    applyTranslations();
+    document.querySelectorAll('.lang-option').forEach(opt => { opt.addEventListener('click', (e) => { e.stopPropagation(); setLanguage(opt.dataset.lang); document.getElementById('currentLangText').textContent = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' }[opt.dataset.lang]; document.getElementById('langMenu')?.classList.remove('active'); }); });
+    const langMenu = document.getElementById('langMenu'); const langCurrent = document.querySelector('.lang-current'); if (langCurrent) langCurrent.addEventListener('click', (e) => { e.stopPropagation(); langMenu.classList.toggle('active'); });
+    document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
+    // Supabase & App Logic
+    const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    let products = [], cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
+    const productGrid = document.getElementById('productGrid'), loadingEl = document.getElementById('loadingProducts');
+    const cartSidebar = document.getElementById('cartSidebar'), cartOverlay = document.getElementById('cartOverlay');
+    const cartToggle = document.getElementById('cartToggle'), closeCartBtn = document.getElementById('closeCartBtn');
+    const cartCountSpan = document.getElementById('cartCount'), cartItemsContainer = document.getElementById('cartItemsContainer');
+    const cartTotalSpan = document.getElementById('cartTotalPrice'), toast = document.getElementById('toast');
+    const checkoutBtn = document.getElementById('checkoutBtn'), menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks'), menuOverlay = document.getElementById('menuOverlay');
+    function showToast(msg) { if (toast) { toast.textContent = msg; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2000); } }
+    function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
+    function calculateTotal() { return cart.reduce((sum, i) => sum + (i.price * i.quantity), 0); }
+    function updateCartCount() { const total = cart.reduce((acc, i) => acc + (i.quantity || 1), 0); if (cartCountSpan) cartCountSpan.textContent = total; }
+    function saveCart() { localStorage.setItem('RosaFragrances_cart', JSON.stringify(cart)); updateCartCount(); renderCart(); }
+    function renderCart() { if (!cartItemsContainer) return; if (cart.length === 0) { cartItemsContainer.innerHTML = '<div class="empty-cart-message" data-translate="emptyCart">Votre panier est vide.</div>'; applyTranslations(); if (cartTotalSpan) cartTotalSpan.textContent = '0,000 TND'; return; } let html = ''; let total = 0; cart.forEach(item => { const sub = item.price * (item.quantity || 1); total += sub; html += `<div class="cart-item" data-id="${item.id}"><div class="cart-item-icon"><i class="fas ${item.icon || 'fa-leaf'}"></i></div><div class="cart-item-info"><div class="cart-item-title">${item.name}</div><div class="cart-item-price">${formatPrice(item.price)}</div><div class="cart-item-quantity"><button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button><span class="quantity-value">${item.quantity || 1}</span><button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button></div></div><button class="cart-item-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button></div>`; }); cartItemsContainer.innerHTML = html; if (cartTotalSpan) cartTotalSpan.textContent = formatPrice(total); applyTranslations(); }
+    function addToCart(id, name, price, icon, image) { const existing = cart.find(i => i.id === id); if (existing) existing.quantity = (existing.quantity || 1) + 1; else cart.push({ id, name, price, icon: icon || 'fa-leaf', image, quantity: 1 }); saveCart(); showToast('✨ ' + name + ' ajouté'); }
+    function removeFromCart(id) { cart = cart.filter(i => i.id !== id); saveCart(); showToast('🗑️ Retiré'); }
+    function updateQuantity(id, action) { const item = cart.find(i => i.id === id); if (!item) return; if (action === 'increase') item.quantity = (item.quantity || 1) + 1; else if (action === 'decrease') { if (item.quantity > 1) item.quantity -= 1; else { removeFromCart(id); return; } } saveCart(); }
+    function openCart() { cartSidebar?.classList.add('open'); cartOverlay?.classList.add('active'); }
+    function closeCart() { cartSidebar?.classList.remove('open'); cartOverlay?.classList.remove('active'); }
+    window.openProductModal = function (product) { const modal = document.getElementById('productModal'); const modalBody = document.getElementById('productModalBody'); const modalTitle = document.getElementById('productModalTitle'); const formattedPrice = product.price.toFixed(3).replace('.', ','); const imgHtml = product.image ? `<img src="${product.image}" alt="${product.name}">` : `<i class="fas fa-crown"></i>`; modalBody.innerHTML = `<div class="product-modal-image">${imgHtml}</div><h2 class="product-modal-name">${product.name}</h2><div class="product-modal-brand">${product.brand}</div><div class="product-modal-price">${formattedPrice} TND</div><div class="product-modal-description">${product.description || 'Découvrez ce parfum d\'exception.'}</div>`; modalTitle.innerHTML = `<i class="fas fa-info-circle"></i> ${product.name}`; modal.style.display = 'flex'; const addBtn = document.getElementById('modalAddToCartBtn'); addBtn.onclick = () => { addToCart(product.id, product.name, product.price, product.icon || 'fa-crown', product.image); closeProductModal(); }; applyTranslations(); };
+    window.closeProductModal = function () { document.getElementById('productModal').style.display = 'none'; };
+    async function loadProducts() { try { loadingEl.style.display = 'block'; productGrid.style.display = 'none'; const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: true }); if (error) throw error; products = data || []; renderProducts(); } catch (error) { console.error(error); loadingEl.innerHTML = '<div style="color:#c1654c;">❌ Erreur chargement</div>'; } }
+    function renderProducts() { loadingEl.style.display = 'none'; if (!products || products.length === 0) { productGrid.style.display = 'grid'; productGrid.innerHTML = '<div class="empty-cart-message">Aucun parfum disponible.</div>'; return; } productGrid.style.display = 'grid'; let html = ''; products.forEach(p => { const imgHtml = p.image ? `<img src="${p.image}" alt="${p.name}">` : `<i class="fas ${p.icon || 'fa-leaf'}"></i>`; html += `<div class="product-card" onclick='openProductModal(${JSON.stringify(p).replace(/'/g, "\\'")})'><div class="product-img">${imgHtml}</div><div class="product-title">${p.name}</div><div class="product-brand">${p.brand}</div><div class="product-price">${parseFloat(p.price).toFixed(3).replace('.', ',')} TND</div><button class="add-to-cart" data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-icon="${p.icon || 'fa-leaf'}" data-image="${p.image || ''}" onclick="event.stopPropagation(); addToCart(this.dataset.id, this.dataset.name, parseFloat(this.dataset.price), this.dataset.icon, this.dataset.image)"><span data-translate="addToCart">Ajouter au panier</span></button></div>`; }); productGrid.innerHTML = html; applyTranslations(); document.querySelectorAll('.add-to-cart').forEach(btn => { btn.addEventListener('click', (e) => { e.stopPropagation(); }); }); }
+    if (cartItemsContainer) cartItemsContainer.addEventListener('click', (e) => { const rm = e.target.closest('.cart-item-remove'); if (rm) { removeFromCart(rm.dataset.id); return; } const qtyBtn = e.target.closest('.quantity-btn'); if (qtyBtn) updateQuantity(qtyBtn.dataset.id, qtyBtn.dataset.action); });
+    if (cartToggle) cartToggle.addEventListener('click', openCart); if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart); if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
+    window.closeCheckoutModal = () => document.getElementById('checkoutModal').style.display = 'none';
+    checkoutBtn?.addEventListener('click', async () => { if (cart.length === 0) { showToast('🛒 Panier vide'); return; } const { data: { user } } = await supabase.auth.getUser(); const emailField = document.getElementById('emailFieldGroup'); const loggedDiv = document.getElementById('loggedInEmailDisplay'); const emailInp = document.getElementById('customerEmail'); if (user) { emailField.style.display = 'none'; loggedDiv.style.display = 'block'; document.getElementById('displayEmail').textContent = user.email; emailInp.required = false; } else { emailField.style.display = 'block'; loggedDiv.style.display = 'none'; emailInp.required = true; } const modalItemsDiv = document.getElementById('modalCartItems'); modalItemsDiv.innerHTML = cart.map(i => `<div style="display:flex; justify-content:space-between; padding:8px 0;"><span>${i.name} x${i.quantity}</span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`).join(''); document.getElementById('modalTotal').textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND'; document.getElementById('checkoutModal').style.display = 'flex'; applyTranslations(); });
+    window.processOrder = async (event) => { event.preventDefault(); const btn = document.getElementById('submitOrderBtn'); btn.disabled = true; btn.innerHTML = '⏳ Traitement...'; try { const { data: { user } } = await supabase.auth.getUser(); const email = user ? user.email : document.getElementById('customerEmail').value; const orderData = { items: cart, total: calculateTotal(), customer_name: document.getElementById('customerName').value, customer_phone: document.getElementById('customerPhone').value, customer_email: email, shipping_address: document.getElementById('shippingAddress').value, status: 'pending' }; if (user) orderData.user_id = user.id; const { error } = await supabase.from('orders').insert([orderData]); if (error) throw error; cart = []; localStorage.removeItem('RosaFragrances_cart'); saveCart(); closeCheckoutModal(); closeCart(); showToast('✅ Commande confirmée!'); } catch (error) { console.error(error); showToast('❌ Erreur'); } finally { btn.disabled = false; btn.innerHTML = translations[currentLang]?.confirm || 'Confirmer'; } };
+    document.getElementById('checkoutForm')?.addEventListener('submit', window.processOrder);
+    async function updateUserDisplay() { const { data: { user } } = await supabase.auth.getUser(); const authLink = document.getElementById('authLink'); const profileLink = document.getElementById('profileLink'); if (user) { if (authLink) authLink.style.display = 'none'; if (profileLink) profileLink.style.display = 'block'; } else { if (authLink) authLink.style.display = 'block'; if (profileLink) profileLink.style.display = 'none'; } }
+    updateUserDisplay(); supabase.auth.onAuthStateChange(() => updateUserDisplay());
+    function toggleMenu() { if (navLinks.classList.contains('active')) { navLinks.classList.remove('active'); menuOverlay.classList.remove('active'); document.body.style.overflow = ''; } else { navLinks.classList.add('active'); menuOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; closeCart(); } }
+    if (menuToggle) menuToggle.addEventListener('click', toggleMenu); if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
+    function initTheme() { const saved = localStorage.getItem('theme') || 'light'; if (saved === 'dark') { document.body.classList.add('dark'); document.querySelector('#themeToggle .fa-sun').style.display = 'none'; document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block'; } else { document.body.classList.remove('dark'); document.querySelector('#themeToggle .fa-sun').style.display = 'inline-block'; document.querySelector('#themeToggle .fa-moon').style.display = 'none'; } }
+    function toggleTheme() { if (document.body.classList.contains('dark')) { document.body.classList.remove('dark'); localStorage.setItem('theme', 'light'); document.querySelector('#themeToggle .fa-sun').style.display = 'inline-block'; document.querySelector('#themeToggle .fa-moon').style.display = 'none'; } else { document.body.classList.add('dark'); localStorage.setItem('theme', 'dark'); document.querySelector('#themeToggle .fa-sun').style.display = 'none'; document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block'; } }
+    document.getElementById('themeToggle')?.addEventListener('click', toggleTheme); initTheme(); loadProducts(); saveCart();
   </script>
 </body>
 
