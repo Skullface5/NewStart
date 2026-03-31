@@ -1268,34 +1268,24 @@
       // SIMPLIFIED PRODUCT LOADING WITH RETRY (NO TIMEOUT RACE)
       // --------------------------------------------------------------
       async function loadProducts(retryCount = 0) {
+        console.log("🚀 loadProducts started");
+
         try {
           const { data, error } = await supabase
             .from('products')
-            .select('*')
-            .order('created_at', { ascending: true });
-          console.log("DATA:", data);
-          console.log("ERROR:", error);
-          if (error) throw error;
+            .select('*');
+
+          console.log("✅ RESPONSE:", data);
+          console.log("❌ ERROR:", error);
+
           products = data || [];
+
+          console.log("📦 PRODUCTS ARRAY:", products);
+
           renderProducts();
+
         } catch (err) {
-          console.error('Product loading error:', err);
-          if (retryCount < 2) {
-            // Retry after 2 seconds
-            if (loadingEl) {
-              loadingEl.innerHTML = `<i class="fas fa-spinner fa-spin fa-3x"></i><p>Tentative ${retryCount + 1}/2...</p>`;
-            }
-            setTimeout(() => loadProducts(retryCount + 1), 2000);
-          } else {
-            // Final failure
-            if (loadingEl) {
-              loadingEl.innerHTML = '<div style="color: #c1654c;">❌ Impossible de charger les produits. Vérifiez votre connexion.</div><button onclick="location.reload()" style="margin-top:1rem;padding:0.5rem 1rem;background:var(--accent);color:white;border:none;border-radius:30px;">Recharger</button>';
-            }
-            if (productGrid) {
-              productGrid.style.display = 'grid';
-              productGrid.innerHTML = '<div class="empty-cart-message" style="grid-column:1/-1;">Problème de connexion. Veuillez réessayer plus tard.</div>';
-            }
-          }
+          console.error('🔥 CATCH ERROR:', err);
         }
       }
 
