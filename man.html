@@ -1103,7 +1103,7 @@
         (function () {
             const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
             const SUPABASE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
-            const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
             console.log('Supabase client created:', supabase);
 
             console.log('✅ supabase.from exists?', typeof supabase.from === 'function');
