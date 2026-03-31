@@ -1232,36 +1232,38 @@
                     return c;
                 });
             }
+            function loadProducts() {
+                console.log('🔍 loadProducts() called - filtering for category: man');
+                console.log('📡 About to query Supabase...');
 
-            async function loadProducts() {
-                try {
-                    console.log('🔍 loadProducts() called - filtering for category: man');
-                    console.log('📡 About to query Supabase...');
+                supabase
+                    .from('products')
+                    .select('*')
+                    .eq('category', 'man')
+                    .order('created_at', { ascending: true })
+                    .then(({ data, error }) => {
+                        console.log('📦 THEN - Data:', data);
+                        console.log('📦 THEN - Error:', error);
+                        console.log('📊 Number of products found:', data?.length || 0);
 
-                    const { data, error } = await supabase
-                        .from('products')
-                        .select('*')
-                        .eq('category', 'man')
-                        .order('created_at', { ascending: true });
+                        if (error) {
+                            console.error('Error from Supabase:', error);
+                            throw error;
+                        }
 
-                    console.log('📦 AFTER QUERY - Data:', data);
-                    console.log('📦 AFTER QUERY - Error:', error);
-                    console.log('📊 Number of products found:', data?.length || 0);
-
-                    if (error) throw error;
-
-                    products = data || [];
-                    renderProducts();
-                } catch (err) {
-                    console.error('❌ Product loading error:', err);
-                    if (loadingEl) {
-                        loadingEl.innerHTML = '<div style="color: #c1654c;">❌ Impossible de charger les produits. Vérifiez votre connexion.</div><button onclick="location.reload()" style="margin-top:1rem;padding:0.5rem 1rem;background:var(--accent);color:white;border:none;border-radius:30px;">Recharger</button>';
-                    }
-                    if (productGrid) {
-                        productGrid.style.display = 'grid';
-                        productGrid.innerHTML = '<div class="empty-cart-message" style="grid-column:1/-1;">Problème de connexion. Veuillez réessayer plus tard.</div>';
-                    }
-                }
+                        products = data || [];
+                        renderProducts();
+                    })
+                    .catch(err => {
+                        console.error('❌ Product loading error:', err);
+                        if (loadingEl) {
+                            loadingEl.innerHTML = '<div style="color: #c1654c;">❌ Impossible de charger les produits. Vérifiez votre connexion.</div><button onclick="location.reload()" style="margin-top:1rem;padding:0.5rem 1rem;background:var(--accent);color:white;border:none;border-radius:30px;">Recharger</button>';
+                        }
+                        if (productGrid) {
+                            productGrid.style.display = 'grid';
+                            productGrid.innerHTML = '<div class="empty-cart-message" style="grid-column:1/-1;">Problème de connexion. Veuillez réessayer plus tard.</div>';
+                        }
+                    });
             }
 
             function renderProducts() {
