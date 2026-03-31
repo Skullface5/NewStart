@@ -10,7 +10,6 @@
   <!-- Supabase client library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* (Your existing CSS remains exactly the same) */
     * {
       margin: 0;
       padding: 0;
@@ -344,8 +343,39 @@
 
     .category-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 1.5rem;
+    }
+
+    /* For tablet/medium screens - 3 columns layout */
+    @media (max-width: 1024px) {
+      .category-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      /* Make Enfants appear under Unisexe (3rd position) */
+      .category-card:last-child {
+        grid-column: 3 / 4;
+      }
+    }
+
+    /* For small tablets - 2 columns layout */
+    @media (max-width: 768px) {
+      .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      /* Reset the grid-column */
+      .category-card:last-child {
+        grid-column: auto;
+      }
+    }
+
+    /* For mobile phones - 1 column layout */
+    @media (max-width: 480px) {
+      .category-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .category-card {
@@ -1115,8 +1145,6 @@
         </a>
       </div>
     </div>
-
-
   </main>
 
   <footer>
@@ -1254,7 +1282,6 @@
         if (modal && modal.style.display === 'flex' && e.target === modal) closeProductModal();
       });
 
-      // Helper function to escape HTML to prevent XSS
       function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, function (m) {
@@ -1304,10 +1331,8 @@
         });
         productGrid.innerHTML = html;
 
-        // Attach click handlers to product-clickable elements
         document.querySelectorAll('.product-clickable').forEach((el) => {
           el.addEventListener('click', (e) => {
-            // Don't trigger if clicking on add-to-cart button
             if (e.target.closest('.add-to-cart')) return;
             const productCard = el.closest('.product-card');
             const productId = productCard.dataset.productId;
@@ -1318,7 +1343,6 @@
           });
         });
 
-        // Attach add-to-cart handlers
         document.querySelectorAll('.add-to-cart').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -1327,7 +1351,6 @@
         });
       }
 
-      // Cart event listeners
       if (cartItemsContainer) {
         cartItemsContainer.addEventListener('click', (e) => {
           const rm = e.target.closest('.cart-item-remove');
@@ -1341,7 +1364,6 @@
       if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
       if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
 
-      // Checkout modal
       window.closeCheckoutModal = () => document.getElementById('checkoutModal').style.display = 'none';
 
       checkoutBtn?.addEventListener('click', async () => {
@@ -1408,7 +1430,6 @@
 
       document.getElementById('checkoutForm')?.addEventListener('submit', window.processOrder);
 
-      // Auth display
       async function updateUserDisplay() {
         const { data: { user } } = await supabase.auth.getUser();
         const authLink = document.getElementById('authLink');
@@ -1424,7 +1445,6 @@
       updateUserDisplay();
       supabase.auth.onAuthStateChange(() => updateUserDisplay());
 
-      // Menu toggle
       function toggleMenu() {
         const active = navLinks.classList.contains('active');
         if (active) {
@@ -1441,7 +1461,6 @@
       if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
       if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
 
-      // Language menu UI
       const langMenu = document.getElementById('langMenu');
       const langCurrentBtn = document.getElementById('langCurrentBtn');
       if (langCurrentBtn) {
@@ -1459,12 +1478,10 @@
       });
       document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
 
-      // Start loading products
       loadProducts();
       saveCart();
     })();
 
-    // Theme switcher
     function initTheme() {
       const savedTheme = localStorage.getItem('theme') || 'light';
       if (savedTheme === 'dark') {
