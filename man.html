@@ -1106,7 +1106,7 @@
             const SUPABASE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
 
             // Create Supabase client - IMPORTANT: use the createClient method
-            const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            const supabase = window.supabase;
 
             // Test if it worked
             console.log('Supabase client created, checking .from method:', typeof supabase.from);
