@@ -1088,6 +1088,12 @@
                 <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
             </div>
             <div class="nav-links" id="navLinks">
+                <div style="padding: 1rem; text-align: right; border-bottom: 1px solid var(--border);">
+                    <button id="closeMenuBtn"
+                        style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--accent);">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
                 <a href="index.html">ACCUEIL</a>
                 <a href="man.html">HOMME</a>
                 <a href="women.html">FEMME</a>
@@ -1508,6 +1514,21 @@
                 }
             }
 
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function (e) {
+                const menu = document.getElementById('navLinks');
+                const menuBtn = document.getElementById('menuToggle');
+
+                // If menu is open and click is not on menu button or menu itself
+                if (menu.classList.contains('active') &&
+                    !menu.contains(e.target) &&
+                    !menuBtn.contains(e.target)) {
+                    menu.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+
             if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
 
             // Close menu when clicking a link
@@ -1596,6 +1617,15 @@
             if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
             initTheme();
         });
+
+        // Close menu button
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        if (closeMenuBtn) {
+            closeMenuBtn.addEventListener('click', function () {
+                navLinks.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
     </script>
 
 </body>
