@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rosa Fragrances | Atelier de Parfums</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    /* Simplified CSS - keeping only essential styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    :root {
+      --accent: #d4af37;
+      --bg-primary: #fff;
+      --text-primary: #2e2a28;
+      --border: rgba(212, 175, 55, 0.2);
+    }
+
+    body {
+      background: #fff9f0;
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    @media (max-width:768px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 28px;
+      padding: 1.5rem;
+      text-align: center;
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1);
+    }
+
+    .product-img {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .product-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-img i {
+      font-size: 4rem;
+      color: var(--accent);
+    }
+
+    .product-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .product-brand {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+    }
+
+    .product-price {
+      font-size: 1.3rem;
+      color: var(--accent);
+      margin: 0.5rem 0;
+    }
+
+    .add-to-cart {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.5rem 1rem;
+      border-radius: 40px;
+      cursor: pointer;
+    }
+
+    .add-to-cart:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    .loading-spinner {
+      text-align: center;
+      padding: 3rem;
+      color: var(--accent);
+    }
+
+    .error-message {
+      text-align: center;
+      padding: 3rem;
+      color: #c1654c;
+    }
+
+    header {
+      background: white;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo i {
+      font-size: 1.8rem;
+      color: var(--accent);
+    }
+
+    .logo h1 {
+      font-size: 1.3rem;
+      letter-spacing: 0.1em;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container header-flex">
+      <div class="logo"><i class="fas fa-spa"></i>
+        <h1>Rosa Fragrances</h1>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="loadingProducts" class="loading-spinner">
+      <i class="fas fa-spinner fa-spin fa-3x"></i>
+      <p>Chargement des parfums...</p>
+    </div>
+    <div class="product-grid" id="productGrid"></div>
+  </main>
+
+  <script>
+    // SIMPLE PRODUCT LOADER - NO COMPLEX LOGIC
+    (async function () {
+      const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
+      const SUPABASE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      const loadingEl = document.getElementById('loadingProducts');
+      const productGrid = document.getElementById('productGrid');
+
+      try {
+        console.log('Fetching products...');
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .order('created_at', { ascending: true });
+
+        if (error) {
+          console.error('Supabase error:', error);
+          throw error;
+        }
+
+        console.log('Products loaded:', data?.length || 0);
+
+        if (!data || data.length === 0) {
+          loadingEl.style.display = 'none';
+          productGrid.innerHTML = '<div style="grid-column:1/-1; text-align:center;">Aucun produit disponible</div>';
+          return;
+        }
+
+        // Hide loading spinner
+        loadingEl.style.display = 'none';
+
+        // Render products
+        let html = '';
+        data.forEach(product => {
+          const imageHtml = product.image ?
+            `<img src="${product.image}" alt="${product.name}">` :
+            `<i class="fas fa-crown"></i>`;
+
+          const priceFormatted = parseFloat(product.price).toFixed(3).replace('.', ',');
+
+          html += `
+            <div class="product-card">
+              <div class="product-img">${imageHtml}</div>
+              <div class="product-title">${product.name}</div>
+              <div class="product-brand">${product.brand}</div>
+              <div class="product-price">${priceFormatted} TND</div>
+              <button class="add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">
+                <i class="fas fa-shopping-cart"></i> Ajouter
+              </button>
+            </div>
+          `;
+        });
+
+        productGrid.innerHTML = html;
+
+        // Simple cart functionality
+        let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
+
+        function saveCart() {
+          localStorage.setItem('RosaFragrances_cart', JSON.stringify(cart));
+        }
+
+        function showToast(msg) {
+          let toast = document.getElementById('toast');
+          if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'toast';
+            toast.style.cssText = 'position:fixed;bottom:20px;left:20px;background:var(--accent);color:white;padding:0.8rem 1.5rem;border-radius:60px;opacity:0;transition:0.2s;z-index:300';
+            document.body.appendChild(toast);
+          }
+          toast.textContent = msg;
+          toast.style.opacity = '1';
+          setTimeout(() => toast.style.opacity = '0', 2000);
+        }
+
+        document.querySelectorAll('.add-to-cart').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.dataset.id;
+            const name = btn.dataset.name;
+            const price = parseFloat(btn.dataset.price);
+
+            const existing = cart.find(i => i.id === id);
+            if (existing) {
+              existing.quantity = (existing.quantity || 1) + 1;
+            } else {
+              cart.push({ id, name, price, quantity: 1 });
+            }
+            saveCart();
+            showToast(`✨ ${name} ajouté`);
+          });
+        });
+
+      } catch (err) {
+        console.error('Fatal error:', err);
+        loadingEl.innerHTML = `
+          <div class="error-message">
+            <i class="fas fa-exclamation-circle"></i>
+            <p>Erreur de chargement: ${err.message}</p>
+            <button onclick="location.reload()" style="margin-top:1rem;padding:0.5rem 1rem;background:var(--accent);color:white;border:none;border-radius:30px;">Recharger</button>
+          </div>
+        `;
+      }
+    })();
+  </script>
+</body>
+
+</html>
