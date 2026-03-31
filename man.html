@@ -1213,6 +1213,7 @@
             async function loadProducts() {
                 try {
                     console.log('🔍 loadProducts() called - filtering for category: man');
+                    console.log('📡 About to query Supabase...');
 
                     const { data, error } = await supabase
                         .from('products')
@@ -1220,7 +1221,8 @@
                         .eq('category', 'man')
                         .order('created_at', { ascending: true });
 
-                    console.log('📦 Supabase response:', { data, error });
+                    console.log('📦 AFTER QUERY - Data:', data);
+                    console.log('📦 AFTER QUERY - Error:', error);
                     console.log('📊 Number of products found:', data?.length || 0);
 
                     if (error) throw error;
