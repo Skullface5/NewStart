@@ -348,24 +348,7 @@
             color: var(--accent);
         }
 
-        /* Mobile menu overlay - Fixed: behind menu, not blocking clicks */
-        .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 150;
-            visibility: hidden;
-            opacity: 0;
-            transition: 0.2s;
-        }
 
-        .menu-overlay.active {
-            visibility: visible;
-            opacity: 1;
-        }
 
         .category-hero {
             text-align: center;
@@ -1026,7 +1009,6 @@
         }
     </script>
 
-    <div id="menuOverlay" class="menu-overlay"></div>
     <div id="toast" class="notification">✨ Article ajouté</div>
 
     <!-- Checkout Modal -->
@@ -1209,7 +1191,6 @@
             const checkoutBtn = document.getElementById('checkoutBtn');
             const menuToggle = document.getElementById('menuToggle');
             const navLinks = document.getElementById('navLinks');
-            const menuOverlay = document.getElementById('menuOverlay');
 
             function showToast(msg) {
                 if (toast) {
@@ -1521,11 +1502,9 @@
                 const active = navLinks.classList.contains('active');
                 if (active) {
                     navLinks.classList.remove('active');
-                    menuOverlay.classList.remove('active');
                     document.body.style.overflow = '';
                 } else {
                     navLinks.classList.add('active');
-                    menuOverlay.classList.add('active');
                     document.body.style.overflow = 'hidden';
                     closeCart();
                 }
@@ -1538,7 +1517,6 @@
             document.querySelectorAll('.nav-links a').forEach(link => {
                 link.addEventListener('click', () => {
                     navLinks.classList.remove('active');
-                    menuOverlay.classList.remove('active');
                     document.body.style.overflow = '';
                 });
             });
