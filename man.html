@@ -1214,7 +1214,6 @@
                 try {
                     console.log('🔍 loadProducts() called - filtering for category: man');
 
-                    // Filter by category = 'man'
                     const { data, error } = await supabase
                         .from('products')
                         .select('*')
@@ -1222,10 +1221,9 @@
                         .order('created_at', { ascending: true });
 
                     console.log('📦 Supabase response:', { data, error });
+                    console.log('📊 Number of products found:', data?.length || 0);
 
                     if (error) throw error;
-
-                    console.log(`✅ Found ${data?.length || 0} products with category 'man'`);
 
                     products = data || [];
                     renderProducts();
@@ -1467,7 +1465,7 @@
         });
 
 
-        
+
     </script>
 </body>
 
