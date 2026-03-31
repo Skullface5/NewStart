@@ -263,6 +263,7 @@
 
         .nav-links.active {
             right: 0;
+            z-index: 201;
         }
 
         .nav-links a {
@@ -285,7 +286,9 @@
             padding-left: 2rem;
         }
 
+        /* Language dropdown - fixed */
         .lang-menu {
+            position: relative;
             border-bottom: 1px solid var(--border);
         }
 
@@ -305,6 +308,14 @@
         .lang-current:hover {
             background: var(--hover-bg);
             color: var(--accent);
+        }
+
+        .lang-current i {
+            transition: transform 0.3s ease;
+        }
+
+        .lang-menu.active .lang-current i {
+            transform: rotate(180deg);
         }
 
         .lang-options {
@@ -335,7 +346,7 @@
             color: var(--accent);
         }
 
-        /* Mobile menu overlay - no blur effect */
+        /* Mobile menu overlay */
         .menu-overlay {
             position: fixed;
             top: 0;
@@ -1101,8 +1112,10 @@
                 <a href="unisexe.html">UNISEXE</a>
                 <a href="kids.html">ENFANTS</a>
                 <div class="lang-menu" id="langMenu">
-                    <button class="lang-current" id="langCurrentBtn"><span id="currentLangText">FRANÇAIS</span><i
-                            class="fas fa-chevron-down"></i></button>
+                    <button class="lang-current" id="langCurrentBtn">
+                        <span id="currentLangText">FRANÇAIS</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
                     <div class="lang-options">
                         <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
                         <button class="lang-option" data-lang="en">🇬🇧 English</button>
@@ -1391,7 +1404,6 @@
                         if (e.target.closest('.add-to-cart')) return;
                         const productCard = el.closest('.product-card');
                         const productId = productCard.dataset.productId;
-                        // Redirect to product page with ID
                         window.location.href = `product.html?id=${productId}`;
                     });
                 });
@@ -1529,13 +1541,22 @@
                 });
             });
 
+            // Language menu - fixed dropdown
             const langMenu = document.getElementById('langMenu');
             const langCurrentBtn = document.getElementById('langCurrentBtn');
+
             if (langCurrentBtn) {
-                langCurrentBtn.addEventListener('click', (e) => { e.stopPropagation(); langMenu.classList.toggle('active'); });
+                langCurrentBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    langMenu.classList.toggle('active');
+                });
             }
+
+            // Close language menu when clicking options
             document.querySelectorAll('.lang-option').forEach(opt => {
-                opt.addEventListener('click', () => {
+                opt.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     const lang = opt.dataset.lang;
                     const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
                     const currentLangSpan = document.getElementById('currentLangText');
@@ -1544,7 +1565,13 @@
                     localStorage.setItem('language', lang);
                 });
             });
-            document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
+
+            // Close language menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (langMenu && !langMenu.contains(e.target)) {
+                    langMenu.classList.remove('active');
+                }
+            });
 
             // Start loading products
             loadProducts();
