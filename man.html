@@ -1105,10 +1105,11 @@
             const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
             const SUPABASE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
 
-            // Create Supabase client - note: window.supabase is the library, we need to call createClient
+            // Create Supabase client - IMPORTANT: use the createClient method
             const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            console.log('Supabase client created successfully');
+            // Test if it worked
+            console.log('Supabase client created, checking .from method:', typeof supabase.from);
 
             let products = [];
             let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
@@ -1265,6 +1266,11 @@
             async function loadProducts() {
                 try {
                     console.log('Loading products for category: man');
+
+                    if (!supabase || typeof supabase.from !== 'function') {
+                        console.error('Supabase client not ready!');
+                        return;
+                    }
 
                     const { data, error } = await supabase
                         .from('products')
