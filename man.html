@@ -1107,6 +1107,9 @@
 
             // Create the Supabase client - this is the correct way
             const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            console.log('supabase object:', supabase);
+            console.log('supabase.from:', supabase.from);
+            console.log('supabase.from("products"):', supabase.from('products'));
 
             console.log('Supabase client created:', supabase);
             console.log('supabase.from exists?', typeof supabase.from === 'function');
@@ -1264,6 +1267,13 @@
             }
 
             async function loadProducts() {
+
+                // Test query immediately
+                supabase.from('products').select('*').limit(1)
+                    .then(result => console.log('TEST RESULT:', result))
+                    .catch(err => console.error('TEST ERROR:', err));
+
+
                 try {
                     console.log('Loading products for category: man');
 
