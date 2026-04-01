@@ -1424,8 +1424,7 @@
                             <div class="product-brand">${escapeHtml(p.brand)}</div>
                             <div class="product-price">${parseFloat(p.price).toFixed(3).replace('.', ',')} TND</div>
                         </div>
-                        <button class="add-to-cart" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${p.price}" data-icon="${p.icon || 'fa-leaf'}" data-image="${p.image || ''}">Ajouter au panier</button>
-                    </div>
+<button class="add-to-cart" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${p.price}" data-icon="${p.icon || 'fa-leaf'}" data-image="${firstImage}">Ajouter au panier</button>                    </div>
                 `;
                 });
                 productGrid.innerHTML = html;
