@@ -258,7 +258,7 @@
             transition: right 0.3s ease-out;
             box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
             border-left: 1px solid var(--border);
-            z-index: 200;
+            z-index: 1000;
             border-radius: 0;
             padding: 0;
         }
@@ -278,6 +278,8 @@
             display: block;
             width: 100%;
             border-bottom: 1px solid var(--border);
+            position: relative;
+            z-index: 1001;
         }
 
         .close-menu-btn i {
@@ -1024,6 +1026,7 @@
         }
     </script>
 
+
     <div id="toast" class="notification">✨ Article ajouté</div>
 
     <!-- Checkout Modal -->
@@ -1187,6 +1190,9 @@
             const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
             const SUPABASE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
 
+            // Create Supabase client
+            const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
             let products = [];
             let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
 
@@ -1205,7 +1211,6 @@
             const menuToggle = document.getElementById('menuToggle');
             const navLinks = document.getElementById('navLinks');
             const closeMenuBtn = document.getElementById('closeMenuBtn');
-
             function showToast(msg) {
                 if (toast) {
                     toast.textContent = msg;
@@ -1537,6 +1542,11 @@
             // Close menu when clicking close button
             if (closeMenuBtn) {
                 closeMenuBtn.addEventListener('click', closeMenu);
+            }
+
+            // Close menu when clicking overlay
+            if (menuOverlay) {
+                menuOverlay.addEventListener('click', closeMenu);
             }
 
             // Close menu when clicking a link
