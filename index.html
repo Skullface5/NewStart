@@ -1580,17 +1580,19 @@
       initTheme();
     });
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
   <style>
     .logo h1 {
       position: relative;
       display: inline-block;
-      min-width: 350px;
-      text-align: center;
+      white-space: nowrap;
     }
 
-    .logo h1 .char {
+    .logo h1 .word {
+      display: inline-block;
+    }
+
+    .logo h1 .word span {
       display: inline-block;
     }
   </style>
@@ -1600,73 +1602,168 @@
       const logoText = document.getElementById('animatedLogo');
       if (!logoText) return;
 
-      const phrases = ['Rose', 'best fragrances', 'Rosa Fragrances'];
+      const phrases = [
+        { text: 'Rosa Fragrances', keep: '' },
+        { text: 'best Fragrances', keep: 'Fragrances' },
+        { text: 'best Prices', keep: 'best' }
+      ];
+
       let currentIndex = 0;
 
-      function animateText(newText) {
-        // Fade out current text
-        const currentChars = document.querySelectorAll('#animatedLogo .char');
-        if (currentChars.length) {
+      function animateChange(newPhrase) {
+        const currentWords = document.querySelectorAll('#animatedLogo .word');
+
+        if (currentWords.length === 0) {
+          // Initial render
+          renderWords(newPhrase.text);
+          return;
+        }
+
+        const newWordsArray = newPhrase.text.split(' ');
+        const oldWordsArray = [];
+        currentWords.forEach(word => {
+          oldWordsArray.push(word.innerText);
+        });
+
+        // Animate out words that are leaving
+        const wordsToRemove = [];
+        const wordsToKeep = [];
+
+        currentWords.forEach((word, idx) => {
+          const oldWord = oldWordsArray[idx];
+          const newWord = newWordsArray[idx];
+
+          if (oldWord !== newWord) {
+            wordsToRemove.push(word);
+          } else {
+            wordsToKeep.push(word);
+          }
+        });
+
+        // Animate out words that are changing
+        if (wordsToRemove.length) {
           anime({
-            targets: currentChars,
+            targets: wordsToRemove,
             opacity: [1, 0],
+            translateX: [-20, 20],
             duration: 300,
             easing: 'easeOutQuad',
             complete: () => {
-              // Change text
-              logoText.innerHTML = '';
-              const chars = [];
-              for (let i = 0; i < newText.length; i++) {
-                const span = document.createElement('span');
-                span.className = 'char';
-                span.textContent = newText[i] === ' ' ? '\u00A0' : newText[i];
-                span.style.display = 'inline-block';
-                span.style.opacity = '0';
-                logoText.appendChild(span);
-                chars.push(span);
-              }
-              // Fade in new text
-              anime({
-                targets: chars,
-                opacity: [0, 1],
-                duration: 400,
-                delay: (el, i) => i * 40,
-                easing: 'easeOutQuad'
-              });
+              wordsToRemove.forEach(word => word.remove());
+              // Add new words
+              addNewWords(newPhrase.text, wordsToKeep);
             }
           });
         } else {
-          // First time - just fade in
-          logoText.innerHTML = '';
-          const chars = [];
-          for (let i = 0; i < newText.length; i++) {
-            const span = document.createElement('span');
-            span.className = 'char';
-            span.textContent = newText[i] === ' ' ? '\u00A0' : newText[i];
-            span.style.display = 'inline-block';
-            span.style.opacity = '0';
-            logoText.appendChild(span);
-            chars.push(span);
-          }
-          anime({
-            targets: chars,
-            opacity: [0, 1],
-            duration: 500,
-            delay: (el, i) => i * 50,
-            easing: 'easeOutQuad'
-          });
+          addNewWords(newPhrase.text, wordsToKeep);
         }
       }
 
-      function startCycle() {
-        // Show first phrase
-        setTimeout(() => animateText(phrases[0]), 500);
+      function addNewWords(newText, existingWords) {
+        const newWordsArray = newText.split(' ');
+        const container = logoText;
 
-        // Cycle through phrases every 4 seconds
+        // Clear container but keep existing words
+        const tempContainer = document.createElement('div');
+        tempContainer.innerHTML = '';
+
+        newWordsArray.forEach((word, idx) => {
+          const existingWord = existingWords[idx];
+
+          if (existingWord && existingWord.innerText === word) {
+            tempContainer.appendChild(existingWord);
+          } else {
+            const wordSpan = document.createElement('span');
+            wordSpan.className = 'word';
+            wordSpan.style.display = 'inline-block';
+
+            // Split word into letters for animation
+            for (let i = 0; i < word.length; i++) {
+              const letter = document.createElement('span');
+              letter.textContent = word[i];
+              letter.style.display = 'inline-block';
+              letter.style.opacity = '0';
+              letter.style.transform = 'translateY(20px)';
+              wordSpan.appendChild(letter);
+            }
+            tempContainer.appendChild(wordSpan);
+
+            // Animate new word letters
+            const letters = wordSpan.querySelectorAll('span');
+            anime({
+              targets: letters,
+              opacity: [0, 1],
+              translateY: [20, 0],
+              duration: 400,
+              delay: (el, i) => i * 40 + (idx * 100),
+              easing: 'easeOutQuad'
+            });
+          }
+
+          // Add space between words
+          if (idx < newWordsArray.length - 1) {
+            const space = document.createTextNode(' ');
+            tempContainer.appendChild(space);
+          }
+        });
+
+        logoText.innerHTML = '';
+        logoText.appendChild(tempContainer);
+      }
+
+      function renderWords(text) {
+        logoText.innerHTML = '';
+        const words = text.split(' ');
+
+        words.forEach((word, idx) => {
+          const wordSpan = document.createElement('span');
+          wordSpan.className = 'word';
+          wordSpan.style.display = 'inline-block';
+
+          for (let i = 0; i < word.length; i++) {
+            const letter = document.createElement('span');
+            letter.textContent = word[i];
+            letter.style.display = 'inline-block';
+            letter.style.opacity = '0';
+            letter.style.transform = 'translateY(20px)';
+            wordSpan.appendChild(letter);
+          }
+          logoText.appendChild(wordSpan);
+
+          if (idx < words.length - 1) {
+            logoText.appendChild(document.createTextNode(' '));
+          }
+
+          // Animate in
+          const letters = wordSpan.querySelectorAll('span');
+          anime({
+            targets: letters,
+            opacity: [0, 1],
+            translateY: [20, 0],
+            duration: 400,
+            delay: (el, i) => i * 40 + (idx * 100),
+            easing: 'easeOutQuad'
+          });
+        });
+      }
+
+      function startCycle() {
+        let step = 0;
+        const sequence = [
+          () => animateChange({ text: 'best Fragrances', keep: 'Fragrances' }),
+          () => animateChange({ text: 'best Prices', keep: 'best' }),
+          () => animateChange({ text: 'Rosa Fragrances', keep: '' })
+        ];
+
+        // Start with initial text
+        renderWords('Rosa Fragrances');
+
+        // Cycle every 3 seconds
         setInterval(() => {
-          currentIndex = (currentIndex + 1) % phrases.length;
-          animateText(phrases[currentIndex]);
-        }, 4000);
+          const next = sequence[step % sequence.length];
+          next();
+          step++;
+        }, 3000);
       }
 
       startCycle();
