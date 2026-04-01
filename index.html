@@ -1039,20 +1039,16 @@
       border-radius: 4px;
     }
 
+    /* Animation styles */
     .logo h1 {
       font-size: 1.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
     }
 
-    @media (max-width: 768px) {
-      .logo h1 {
-        font-size: 1rem;
-      }
-    }
-
-    /* Animation styles */
     .logo h1 .word {
       display: inline-block;
-      margin-right: 8px;
+      margin-right: 6px;
     }
 
     .logo h1 .word:last-child {
@@ -1061,6 +1057,16 @@
 
     .logo h1 .word span {
       display: inline-block;
+    }
+
+    @media (max-width: 768px) {
+      .logo h1 {
+        font-size: 1rem;
+      }
+
+      .logo h1 .word {
+        margin-right: 4px;
+      }
     }
   </style>
 </head>
