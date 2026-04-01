@@ -367,6 +367,25 @@
             color: var(--accent);
         }
 
+        /* Overlay for when menu is open */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+            visibility: hidden;
+            opacity: 1000;
+            transition: 0.2s;
+        }
+
+        .menu-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
         .category-hero {
             text-align: center;
             padding: 2rem 1rem;
@@ -1026,6 +1045,7 @@
         }
     </script>
 
+    <div id="menuOverlay" class="menu-overlay"></div>
     <div id="toast" class="notification">✨ Article ajouté</div>
 
     <!-- Checkout Modal -->
@@ -1185,6 +1205,9 @@
             const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
             const SUPABASE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
 
+            // Create Supabase client
+            const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
             let products = [];
             let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
 
@@ -1203,6 +1226,7 @@
             const menuToggle = document.getElementById('menuToggle');
             const navLinks = document.getElementById('navLinks');
             const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const menuOverlay = document.getElementById('menuOverlay');
 
             function showToast(msg) {
                 if (toast) {
@@ -1390,16 +1414,16 @@
                     const imgHtml = firstImage ? `<img src="${firstImage}" alt="${escapeHtml(p.name)}">` : `<i class="fas ${p.icon || 'fa-leaf'}"></i>`;
 
                     html += `
-                    <div class="product-card" data-product-id="${p.id}">
-                        <div class="product-clickable" style="cursor:pointer; width:100%;">
-                            <div class="product-img">${imgHtml}</div>
-                            <div class="product-title">${escapeHtml(p.name)}</div>
-                            <div class="product-brand">${escapeHtml(p.brand)}</div>
-                            <div class="product-price">${parseFloat(p.price).toFixed(3).replace('.', ',')} TND</div>
-                        </div>
-                        <button class="add-to-cart" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${p.price}" data-icon="${p.icon || 'fa-leaf'}" data-image="${firstImage}">Ajouter au panier</button>
-                    </div>
-                `;
+            <div class="product-card" data-product-id="${p.id}">
+                <div class="product-clickable" style="cursor:pointer; width:100%;">
+                    <div class="product-img">${imgHtml}</div>
+                    <div class="product-title">${escapeHtml(p.name)}</div>
+                    <div class="product-brand">${escapeHtml(p.brand)}</div>
+                    <div class="product-price">${parseFloat(p.price).toFixed(3).replace('.', ',')} TND</div>
+                </div>
+                <button class="add-to-cart" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${p.price}" data-icon="${p.icon || 'fa-leaf'}" data-image="${firstImage}">Ajouter au panier</button>
+            </div>
+        `;
                 });
                 productGrid.innerHTML = html;
 
@@ -1521,11 +1545,13 @@
 
             function closeMenu() {
                 navLinks.classList.remove('active');
+                menuOverlay.classList.remove('active');
                 document.body.style.overflow = '';
             }
 
             function openMenu() {
                 navLinks.classList.add('active');
+                menuOverlay.classList.add('active');
                 document.body.style.overflow = 'hidden';
                 closeCart();
             }
@@ -1544,6 +1570,11 @@
             // Close menu when clicking close button
             if (closeMenuBtn) {
                 closeMenuBtn.addEventListener('click', closeMenu);
+            }
+
+            // Close menu when clicking overlay
+            if (menuOverlay) {
+                menuOverlay.addEventListener('click', closeMenu);
             }
 
             // Close menu when clicking a link
