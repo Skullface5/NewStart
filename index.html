@@ -1686,7 +1686,10 @@
           const wordElement = wordElements[i];
 
           if (wordElement && shouldKeep) {
-            // Word stays - do nothing
+            // Word stays - do nothing, but add space before if needed
+            if (i > 0 && wordElement.previousSibling?.nodeType === 3) {
+              // Keep the space
+            }
             continue;
           }
           else if (wordElement && !shouldKeep && nextWord) {
@@ -1728,6 +1731,9 @@
             if (i === 0) {
               logoText.insertBefore(wordSpan, logoText.firstChild);
             } else {
+              // Add space before new word
+              const space = document.createTextNode(' ');
+              logoText.insertBefore(space, wordElements[i] || null);
               logoText.insertBefore(wordSpan, wordElements[i] || null);
             }
 
@@ -1738,6 +1744,11 @@
             totalAnimations++;
             const letters = Array.from(wordElement.children);
             animateLettersOut(letters, () => {
+              // Remove the word and the space before it
+              const prevSpace = wordElement.previousSibling;
+              if (prevSpace && prevSpace.nodeType === 3 && prevSpace.textContent === ' ') {
+                prevSpace.remove();
+              }
               wordElement.remove();
               checkComplete();
             });
@@ -1777,6 +1788,11 @@
             wordSpan.appendChild(letter);
           }
           logoText.appendChild(wordSpan);
+
+          // Add space between words
+          if (idx < firstWords.length - 1) {
+            logoText.appendChild(document.createTextNode(' '));
+          }
 
           const letters = wordSpan.querySelectorAll('span');
           anime({
