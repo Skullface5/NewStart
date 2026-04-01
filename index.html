@@ -1610,7 +1610,9 @@
       const phrases = [
         { text: 'Rosa Fragrances', keep: [] },
         { text: 'best Fragrances', keep: ['Fragrances'] },
-        { text: 'best Prices', keep: ['best'] }
+        { text: 'best Prices', keep: ['best'] },
+        { text: 'best Choice', keep: ['best'] },
+        { text: 'all that in', keep: [] }
       ];
 
       let currentIndex = 0;
@@ -1712,7 +1714,7 @@
             });
           }
           else if (wordElement && change.shouldKeep) {
-            // Word stays - do nothing, just keep it
+            // Word stays - do nothing
           }
           else if (wordElement && !change.nextWord) {
             // Word needs to be removed
