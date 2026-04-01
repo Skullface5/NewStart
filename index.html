@@ -30,6 +30,10 @@
       }
     }
 
+    .logo h1 .char {
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
 
 
 
@@ -1585,7 +1589,14 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const logoText = document.getElementById('animatedLogo');
-      if (logoText) {
+      if (!logoText) return;
+
+      let animationRunning = false;
+
+      function animateLogo() {
+        if (animationRunning) return;
+        animationRunning = true;
+
         const text = logoText.innerText;
         logoText.innerHTML = '';
 
@@ -1595,6 +1606,9 @@
           const span = document.createElement('span');
           span.className = 'char';
           span.textContent = text[i] === ' ' ? '\u00A0' : text[i];
+          span.style.opacity = '0';
+          span.style.transform = 'translateY(30px)';
+          span.style.display = 'inline-block';
           logoText.appendChild(span);
           chars.push(span);
         }
@@ -1606,9 +1620,20 @@
           translateY: [30, 0],
           duration: 800,
           delay: (el, i) => i * 50,
-          easing: 'easeOutElastic(1, .5)'
+          easing: 'easeOutElastic(1, .5)',
+          complete: function () {
+            animationRunning = false;
+          }
         });
       }
+
+      // Run animation immediately on page load
+      setTimeout(() => {
+        animateLogo();
+      }, 100);
+
+      // Then run every 15 seconds (15000 milliseconds)
+      setInterval(animateLogo, 15000);
     });
   </script>
 </body>
