@@ -1594,6 +1594,7 @@
     .logo h1 .word {
       display: inline-block;
       position: relative;
+      text-align: center;
     }
 
     .logo h1 .word span {
@@ -1617,6 +1618,24 @@
 
       let currentIndex = 0;
 
+      // Pre-calculate max word widths
+      const allWords = [];
+      phrases.forEach(phrase => {
+        phrase.text.split(' ').forEach(word => {
+          if (!allWords.includes(word)) allWords.push(word);
+        });
+      });
+
+      function setWordWidths() {
+        const wordElements = document.querySelectorAll('#animatedLogo .word');
+        wordElements.forEach(el => {
+          const wordText = el.innerText;
+          const maxLength = Math.max(...allWords.map(w => w.length));
+          el.style.minWidth = `${maxLength * 0.8}em`;
+          el.style.textAlign = 'center';
+        });
+      }
+
       function animateOutLetters(letters, callback) {
         if (!letters.length) {
           if (callback) callback();
@@ -1639,7 +1658,8 @@
           translateY: [20, 0],
           duration: 300,
           delay: (el, i) => delayOffset + (i * 30),
-          easing: 'easeOutQuad'
+          easing: 'easeOutQuad',
+          complete: () => setWordWidths()
         });
       }
 
@@ -1650,7 +1670,6 @@
         const currentWordsArray = currentPhrase.text.split(' ');
         const nextWordsArray = nextPhrase.text.split(' ');
 
-        // Find which words stay and which change
         const wordChanges = [];
         for (let i = 0; i < Math.max(currentWordsArray.length, nextWordsArray.length); i++) {
           const currentWord = currentWordsArray[i] || '';
@@ -1664,13 +1683,11 @@
           });
         }
 
-        // Get all word elements
         const wordElements = document.querySelectorAll('#animatedLogo .word');
 
         wordChanges.forEach((change, idx) => {
           const wordElement = wordElements[idx];
           if (!wordElement && change.nextWord) {
-            // New word needs to be created
             const newWordSpan = document.createElement('span');
             newWordSpan.className = 'word';
             newWordSpan.style.display = 'inline-block';
@@ -1696,7 +1713,6 @@
             animateInLetters(letters, idx * 100);
           }
           else if (wordElement && !change.shouldKeep && change.nextWord) {
-            // Word needs to change
             const currentLetters = Array.from(wordElement.children);
 
             animateOutLetters(currentLetters, () => {
@@ -1714,14 +1730,13 @@
             });
           }
           else if (wordElement && change.shouldKeep) {
-            // Word stays - do nothing
+            // Word stays - set width to prevent shift
+            wordElement.style.minWidth = `${Math.max(wordElement.innerText.length, change.nextWord.length) * 0.8}em`;
           }
           else if (wordElement && !change.nextWord) {
-            // Word needs to be removed
             const currentLetters = Array.from(wordElement.children);
             animateOutLetters(currentLetters, () => {
               wordElement.remove();
-              // Remove preceding space if exists
               const prevNode = wordElement.previousSibling;
               if (prevNode && prevNode.nodeType === Node.TEXT_NODE && prevNode.textContent === ' ') {
                 prevNode.remove();
@@ -1733,7 +1748,6 @@
         currentIndex = (currentIndex + 1) % phrases.length;
       }
 
-      // Initial render
       function renderInitial() {
         logoText.innerHTML = '';
         const words = phrases[0].text.split(' ');
@@ -1756,7 +1770,6 @@
             logoText.appendChild(document.createTextNode(' '));
           }
 
-          // Animate in
           const letters = wordSpan.querySelectorAll('span');
           anime({
             targets: letters,
@@ -1764,14 +1777,14 @@
             translateY: [20, 0],
             duration: 400,
             delay: (el, i) => i * 30 + (idx * 100),
-            easing: 'easeOutQuad'
+            easing: 'easeOutQuad',
+            complete: () => setWordWidths()
           });
         });
       }
 
       renderInitial();
 
-      // Cycle every 4 seconds
       setInterval(() => {
         updatePhrase();
       }, 4000);
