@@ -1614,7 +1614,6 @@
       ];
 
       let currentIndex = 0;
-      let currentWords = [];
 
       function animateOutLetters(letters, callback) {
         if (!letters.length) {
@@ -1713,13 +1712,7 @@
             });
           }
           else if (wordElement && change.shouldKeep) {
-            // Word stays, do nothing or subtle pulse
-            anime({
-              targets: wordElement,
-              scale: [1, 1.05, 1],
-              duration: 300,
-              easing: 'easeOutQuad'
-            });
+            // Word stays - do nothing, just keep it
           }
           else if (wordElement && !change.nextWord) {
             // Word needs to be removed
