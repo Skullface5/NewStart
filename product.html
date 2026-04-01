@@ -160,12 +160,25 @@
             transition: right 0.3s ease-out;
             box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
             border-left: 1px solid var(--border);
-            z-index: 200;
-            padding: 80px 0 2rem 0;
+            z-index: 1001;
+            padding: 0;
         }
 
         .nav-links.active {
             right: 0;
+        }
+
+        .close-menu-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--accent);
+            padding: 1rem;
+            text-align: right;
+            display: block;
+            width: 100%;
+            border-bottom: 1px solid var(--border);
         }
 
         .nav-links a {
@@ -184,6 +197,7 @@
         }
 
         .lang-menu {
+            position: relative;
             border-bottom: 1px solid var(--border);
         }
 
@@ -198,6 +212,14 @@
             font-size: 1rem;
             color: var(--text-primary);
             cursor: pointer;
+        }
+
+        .lang-current i {
+            transition: transform 0.3s ease;
+        }
+
+        .lang-menu.active .lang-current i {
+            transform: rotate(180deg);
         }
 
         .lang-options {
@@ -221,24 +243,6 @@
             font-size: 0.9rem;
             cursor: pointer;
             color: var(--text-secondary);
-        }
-
-        .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 150;
-            visibility: hidden;
-            opacity: 0;
-            transition: 0.2s;
-        }
-
-        .menu-overlay.active {
-            visibility: visible;
-            opacity: 1;
         }
 
         .back-link {
@@ -286,24 +290,73 @@
             }
         }
 
-        .product-image {
+        /* Image Gallery */
+        .product-gallery {
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+            gap: 1rem;
         }
 
-        .product-image img {
+        .main-image {
             width: 100%;
-            max-width: 300px;
-            height: auto;
-            border-radius: 50%;
-            box-shadow: var(--shadow-lg);
-            object-fit: cover;
             aspect-ratio: 1 / 1;
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid var(--border);
         }
 
-        .product-image i {
-            font-size: 8rem;
+        .main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .main-image i {
+            font-size: 5rem;
+            color: var(--accent);
+        }
+
+        .thumbnail-grid {
+            display: flex;
+            gap: 0.8rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .thumbnail {
+            width: 70px;
+            height: 70px;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            background: var(--bg-secondary);
+        }
+
+        .thumbnail.active {
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnail i {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
             color: var(--accent);
         }
 
@@ -615,12 +668,16 @@
                 width: 80px;
                 height: 80px;
             }
+
+            .thumbnail {
+                width: 55px;
+                height: 55px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div id="menuOverlay" class="menu-overlay"></div>
     <div id="toast" class="notification">✨ Article ajouté</div>
 
     <!-- Cart Sidebar -->
@@ -633,7 +690,7 @@
                     class="fas fa-times"></i></button>
         </div>
         <div id="cartItemsContainer" class="cart-items">
-            <div class="empty-cart-message" style="text-align:center; padding:2rem;">Votre panier est vide.</div>
+            <div style="text-align:center; padding:2rem;">Votre panier est vide.</div>
         </div>
         <div class="cart-footer">
             <div class="cart-total"><span>Total</span><span id="cartTotalPrice">0,000 TND</span></div>
@@ -655,14 +712,17 @@
                 <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
             </div>
             <div class="nav-links" id="navLinks">
+                <button class="close-menu-btn" id="closeMenuBtn"><i class="fas fa-times"></i></button>
                 <a href="index.html">ACCUEIL</a>
                 <a href="man.html">HOMME</a>
                 <a href="women.html">FEMME</a>
                 <a href="unisexe.html">UNISEXE</a>
                 <a href="kids.html">ENFANTS</a>
                 <div class="lang-menu" id="langMenu">
-                    <button class="lang-current"><span id="currentLangText">FRANÇAIS</span><i
-                            class="fas fa-chevron-down"></i></button>
+                    <button class="lang-current" id="langCurrentBtn">
+                        <span id="currentLangText">FRANÇAIS</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
                     <div class="lang-options">
                         <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
                         <button class="lang-option" data-lang="en">🇬🇧 English</button>
@@ -701,11 +761,9 @@
             let allProducts = [];
             let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
 
-            // Get product ID from URL
             const urlParams = new URLSearchParams(window.location.search);
             const productId = urlParams.get('id');
 
-            // DOM elements
             const productDetailContainer = document.getElementById('productDetailContainer');
             const suggestionsContainer = document.getElementById('suggestionsContainer');
             const suggestionsGrid = document.getElementById('suggestionsGrid');
@@ -718,6 +776,9 @@
             const cartTotalSpan = document.getElementById('cartTotalPrice');
             const toast = document.getElementById('toast');
             const checkoutBtn = document.getElementById('checkoutBtn');
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
 
             function showToast(msg) {
                 toast.textContent = msg;
@@ -871,11 +932,21 @@
                 }
             }
 
-            // Display product details
+            // Display product details with image gallery
             function displayProduct(product) {
-                const imgHtml = product.image
-                    ? `<img src="${product.image}" alt="${escapeHtml(product.name)}">`
-                    : `<i class="fas fa-crown"></i>`;
+                // Parse images from JSON string
+                let images = [];
+                try {
+                    if (product.images && typeof product.images === 'string') {
+                        images = JSON.parse(product.images);
+                    } else if (product.images && Array.isArray(product.images)) {
+                        images = product.images;
+                    } else if (product.image) {
+                        images = [product.image];
+                    }
+                } catch (e) {
+                    images = [];
+                }
 
                 const seasonNames = { all: 'Toutes saisons', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne' };
                 const categoryNames = { man: 'Homme', women: 'Femme', unisexe: 'Unisexe', kids: 'Enfants' };
@@ -883,10 +954,28 @@
                 const seasonName = seasonNames[product.season] || 'Toutes saisons';
                 const categoryName = categoryNames[product.category] || product.category;
 
+                // Generate thumbnail grid HTML
+                let thumbnailsHtml = '';
+                let mainImageHtml = '';
+
+                if (images.length > 0) {
+                    mainImageHtml = `<img src="${images[0]}" alt="${escapeHtml(product.name)}" id="mainImage">`;
+                    thumbnailsHtml = images.map((img, idx) => `
+                        <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="document.getElementById('mainImage').src='${img}'; document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active')); this.classList.add('active')">
+                            <img src="${img}" alt="thumbnail ${idx + 1}">
+                        </div>
+                    `).join('');
+                } else {
+                    mainImageHtml = `<i class="fas fa-crown"></i>`;
+                }
+
                 productDetailContainer.innerHTML = `
                     <div class="product-detail">
-                        <div class="product-image">
-                            ${imgHtml}
+                        <div class="product-gallery">
+                            <div class="main-image">
+                                ${mainImageHtml}
+                            </div>
+                            ${images.length > 1 ? `<div class="thumbnail-grid">${thumbnailsHtml}</div>` : ''}
                         </div>
                         <div class="product-info">
                             <h1>${escapeHtml(product.name)}</h1>
@@ -897,7 +986,7 @@
                             </div>
                             <div class="product-price">${formatPrice(product.price)}</div>
                             <div class="product-description">${escapeHtml(product.description || 'Découvrez ce parfum d\'exception, une fragrance unique qui révèle votre personnalité.')}</div>
-                            <button class="add-to-cart-btn" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${product.price}" data-icon="${product.icon || 'fa-crown'}" data-image="${product.image || ''}">
+                            <button class="add-to-cart-btn" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${product.price}" data-icon="${product.icon || 'fa-crown'}" data-image="${images[0] || ''}">
                                 <i class="fas fa-shopping-cart"></i> Ajouter au panier
                             </button>
                         </div>
@@ -919,32 +1008,17 @@
                 }
             }
 
-            // Load suggestions based on same category AND same season
+            // Load suggestions based on same category
             function loadSuggestions() {
                 if (!currentProduct || !allProducts.length) return;
 
-                // Find suggestions: same category AND same season, exclude current product
+                // Find suggestions: same category, exclude current product
                 const suggestions = allProducts.filter(p =>
                     p.id !== currentProduct.id &&
-                    p.category === currentProduct.category &&
-                    p.season === currentProduct.season
-                );
+                    p.category === currentProduct.category
+                ).slice(0, 8);
 
-                // If not enough suggestions, also add products from same category (different season)
-                let finalSuggestions = [...suggestions];
-                if (finalSuggestions.length < 4) {
-                    const sameCategory = allProducts.filter(p =>
-                        p.id !== currentProduct.id &&
-                        p.category === currentProduct.category &&
-                        p.season !== currentProduct.season
-                    );
-                    finalSuggestions = [...finalSuggestions, ...sameCategory];
-                }
-
-                // Limit to 8 suggestions
-                finalSuggestions = finalSuggestions.slice(0, 8);
-
-                if (finalSuggestions.length === 0) {
+                if (suggestions.length === 0) {
                     suggestionsContainer.style.display = 'none';
                     return;
                 }
@@ -952,10 +1026,15 @@
                 suggestionsContainer.style.display = 'block';
 
                 let html = '';
-                finalSuggestions.forEach(product => {
-                    const imgHtml = product.image
-                        ? `<img src="${product.image}" alt="${escapeHtml(product.name)}">`
-                        : `<i class="fas fa-leaf"></i>`;
+                suggestions.forEach(product => {
+                    // Get first image
+                    let firstImage = '';
+                    try {
+                        const prodImages = product.images ? JSON.parse(product.images) : [];
+                        firstImage = prodImages[0] || '';
+                    } catch (e) { }
+
+                    const imgHtml = firstImage ? `<img src="${firstImage}" alt="${escapeHtml(product.name)}">` : `<i class="fas fa-leaf"></i>`;
 
                     html += `
                         <div class="suggestion-card" onclick="window.location.href='product.html?id=${product.id}'">
@@ -996,42 +1075,56 @@
             if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
             if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
 
-            // Menu toggle
-            const menuToggle = document.getElementById('menuToggle');
-            const navLinks = document.getElementById('navLinks');
-            const menuOverlay = document.getElementById('menuOverlay');
-
-            function toggleMenu() {
-                const active = navLinks.classList.contains('active');
-                if (active) {
-                    navLinks.classList.remove('active');
-                    menuOverlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                } else {
-                    navLinks.classList.add('active');
-                    menuOverlay.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                    closeCart();
-                }
+            // Menu functions
+            function closeMenu() {
+                navLinks.classList.remove('active');
+                document.body.style.overflow = '';
             }
 
-            if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
-            if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
+            function openMenu() {
+                navLinks.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            if (menuToggle) menuToggle.addEventListener('click', () => {
+                navLinks.classList.contains('active') ? closeMenu() : openMenu();
+            });
+
+            if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
 
             document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navLinks.classList.remove('active');
-                    menuOverlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                });
+                link.addEventListener('click', closeMenu);
             });
 
             // Language menu
             const langMenu = document.getElementById('langMenu');
-            const langCurrentBtn = document.querySelector('#langMenu .lang-current');
+            const langCurrentBtn = document.getElementById('langCurrentBtn');
+
             if (langCurrentBtn) {
-                langCurrentBtn.addEventListener('click', (e) => { e.stopPropagation(); langMenu.classList.toggle('active'); });
+                langCurrentBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    langMenu.classList.toggle('active');
+                });
             }
+
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                opt.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const lang = opt.dataset.lang;
+                    const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+                    const currentLangSpan = document.getElementById('currentLangText');
+                    if (currentLangSpan) currentLangSpan.textContent = names[lang];
+                    langMenu.classList.remove('active');
+                    localStorage.setItem('language', lang);
+                });
+            });
+
+            document.addEventListener('click', (e) => {
+                if (langMenu && !langMenu.contains(e.target)) {
+                    langMenu.classList.remove('active');
+                }
+            });
 
             // Theme switcher
             function initTheme() {
