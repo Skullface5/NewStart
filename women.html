@@ -279,7 +279,7 @@
             width: 100%;
             border-bottom: 1px solid var(--border);
             position: relative;
-            z-index: 1001;
+            z-index: 1002;
         }
 
         .close-menu-btn i {
@@ -365,6 +365,25 @@
         .lang-option:hover {
             background: var(--hover-bg);
             color: var(--accent);
+        }
+
+        /* Overlay for when menu is open */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+            visibility: hidden;
+            opacity: 1000;
+            transition: 0.2s;
+        }
+
+        .menu-overlay.active {
+            visibility: visible;
+            opacity: 1;
         }
 
         .category-hero {
@@ -1026,7 +1045,7 @@
         }
     </script>
 
-
+    <div id="menuOverlay" class="menu-overlay"></div>
     <div id="toast" class="notification">✨ Article ajouté</div>
 
     <!-- Checkout Modal -->
@@ -1211,6 +1230,8 @@
             const menuToggle = document.getElementById('menuToggle');
             const navLinks = document.getElementById('navLinks');
             const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const menuOverlay = document.getElementById('menuOverlay');
+
             function showToast(msg) {
                 if (toast) {
                     toast.textContent = msg;
@@ -1519,11 +1540,13 @@
 
             function closeMenu() {
                 navLinks.classList.remove('active');
+                menuOverlay.classList.remove('active');
                 document.body.style.overflow = '';
             }
 
             function openMenu() {
                 navLinks.classList.add('active');
+                menuOverlay.classList.add('active');
                 document.body.style.overflow = 'hidden';
                 closeCart();
             }
