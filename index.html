@@ -9,7 +9,31 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- Supabase client library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
   <style>
+    /* Animated logo text */
+    .animated-logo {
+      position: relative;
+    }
+
+    .animated-logo .char {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.5s forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+
+
+
     * {
       margin: 0;
       padding: 0;
@@ -1128,7 +1152,7 @@
   <header>
     <div class="container header-flex">
       <div class="logo"><i class="fas fa-spa"></i>
-        <h1>Rosa Fragrances</h1>
+        <h1 id="animatedLogo">Rosa Fragrances</h1>
       </div>
       <div style="display: flex; align-items: center;">
         <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon"
@@ -1556,6 +1580,35 @@
       const themeToggle = document.getElementById('themeToggle');
       if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
       initTheme();
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const logoText = document.getElementById('animatedLogo');
+      if (logoText) {
+        const text = logoText.innerText;
+        logoText.innerHTML = '';
+
+        // Create spans for each character
+        const chars = [];
+        for (let i = 0; i < text.length; i++) {
+          const span = document.createElement('span');
+          span.className = 'char';
+          span.textContent = text[i] === ' ' ? '\u00A0' : text[i];
+          logoText.appendChild(span);
+          chars.push(span);
+        }
+
+        // Anime.js animation
+        anime({
+          targets: chars,
+          opacity: [0, 1],
+          translateY: [30, 0],
+          duration: 800,
+          delay: (el, i) => i * 50,
+          easing: 'easeOutElastic(1, .5)'
+        });
+      }
     });
   </script>
 </body>
