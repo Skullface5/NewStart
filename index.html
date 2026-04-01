@@ -30,6 +30,12 @@
       }
     }
 
+    .logo h1 {
+      position: relative;
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+
     .logo h1 .char {
       display: inline-block;
       transition: all 0.3s ease;
@@ -1591,49 +1597,160 @@
       const logoText = document.getElementById('animatedLogo');
       if (!logoText) return;
 
-      let animationRunning = false;
+      let isAnimating = false;
+      let timeoutIds = [];
 
-      function animateLogo() {
-        if (animationRunning) return;
-        animationRunning = true;
-
-        const text = logoText.innerText;
-        logoText.innerHTML = '';
-
-        // Create spans for each character
-        const chars = [];
-        for (let i = 0; i < text.length; i++) {
-          const span = document.createElement('span');
-          span.className = 'char';
-          span.textContent = text[i] === ' ' ? '\u00A0' : text[i];
-          span.style.opacity = '0';
-          span.style.transform = 'translateY(30px)';
-          span.style.display = 'inline-block';
-          logoText.appendChild(span);
-          chars.push(span);
-        }
-
-        // Anime.js animation
-        anime({
-          targets: chars,
-          opacity: [0, 1],
-          translateY: [30, 0],
-          duration: 800,
-          delay: (el, i) => i * 50,
-          easing: 'easeOutElastic(1, .5)',
-          complete: function () {
-            animationRunning = false;
-          }
-        });
+      function clearTimeouts() {
+        timeoutIds.forEach(id => clearTimeout(id));
+        timeoutIds = [];
       }
 
-      // Run animation immediately on page load
-      setTimeout(() => {
-        animateLogo();
-      }, 100);
+      function resetToNormal() {
+        if (isAnimating) return;
+        logoText.innerHTML = 'Rosa Fragrances';
+        logoText.style.opacity = '1';
+      }
 
-      // Then run every 15 seconds (15000 milliseconds)
-      setInterval(animateLogo, 15000);
+      function animateSequence() {
+        if (isAnimating) return;
+        isAnimating = true;
+        clearTimeouts();
+
+        const originalText = 'Rosa Fragrances';
+
+        // Step 1: After 0.5s, show only "Ros"
+        timeoutIds.push(setTimeout(() => {
+          logoText.innerHTML = '';
+          const chars = [];
+          const text = 'Ros';
+          for (let i = 0; i < text.length; i++) {
+            const span = document.createElement('span');
+            span.className = 'char';
+            span.textContent = text[i];
+            span.style.display = 'inline-block';
+            span.style.opacity = '0';
+            span.style.transform = 'translateY(20px)';
+            logoText.appendChild(span);
+            chars.push(span);
+          }
+          anime({
+            targets: chars,
+            opacity: [0, 1],
+            translateY: [20, 0],
+            duration: 400,
+            delay: (el, i) => i * 100,
+            easing: 'easeOutQuad'
+          });
+        }, 500));
+
+        // Step 2: After 5 secs, add "e" to become "Rose"
+        timeoutIds.push(setTimeout(() => {
+          logoText.innerHTML = '';
+          const chars = [];
+          const text = 'Rose';
+          for (let i = 0; i < text.length; i++) {
+            const span = document.createElement('span');
+            span.className = 'char';
+            span.textContent = text[i];
+            span.style.display = 'inline-block';
+            span.style.opacity = '0';
+            span.style.transform = 'translateY(20px)';
+            logoText.appendChild(span);
+            chars.push(span);
+          }
+          anime({
+            targets: chars,
+            opacity: [0, 1],
+            translateY: [20, 0],
+            duration: 400,
+            delay: (el, i) => i * 100,
+            easing: 'easeOutQuad'
+          });
+        }, 5500));
+
+        // Step 3: After another 5 secs, change to "best fragrances"
+        timeoutIds.push(setTimeout(() => {
+          logoText.innerHTML = '';
+          const chars = [];
+          const text = 'best fragrances';
+          for (let i = 0; i < text.length; i++) {
+            const span = document.createElement('span');
+            span.className = 'char';
+            span.textContent = text[i];
+            span.style.display = 'inline-block';
+            span.style.opacity = '0';
+            span.style.transform = 'translateY(20px)';
+            logoText.appendChild(span);
+            chars.push(span);
+          }
+          anime({
+            targets: chars,
+            opacity: [0, 1],
+            translateY: [20, 0],
+            duration: 500,
+            delay: (el, i) => i * 50,
+            easing: 'easeOutQuad'
+          });
+        }, 10500));
+
+        // Step 4: After another 5 secs, character reset animation and return to normal
+        timeoutIds.push(setTimeout(() => {
+          // Character reset animation (shake/rotate effect)
+          const currentChars = document.querySelectorAll('#animatedLogo .char');
+          if (currentChars.length) {
+            anime({
+              targets: currentChars,
+              rotate: [0, 15, -15, 10, -10, 0],
+              translateX: [0, -5, 5, -3, 3, 0],
+              duration: 600,
+              easing: 'easeOutQuad',
+              complete: () => {
+                // Return to original text
+                logoText.innerHTML = originalText;
+                logoText.style.opacity = '1';
+
+                // Add a subtle bounce animation to the original text
+                anime({
+                  targets: logoText,
+                  scale: [0.95, 1],
+                  duration: 400,
+                  easing: 'easeOutElastic(1, .5)'
+                });
+
+                isAnimating = false;
+              }
+            });
+          } else {
+            logoText.innerHTML = originalText;
+            isAnimating = false;
+          }
+        }, 15500));
+
+        // Schedule next cycle after this one completes (add 2 sec buffer)
+        timeoutIds.push(setTimeout(() => {
+          if (!isAnimating) {
+            animateSequence();
+          }
+        }, 17500));
+      }
+
+      // Start the sequence after page loads
+      setTimeout(() => {
+        animateSequence();
+      }, 1000);
+
+      // Optional: Pause animation on hover
+      logoText.addEventListener('mouseenter', () => {
+        clearTimeouts();
+        isAnimating = false;
+        logoText.innerHTML = 'Rosa Fragrances';
+      });
+
+      logoText.addEventListener('mouseleave', () => {
+        clearTimeouts();
+        isAnimating = false;
+        setTimeout(() => animateSequence(), 1000);
+      });
     });
   </script>
 </body>
