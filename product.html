@@ -168,6 +168,9 @@
 
         .nav-links.active {
             right: 0;
+            background: red;
+            /* Temporary - this will turn menu red */
+
         }
 
         .close-menu-btn {
@@ -190,6 +193,8 @@
             transition: all 0.2s;
             border-bottom: 1px solid var(--border);
             display: block;
+            pointer-events: auto !important;
+            cursor: pointer;
         }
 
         .nav-links a:hover {
