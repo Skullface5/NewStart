@@ -1598,7 +1598,9 @@
       display: inline-block;
       position: relative;
       text-align: center;
-      width: 100px;
+      width: auto;
+      margin-right: -8px;
+      /* Overlap words slightly */
     }
 
     .logo h1 .word span {
@@ -1606,9 +1608,14 @@
       will-change: transform, opacity;
     }
 
+    /* Remove space between words */
+    .logo h1 .word-space {
+      display: none;
+    }
+
     @media (max-width: 768px) {
       .logo h1 .word {
-        width: 70px;
+        margin-right: -4px;
       }
 
       .logo h1 {
@@ -1698,7 +1705,7 @@
             const newWordSpan = document.createElement('span');
             newWordSpan.className = 'word';
             newWordSpan.style.display = 'inline-block';
-            newWordSpan.style.width = '100px';
+            newWordSpan.style.marginRight = '-8px';
             newWordSpan.style.textAlign = 'center';
 
             const letters = [];
@@ -1714,8 +1721,6 @@
             if (idx === 0) {
               logoText.insertBefore(newWordSpan, logoText.firstChild);
             } else {
-              const space = document.createTextNode(' ');
-              logoText.insertBefore(space, wordElements[idx] || null);
               logoText.insertBefore(newWordSpan, wordElements[idx] || null);
             }
 
@@ -1740,7 +1745,7 @@
             });
           }
           else if (wordElement && change.shouldKeep) {
-            // Word stays - just keep it
+            // Word stays
             if (idx === wordChanges.length - 1 && totalAnimations === 0) {
               currentIndex = (currentIndex + 1) % phrases.length;
             }
@@ -1750,10 +1755,6 @@
             const currentLetters = Array.from(wordElement.children);
             animateOutLetters(currentLetters, () => {
               wordElement.remove();
-              const prevNode = wordElement.previousSibling;
-              if (prevNode && prevNode.nodeType === Node.TEXT_NODE && prevNode.textContent === ' ') {
-                prevNode.remove();
-              }
               checkAllComplete();
             });
           }
@@ -1774,7 +1775,7 @@
           const wordSpan = document.createElement('span');
           wordSpan.className = 'word';
           wordSpan.style.display = 'inline-block';
-          wordSpan.style.width = '100px';
+          wordSpan.style.marginRight = '-8px';
           wordSpan.style.textAlign = 'center';
 
           for (let i = 0; i < word.length; i++) {
@@ -1785,10 +1786,6 @@
             wordSpan.appendChild(letter);
           }
           logoText.appendChild(wordSpan);
-
-          if (idx < words.length - 1) {
-            logoText.appendChild(document.createTextNode(' '));
-          }
 
           const letters = wordSpan.querySelectorAll('span');
           anime({
@@ -1801,7 +1798,6 @@
             complete: () => {
               completedAnimations++;
               if (completedAnimations === words.length) {
-                // Start cycling after initial animation
                 setTimeout(() => {
                   setInterval(() => {
                     updatePhrase();
