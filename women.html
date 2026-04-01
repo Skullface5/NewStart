@@ -1403,27 +1403,30 @@
                 productGrid.style.display = 'grid';
                 let html = '';
                 products.forEach((p, index) => {
-                    // Get first image from images array
+
+                    // Get first image from images array (multi-image support)
                     let firstImage = '';
-                    try {
-                        const imagesArray = p.images ? JSON.parse(p.images) : [];
-                        firstImage = imagesArray[0] || '';
-                    } catch (e) {
-                        firstImage = p.image || '';
+                    if (p.images) {
+                        try {
+                            const imagesArray = typeof p.images === 'string' ? JSON.parse(p.images) : p.images;
+                            firstImage = imagesArray[0] || '';
+                        } catch (e) { firstImage = ''; }
                     }
+                    if (!firstImage && p.image) firstImage = p.image;
                     const imgHtml = firstImage ? `<img src="${firstImage}" alt="${escapeHtml(p.name)}">` : `<i class="fas ${p.icon || 'fa-leaf'}"></i>`;
 
+
                     html += `
-            <div class="product-card" data-product-id="${p.id}">
-                <div class="product-clickable" style="cursor:pointer; width:100%;">
-                    <div class="product-img">${imgHtml}</div>
-                    <div class="product-title">${escapeHtml(p.name)}</div>
-                    <div class="product-brand">${escapeHtml(p.brand)}</div>
-                    <div class="product-price">${parseFloat(p.price).toFixed(3).replace('.', ',')} TND</div>
-                </div>
-                <button class="add-to-cart" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${p.price}" data-icon="${p.icon || 'fa-leaf'}" data-image="${firstImage}">Ajouter au panier</button>
-            </div>
-        `;
+                    <div class="product-card" data-product-id="${p.id}">
+                        <div class="product-clickable" style="cursor:pointer; width:100%;">
+                            <div class="product-img">${imgHtml}</div>
+                            <div class="product-title">${escapeHtml(p.name)}</div>
+                            <div class="product-brand">${escapeHtml(p.brand)}</div>
+                            <div class="product-price">${parseFloat(p.price).toFixed(3).replace('.', ',')} TND</div>
+                        </div>
+                        <button class="add-to-cart" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${p.price}" data-icon="${p.icon || 'fa-leaf'}" data-image="${p.image || ''}">Ajouter au panier</button>
+                    </div>
+                `;
                 });
                 productGrid.innerHTML = html;
 
