@@ -9,9 +9,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- Supabase client library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
-  <style>
+  <!-- Anime.js for animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
+  <style>
+    /* Your existing CSS stays exactly the same */
     * {
       margin: 0;
       padding: 0;
@@ -355,28 +357,22 @@
         grid-template-columns: repeat(3, 1fr);
       }
 
-      /* Homme (col1), Unisexe (col2), Femme (col3) */
       .category-card:nth-child(1) {
         order: 1;
       }
 
-      /* Homme - column 1 */
       .category-card:nth-child(2) {
         order: 3;
       }
 
-      /* Femme - column 3 */
       .category-card:nth-child(3) {
         order: 2;
       }
 
-      /* Unisexe - column 2 */
       .category-card:nth-child(4) {
         order: 4;
         grid-column: 2 / 3;
       }
-
-      /* Enfants - column 2 second row */
     }
 
     /* For small tablets - 2 columns layout */
@@ -385,7 +381,6 @@
         grid-template-columns: repeat(2, 1fr);
       }
 
-      /* Reset order for 2 columns */
       .category-card:nth-child(1) {
         order: 1;
       }
@@ -410,7 +405,6 @@
         grid-template-columns: 1fr;
       }
 
-      /* Reset all orders */
       .category-card:nth-child(1),
       .category-card:nth-child(2),
       .category-card:nth-child(3),
@@ -1044,6 +1038,20 @@
       background: var(--accent);
       border-radius: 4px;
     }
+
+    /* Animation styles */
+    .logo h1 .word {
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    .logo h1 .word:last-child {
+      margin-right: 0;
+    }
+
+    .logo h1 .word span {
+      display: inline-block;
+    }
   </style>
 </head>
 
@@ -1559,9 +1567,94 @@
       if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
       initTheme();
     });
+
+    // ========== LOGO ANIMATION ==========
+    (function () {
+      const logoText = document.getElementById('animatedLogo');
+      if (!logoText) return;
+
+      const phrases = [
+        'Rosa Fragrances',
+        'all in one place',
+        'best fragrances',
+        'best price',
+        'best choice',
+        'all that in'
+      ];
+
+      let currentIndex = 1;
+
+      function animateText(newText) {
+        const words = newText.split(' ');
+        const oldWords = document.querySelectorAll('#animatedLogo .word');
+
+        if (oldWords.length === 0) {
+          createWords(words);
+          return;
+        }
+
+        // Animate out old words
+        oldWords.forEach(word => {
+          const letters = Array.from(word.children);
+          anime({
+            targets: letters,
+            opacity: [1, 0],
+            translateY: [0, -15],
+            duration: 200,
+            easing: 'easeInQuad',
+            complete: () => {
+              word.remove();
+              if (document.querySelectorAll('#animatedLogo .word').length === 0) {
+                createWords(words);
+              }
+            }
+          });
+        });
+      }
+
+      function createWords(words) {
+        logoText.innerHTML = '';
+        words.forEach((word, idx) => {
+          const wordSpan = document.createElement('span');
+          wordSpan.className = 'word';
+          wordSpan.style.display = 'inline-block';
+          wordSpan.style.marginRight = idx === words.length - 1 ? '0' : '8px';
+
+          for (let i = 0; i < word.length; i++) {
+            const letter = document.createElement('span');
+            letter.textContent = word[i];
+            letter.style.display = 'inline-block';
+            letter.style.opacity = '0';
+            wordSpan.appendChild(letter);
+          }
+          logoText.appendChild(wordSpan);
+
+          if (idx < words.length - 1) {
+            logoText.appendChild(document.createTextNode(' '));
+          }
+
+          const letters = wordSpan.querySelectorAll('span');
+          anime({
+            targets: letters,
+            opacity: [0, 1],
+            translateY: [20, 0],
+            duration: 400,
+            delay: (el, i) => i * 30 + (idx * 100),
+            easing: 'easeOutQuad'
+          });
+        });
+      }
+
+      // Start with first phrase
+      createWords(phrases[0].split(' '));
+
+      // Cycle every 3 seconds
+      setInterval(() => {
+        animateText(phrases[currentIndex]);
+        currentIndex = (currentIndex + 1) % phrases.length;
+      }, 3000);
+    })();
   </script>
-
-
 
 </body>
 
