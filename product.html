@@ -290,7 +290,7 @@
             }
         }
 
-        /* Image Gallery */
+        /* Image Gallery with Animation */
         .product-gallery {
             display: flex;
             flex-direction: column;
@@ -307,12 +307,19 @@
             justify-content: center;
             overflow: hidden;
             border: 1px solid var(--border);
+            position: relative;
         }
 
         .main-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 1;
+        }
+
+        .main-image img.fade-out {
+            opacity: 0;
         }
 
         .main-image i {
@@ -334,7 +341,7 @@
             overflow: hidden;
             cursor: pointer;
             border: 2px solid transparent;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             flex-shrink: 0;
             background: var(--bg-secondary);
         }
@@ -508,6 +515,7 @@
             color: #c1654c;
         }
 
+        /* Cart Sidebar */
         .cart-sidebar {
             position: fixed;
             top: 0;
@@ -560,6 +568,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .cart-item-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 30px;
         }
 
         .cart-item-info {
@@ -621,7 +636,8 @@
             font-weight: 600;
         }
 
-        .cart-overlay {
+        /* Shared Overlay for both cart and menu */
+        .overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -634,7 +650,7 @@
             transition: 0.2s;
         }
 
-        .cart-overlay.active {
+        .overlay.active {
             visibility: visible;
             opacity: 1;
         }
@@ -680,8 +696,10 @@
 <body>
     <div id="toast" class="notification">✨ Article ajouté</div>
 
+    <!-- Shared Overlay -->
+    <div id="overlay" class="overlay"></div>
+
     <!-- Cart Sidebar -->
-    <div id="cartOverlay" class="cart-overlay"></div>
     <aside id="cartSidebar" class="cart-sidebar">
         <div class="cart-header">
             <h3><i class="fas fa-bag-shopping"></i> Votre panier</h3>
@@ -768,7 +786,7 @@
             const suggestionsContainer = document.getElementById('suggestionsContainer');
             const suggestionsGrid = document.getElementById('suggestionsGrid');
             const cartSidebar = document.getElementById('cartSidebar');
-            const cartOverlay = document.getElementById('cartOverlay');
+            const overlay = document.getElementById('overlay');
             const cartToggle = document.getElementById('cartToggle');
             const closeCartBtn = document.getElementById('closeCartBtn');
             const cartCountSpan = document.getElementById('cartCount');
@@ -817,9 +835,10 @@
                 cart.forEach(item => {
                     const sub = item.price * (item.quantity || 1);
                     total += sub;
+                    const imageHtml = item.image ? `<img src="${item.image}" alt="${escapeHtml(item.name)}">` : `<i class="fas ${item.icon || 'fa-leaf'}"></i>`;
                     html += `
                         <div class="cart-item" data-id="${item.id}">
-                            <div class="cart-item-icon"><i class="fas ${item.icon || 'fa-leaf'}"></i></div>
+                            <div class="cart-item-icon">${imageHtml}</div>
                             <div class="cart-item-info">
                                 <div class="cart-item-title">${escapeHtml(item.name)}</div>
                                 <div class="cart-item-price">${formatPrice(item.price)}</div>
@@ -864,13 +883,25 @@
 
             function openCart() {
                 cartSidebar?.classList.add('open');
-                cartOverlay?.classList.add('active');
+                overlay?.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
 
             function closeCart() {
                 cartSidebar?.classList.remove('open');
-                cartOverlay?.classList.remove('active');
+                overlay?.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            function openMenu() {
+                navLinks.classList.add('active');
+                overlay?.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMenu() {
+                navLinks.classList.remove('active');
+                overlay?.classList.remove('active');
                 document.body.style.overflow = '';
             }
 
@@ -932,7 +963,7 @@
                 }
             }
 
-            // Display product details with image gallery
+            // Display product details with image gallery and animation
             function displayProduct(product) {
                 // Parse images from JSON string
                 let images = [];
@@ -961,7 +992,7 @@
                 if (images.length > 0) {
                     mainImageHtml = `<img src="${images[0]}" alt="${escapeHtml(product.name)}" id="mainImage">`;
                     thumbnailsHtml = images.map((img, idx) => `
-                        <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="document.getElementById('mainImage').src='${img}'; document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active')); this.classList.add('active')">
+                        <div class="thumbnail ${idx === 0 ? 'active' : ''}" data-img="${img}">
                             <img src="${img}" alt="thumbnail ${idx + 1}">
                         </div>
                     `).join('');
@@ -1004,6 +1035,31 @@
                             addBtn.dataset.icon,
                             addBtn.dataset.image
                         );
+                    });
+                }
+
+                // Thumbnail click handler with animation
+                if (images.length > 1) {
+                    const mainImageElement = document.getElementById('mainImage');
+                    const thumbnails = document.querySelectorAll('.thumbnail');
+
+                    thumbnails.forEach((thumb, idx) => {
+                        thumb.addEventListener('click', () => {
+                            const newImageSrc = thumb.dataset.img;
+                            if (mainImageElement && newImageSrc) {
+                                // Add fade-out animation
+                                mainImageElement.classList.add('fade-out');
+
+                                setTimeout(() => {
+                                    mainImageElement.src = newImageSrc;
+                                    mainImageElement.classList.remove('fade-out');
+                                }, 150);
+
+                                // Update active thumbnail
+                                thumbnails.forEach(t => t.classList.remove('active'));
+                                thumb.classList.add('active');
+                            }
+                        });
                     });
                 }
             }
@@ -1073,21 +1129,18 @@
 
             if (cartToggle) cartToggle.addEventListener('click', openCart);
             if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
-            if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
+            if (overlay) overlay.addEventListener('click', () => {
+                closeCart();
+                closeMenu();
+            });
 
             // Menu functions
-            function closeMenu() {
-                navLinks.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-
-            function openMenu() {
-                navLinks.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-
             if (menuToggle) menuToggle.addEventListener('click', () => {
-                navLinks.classList.contains('active') ? closeMenu() : openMenu();
+                if (navLinks.classList.contains('active')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
             });
 
             if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
