@@ -3,8 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Rosa Fragrances · Console Administrateur</title>
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -28,6 +27,7 @@
       padding-top: 80px;
     }
 
+    /* Animated background with floating particles */
     body::before {
       content: '';
       position: fixed;
@@ -56,6 +56,7 @@
       }
     }
 
+    /* Floating gold particles */
     .particle {
       position: fixed;
       background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
@@ -86,6 +87,7 @@
       }
     }
 
+    /* Header */
     header {
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
@@ -168,49 +170,40 @@
     .nav-links {
       display: flex;
       flex-direction: column;
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 85%;
-      max-width: 300px;
-      height: 100vh;
+      position: absolute;
+      top: 100%;
+      right: 1rem;
+      width: 240px;
       background: var(--bg-primary);
+      backdrop-filter: blur(10px);
       gap: 0;
-      overflow-y: auto;
-      transition: right 0.3s ease-out;
-      box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
-      border-left: 1px solid var(--border);
-      z-index: 1001;
-      border-radius: 0;
       padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+      z-index: 101;
+      border-radius: 16px;
     }
 
     .nav-links.active {
-      right: 0;
-    }
-
-    .close-menu-btn {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--accent);
-      padding: 1rem;
-      text-align: right;
-      display: block;
-      width: 100%;
-      border-bottom: 1px solid var(--border);
+      max-height: 420px;
+      opacity: 1;
+      padding: 0.5rem 0;
     }
 
     .nav-links a {
-      padding: 1rem 1.5rem;
+      padding: 0.8rem 1.2rem;
+      width: 100%;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
       text-decoration: none;
       color: var(--text-primary);
       transition: all 0.2s;
-      border-bottom: 1px solid var(--border);
-      display: block;
-      font-size: 1rem;
-      cursor: pointer;
     }
 
     .nav-links a:last-child {
@@ -220,25 +213,26 @@
     .nav-links a:hover {
       background: var(--hover-bg);
       color: var(--accent);
-      padding-left: 2rem;
+      padding-left: 1.5rem;
     }
 
     .lang-menu {
-      position: relative;
       border-bottom: 1px solid var(--border);
     }
 
     .lang-current {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       width: 100%;
       background: none;
       border: none;
-      padding: 1rem 1.5rem;
-      font-size: 1rem;
+      padding: 0.8rem 1.2rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
       color: var(--text-primary);
       cursor: pointer;
+      transition: all 0.2s;
     }
 
     .lang-current:hover {
@@ -247,7 +241,8 @@
     }
 
     .lang-current i {
-      transition: transform 0.3s ease;
+      font-size: 0.7rem;
+      transition: transform 0.2s;
     }
 
     .lang-menu.active .lang-current i {
@@ -262,24 +257,44 @@
     }
 
     .lang-menu.active .lang-options {
-      max-height: 150px;
+      max-height: 140px;
     }
 
     .lang-option {
       display: block;
       width: 100%;
       text-align: left;
-      padding: 0.8rem 1.5rem 0.8rem 2.5rem;
+      padding: 0.6rem 1.2rem 0.6rem 2rem;
       background: none;
       border: none;
-      font-size: 0.9rem;
-      cursor: pointer;
+      font-size: 0.85rem;
       color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
     }
 
     .lang-option:hover {
       background: var(--hover-bg);
       color: var(--accent);
+    }
+
+    .menu-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(2px);
+      z-index: 99;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .menu-overlay.active {
+      display: block;
+      opacity: 1;
     }
 
     @media (max-width: 768px) {
@@ -304,8 +319,8 @@
       }
 
       .nav-links {
-        width: 85%;
-        right: -85%;
+        width: 200px;
+        right: 0.5rem;
       }
     }
 
@@ -463,87 +478,6 @@
       -moz-appearance: textfield;
     }
 
-    /* Multiple Image Upload */
-    .multi-image-upload {
-      border: 1px dashed var(--border);
-      border-radius: 20px;
-      padding: 1rem;
-      background: var(--bg-secondary);
-    }
-
-    .image-preview-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-      gap: 0.8rem;
-      margin-top: 1rem;
-    }
-
-    .preview-item {
-      position: relative;
-      aspect-ratio: 1 / 1;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      background: var(--bg-primary);
-    }
-
-    .preview-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .remove-image-btn {
-      position: absolute;
-      top: 2px;
-      right: 2px;
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 10px;
-      transition: all 0.2s;
-    }
-
-    .remove-image-btn:hover {
-      background: #c1654c;
-      transform: scale(1.1);
-    }
-
-    .add-more-btn {
-      background: var(--bg-secondary);
-      border: 1px dashed var(--accent);
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      cursor: pointer;
-      transition: all 0.2s;
-      aspect-ratio: 1 / 1;
-      color: var(--accent);
-    }
-
-    .add-more-btn:hover {
-      background: var(--hover-bg);
-      transform: scale(1.02);
-    }
-
-    .add-more-btn i {
-      font-size: 1.5rem;
-    }
-
-    .add-more-btn span {
-      font-size: 0.7rem;
-    }
-
     /* Category Selector */
     .category-selector {
       display: flex;
@@ -628,6 +562,47 @@
       transform: translateY(-2px);
     }
 
+    .file-input-area {
+      background: var(--bg-secondary);
+      border: 1px dashed var(--border);
+      border-radius: 28px;
+      padding: 1rem;
+      text-align: center;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .file-input-area:hover {
+      border-color: var(--accent);
+      background: var(--hover-bg);
+      transform: translateY(-2px);
+    }
+
+    .file-input-area i {
+      font-size: 1.5rem;
+      color: var(--accent);
+      margin-bottom: 5px;
+    }
+
+    #imagePreview {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-secondary);
+      padding: 0.5rem 1rem;
+      border-radius: 40px;
+      border: 1px solid var(--border);
+    }
+
+    #imagePreview img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
     .btn-primary {
       background: var(--accent-gradient);
       border: none;
@@ -671,6 +646,10 @@
     .btn-primary:hover {
       transform: translateY(-2px);
       box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
     }
 
     .list-panel {
@@ -790,12 +769,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 180px;
-    }
-
-    .image-count-badge {
-      font-size: 0.65rem;
-      color: var(--accent);
-      margin-top: 0.2rem;
     }
 
     .delete-btn {
@@ -1006,11 +979,6 @@
         height: 38px;
         font-size: 1.1rem;
       }
-
-      .image-preview-grid {
-        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-        gap: 0.5rem;
-      }
     }
   </style>
 </head>
@@ -1032,6 +1000,8 @@
     }
   </script>
 
+  <div id="menuOverlay" class="menu-overlay"></div>
+
   <!-- Header -->
   <header>
     <div class="header-flex">
@@ -1049,14 +1019,12 @@
         </button>
       </div>
       <div class="nav-links" id="navLinks">
-        <button class="close-menu-btn" id="closeMenuBtn"><i class="fas fa-times"></i></button>
         <a href="index.html">ACCUEIL</a>
-        <a href="man.html">HOMME</a>
-        <a href="women.html">FEMME</a>
-        <a href="unisexe.html">UNISEXE</a>
-        <a href="kids.html">ENFANTS</a>
+        <a href="#">COLLECTION</a>
+        <a href="#">EXCLUSIVITÉS</a>
+        <a href="#">COFFRETS</a>
         <div class="lang-menu" id="langMenu">
-          <button class="lang-current" id="langCurrentBtn">
+          <button class="lang-current">
             <span id="currentLangText">FRANÇAIS</span>
             <i class="fas fa-chevron-down"></i>
           </button>
@@ -1113,28 +1081,11 @@
             <input type="number" id="productPrice" step="0.001" min="0" placeholder="0.000">
           </div>
 
-          <!-- DESCRIPTION FIELD -->
+          <!-- DESCRIPTION FIELD (NEW) -->
           <div class="input-group">
             <label>Description</label>
             <textarea id="productDescription" rows="3"
               placeholder="Décrivez ce parfum... Notes de tête, cœur, fond, inspiration..."></textarea>
-          </div>
-
-          <!-- MULTIPLE IMAGE UPLOAD -->
-          <div class="input-group">
-            <label>Images du produit</label>
-            <div class="multi-image-upload">
-              <div class="image-preview-grid" id="imagePreviewGrid"></div>
-              <div class="add-more-btn" id="addMoreImagesBtn">
-                <i class="fas fa-plus-circle"></i>
-                <span>Ajouter des images</span>
-              </div>
-              <input type="file" id="imageUpload" accept="image/*" multiple style="display: none;">
-            </div>
-            <p style="font-size:0.65rem; color:var(--text-secondary); margin-top:0.5rem;">
-              <i class="fas fa-info-circle"></i> Vous pouvez ajouter plusieurs images. La première sera l'image
-              principale.
-            </p>
           </div>
 
           <!-- CATEGORY SELECTOR -->
@@ -1157,6 +1108,22 @@
               <div class="season-option" data-season="winter"><i class="fas fa-snowflake"></i> Hiver</div>
               <div class="season-option" data-season="spring"><i class="fas fa-seedling"></i> Printemps</div>
               <div class="season-option" data-season="autumn"><i class="fas fa-leaf"></i> Automne</div>
+            </div>
+          </div>
+
+          <!-- Image Upload -->
+          <div class="input-group">
+            <label>Image du produit</label>
+            <div class="file-input-area" id="fileInputArea">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p>Cliquez pour sélectionner une image</p>
+              <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+            </div>
+            <div id="imagePreview" style="display: none;">
+              <img id="previewImg" src="#" alt="aperçu">
+              <span id="previewFilename"></span>
+              <i class="fas fa-times" id="clearPreview"
+                style="margin-left: auto; cursor:pointer; color:var(--accent);"></i>
             </div>
           </div>
 
@@ -1230,27 +1197,28 @@
       // Menu Toggle
       const menuToggle = document.getElementById('menuToggle');
       const navLinks = document.getElementById('navLinks');
-      const closeMenuBtn = document.getElementById('closeMenuBtn');
+      const menuOverlay = document.getElementById('menuOverlay');
       const langMenu = document.getElementById('langMenu');
 
-      function closeMenu() {
-        navLinks.classList.remove('active');
-        document.body.style.overflow = '';
+      function toggleMenu() {
+        if (!navLinks) return;
+        navLinks.classList.toggle('active');
+        if (menuOverlay) menuOverlay.classList.toggle('active');
+        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
       }
 
-      function openMenu() {
-        navLinks.classList.add('active');
-        document.body.style.overflow = 'hidden';
+      if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
+      if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
+
+      if (navLinks) {
+        navLinks.querySelectorAll('a:not(.lang-current):not(.lang-option)').forEach(link => {
+          link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            if (menuOverlay) menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+          });
+        });
       }
-
-      if (menuToggle) menuToggle.addEventListener('click', () => {
-        navLinks.classList.contains('active') ? closeMenu() : openMenu();
-      });
-
-      if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
-      document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', closeMenu);
-      });
 
       if (langMenu) {
         const langCurrent = langMenu.querySelector('.lang-current');
@@ -1268,7 +1236,9 @@
 
       document.addEventListener('click', (e) => {
         if (navLinks && !navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
-          closeMenu();
+          navLinks.classList.remove('active');
+          if (menuOverlay) menuOverlay.classList.remove('active');
+          document.body.style.overflow = '';
         }
       });
 
@@ -1288,62 +1258,40 @@
       const productName = document.getElementById('productName');
       const productBrand = document.getElementById('productBrand');
       const productPrice = document.getElementById('productPrice');
-      const productDescription = document.getElementById('productDescription');
+      const productDescription = document.getElementById('productDescription'); // NEW
 
-      // Multiple Image Upload
-      const imageUpload = document.getElementById('imageUpload');
-      const addMoreImagesBtn = document.getElementById('addMoreImagesBtn');
-      const imagePreviewGrid = document.getElementById('imagePreviewGrid');
-      let uploadedImages = []; // Array of base64 strings
+      // Category Buttons
+      const categoryOptions = document.querySelectorAll('.category-option');
+      let selectedCategory = 'man';
 
-      function updateImagePreview() {
-        imagePreviewGrid.innerHTML = '';
-        uploadedImages.forEach((imgBase64, index) => {
-          const div = document.createElement('div');
-          div.className = 'preview-item';
-          div.innerHTML = `
-            <img src="${imgBase64}" alt="image ${index + 1}">
-            <button class="remove-image-btn" data-index="${index}"><i class="fas fa-times"></i></button>
-          `;
-          imagePreviewGrid.appendChild(div);
+      categoryOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          categoryOptions.forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          selectedCategory = opt.dataset.category;
         });
-
-        // Add remove button handlers
-        document.querySelectorAll('.remove-image-btn').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const index = parseInt(btn.dataset.index);
-            uploadedImages.splice(index, 1);
-            updateImagePreview();
-          });
-        });
-
-        // If no images, show placeholder
-        if (uploadedImages.length === 0) {
-          const emptyDiv = document.createElement('div');
-          emptyDiv.style.cssText = 'grid-column:1/-1; text-align:center; padding:1rem; color:var(--text-secondary);';
-          emptyDiv.innerHTML = '<i class="fas fa-images"></i> Aucune image';
-          imagePreviewGrid.appendChild(emptyDiv);
-        }
-      }
-
-      addMoreImagesBtn.addEventListener('click', () => {
-        imageUpload.click();
       });
 
-      imageUpload.addEventListener('change', function (e) {
-        const files = Array.from(e.target.files);
-        files.forEach(file => {
-          if (!file.type.startsWith('image/')) return;
-          const reader = new FileReader();
-          reader.onload = (ev) => {
-            uploadedImages.push(ev.target.result);
-            updateImagePreview();
-          };
-          reader.readAsDataURL(file);
+      // Season Buttons
+      const seasonOptions = document.querySelectorAll('.season-option');
+      let selectedSeason = 'all';
+
+      seasonOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          seasonOptions.forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          selectedSeason = opt.dataset.season;
         });
-        imageUpload.value = '';
       });
+
+      // Image Upload
+      const fileInput = document.getElementById('imageUpload');
+      const fileArea = document.getElementById('fileInputArea');
+      const imagePreview = document.getElementById('imagePreview');
+      const previewImg = document.getElementById('previewImg');
+      const previewFilename = document.getElementById('previewFilename');
+      const clearPreview = document.getElementById('clearPreview');
+      let uploadedImageBase64 = null;
 
       function showAdminToast(msg) {
         const toast = document.getElementById('adminToast');
@@ -1379,16 +1327,9 @@
           let html = '';
           data.forEach(prod => {
             const priceStr = parseFloat(prod.price).toFixed(3).replace('.', ',');
-
-            // Get first image or default icon
-            let imagesArray = [];
-            try {
-              imagesArray = typeof prod.images === 'string' ? JSON.parse(prod.images) : (prod.images || []);
-            } catch (e) { imagesArray = []; }
-
-            const firstImage = imagesArray.length > 0 ? imagesArray[0] : null;
-            const iconOrImage = firstImage ? `<img src="${firstImage}" alt="${prod.name}">` : `<i class="fas fa-crown"></i>`;
-            const imageCount = imagesArray.length;
+            const iconOrImage = prod.image
+              ? `<img src="${prod.image}" alt="${prod.name}">`
+              : `<i class="fas fa-crown"></i>`;
 
             const seasonName = seasonNames[prod.season] || prod.season || 'Toutes saisons';
             let seasonIcon = '';
@@ -1413,7 +1354,6 @@
                   <div>
                     <span class="product-category-badge">${categoryIcon} ${categoryName}</span>
                     <span class="product-season-badge">${seasonIcon}${seasonName}</span>
-                    ${imageCount > 0 ? `<span class="product-season-badge"><i class="fas fa-images"></i> ${imageCount}</span>` : ''}
                   </div>
                   ${descriptionPreview ? `<div class="product-description-preview">📝 ${descriptionPreview}</div>` : ''}
                 </div>
@@ -1435,7 +1375,7 @@
         const name = productName.value.trim();
         const brand = productBrand.value.trim();
         const price = parseFloat(productPrice.value);
-        const description = productDescription.value.trim();
+        const description = productDescription.value.trim(); // NEW
 
         if (!name || !brand || isNaN(price) || price <= 0) {
           showAdminToast('❌ Nom, marque et prix valides requis');
@@ -1448,10 +1388,10 @@
             brand: brand,
             price: price,
             description: description || null,
-            images: JSON.stringify(uploadedImages), // Store all images as JSON array
             icon: 'fa-crown',
             category: selectedCategory,
-            season: selectedSeason
+            season: selectedSeason,
+            image: uploadedImageBase64 || null
           };
 
           const { error } = await supabase
@@ -1464,9 +1404,7 @@
           productName.value = '';
           productBrand.value = '';
           productPrice.value = '';
-          productDescription.value = '';
-          uploadedImages = [];
-          updateImagePreview();
+          productDescription.value = ''; // NEW
 
           // Reset category to default
           categoryOptions.forEach(o => o.classList.remove('selected'));
@@ -1478,6 +1416,10 @@
           document.querySelector('.season-option[data-season="all"]').classList.add('selected');
           selectedSeason = 'all';
 
+          uploadedImageBase64 = null;
+          imagePreview.style.display = 'none';
+          fileInput.value = '';
+
           showAdminToast('✅ Produit ajouté');
           loadAdminProducts();
         } catch (error) {
@@ -1485,30 +1427,6 @@
           showAdminToast('❌ Erreur lors de l\'ajout');
         }
       }
-
-      // Category Buttons
-      const categoryOptions = document.querySelectorAll('.category-option');
-      let selectedCategory = 'man';
-
-      categoryOptions.forEach(opt => {
-        opt.addEventListener('click', () => {
-          categoryOptions.forEach(o => o.classList.remove('selected'));
-          opt.classList.add('selected');
-          selectedCategory = opt.dataset.category;
-        });
-      });
-
-      // Season Buttons
-      const seasonOptions = document.querySelectorAll('.season-option');
-      let selectedSeason = 'all';
-
-      seasonOptions.forEach(opt => {
-        opt.addEventListener('click', () => {
-          seasonOptions.forEach(o => o.classList.remove('selected'));
-          opt.classList.add('selected');
-          selectedSeason = opt.dataset.season;
-        });
-      });
 
       // Delete Product
       async function deleteProduct(id) {
@@ -1557,6 +1475,29 @@
         window.location.href = 'index.html';
       });
 
+      // Image upload
+      fileArea.addEventListener('click', () => fileInput.click());
+
+      fileInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!file || !file.type.startsWith('image/')) return;
+
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          uploadedImageBase64 = ev.target.result;
+          previewImg.src = ev.target.result;
+          previewFilename.textContent = file.name.length > 20 ? file.name.substr(0, 18) + '…' : file.name;
+          imagePreview.style.display = 'flex';
+        };
+        reader.readAsDataURL(file);
+      });
+
+      clearPreview.addEventListener('click', () => {
+        uploadedImageBase64 = null;
+        imagePreview.style.display = 'none';
+        fileInput.value = '';
+      });
+
       document.getElementById('addProductBtn').addEventListener('click', addProduct);
 
       adminListContainer.addEventListener('click', (e) => {
@@ -1566,9 +1507,6 @@
           deleteProduct(id);
         }
       });
-
-      // Initialize empty preview
-      updateImagePreview();
     })();
 
     // ========== TRANSLATION - APPLIED IMMEDIATELY ==========
@@ -1589,7 +1527,7 @@
         document.querySelector('#productBrand'),
         document.querySelector('#productPrice'),
         document.querySelector('#productDescription'),
-        document.querySelector('.add-more-btn span'),
+        document.querySelector('.file-input-area p'),
         document.querySelector('#addProductBtn'),
         document.querySelector('.list-panel h2'),
         document.querySelector('#logoutBtn'),
