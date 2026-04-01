@@ -1586,20 +1586,20 @@
     .logo h1 {
       position: relative;
       display: inline-block;
-      white-space: nowrap;
-      font-weight: 350;
-      letter-spacing: 0.03em;
+      min-width: 350px;
+      text-align: center;
+    }
+
+    .logo h1 .char {
+      display: inline-block;
     }
 
     .logo h1 .word {
       display: inline-block;
       position: relative;
+      min-width: 80px;
+      /* Adjust this value based on your longest word */
       text-align: center;
-    }
-
-    .logo h1 .word span {
-      display: inline-block;
-      transition: all 0.2s ease;
     }
   </style>
 
@@ -1608,186 +1608,76 @@
       const logoText = document.getElementById('animatedLogo');
       if (!logoText) return;
 
-      const phrases = [
-        { text: 'Rosa Fragrances', keep: [] },
-        { text: 'best Fragrances', keep: ['Fragrances'] },
-        { text: 'best Prices', keep: ['best'] },
-        { text: 'best Choice', keep: ['best'] },
-        { text: 'all that in', keep: [] }
-      ];
-
+      const phrases = ['Rose', 'best fragrances', 'Rosa Fragrances'];
       let currentIndex = 0;
 
-      // Pre-calculate max word widths
-      const allWords = [];
-      phrases.forEach(phrase => {
-        phrase.text.split(' ').forEach(word => {
-          if (!allWords.includes(word)) allWords.push(word);
-        });
-      });
-
-      function setWordWidths() {
-        const wordElements = document.querySelectorAll('#animatedLogo .word');
-        wordElements.forEach(el => {
-          const wordText = el.innerText;
-          const maxLength = Math.max(...allWords.map(w => w.length));
-          el.style.minWidth = `${maxLength * 0.8}em`;
-          el.style.textAlign = 'center';
-        });
-      }
-
-      function animateOutLetters(letters, callback) {
-        if (!letters.length) {
-          if (callback) callback();
-          return;
-        }
-        anime({
-          targets: letters,
-          opacity: [1, 0],
-          translateY: [0, -15],
-          duration: 200,
-          easing: 'easeInQuad',
-          complete: callback
-        });
-      }
-
-      function animateInLetters(letters, delayOffset = 0) {
-        anime({
-          targets: letters,
-          opacity: [0, 1],
-          translateY: [20, 0],
-          duration: 300,
-          delay: (el, i) => delayOffset + (i * 30),
-          easing: 'easeOutQuad',
-          complete: () => setWordWidths()
-        });
-      }
-
-      function updatePhrase() {
-        const currentPhrase = phrases[currentIndex];
-        const nextPhrase = phrases[(currentIndex + 1) % phrases.length];
-
-        const currentWordsArray = currentPhrase.text.split(' ');
-        const nextWordsArray = nextPhrase.text.split(' ');
-
-        const wordChanges = [];
-        for (let i = 0; i < Math.max(currentWordsArray.length, nextWordsArray.length); i++) {
-          const currentWord = currentWordsArray[i] || '';
-          const nextWord = nextWordsArray[i] || '';
-          const shouldKeep = nextPhrase.keep.includes(nextWord) || (currentWord === nextWord && nextWord !== '');
-          wordChanges.push({
-            currentWord,
-            nextWord,
-            shouldKeep,
-            index: i
-          });
-        }
-
-        const wordElements = document.querySelectorAll('#animatedLogo .word');
-
-        wordChanges.forEach((change, idx) => {
-          const wordElement = wordElements[idx];
-          if (!wordElement && change.nextWord) {
-            const newWordSpan = document.createElement('span');
-            newWordSpan.className = 'word';
-            newWordSpan.style.display = 'inline-block';
-
-            const letters = [];
-            for (let i = 0; i < change.nextWord.length; i++) {
-              const letter = document.createElement('span');
-              letter.textContent = change.nextWord[i];
-              letter.style.display = 'inline-block';
-              letter.style.opacity = '0';
-              newWordSpan.appendChild(letter);
-              letters.push(letter);
-            }
-
-            if (idx === 0) {
-              logoText.insertBefore(newWordSpan, logoText.firstChild);
-            } else {
-              const space = document.createTextNode(' ');
-              logoText.insertBefore(space, wordElements[idx] || null);
-              logoText.insertBefore(newWordSpan, wordElements[idx] || null);
-            }
-
-            animateInLetters(letters, idx * 100);
-          }
-          else if (wordElement && !change.shouldKeep && change.nextWord) {
-            const currentLetters = Array.from(wordElement.children);
-
-            animateOutLetters(currentLetters, () => {
-              wordElement.innerHTML = '';
-              const newLetters = [];
-              for (let i = 0; i < change.nextWord.length; i++) {
-                const letter = document.createElement('span');
-                letter.textContent = change.nextWord[i];
-                letter.style.display = 'inline-block';
-                letter.style.opacity = '0';
-                wordElement.appendChild(letter);
-                newLetters.push(letter);
-              }
-              animateInLetters(newLetters, idx * 100);
-            });
-          }
-          else if (wordElement && change.shouldKeep) {
-            // Word stays - set width to prevent shift
-            wordElement.style.minWidth = `${Math.max(wordElement.innerText.length, change.nextWord.length) * 0.8}em`;
-          }
-          else if (wordElement && !change.nextWord) {
-            const currentLetters = Array.from(wordElement.children);
-            animateOutLetters(currentLetters, () => {
-              wordElement.remove();
-              const prevNode = wordElement.previousSibling;
-              if (prevNode && prevNode.nodeType === Node.TEXT_NODE && prevNode.textContent === ' ') {
-                prevNode.remove();
-              }
-            });
-          }
-        });
-
-        currentIndex = (currentIndex + 1) % phrases.length;
-      }
-
-      function renderInitial() {
-        logoText.innerHTML = '';
-        const words = phrases[0].text.split(' ');
-
-        words.forEach((word, idx) => {
-          const wordSpan = document.createElement('span');
-          wordSpan.className = 'word';
-          wordSpan.style.display = 'inline-block';
-
-          for (let i = 0; i < word.length; i++) {
-            const letter = document.createElement('span');
-            letter.textContent = word[i];
-            letter.style.display = 'inline-block';
-            letter.style.opacity = '0';
-            wordSpan.appendChild(letter);
-          }
-          logoText.appendChild(wordSpan);
-
-          if (idx < words.length - 1) {
-            logoText.appendChild(document.createTextNode(' '));
-          }
-
-          const letters = wordSpan.querySelectorAll('span');
+      function animateText(newText) {
+        // Fade out current text
+        const currentChars = document.querySelectorAll('#animatedLogo .char');
+        if (currentChars.length) {
           anime({
-            targets: letters,
-            opacity: [0, 1],
-            translateY: [20, 0],
-            duration: 400,
-            delay: (el, i) => i * 30 + (idx * 100),
+            targets: currentChars,
+            opacity: [1, 0],
+            duration: 300,
             easing: 'easeOutQuad',
-            complete: () => setWordWidths()
+            complete: () => {
+              // Change text
+              logoText.innerHTML = '';
+              const chars = [];
+              for (let i = 0; i < newText.length; i++) {
+                const span = document.createElement('span');
+                span.className = 'char';
+                span.textContent = newText[i] === ' ' ? '\u00A0' : newText[i];
+                span.style.display = 'inline-block';
+                span.style.opacity = '0';
+                logoText.appendChild(span);
+                chars.push(span);
+              }
+              // Fade in new text
+              anime({
+                targets: chars,
+                opacity: [0, 1],
+                duration: 400,
+                delay: (el, i) => i * 40,
+                easing: 'easeOutQuad'
+              });
+            }
           });
-        });
+        } else {
+          // First time - just fade in
+          logoText.innerHTML = '';
+          const chars = [];
+          for (let i = 0; i < newText.length; i++) {
+            const span = document.createElement('span');
+            span.className = 'char';
+            span.textContent = newText[i] === ' ' ? '\u00A0' : newText[i];
+            span.style.display = 'inline-block';
+            span.style.opacity = '0';
+            logoText.appendChild(span);
+            chars.push(span);
+          }
+          anime({
+            targets: chars,
+            opacity: [0, 1],
+            duration: 500,
+            delay: (el, i) => i * 50,
+            easing: 'easeOutQuad'
+          });
+        }
       }
 
-      renderInitial();
+      function startCycle() {
+        // Show first phrase
+        setTimeout(() => animateText(phrases[0]), 500);
 
-      setInterval(() => {
-        updatePhrase();
-      }, 4000);
+        // Cycle through phrases every 4 seconds
+        setInterval(() => {
+          currentIndex = (currentIndex + 1) % phrases.length;
+          animateText(phrases[currentIndex]);
+        }, 4000);
+      }
+
+      startCycle();
     });
   </script>
 </body>
