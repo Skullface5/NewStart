@@ -1598,6 +1598,11 @@
       display: inline-block;
       position: relative;
       text-align: center;
+      margin-right: 0.5rem;
+    }
+
+    .logo h1 .word:last-child {
+      margin-right: 0;
     }
 
     .logo h1 .word span {
@@ -1605,19 +1610,13 @@
       will-change: transform, opacity;
     }
 
-    /* Normal space between words */
-    .word-space {
-      display: inline-block;
-      width: 0.25em;
-    }
-
     @media (max-width: 768px) {
       .logo h1 {
         font-size: 1.2rem;
       }
 
-      .word-space {
-        width: 0.2em;
+      .logo h1 .word {
+        margin-right: 0.3rem;
       }
     }
   </style>
@@ -1703,6 +1702,7 @@
             const newWordSpan = document.createElement('span');
             newWordSpan.className = 'word';
             newWordSpan.style.display = 'inline-block';
+            newWordSpan.style.marginRight = '0.5rem';
 
             const letters = [];
             for (let i = 0; i < change.nextWord.length; i++) {
@@ -1720,14 +1720,15 @@
               logoText.insertBefore(newWordSpan, wordElements[idx] || null);
             }
 
-            // Add space after word (except last)
-            if (idx < wordChanges.length - 1 && change.nextWord) {
-              const space = document.createElement('span');
-              space.className = 'word-space';
-              space.innerHTML = '&nbsp;';
-              space.style.display = 'inline-block';
-              logoText.insertBefore(space, newWordSpan.nextSibling);
-            }
+            // Update margin for last word
+            const allWords = document.querySelectorAll('#animatedLogo .word');
+            allWords.forEach((word, i) => {
+              if (i === allWords.length - 1) {
+                word.style.marginRight = '0';
+              } else {
+                word.style.marginRight = '0.5rem';
+              }
+            });
 
             animateInLetters(letters, idx * 100, checkAllComplete);
           }
@@ -1759,12 +1760,16 @@
             totalAnimations++;
             const currentLetters = Array.from(wordElement.children);
             animateOutLetters(currentLetters, () => {
-              // Remove the word and its following space
-              const nextSpace = wordElement.nextSibling;
-              if (nextSpace && nextSpace.className === 'word-space') {
-                nextSpace.remove();
-              }
               wordElement.remove();
+              // Update margins for remaining words
+              const remainingWords = document.querySelectorAll('#animatedLogo .word');
+              remainingWords.forEach((word, i) => {
+                if (i === remainingWords.length - 1) {
+                  word.style.marginRight = '0';
+                } else {
+                  word.style.marginRight = '0.5rem';
+                }
+              });
               checkAllComplete();
             });
           }
@@ -1785,6 +1790,7 @@
           const wordSpan = document.createElement('span');
           wordSpan.className = 'word';
           wordSpan.style.display = 'inline-block';
+          wordSpan.style.marginRight = idx === words.length - 1 ? '0' : '0.5rem';
 
           for (let i = 0; i < word.length; i++) {
             const letter = document.createElement('span');
@@ -1794,15 +1800,6 @@
             wordSpan.appendChild(letter);
           }
           logoText.appendChild(wordSpan);
-
-          // Add space between words
-          if (idx < words.length - 1) {
-            const space = document.createElement('span');
-            space.className = 'word-space';
-            space.innerHTML = '&nbsp;';
-            space.style.display = 'inline-block';
-            logoText.appendChild(space);
-          }
 
           const letters = wordSpan.querySelectorAll('span');
           anime({
