@@ -1580,20 +1580,25 @@
       initTheme();
     });
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
   <style>
     .logo h1 {
       position: relative;
       display: inline-block;
       white-space: nowrap;
+      font-weight: 350;
+      letter-spacing: 0.03em;
     }
 
     .logo h1 .word {
       display: inline-block;
+      position: relative;
     }
 
     .logo h1 .word span {
       display: inline-block;
+      transition: all 0.2s ease;
     }
   </style>
 
@@ -1603,117 +1608,140 @@
       if (!logoText) return;
 
       const phrases = [
-        { text: 'Rosa Fragrances', keep: '' },
-        { text: 'best Fragrances', keep: 'Fragrances' },
-        { text: 'best Prices', keep: 'best' }
+        { text: 'Rosa Fragrances', keep: [] },
+        { text: 'best Fragrances', keep: ['Fragrances'] },
+        { text: 'best Prices', keep: ['best'] }
       ];
 
       let currentIndex = 0;
+      let currentWords = [];
 
-      function animateChange(newPhrase) {
-        const currentWords = document.querySelectorAll('#animatedLogo .word');
-
-        if (currentWords.length === 0) {
-          // Initial render
-          renderWords(newPhrase.text);
+      function animateOutLetters(letters, callback) {
+        if (!letters.length) {
+          if (callback) callback();
           return;
         }
-
-        const newWordsArray = newPhrase.text.split(' ');
-        const oldWordsArray = [];
-        currentWords.forEach(word => {
-          oldWordsArray.push(word.innerText);
+        anime({
+          targets: letters,
+          opacity: [1, 0],
+          translateY: [0, -15],
+          duration: 200,
+          easing: 'easeInQuad',
+          complete: callback
         });
-
-        // Animate out words that are leaving
-        const wordsToRemove = [];
-        const wordsToKeep = [];
-
-        currentWords.forEach((word, idx) => {
-          const oldWord = oldWordsArray[idx];
-          const newWord = newWordsArray[idx];
-
-          if (oldWord !== newWord) {
-            wordsToRemove.push(word);
-          } else {
-            wordsToKeep.push(word);
-          }
-        });
-
-        // Animate out words that are changing
-        if (wordsToRemove.length) {
-          anime({
-            targets: wordsToRemove,
-            opacity: [1, 0],
-            translateX: [-20, 20],
-            duration: 300,
-            easing: 'easeOutQuad',
-            complete: () => {
-              wordsToRemove.forEach(word => word.remove());
-              // Add new words
-              addNewWords(newPhrase.text, wordsToKeep);
-            }
-          });
-        } else {
-          addNewWords(newPhrase.text, wordsToKeep);
-        }
       }
 
-      function addNewWords(newText, existingWords) {
-        const newWordsArray = newText.split(' ');
-        const container = logoText;
+      function animateInLetters(letters, delayOffset = 0) {
+        anime({
+          targets: letters,
+          opacity: [0, 1],
+          translateY: [20, 0],
+          duration: 300,
+          delay: (el, i) => delayOffset + (i * 30),
+          easing: 'easeOutQuad'
+        });
+      }
 
-        // Clear container but keep existing words
-        const tempContainer = document.createElement('div');
-        tempContainer.innerHTML = '';
+      function updatePhrase() {
+        const currentPhrase = phrases[currentIndex];
+        const nextPhrase = phrases[(currentIndex + 1) % phrases.length];
 
-        newWordsArray.forEach((word, idx) => {
-          const existingWord = existingWords[idx];
+        const currentWordsArray = currentPhrase.text.split(' ');
+        const nextWordsArray = nextPhrase.text.split(' ');
 
-          if (existingWord && existingWord.innerText === word) {
-            tempContainer.appendChild(existingWord);
-          } else {
-            const wordSpan = document.createElement('span');
-            wordSpan.className = 'word';
-            wordSpan.style.display = 'inline-block';
+        // Find which words stay and which change
+        const wordChanges = [];
+        for (let i = 0; i < Math.max(currentWordsArray.length, nextWordsArray.length); i++) {
+          const currentWord = currentWordsArray[i] || '';
+          const nextWord = nextWordsArray[i] || '';
+          const shouldKeep = nextPhrase.keep.includes(nextWord) || (currentWord === nextWord && nextWord !== '');
+          wordChanges.push({
+            currentWord,
+            nextWord,
+            shouldKeep,
+            index: i
+          });
+        }
 
-            // Split word into letters for animation
-            for (let i = 0; i < word.length; i++) {
+        // Get all word elements
+        const wordElements = document.querySelectorAll('#animatedLogo .word');
+
+        wordChanges.forEach((change, idx) => {
+          const wordElement = wordElements[idx];
+          if (!wordElement && change.nextWord) {
+            // New word needs to be created
+            const newWordSpan = document.createElement('span');
+            newWordSpan.className = 'word';
+            newWordSpan.style.display = 'inline-block';
+
+            const letters = [];
+            for (let i = 0; i < change.nextWord.length; i++) {
               const letter = document.createElement('span');
-              letter.textContent = word[i];
+              letter.textContent = change.nextWord[i];
               letter.style.display = 'inline-block';
               letter.style.opacity = '0';
-              letter.style.transform = 'translateY(20px)';
-              wordSpan.appendChild(letter);
+              newWordSpan.appendChild(letter);
+              letters.push(letter);
             }
-            tempContainer.appendChild(wordSpan);
 
-            // Animate new word letters
-            const letters = wordSpan.querySelectorAll('span');
+            if (idx === 0) {
+              logoText.insertBefore(newWordSpan, logoText.firstChild);
+            } else {
+              const space = document.createTextNode(' ');
+              logoText.insertBefore(space, wordElements[idx] || null);
+              logoText.insertBefore(newWordSpan, wordElements[idx] || null);
+            }
+
+            animateInLetters(letters, idx * 100);
+          }
+          else if (wordElement && !change.shouldKeep && change.nextWord) {
+            // Word needs to change
+            const currentLetters = Array.from(wordElement.children);
+
+            animateOutLetters(currentLetters, () => {
+              wordElement.innerHTML = '';
+              const newLetters = [];
+              for (let i = 0; i < change.nextWord.length; i++) {
+                const letter = document.createElement('span');
+                letter.textContent = change.nextWord[i];
+                letter.style.display = 'inline-block';
+                letter.style.opacity = '0';
+                wordElement.appendChild(letter);
+                newLetters.push(letter);
+              }
+              animateInLetters(newLetters, idx * 100);
+            });
+          }
+          else if (wordElement && change.shouldKeep) {
+            // Word stays, do nothing or subtle pulse
             anime({
-              targets: letters,
-              opacity: [0, 1],
-              translateY: [20, 0],
-              duration: 400,
-              delay: (el, i) => i * 40 + (idx * 100),
+              targets: wordElement,
+              scale: [1, 1.05, 1],
+              duration: 300,
               easing: 'easeOutQuad'
             });
           }
-
-          // Add space between words
-          if (idx < newWordsArray.length - 1) {
-            const space = document.createTextNode(' ');
-            tempContainer.appendChild(space);
+          else if (wordElement && !change.nextWord) {
+            // Word needs to be removed
+            const currentLetters = Array.from(wordElement.children);
+            animateOutLetters(currentLetters, () => {
+              wordElement.remove();
+              // Remove preceding space if exists
+              const prevNode = wordElement.previousSibling;
+              if (prevNode && prevNode.nodeType === Node.TEXT_NODE && prevNode.textContent === ' ') {
+                prevNode.remove();
+              }
+            });
           }
         });
 
-        logoText.innerHTML = '';
-        logoText.appendChild(tempContainer);
+        currentIndex = (currentIndex + 1) % phrases.length;
       }
 
-      function renderWords(text) {
+      // Initial render
+      function renderInitial() {
         logoText.innerHTML = '';
-        const words = text.split(' ');
+        const words = phrases[0].text.split(' ');
 
         words.forEach((word, idx) => {
           const wordSpan = document.createElement('span');
@@ -1725,7 +1753,6 @@
             letter.textContent = word[i];
             letter.style.display = 'inline-block';
             letter.style.opacity = '0';
-            letter.style.transform = 'translateY(20px)';
             wordSpan.appendChild(letter);
           }
           logoText.appendChild(wordSpan);
@@ -1741,32 +1768,18 @@
             opacity: [0, 1],
             translateY: [20, 0],
             duration: 400,
-            delay: (el, i) => i * 40 + (idx * 100),
+            delay: (el, i) => i * 30 + (idx * 100),
             easing: 'easeOutQuad'
           });
         });
       }
 
-      function startCycle() {
-        let step = 0;
-        const sequence = [
-          () => animateChange({ text: 'best Fragrances', keep: 'Fragrances' }),
-          () => animateChange({ text: 'best Prices', keep: 'best' }),
-          () => animateChange({ text: 'Rosa Fragrances', keep: '' })
-        ];
+      renderInitial();
 
-        // Start with initial text
-        renderWords('Rosa Fragrances');
-
-        // Cycle every 3 seconds
-        setInterval(() => {
-          const next = sequence[step % sequence.length];
-          next();
-          step++;
-        }, 3000);
-      }
-
-      startCycle();
+      // Cycle every 3 seconds
+      setInterval(() => {
+        updatePhrase();
+      }, 3000);
     });
   </script>
 </body>
