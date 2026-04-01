@@ -162,6 +162,8 @@
             border-left: 1px solid var(--border);
             z-index: 251;
             padding: 0;
+            pointer-events: auto;
+
         }
 
         .nav-links.active {
@@ -531,6 +533,8 @@
             z-index: 250;
             border-left: 1px solid var(--border);
             box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
+            pointer-events: auto;
+
         }
 
         .cart-sidebar.open {
@@ -648,11 +652,13 @@
             visibility: hidden;
             opacity: 0;
             transition: 0.2s;
+            pointer-events: none;
         }
 
         .overlay.active {
             visibility: visible;
             opacity: 1;
+            pointer-events: auto;
         }
 
         .notification {
