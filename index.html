@@ -1629,13 +1629,17 @@
         return fragment;
       }
 
-      // Animation A1: fancy entrance (staggered fade + scale + color pulse)
+      // Animation A1: fancy entrance (staggered fade + scale + color pulse from dark to GOLD)
       function animateEntrance(wordElements) {
         const allLetters = [];
         wordElements.forEach(wordSpan => {
           const letters = Array.from(wordSpan.children);
           allLetters.push(...letters);
         });
+
+        // Set initial color to dark
+        anime.set(allLetters, { color: '#2e2a28' });
+
         anime({
           targets: allLetters,
           opacity: [0, 1],
@@ -1645,19 +1649,18 @@
           delay: (el, i) => i * 40,
           easing: 'easeOutElastic(1, .5)'
         });
-        // Add a subtle gold color pulse
+
+        // Color transition from dark to GOLD
         anime({
           targets: allLetters,
-          color: [varColor('--accent'), varColor('--text-primary')],
+          color: ['#2e2a28', '#d4af37'],
           duration: 600,
           delay: (el, i) => i * 40,
-          easing: 'easeOutQuad',
-          direction: 'alternate',
-          loop: false
+          easing: 'easeOutQuad'
         });
       }
 
-      // Animation A2: different exit (rotate + fade + shrink)
+      // Animation A2: exit (rotate + fade + shrink)
       function animateExit(wordElements, onComplete) {
         const allLetters = [];
         wordElements.forEach(wordSpan => {
@@ -1675,11 +1678,6 @@
           easing: 'easeInQuad',
           complete: onComplete
         });
-      }
-
-      // Helper to get computed CSS variable color
-      function varColor(varName) {
-        return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
       }
 
       // Main transition: replace current text with new phrase using A2 exit + A1 entrance
