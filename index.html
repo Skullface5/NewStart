@@ -1584,7 +1584,7 @@
       initTheme();
     });
 
-    // ========== UPDATED LOGO ANIMATION ==========
+    // ========== LUXURY LOGO ANIMATION ==========
     (function () {
       const logoText = document.getElementById('animatedLogo');
       if (!logoText) return;
@@ -1600,12 +1600,11 @@
 
       let currentIndex = 0;
 
-      // Helper: split a phrase into an array of words
       function splitIntoWords(phrase) {
         return phrase.split(' ');
       }
 
-      // Create the DOM structure for words and letters (no animation yet)
+      // Create DOM structure with individual letters wrapped in spans
       function buildWordStructure(words) {
         const fragment = document.createDocumentFragment();
         words.forEach((word, idx) => {
@@ -1613,12 +1612,16 @@
           wordSpan.className = 'word';
           wordSpan.style.display = 'inline-block';
           wordSpan.style.marginRight = (idx === words.length - 1) ? '0' : '8px';
+          wordSpan.style.position = 'relative';
 
           for (let i = 0; i < word.length; i++) {
             const letter = document.createElement('span');
             letter.textContent = word[i];
             letter.style.display = 'inline-block';
             letter.style.opacity = '0';
+            letter.style.transform = 'translateY(40px) rotateX(-90deg)';
+            letter.style.transformOrigin = 'center center';
+            letter.style.filter = 'blur(8px)';
             wordSpan.appendChild(letter);
           }
           fragment.appendChild(wordSpan);
@@ -1629,7 +1632,7 @@
         return fragment;
       }
 
-      // Animation A1: fancy entrance (staggered fade + scale + color pulse from dark to GOLD)
+      // PREMIUM ANIMATION A1: Cinematic 3D flip + blur reveal with gold dust sparkle
       function animateEntrance(wordElements) {
         const allLetters = [];
         wordElements.forEach(wordSpan => {
@@ -1637,50 +1640,62 @@
           allLetters.push(...letters);
         });
 
-        // Set initial color to dark
-        anime.set(allLetters, { color: '#2e2a28' });
+        // Initial state - invisible, blurred, rotated
+        anime.set(allLetters, {
+          opacity: 0,
+          translateY: 60,
+          rotateX: -90,
+          filter: 'blur(12px)',
+          color: '#d4af37'
+        });
 
+        // Staggered 3D flip-in with blur dissolve
         anime({
           targets: allLetters,
           opacity: [0, 1],
-          scale: [0.5, 1],
-          translateY: [20, 0],
-          duration: 500,
-          delay: (el, i) => i * 40,
-          easing: 'easeOutElastic(1, .5)'
+          translateY: [60, 0],
+          rotateX: [-90, 0],
+          filter: ['blur(12px)', 'blur(0px)'],
+          duration: 800,
+          delay: (el, i) => 50 + (i * 35),
+          easing: 'cubicBezier(0.25, 0.46, 0.45, 0.94)',
         });
 
-        // Color transition from dark to GOLD
+        // Gold shimmer effect that sweeps across letters
         anime({
           targets: allLetters,
-          color: ['#2e2a28', '#d4af37'],
-          duration: 600,
-          delay: (el, i) => i * 40,
+          keyframes: [
+            { textShadow: '0 0 0px rgba(212,175,55,0)' },
+            { textShadow: '0 0 12px rgba(212,175,55,0.8)' },
+            { textShadow: '0 0 0px rgba(212,175,55,0)' }
+          ],
+          duration: 1000,
+          delay: (el, i) => 100 + (i * 35),
           easing: 'easeOutQuad'
         });
       }
 
-      // Animation A2: exit (rotate + fade + shrink)
+      // PREMIUM ANIMATION A2: Elegant fade out with downward dissolve + blur
       function animateExit(wordElements, onComplete) {
         const allLetters = [];
         wordElements.forEach(wordSpan => {
           const letters = Array.from(wordSpan.children);
           allLetters.push(...letters);
         });
+
         anime({
           targets: allLetters,
           opacity: [1, 0],
-          rotate: [0, -15],
-          scale: [1, 0.3],
           translateY: [0, -30],
-          duration: 400,
+          rotateX: [0, 45],
+          filter: ['blur(0px)', 'blur(8px)'],
+          duration: 500,
           delay: (el, i) => i * 20,
-          easing: 'easeInQuad',
+          easing: 'cubicBezier(0.55, 0.085, 0.68, 0.53)',
           complete: onComplete
         });
       }
 
-      // Main transition: replace current text with new phrase using A2 exit + A1 entrance
       let isAnimating = false;
       let currentWordElements = [];
 
@@ -1691,25 +1706,19 @@
         const newWords = splitIntoWords(newPhrase);
         const newWordElements = [];
 
-        // Exit animation on current words
         if (currentWordElements.length > 0) {
           animateExit(currentWordElements, () => {
-            // Remove old words
             currentWordElements.forEach(el => el.remove());
-            // Build and insert new words
             const fragment = buildWordStructure(newWords);
             logoText.innerHTML = '';
             logoText.appendChild(fragment);
-            // Collect new word elements
             const freshWordSpans = logoText.querySelectorAll('.word');
             freshWordSpans.forEach(ws => newWordElements.push(ws));
             currentWordElements = newWordElements;
-            // Entrance animation
             animateEntrance(currentWordElements);
             isAnimating = false;
           });
         } else {
-          // Initial display (no exit)
           const fragment = buildWordStructure(newWords);
           logoText.innerHTML = '';
           logoText.appendChild(fragment);
@@ -1721,14 +1730,12 @@
         }
       }
 
-      // Start with first phrase
       transitionToPhrase(phrases[0]);
 
-      // Cycle through phrases every 3 seconds
       setInterval(() => {
         currentIndex = (currentIndex + 1) % phrases.length;
         transitionToPhrase(phrases[currentIndex]);
-      }, 3000);
+      }, 3200);
     })();
   </script>
 
