@@ -1822,13 +1822,16 @@
             translatePage(currentLanguage);
             checkUser();
             updateUserDisplay();
-            supabase.auth.onAuthStateChange(() => {
-                // Debounce auth state changes to avoid concurrent calls
-                if (checkUserTimeout) clearTimeout(checkUserTimeout);
-                if (updateDisplayTimeout) clearTimeout(updateDisplayTimeout);
-                
-                checkUserTimeout = setTimeout(() => checkUser(), 50);
-                updateDisplayTimeout = setTimeout(() => updateUserDisplay(), 100);
+            supabase.auth.onAuthStateChange((event, session) => {
+                // Only update on meaningful auth events, not token refreshes
+                if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
+                    // Debounce auth state changes to avoid concurrent calls
+                    if (checkUserTimeout) clearTimeout(checkUserTimeout);
+                    if (updateDisplayTimeout) clearTimeout(updateDisplayTimeout);
+                    
+                    checkUserTimeout = setTimeout(() => checkUser(), 50);
+                    updateDisplayTimeout = setTimeout(() => updateUserDisplay(), 100);
+                }
             });
             saveCart();
         })();

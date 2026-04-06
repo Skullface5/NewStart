@@ -1158,21 +1158,8 @@
   </header>
 
   <div class="admin-wrapper" id="adminWrapper">
-    <!-- GATE PANEL -->
-    <div id="gatePanel" class="gate">
-      <i class="fas fa-spa" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem;"></i>
-      <h2>Espace propriétaire</h2>
-      <div class="password-input">
-        <input type="password" id="passwordInput" placeholder="Mot de passe" value="">
-        <button id="unlockBtn"><i class="fas fa-arrow-right"></i></button>
-      </div>
-      <div class="hint">🔐 Mot de passe: <strong>rosa</strong></div>
-      <a href="index.html" id="backToShopLink" class="back-link"><i class="fas fa-arrow-left"></i> Retour à la
-        boutique</a>
-    </div>
-
     <!-- ADMIN PANEL -->
-    <div id="adminPanel" style="display: none;">
+    <div id="adminPanel">
       <h1>
         <i class="fas fa-spa"></i> Rosa Fragrances · Gérer les produits
         <span style="flex:1; text-align: right; font-size: 0.7rem; opacity:0.7;" id="loggedInAs"></span>
@@ -1257,12 +1244,6 @@
             <i class="fas fa-box-open"></i> Voir les parfums existants
           </a>
         </div>
-      </div>
-      <div style="margin-top: 1.5rem; text-align: right;">
-        <button id="logoutBtn" class="logout-btn"
-          style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:0.85rem;">
-          <i class="fas fa-sign-out-alt"></i> Se déconnecter
-        </button>
       </div>
     </div>
   </div>
@@ -1355,14 +1336,8 @@
         }
       });
 
-      // Password Gate
-      const GATE_PASSWORD = 'rosa';
-      const gatePanel = document.getElementById('gatePanel');
+      // Password Gate removed - Admin panel shows directly
       const adminPanel = document.getElementById('adminPanel');
-      const unlockBtn = document.getElementById('unlockBtn');
-      const passwordInput = document.getElementById('passwordInput');
-      const backLink = document.getElementById('backToShopLink');
-      const logoutBtn = document.getElementById('logoutBtn');
       const loggedInSpan = document.getElementById('loggedInAs');
       const loadingAdmin = document.getElementById('loadingAdmin');
       const adminListContainer = document.getElementById('adminProductListContainer');
@@ -1614,32 +1589,6 @@
       }
 
       // Event Listeners
-      unlockBtn.addEventListener('click', () => {
-        if (passwordInput.value === GATE_PASSWORD) {
-          gatePanel.style.display = 'none';
-          adminPanel.style.display = 'block';
-          loggedInSpan.textContent = '⚡ propriétaire · ' + new Date().toLocaleDateString('fr-FR');
-          loadAdminProducts();
-        } else {
-          alert('❌ Mot de passe incorrect');
-        }
-      });
-
-      passwordInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') unlockBtn.click();
-      });
-
-      logoutBtn.addEventListener('click', () => {
-        adminPanel.style.display = 'none';
-        gatePanel.style.display = 'block';
-        passwordInput.value = '';
-      });
-
-      backLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.location.href = 'index.html';
-      });
-
       document.getElementById('addProductBtn').addEventListener('click', addProduct);
 
       adminListContainer.addEventListener('click', (e) => {
@@ -1650,7 +1599,10 @@
         }
       });
 
-      // Initialize empty preview
+      // Initialize - show admin panel and load products
+      adminPanel.style.display = 'block';
+      loggedInSpan.textContent = '⚡ propriétaire · ' + new Date().toLocaleDateString('fr-FR');
+      loadAdminProducts();
       updateImagePreview();
     })();
 
@@ -1894,16 +1846,16 @@ let updateUserTimeout;
       updateUserDisplay();
       
       // Also set up listener for auth state changes with debounce
+      // Only respond to meaningful events, skip TOKEN_REFRESHED which happens automatically
       supabase.auth.onAuthStateChange((event, session) => {
         console.log('Auth state changed:', event, session);
-        // Clear any pending update
-        if (updateUserTimeout) clearTimeout(updateUserTimeout);
-        // Debounce the update by 100ms to avoid concurrent calls
-        updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-      setupLanguageSwitcher();
+        // Only update on meaningful auth events, not token refreshes
+        if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
+          // Clear any pending update
+          if (updateUserTimeout) clearTimeout(updateUserTimeout);
+          // Debounce the update by 100ms to avoid concurrent calls
+          updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
+        }
     });
   </script>
 </body>

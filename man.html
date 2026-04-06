@@ -1564,9 +1564,12 @@
                 }
             }
             updateUserDisplay();
-            supabase.auth.onAuthStateChange(() => {
-                if (updateUserTimeout) clearTimeout(updateUserTimeout);
-                updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
+            supabase.auth.onAuthStateChange((event, session) => {
+                // Only update on meaningful auth events, not token refreshes
+                if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
+                    if (updateUserTimeout) clearTimeout(updateUserTimeout);
+                    updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
+                }
             });
 
             function closeMenu() {

@@ -1178,12 +1178,16 @@
       updateUserDisplay();
       
       // Also set up listener for auth state changes with debounce
+      // Only respond to meaningful events, skip TOKEN_REFRESHED which happens automatically
       supabase.auth.onAuthStateChange((event, session) => {
         console.log('Auth state changed:', event, session);
-        // Clear any pending update
-        if (updateUserTimeout) clearTimeout(updateUserTimeout);
-        // Debounce the update by 100ms to avoid concurrent calls
-        updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
+        // Only update on meaningful auth events, not token refreshes
+        if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
+          // Clear any pending update
+          if (updateUserTimeout) clearTimeout(updateUserTimeout);
+          // Debounce the update by 100ms to avoid concurrent calls
+          updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
+        }
       });
 
       document.addEventListener('DOMContentLoaded', () => {
