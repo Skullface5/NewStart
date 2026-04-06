@@ -1116,7 +1116,14 @@
       initLanguage();
 
       // Update user nav links
+      let updateUserTimeout;
+      let isUpdatingUser = false;
+      
       async function updateUserDisplay() {
+        // Prevent concurrent calls
+        if (isUpdatingUser) return;
+        isUpdatingUser = true;
+        
         try {
           const { data: { user } } = await supabase.auth.getUser();
           const authLink = document.getElementById('authLink');
@@ -1162,16 +1169,21 @@
           }
         } catch (error) {
           console.error('Error checking user:', error);
+        } finally {
+          isUpdatingUser = false;
         }
       }
       
       // Call immediately
       updateUserDisplay();
       
-      // Also set up listener for auth state changes
+      // Also set up listener for auth state changes with debounce
       supabase.auth.onAuthStateChange((event, session) => {
         console.log('Auth state changed:', event, session);
-        updateUserDisplay();
+        // Clear any pending update
+        if (updateUserTimeout) clearTimeout(updateUserTimeout);
+        // Debounce the update by 100ms to avoid concurrent calls
+        updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
       });
 
       document.addEventListener('DOMContentLoaded', () => {

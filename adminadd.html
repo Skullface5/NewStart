@@ -1832,62 +1832,74 @@
     initLanguage();
 
     // Update user nav links
-    async function updateUserDisplay() {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        const authLink = document.getElementById('authLink');
-        const profileLink = document.getElementById('profileLink');
-        const adminLink = document.getElementById('adminLink');
+let updateUserTimeout;
+      let isUpdatingUser = false;
+      
+      async function updateUserDisplay() {
+        // Prevent concurrent calls
+        if (isUpdatingUser) return;
+        isUpdatingUser = true;
         
-        console.log('Checking user auth state...', user); // Debug log
-        
-        if (user) {
-          console.log('✅ User logged in:', user.email); // Debug log
-          if (authLink) {
-            authLink.style.display = 'none';
-            console.log('Hidden authLink');
-          }
-          if (profileLink) {
-            profileLink.style.display = 'block';
-            console.log('Shown profileLink');
-          }
-          // Check if user is the admin account
-          if (user.email === 'azmmeli146@gmail.com') {
-            if (adminLink) {
-              adminLink.style.display = 'block';
-              console.log('Shown adminLink');
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          const authLink = document.getElementById('authLink');
+          const profileLink = document.getElementById('profileLink');
+          const adminLink = document.getElementById('adminLink');
+          
+          console.log('Checking user auth state...', user); // Debug log
+          
+          if (user) {
+            console.log('✅ User logged in:', user.email); // Debug log
+            if (authLink) {
+              authLink.style.display = 'none';
+              console.log('Hidden authLink');
+            }
+            if (profileLink) {
+              profileLink.style.display = 'block';
+              console.log('Shown profileLink');
+            }
+            // Check if user is the admin account
+            if (user.email === 'azmmeli146@gmail.com') {
+              if (adminLink) {
+                adminLink.style.display = 'block';
+                console.log('Shown adminLink');
+              }
+            } else {
+              if (adminLink) {
+                adminLink.style.display = 'none';
+              }
             }
           } else {
+            console.log('❌ User not logged in'); // Debug log
+            if (authLink) {
+              authLink.style.display = 'block';
+              console.log('Shown authLink');
+            }
+            if (profileLink) {
+              profileLink.style.display = 'none';
+              console.log('Hidden profileLink');
+            }
             if (adminLink) {
               adminLink.style.display = 'none';
             }
           }
-        } else {
-          console.log('❌ User not logged in'); // Debug log
-          if (authLink) {
-            authLink.style.display = 'block';
-            console.log('Shown authLink');
-          }
-          if (profileLink) {
-            profileLink.style.display = 'none';
-            console.log('Hidden profileLink');
-          }
-          if (adminLink) {
-            adminLink.style.display = 'none';
-          }
+        } catch (error) {
+          console.error('Error checking user:', error);
+        } finally {
+          isUpdatingUser = false;
         }
-      } catch (error) {
-        console.error('Error checking user:', error);
       }
-    }
-    
-    // Call immediately
-    updateUserDisplay();
-    
-    // Also set up listener for auth state changes
-    supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth state changed:', event, session);
+      
+      // Call immediately
       updateUserDisplay();
+      
+      // Also set up listener for auth state changes with debounce
+      supabase.auth.onAuthStateChange((event, session) => {
+        console.log('Auth state changed:', event, session);
+        // Clear any pending update
+        if (updateUserTimeout) clearTimeout(updateUserTimeout);
+        // Debounce the update by 100ms to avoid concurrent calls
+        updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
     });
 
     document.addEventListener('DOMContentLoaded', () => {

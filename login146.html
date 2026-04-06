@@ -930,20 +930,29 @@
             signinBtn.innerHTML = '<span class="loading-spinner"></span> Connexion...';
 
             try {
+                console.log('Attempting sign in with:', email);
                 const { data, error } = await supabaseClient.auth.signInWithPassword({
                     email: email,
                     password: password
                 });
 
                 if (error) {
+                    console.error('Sign in error:', error);
                     showMessage('❌ Email ou mot de passe incorrect', 'error');
                     signinBtn.disabled = false;
                     signinBtn.innerHTML = '<span>SE CONNECTER</span>';
                 } else {
+                    console.log('✅ Sign in successful, user:', data.user);
+                    console.log('Session:', data.session);
                     showMessage('✅ Connexion réussie! Redirection...', 'success');
-                    setTimeout(() => window.location.href = 'index.html', 1500);
+                    // Wait a bit longer to ensure session is saved
+                    setTimeout(() => {
+                        console.log('Redirecting to index.html');
+                        window.location.href = 'index.html';
+                    }, 2000);
                 }
             } catch (err) {
+                console.error('Sign in catch error:', err);
                 showMessage('❌ Une erreur est survenue', 'error');
                 signinBtn.disabled = false;
                 signinBtn.innerHTML = '<span>SE CONNECTER</span>';
@@ -952,14 +961,32 @@
 
         // Check if user is already logged in
         async function checkLoggedIn() {
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            if (user) {
-                document.body.style.opacity = '0';
-                document.body.style.transition = 'opacity 0.5s';
-                setTimeout(() => window.location.href = 'index.html', 500);
+            try {
+                const { data: { user } } = await supabaseClient.auth.getUser();
+                console.log('checkLoggedIn - user found:', user);
+                if (user) {
+                    console.log('✅ User already logged in, redirecting to index.html');
+                    document.body.style.opacity = '0';
+                    document.body.style.transition = 'opacity 0.5s';
+                    setTimeout(() => window.location.href = 'index.html', 500);
+                } else {
+                    console.log('❌ No user logged in, staying on login page');
+                }
+            } catch (err) {
+                console.error('Error checking login status:', err);
             }
         }
-        checkLoggedIn();
+        
+        // Wait for page to be ready before checking
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                console.log('Page loaded, checking session...');
+                checkLoggedIn();
+            });
+        } else {
+            console.log('Page already loaded, checking session...');
+            checkLoggedIn();
+        }
     </script>
 </body>
 

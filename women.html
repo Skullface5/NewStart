@@ -1553,20 +1553,34 @@
 
             document.getElementById('checkoutForm')?.addEventListener('submit', window.processOrder);
 
+            let isUpdatingUser = false;
+            let updateUserTimeout;
+            
             async function updateUserDisplay() {
-                const { data: { user } } = await supabase.auth.getUser();
-                const authLink = document.getElementById('authLink');
-                const profileLink = document.getElementById('profileLink');
-                if (user) {
-                    if (authLink) authLink.style.display = 'none';
-                    if (profileLink) profileLink.style.display = 'block';
-                } else {
-                    if (authLink) authLink.style.display = 'block';
-                    if (profileLink) profileLink.style.display = 'none';
+                // Prevent concurrent calls
+                if (isUpdatingUser) return;
+                isUpdatingUser = true;
+                
+                try {
+                    const { data: { user } } = await supabase.auth.getUser();
+                    const authLink = document.getElementById('authLink');
+                    const profileLink = document.getElementById('profileLink');
+                    if (user) {
+                        if (authLink) authLink.style.display = 'none';
+                        if (profileLink) profileLink.style.display = 'block';
+                    } else {
+                        if (authLink) authLink.style.display = 'block';
+                        if (profileLink) profileLink.style.display = 'none';
+                    }
+                } finally {
+                    isUpdatingUser = false;
                 }
             }
             updateUserDisplay();
-            supabase.auth.onAuthStateChange(() => updateUserDisplay());
+            supabase.auth.onAuthStateChange(() => {
+                if (updateUserTimeout) clearTimeout(updateUserTimeout);
+                updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
+            });
 
             function closeMenu() {
                 navLinks.classList.remove('active');
