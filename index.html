@@ -23,46 +23,46 @@
       --bg-secondary: #EDE5DB;
       --bg-tertiary: #E8DFD3;
       --bg-gradient: radial-gradient(ellipse at 20% 30%, #F2ECE4 0%, #EDE5DB 100%);
-      
+
       /* Card & Surface colors - Gentle and soft */
       --card-base: #F5F0EA;
       --card-warm: #F2EDE6;
       --card-elevated: #F7F2EC;
       --card-shadow: rgba(100, 80, 60, 0.06);
-      
+
       /* Text hierarchy - Lower contrast, easier on eyes */
       --text-primary: #5C4F42;
       --text-secondary: #8A7B6B;
       --text-tertiary: #B0A392;
       --text-light: #C9BFB0;
-      
+
       /* Gold accents - Muted and elegant */
       --gold-light: #DFCEA8;
       --gold-base: #C4AF7D;
       --gold-deep: #B09A68;
       --gold-rich: #9C8658;
       --gold-gradient: linear-gradient(135deg, #DFCEA8 0%, #C4AF7D 50%, #DFCEA8 100%);
-      
+
       /* Rose/Blush accents - Very subtle */
       --rose-light: #F0E6E2;
       --rose-base: #E2D5CE;
       --rose-deep: #D2C2B8;
-      
+
       /* Border & divider - Almost invisible */
       --border-light: rgba(180, 155, 120, 0.12);
       --border-medium: rgba(180, 155, 120, 0.2);
-      
+
       /* Shadows - Very soft, almost no shadow */
       --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
       --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.03);
       --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.04);
       --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.06);
-      
+
       /* Input & form */
       --input-bg: #F9F6F2;
       --input-border: #E2D9CF;
       --input-focus: #C4AF7D;
-      
+
       /* Hover states */
       --hover-subtle: rgba(180, 155, 120, 0.05);
       --hover-medium: rgba(180, 155, 120, 0.1);
@@ -74,39 +74,39 @@
       --bg-secondary: #24201A;
       --bg-tertiary: #2E2820;
       --bg-gradient: radial-gradient(ellipse at 20% 30%, #1A1814 0%, #24201A 100%);
-      
+
       --card-base: #2E2820;
       --card-warm: #362F26;
       --card-elevated: #40382D;
       --card-shadow: rgba(0, 0, 0, 0.3);
-      
+
       --text-primary: #F5EFE6;
       --text-secondary: #D4C5B0;
       --text-tertiary: #A89A82;
       --text-light: #7A6E5A;
-      
+
       --gold-light: #D4B87A;
       --gold-base: #B89B5E;
       --gold-deep: #9E8048;
       --gold-rich: #8A6E3A;
       --gold-gradient: linear-gradient(135deg, #D4B87A 0%, #B89B5E 40%, #C9A96E 70%, #B89B5E 100%);
-      
+
       --rose-light: #3A2A25;
       --rose-base: #5A4038;
       --rose-deep: #7A5850;
-      
+
       --border-light: rgba(184, 155, 94, 0.15);
       --border-medium: rgba(184, 155, 94, 0.25);
-      
+
       --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
       --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
       --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
       --shadow-hover: 0 24px 48px rgba(0, 0, 0, 0.6);
-      
+
       --input-bg: #3A352C;
       --input-border: #4A4438;
       --input-focus: #B89B5E;
-      
+
       --hover-subtle: rgba(184, 155, 94, 0.08);
       --hover-medium: rgba(184, 155, 94, 0.15);
     }
@@ -128,7 +128,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: 
+      background:
         radial-gradient(circle at 20% 40%, rgba(180, 155, 120, 0.03) 0%, transparent 50%),
         radial-gradient(circle at 80% 70%, rgba(180, 155, 120, 0.02) 0%, transparent 60%);
       pointer-events: none;
@@ -136,7 +136,7 @@
     }
 
     body.dark::before {
-      background: 
+      background:
         radial-gradient(circle at 20% 40%, rgba(184, 155, 94, 0.05) 0%, transparent 50%),
         radial-gradient(circle at 80% 70%, rgba(212, 184, 122, 0.04) 0%, transparent 60%);
     }
@@ -157,12 +157,15 @@
         opacity: 0;
         transform: translateY(100vh) rotate(0deg) scale(0);
       }
+
       20% {
         opacity: 0.15;
       }
+
       80% {
         opacity: 0.15;
       }
+
       100% {
         opacity: 0;
         transform: translateY(-20vh) rotate(360deg) scale(1.2);
@@ -415,24 +418,60 @@
     }
 
     @media (max-width: 1024px) {
-      .category-grid { grid-template-columns: repeat(3, 1fr); }
-      .category-card:nth-child(1) { order: 1; }
-      .category-card:nth-child(2) { order: 3; }
-      .category-card:nth-child(3) { order: 2; }
-      .category-card:nth-child(4) { order: 4; grid-column: 2 / 3; }
+      .category-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .category-card:nth-child(1) {
+        order: 1;
+      }
+
+      .category-card:nth-child(2) {
+        order: 3;
+      }
+
+      .category-card:nth-child(3) {
+        order: 2;
+      }
+
+      .category-card:nth-child(4) {
+        order: 4;
+        grid-column: 2 / 3;
+      }
     }
 
     @media (max-width: 768px) {
-      .category-grid { grid-template-columns: repeat(2, 1fr); }
-      .category-card:nth-child(1) { order: 1; }
-      .category-card:nth-child(2) { order: 2; }
-      .category-card:nth-child(3) { order: 4; }
-      .category-card:nth-child(4) { order: 3; grid-column: auto; }
+      .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .category-card:nth-child(1) {
+        order: 1;
+      }
+
+      .category-card:nth-child(2) {
+        order: 2;
+      }
+
+      .category-card:nth-child(3) {
+        order: 4;
+      }
+
+      .category-card:nth-child(4) {
+        order: 3;
+        grid-column: auto;
+      }
     }
 
     @media (max-width: 480px) {
-      .category-grid { grid-template-columns: 1fr; }
-      .category-card { order: 0 !important; grid-column: auto !important; }
+      .category-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .category-card {
+        order: 0 !important;
+        grid-column: auto !important;
+      }
     }
 
     .category-card {
@@ -473,17 +512,18 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 100%);
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.3) 100%);
       border-radius: 24px;
       z-index: 1;
       transition: all 0.4s ease;
     }
 
     .category-card:hover::before {
-      background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%);
     }
 
-    .category-card h3, .category-card p {
+    .category-card h3,
+    .category-card p {
       position: relative;
       z-index: 2;
       color: white;
@@ -515,8 +555,17 @@
       margin: 2rem 0;
     }
 
-    @media (max-width: 1024px) { .product-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 768px) { .product-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 1024px) {
+      .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
 
     .product-card {
       background: var(--card-warm);
@@ -1018,15 +1067,23 @@
         <form id="checkoutForm">
           <div class="form-group"><label>Nom complet *</label><input type="text" id="customerName" required></div>
           <div class="form-group"><label>Téléphone *</label><input type="tel" id="customerPhone" required></div>
-          <div id="emailFieldGroup" class="form-group"><label>Email *</label><input type="email" id="customerEmail"></div>
-          <div id="loggedInEmailDisplay" style="display:none;" class="form-group"><label>Email</label><div style="padding:0.7rem; background:var(--bg-tertiary); border-radius:14px;"><i class="fas fa-check-circle"></i> <span id="displayEmail"></span></div></div>
+          <div id="emailFieldGroup" class="form-group"><label>Email *</label><input type="email" id="customerEmail">
+          </div>
+          <div id="loggedInEmailDisplay" style="display:none;" class="form-group"><label>Email</label>
+            <div style="padding:0.7rem; background:var(--bg-tertiary); border-radius:14px;"><i
+                class="fas fa-check-circle"></i> <span id="displayEmail"></span></div>
+          </div>
           <div class="form-group"><label>Adresse *</label><input type="text" id="shippingAddress" required></div>
           <div style="background: var(--bg-tertiary); padding: 0.8rem; border-radius: 18px; margin: 0.8rem 0;">
             <h4 style="margin-bottom: 0.5rem; font-weight: 400; font-size: 0.9rem;">Votre commande</h4>
             <div id="modalCartItems" style="font-size: 0.8rem;"></div>
-            <div style="display: flex; justify-content: space-between; margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid var(--border-light);"><span>Total</span><span id="modalTotal">0 TND</span></div>
+            <div
+              style="display: flex; justify-content: space-between; margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid var(--border-light);">
+              <span>Total</span><span id="modalTotal">0 TND</span></div>
           </div>
-          <div style="display: flex; gap: 10px; margin-top: 0.8rem;"><button type="button" class="btn-secondary" onclick="closeCheckoutModal()" style="font-size: 0.8rem;">Annuler</button><button type="submit" class="btn-primary" id="submitOrderBtn" style="font-size: 0.8rem;">Confirmer</button></div>
+          <div style="display: flex; gap: 10px; margin-top: 0.8rem;"><button type="button" class="btn-secondary"
+              onclick="closeCheckoutModal()" style="font-size: 0.8rem;">Annuler</button><button type="submit"
+              class="btn-primary" id="submitOrderBtn" style="font-size: 0.8rem;">Confirmer</button></div>
         </form>
       </div>
     </div>
@@ -1036,7 +1093,8 @@
   <div id="productModal" class="modal-overlay">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 id="productModalTitle" style="font-weight: 400; font-size: 1rem;"><i class="fas fa-info-circle"></i> Détails</h3>
+        <h3 id="productModalTitle" style="font-weight: 400; font-size: 1rem;"><i class="fas fa-info-circle"></i> Détails
+        </h3>
         <button class="close-modal" onclick="closeProductModal()"><i class="fas fa-times"></i></button>
       </div>
       <div id="productModalBody" style="padding: 1.2rem; text-align: center;"></div>
@@ -1052,12 +1110,17 @@
   <aside id="cartSidebar" class="cart-sidebar">
     <div class="cart-header">
       <h3 style="font-weight: 400; font-size: 1rem;"><i class="fas fa-bag-shopping"></i> Panier</h3>
-      <button class="close-cart" id="closeCartBtn" style="background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--text-tertiary);"><i class="fas fa-times"></i></button>
+      <button class="close-cart" id="closeCartBtn"
+        style="background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--text-tertiary);"><i
+          class="fas fa-times"></i></button>
     </div>
-    <div id="cartItemsContainer" class="cart-items"><div class="empty-cart-message">Votre panier est vide.</div></div>
+    <div id="cartItemsContainer" class="cart-items">
+      <div class="empty-cart-message">Votre panier est vide.</div>
+    </div>
     <div class="cart-footer">
       <div class="cart-total"><span>Total</span><span id="cartTotalPrice">0,000 TND</span></div>
-      <button class="checkout-btn" id="checkoutBtn" style="font-size: 0.8rem;">PAIEMENT <i class="fas fa-arrow-right"></i></button>
+      <button class="checkout-btn" id="checkoutBtn" style="font-size: 0.8rem;">PAIEMENT <i
+          class="fas fa-arrow-right"></i></button>
     </div>
   </aside>
 
@@ -1069,38 +1132,57 @@
         <h1>Rosa Fragrances</h1>
       </a>
       <div style="display: flex; align-items: center; gap: 4px;">
-        <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon" style="display: none;"></i></div>
-        <div class="cart-icon" id="cartToggle"><i class="fas fa-bag-shopping"></i><span id="cartCount" class="cart-count">0</span></div>
+        <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon"
+            style="display: none;"></i></div>
+        <div class="cart-icon" id="cartToggle"><i class="fas fa-bag-shopping"></i><span id="cartCount"
+            class="cart-count">0</span></div>
         <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
       </div>
       <div class="nav-links" id="navLinks">
         <a href="#">COLLECTION</a><a href="#">EXCLUSIVITÉS</a><a href="#">COFFRETS</a>
         <div class="lang-menu" id="langMenu">
-          <button class="lang-current" id="langCurrentBtn"><span id="currentLangText">FRANÇAIS</span><i class="fas fa-chevron-down"></i></button>
-          <div class="lang-options"><button class="lang-option" data-lang="fr">🇫🇷 Français</button><button class="lang-option" data-lang="en">🇬🇧 English</button><button class="lang-option" data-lang="ar">🇸🇦 العربية</button></div>
+          <button class="lang-current" id="langCurrentBtn"><span id="currentLangText">FRANÇAIS</span><i
+              class="fas fa-chevron-down"></i></button>
+          <div class="lang-options"><button class="lang-option" data-lang="fr">🇫🇷 Français</button><button
+              class="lang-option" data-lang="en">🇬🇧 English</button><button class="lang-option" data-lang="ar">🇸🇦
+              العربية</button></div>
         </div>
-        <a href="login146.html" id="authLink">Se connecter</a><a href="profile.html" id="profileLink" style="display: none;">Mon Profil</a>
+        <a href="login146.html" id="authLink">Se connecter</a><a href="profile.html" id="profileLink"
+          style="display: none;">Mon Profil</a>
       </div>
     </div>
   </header>
 
   <div style="margin: 8px 5px;">
-    <img src="https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/card.jpg"
-      alt="Rosa Fragrances"
+    <img src="https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/card.jpg" alt="Rosa Fragrances"
       style="width: 100%; display: block; border-radius: 0; box-shadow: var(--shadow-sm);">
   </div>
 
   <main class="container">
     <div class="categories-section">
       <div class="category-grid">
-        <a href="man.html" class="category-card cat-man"><h3>Homme</h3><p>Boisés & épicés</p></a>
-        <a href="women.html" class="category-card cat-women"><h3>Femme</h3><p>Floraux & sensuels</p></a>
-        <a href="unisexe.html" class="category-card cat-unisex"><h3>Unisexe</h3><p>Pour tous</p></a>
-        <a href="kids.html" class="category-card cat-kids"><h3>Enfants</h3><p>Douceurs</p></a>
+        <a href="man.html" class="category-card cat-man">
+          <h3>Homme</h3>
+          <p>Boisés & épicés</p>
+        </a>
+        <a href="women.html" class="category-card cat-women">
+          <h3>Femme</h3>
+          <p>Floraux & sensuels</p>
+        </a>
+        <a href="unisexe.html" class="category-card cat-unisex">
+          <h3>Unisexe</h3>
+          <p>Pour tous</p>
+        </a>
+        <a href="kids.html" class="category-card cat-kids">
+          <h3>Enfants</h3>
+          <p>Douceurs</p>
+        </a>
       </div>
     </div>
 
-    <div id="loadingProducts" class="loading-spinner" style="display: none;"><i class="fas fa-spinner fa-spin"></i><p style="margin-top: 0.3rem; font-size: 0.8rem;">Chargement...</p></div>
+    <div id="loadingProducts" class="loading-spinner" style="display: none;"><i class="fas fa-spinner fa-spin"></i>
+      <p style="margin-top: 0.3rem; font-size: 0.8rem;">Chargement...</p>
+    </div>
     <div class="product-grid" id="productGrid"></div>
   </main>
 
@@ -1112,10 +1194,23 @@
           <p style="color:var(--text-secondary); font-size: 0.75rem;">Une question ? Nous sommes là.</p>
         </div>
         <div class="contact-grid">
-          <div class="contact-item"><div class="contact-icon"><i class="fas fa-envelope"></i></div><p>Email</p><a href="mailto:rosafragrances.tn@gmail.com">rosafragrances.tn@gmail.com</a></div>
-          <div class="contact-item"><div class="contact-icon"><i class="fas fa-phone-alt"></i></div><p>Téléphone</p><a href="tel:+21696163366">+216 96 163 366</a></div>
-          <div class="contact-item"><div class="contact-icon"><i class="fab fa-whatsapp"></i></div><p>WhatsApp</p><a href="https://wa.me/21696163366" target="_blank">+216 96 163 366</a></div>
-          <div class="contact-item"><div class="contact-icon"><i class="fab fa-facebook-f"></i></div><p>Facebook</p><a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/" target="_blank">Rosa</a></div>
+          <div class="contact-item">
+            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+            <p>Email</p><a href="mailto:rosafragrances.tn@gmail.com">rosafragrances.tn@gmail.com</a>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+            <p>Téléphone</p><a href="tel:+21696163366">+216 96 163 366</a>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
+            <p>WhatsApp</p><a href="https://wa.me/21696163366" target="_blank">+216 96 163 366</a>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon"><i class="fab fa-facebook-f"></i></div>
+            <p>Facebook</p><a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/"
+              target="_blank">Rosa</a>
+          </div>
         </div>
         <div style="width: 30px; height: 1px; background: var(--gold-gradient); margin: 1rem auto 0;"></div>
       </div>
@@ -1126,7 +1221,7 @@
   <script>
     (function () {
       const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
-      const SUPABASE_KEY = 'sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_';
+      const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
       let products = [];
@@ -1428,9 +1523,11 @@
         });
       });
       document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
+      supabase.auth.refreshSession().then(() => {
+        loadProducts();
+        saveCart();
+      });
 
-      loadProducts();
-      saveCart();
     })();
 
     function initTheme() {
