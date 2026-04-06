@@ -1833,38 +1833,62 @@
 
     // Update user nav links
     async function updateUserDisplay() {
-      const { data: { user } } = await supabase.auth.getUser();
-      const authLink = document.getElementById('authLink');
-      const profileLink = document.getElementById('profileLink');
-      const adminLink = document.getElementById('adminLink');
-      console.log('User:', user); // Debug log
-      if (user) {
-        console.log('User logged in:', user.email); // Debug log
-        if (authLink) authLink.style.display = 'none';
-        if (profileLink) profileLink.style.display = 'block';
-        if (user.email === 'azmmeli146@gmail.com') {
-          if (adminLink) adminLink.style.display = 'block';
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        const authLink = document.getElementById('authLink');
+        const profileLink = document.getElementById('profileLink');
+        const adminLink = document.getElementById('adminLink');
+        
+        console.log('Checking user auth state...', user); // Debug log
+        
+        if (user) {
+          console.log('✅ User logged in:', user.email); // Debug log
+          if (authLink) {
+            authLink.style.display = 'none';
+            console.log('Hidden authLink');
+          }
+          if (profileLink) {
+            profileLink.style.display = 'block';
+            console.log('Shown profileLink');
+          }
+          // Check if user is the admin account
+          if (user.email === 'azmmeli146@gmail.com') {
+            if (adminLink) {
+              adminLink.style.display = 'block';
+              console.log('Shown adminLink');
+            }
+          } else {
+            if (adminLink) {
+              adminLink.style.display = 'none';
+            }
+          }
         } else {
-          if (adminLink) adminLink.style.display = 'none';
+          console.log('❌ User not logged in'); // Debug log
+          if (authLink) {
+            authLink.style.display = 'block';
+            console.log('Shown authLink');
+          }
+          if (profileLink) {
+            profileLink.style.display = 'none';
+            console.log('Hidden profileLink');
+          }
+          if (adminLink) {
+            adminLink.style.display = 'none';
+          }
         }
-      } else {
-        console.log('User not logged in'); // Debug log
-        if (authLink) authLink.style.display = 'block';
-        if (profileLink) profileLink.style.display = 'none';
-        if (adminLink) adminLink.style.display = 'none';
+      } catch (error) {
+        console.error('Error checking user:', error);
       }
     }
     
-    // Wait for page to load and session to be restored
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => updateUserDisplay(), 100);
-      });
-    } else {
-      setTimeout(() => updateUserDisplay(), 100);
-    }
+    // Call immediately
+    updateUserDisplay();
     
-    supabase.auth.onAuthStateChange(() => updateUserDisplay());
+    // Also set up listener for auth state changes
+    supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth state changed:', event, session);
+      updateUserDisplay();
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
       setupLanguageSwitcher();
