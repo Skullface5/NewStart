@@ -145,45 +145,31 @@
             cursor: pointer;
         }
 
+        /* Mobile Menu - Same as index.html */
         .nav-links {
             display: flex;
             flex-direction: column;
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 85%;
-            max-width: 300px;
-            height: 100vh;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 260px;
             background: var(--bg-primary);
+            backdrop-filter: blur(10px);
             gap: 0;
-            overflow-y: auto;
-            transition: right 0.3s ease-out;
-            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
-            border-left: 1px solid var(--border);
-            z-index: 251;
-            padding: 0;
-            pointer-events: auto;
-
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            z-index: 101;
+            border-radius: 20px;
         }
 
         .nav-links.active {
-            right: 0;
-            background: red;
-            /* Temporary - this will turn menu red */
-
-        }
-
-        .close-menu-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--accent);
-            padding: 1rem;
-            text-align: right;
-            display: block;
-            width: 100%;
-            border-bottom: 1px solid var(--border);
+            max-height: 450px;
+            opacity: 1;
+            padding: 0.5rem 0;
         }
 
         .nav-links a {
@@ -193,8 +179,11 @@
             transition: all 0.2s;
             border-bottom: 1px solid var(--border);
             display: block;
-            pointer-events: auto !important;
             cursor: pointer;
+        }
+
+        .nav-links a:last-child {
+            border-bottom: none;
         }
 
         .nav-links a:hover {
@@ -203,8 +192,8 @@
             padding-left: 2rem;
         }
 
+        /* Language dropdown */
         .lang-menu {
-            position: relative;
             border-bottom: 1px solid var(--border);
         }
 
@@ -219,6 +208,11 @@
             font-size: 1rem;
             color: var(--text-primary);
             cursor: pointer;
+        }
+
+        .lang-current:hover {
+            background: var(--hover-bg);
+            color: var(--accent);
         }
 
         .lang-current i {
@@ -250,6 +244,11 @@
             font-size: 0.9rem;
             cursor: pointer;
             color: var(--text-secondary);
+        }
+
+        .lang-option:hover {
+            background: var(--hover-bg);
+            color: var(--accent);
         }
 
         .back-link {
@@ -297,23 +296,32 @@
             }
         }
 
-        /* Image Gallery with Animation */
+        /* Image Gallery with Swipe Support */
         .product-gallery {
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            position: relative;
         }
 
-        .main-image {
+        .main-image-container {
+            position: relative;
             width: 100%;
             aspect-ratio: 1 / 1;
             background: var(--bg-secondary);
             border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            touch-action: pan-y pinch-zoom;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            border: 1px solid var(--border);
             position: relative;
         }
 
@@ -321,8 +329,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-            opacity: 1;
+            transition: transform 0.3s ease-in-out;
         }
 
         .main-image img.fade-out {
@@ -332,6 +339,65 @@
         .main-image i {
             font-size: 5rem;
             color: var(--accent);
+        }
+
+        /* Swipe indicators */
+        .swipe-indicators {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .swipe-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transition: all 0.2s;
+        }
+
+        .swipe-dot.active {
+            width: 20px;
+            border-radius: 4px;
+            background: var(--accent);
+        }
+
+        /* Navigation arrows */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .nav-arrow:hover {
+            background: var(--accent);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow.prev {
+            left: 10px;
+        }
+
+        .nav-arrow.next {
+            right: 10px;
         }
 
         .thumbnail-grid {
@@ -538,8 +604,6 @@
             z-index: 250;
             border-left: 1px solid var(--border);
             box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
-            pointer-events: auto;
-
         }
 
         .cart-sidebar.open {
@@ -645,7 +709,7 @@
             font-weight: 600;
         }
 
-        /* Shared Overlay for both cart and menu */
+        /* Overlay */
         .overlay {
             position: fixed;
             top: 0;
@@ -657,13 +721,11 @@
             visibility: hidden;
             opacity: 0;
             transition: 0.2s;
-            pointer-events: none;
         }
 
         .overlay.active {
             visibility: visible;
             opacity: 1;
-            pointer-events: auto;
         }
 
         .notification {
@@ -700,6 +762,12 @@
                 width: 55px;
                 height: 55px;
             }
+
+            .nav-arrow {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -707,7 +775,7 @@
 <body>
     <div id="toast" class="notification">✨ Article ajouté</div>
 
-    <!-- Shared Overlay -->
+    <!-- Overlay -->
     <div id="overlay" class="overlay"></div>
 
     <!-- Cart Sidebar -->
@@ -741,7 +809,6 @@
                 <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
             </div>
             <div class="nav-links" id="navLinks">
-                <button class="close-menu-btn" id="closeMenuBtn"><i class="fas fa-times"></i></button>
                 <a href="index.html">ACCUEIL</a>
                 <a href="man.html">HOMME</a>
                 <a href="women.html">FEMME</a>
@@ -789,6 +856,8 @@
             let currentProduct = null;
             let allProducts = [];
             let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
+            let currentImageIndex = 0;
+            let productImages = [];
 
             const urlParams = new URLSearchParams(window.location.search);
             const productId = urlParams.get('id');
@@ -807,7 +876,6 @@
             const checkoutBtn = document.getElementById('checkoutBtn');
             const menuToggle = document.getElementById('menuToggle');
             const navLinks = document.getElementById('navLinks');
-            const closeMenuBtn = document.getElementById('closeMenuBtn');
 
             function showToast(msg) {
                 toast.textContent = msg;
@@ -926,6 +994,100 @@
                 });
             }
 
+            // Swipe functionality for image gallery
+            function setupSwipeAndNavigation(images) {
+                if (images.length <= 1) return;
+
+                let touchStartX = 0;
+                let touchEndX = 0;
+                const container = document.querySelector('.main-image-container');
+                
+                if (!container) return;
+
+                // Touch events for swipe
+                container.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                });
+
+                container.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                });
+
+                function handleSwipe() {
+                    const swipeThreshold = 50;
+                    const diff = touchEndX - touchStartX;
+                    
+                    if (Math.abs(diff) < swipeThreshold) return;
+                    
+                    if (diff > 0) {
+                        // Swipe right - previous image
+                        changeImage(currentImageIndex - 1);
+                    } else {
+                        // Swipe left - next image
+                        changeImage(currentImageIndex + 1);
+                    }
+                }
+
+                // Arrow navigation
+                const prevArrow = document.querySelector('.nav-arrow.prev');
+                const nextArrow = document.querySelector('.nav-arrow.next');
+                
+                if (prevArrow) {
+                    prevArrow.addEventListener('click', () => changeImage(currentImageIndex - 1));
+                }
+                if (nextArrow) {
+                    nextArrow.addEventListener('click', () => changeImage(currentImageIndex + 1));
+                }
+
+                // Thumbnail click
+                const thumbnails = document.querySelectorAll('.thumbnail');
+                thumbnails.forEach((thumb, idx) => {
+                    thumb.addEventListener('click', () => changeImage(idx));
+                });
+
+                function changeImage(newIndex) {
+                    if (newIndex < 0) newIndex = images.length - 1;
+                    if (newIndex >= images.length) newIndex = 0;
+                    if (newIndex === currentImageIndex) return;
+                    
+                    currentImageIndex = newIndex;
+                    
+                    // Update main image with fade effect
+                    const mainImage = document.getElementById('mainImage');
+                    if (mainImage) {
+                        mainImage.classList.add('fade-out');
+                        setTimeout(() => {
+                            mainImage.src = images[currentImageIndex];
+                            mainImage.classList.remove('fade-out');
+                        }, 150);
+                    }
+                    
+                    // Update active thumbnail
+                    document.querySelectorAll('.thumbnail').forEach((thumb, idx) => {
+                        if (idx === currentImageIndex) {
+                            thumb.classList.add('active');
+                        } else {
+                            thumb.classList.remove('active');
+                        }
+                    });
+                    
+                    // Update swipe indicators
+                    updateSwipeIndicators();
+                }
+                
+                function updateSwipeIndicators() {
+                    const dots = document.querySelectorAll('.swipe-dot');
+                    dots.forEach((dot, idx) => {
+                        if (idx === currentImageIndex) {
+                            dot.classList.add('active');
+                        } else {
+                            dot.classList.remove('active');
+                        }
+                    });
+                }
+            }
+
             // Load all products first
             async function loadAllProducts() {
                 try {
@@ -974,20 +1136,20 @@
                 }
             }
 
-            // Display product details with image gallery and animation
+            // Display product details with image gallery, swipe, and arrows
             function displayProduct(product) {
                 // Parse images from JSON string
-                let images = [];
+                productImages = [];
                 try {
                     if (product.images && typeof product.images === 'string') {
-                        images = JSON.parse(product.images);
+                        productImages = JSON.parse(product.images);
                     } else if (product.images && Array.isArray(product.images)) {
-                        images = product.images;
+                        productImages = product.images;
                     } else if (product.image) {
-                        images = [product.image];
+                        productImages = [product.image];
                     }
                 } catch (e) {
-                    images = [];
+                    productImages = [];
                 }
 
                 const seasonNames = { all: 'Toutes saisons', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne' };
@@ -999,14 +1161,31 @@
                 // Generate thumbnail grid HTML
                 let thumbnailsHtml = '';
                 let mainImageHtml = '';
+                let swipeIndicatorsHtml = '';
+                let arrowsHtml = '';
 
-                if (images.length > 0) {
-                    mainImageHtml = `<img src="${images[0]}" alt="${escapeHtml(product.name)}" id="mainImage">`;
-                    thumbnailsHtml = images.map((img, idx) => `
+                if (productImages.length > 0) {
+                    mainImageHtml = `<img src="${productImages[0]}" alt="${escapeHtml(product.name)}" id="mainImage">`;
+                    
+                    // Generate thumbnails
+                    thumbnailsHtml = productImages.map((img, idx) => `
                         <div class="thumbnail ${idx === 0 ? 'active' : ''}" data-img="${img}">
                             <img src="${img}" alt="thumbnail ${idx + 1}">
                         </div>
                     `).join('');
+                    
+                    // Generate swipe indicators (dots)
+                    swipeIndicatorsHtml = productImages.map((_, idx) => `
+                        <div class="swipe-dot ${idx === 0 ? 'active' : ''}"></div>
+                    `).join('');
+                    
+                    // Add navigation arrows if more than 1 image
+                    if (productImages.length > 1) {
+                        arrowsHtml = `
+                            <div class="nav-arrow prev"><i class="fas fa-chevron-left"></i></div>
+                            <div class="nav-arrow next"><i class="fas fa-chevron-right"></i></div>
+                        `;
+                    }
                 } else {
                     mainImageHtml = `<i class="fas fa-crown"></i>`;
                 }
@@ -1014,10 +1193,16 @@
                 productDetailContainer.innerHTML = `
                     <div class="product-detail">
                         <div class="product-gallery">
-                            <div class="main-image">
-                                ${mainImageHtml}
+                            <div class="main-image-container">
+                                <div class="main-image">
+                                    ${mainImageHtml}
+                                </div>
+                                ${arrowsHtml}
+                                <div class="swipe-indicators">
+                                    ${swipeIndicatorsHtml}
+                                </div>
                             </div>
-                            ${images.length > 1 ? `<div class="thumbnail-grid">${thumbnailsHtml}</div>` : ''}
+                            ${productImages.length > 1 ? `<div class="thumbnail-grid">${thumbnailsHtml}</div>` : ''}
                         </div>
                         <div class="product-info">
                             <h1>${escapeHtml(product.name)}</h1>
@@ -1028,7 +1213,7 @@
                             </div>
                             <div class="product-price">${formatPrice(product.price)}</div>
                             <div class="product-description">${escapeHtml(product.description || 'Découvrez ce parfum d\'exception, une fragrance unique qui révèle votre personnalité.')}</div>
-                            <button class="add-to-cart-btn" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${product.price}" data-icon="${product.icon || 'fa-crown'}" data-image="${images[0] || ''}">
+                            <button class="add-to-cart-btn" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${product.price}" data-icon="${product.icon || 'fa-crown'}" data-image="${productImages[0] || ''}">
                                 <i class="fas fa-shopping-cart"></i> Ajouter au panier
                             </button>
                         </div>
@@ -1049,29 +1234,9 @@
                     });
                 }
 
-                // Thumbnail click handler with animation
-                if (images.length > 1) {
-                    const mainImageElement = document.getElementById('mainImage');
-                    const thumbnails = document.querySelectorAll('.thumbnail');
-
-                    thumbnails.forEach((thumb, idx) => {
-                        thumb.addEventListener('click', () => {
-                            const newImageSrc = thumb.dataset.img;
-                            if (mainImageElement && newImageSrc) {
-                                // Add fade-out animation
-                                mainImageElement.classList.add('fade-out');
-
-                                setTimeout(() => {
-                                    mainImageElement.src = newImageSrc;
-                                    mainImageElement.classList.remove('fade-out');
-                                }, 150);
-
-                                // Update active thumbnail
-                                thumbnails.forEach(t => t.classList.remove('active'));
-                                thumb.classList.add('active');
-                            }
-                        });
-                    });
+                // Setup swipe and navigation if multiple images
+                if (productImages.length > 1) {
+                    setupSwipeAndNavigation(productImages);
                 }
             }
 
@@ -1079,7 +1244,6 @@
             function loadSuggestions() {
                 if (!currentProduct || !allProducts.length) return;
 
-                // Find suggestions: same category, exclude current product
                 const suggestions = allProducts.filter(p =>
                     p.id !== currentProduct.id &&
                     p.category === currentProduct.category
@@ -1094,7 +1258,6 @@
 
                 let html = '';
                 suggestions.forEach(product => {
-                    // Get first image
                     let firstImage = '';
                     try {
                         const prodImages = product.images ? JSON.parse(product.images) : [];
@@ -1153,8 +1316,6 @@
                     openMenu();
                 }
             });
-
-            if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
 
             document.querySelectorAll('.nav-links a').forEach(link => {
                 link.addEventListener('click', closeMenu);

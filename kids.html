@@ -242,44 +242,34 @@
             color: var(--accent);
         }
 
-        /* Mobile Menu */
         .nav-links {
             display: flex;
             flex-direction: column;
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 85%;
-            max-width: 300px;
-            height: 100vh;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 260px;
             background: var(--bg-primary);
+            backdrop-filter: blur(10px);
             gap: 0;
-            overflow-y: auto;
-            transition: right 0.3s ease-out;
-            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
-            border-left: 1px solid var(--border);
-            z-index: 1000;
-            border-radius: 0;
-            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            z-index: 101;
+            border-radius: 20px;
         }
 
         .nav-links.active {
-            right: 0;
+            max-height: 450px;
+            opacity: 1;
+            padding: 0.5rem 0;
         }
 
         .close-menu-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--accent);
-            padding: 1rem;
-            text-align: right;
-            display: block;
-            width: 100%;
-            border-bottom: 1px solid var(--border);
-            position: relative;
-            z-index: 1002;
+            display: none;
         }
 
         .close-menu-btn i {
@@ -1132,7 +1122,6 @@
                 <a href="man.html">HOMME</a>
                 <a href="women.html">FEMME</a>
                 <a href="unisexe.html">UNISEXE</a>
-                <a href="kids.html">ENFANTS</a>
                 <div class="lang-menu" id="langMenu">
                     <button class="lang-current" id="langCurrentBtn">
                         <span id="currentLangText">FRANÇAIS</span>
@@ -1550,18 +1539,19 @@
             function toggleMenu() {
                 const active = navLinks.classList.contains('active');
                 if (active) {
-                    closeMenu();
+                    navLinks.classList.remove('active');
+                    menuOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
                 } else {
-                    openMenu();
+                    navLinks.classList.add('active');
+                    menuOverlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    closeCart();
                 }
             }
-
             if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
+            if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
 
-            // Close menu when clicking close button
-            if (closeMenuBtn) {
-                closeMenuBtn.addEventListener('click', closeMenu);
-            }
 
             // Close menu when clicking overlay
             if (menuOverlay) {
