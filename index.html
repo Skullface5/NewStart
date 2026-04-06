@@ -354,6 +354,31 @@
       padding-left: 2rem;
     }
 
+    .admin-nav-link {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.04) 100%) !important;
+      color: var(--gold-base) !important;
+      font-weight: 600;
+      border-bottom: 2px solid var(--gold-base) !important;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .admin-nav-link[style*="display: block"] {
+      display: flex !important;
+    }
+
+    .admin-nav-link:hover {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.08) 100%) !important;
+      color: var(--accent-dark) !important;
+      padding-left: 2.5rem !important;
+      transform: translateX(2px);
+    }
+
+    .admin-nav-link i {
+      font-size: 0.95rem;
+    }
+
     .lang-menu {
       border-bottom: 1px solid var(--border-light);
     }
@@ -1148,7 +1173,8 @@
               العربية</button></div>
         </div>
         <a href="login146.html" id="authLink">Se connecter</a><a href="profile.html" id="profileLink"
-          style="display: none;">Mon Profil</a>
+          style="display: none;">Mon Profil</a><a href="adminadd.html" id="adminLink"
+          style="display: none;" class="admin-nav-link"><i class="fas fa-crown"></i> Admin</a>
       </div>
     </div>
   </header>
@@ -1491,12 +1517,20 @@
         const { data: { user } } = await supabase.auth.getUser();
         const authLink = document.getElementById('authLink');
         const profileLink = document.getElementById('profileLink');
+        const adminLink = document.getElementById('adminLink');
         if (user) {
           if (authLink) authLink.style.display = 'none';
           if (profileLink) profileLink.style.display = 'block';
+          // Check if user is the admin account
+          if (user.email === 'azmmeli146@gmail.com') {
+            if (adminLink) adminLink.style.display = 'block';
+          } else {
+            if (adminLink) adminLink.style.display = 'none';
+          }
         } else {
           if (authLink) authLink.style.display = 'block';
           if (profileLink) profileLink.style.display = 'none';
+          if (adminLink) adminLink.style.display = 'none';
         }
       }
       updateUserDisplay();

@@ -223,6 +223,31 @@
       padding-left: 2rem;
     }
 
+    .admin-nav-link {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.04) 100%) !important;
+      color: var(--accent) !important;
+      font-weight: 600;
+      border-bottom: 2px solid var(--accent) !important;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .admin-nav-link[style*="display: block"] {
+      display: flex !important;
+    }
+
+    .admin-nav-link:hover {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.08) 100%) !important;
+      color: var(--accent-dark) !important;
+      padding-left: 2.5rem !important;
+      transform: translateX(2px);
+    }
+
+    .admin-nav-link i {
+      font-size: 0.95rem;
+    }
+
     .lang-menu {
       position: relative;
       border-bottom: 1px solid var(--border);
@@ -369,16 +394,14 @@
       gap: 10px;
     }
 
-    .two-column {
-      display: grid;
-      grid-template-columns: 1.2fr 0.9fr;
+    .single-column {
+      display: flex;
+      flex-direction: column;
       gap: 2rem;
-      align-items: start;
     }
 
     @media (max-width: 768px) {
-      .two-column {
-        grid-template-columns: 1fr;
+      .single-column {
         gap: 1.5rem;
       }
 
@@ -389,16 +412,57 @@
 
     .form-panel {
       background: var(--card-gradient);
-      padding: 1.8rem;
-      border-radius: 28px;
+      padding: 2rem;
+      border-radius: 32px;
       border: 1px solid var(--border);
       box-shadow: var(--shadow-md);
-      transition: all 0.3s;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--accent-gradient);
+      border-radius: 32px 32px 0 0;
     }
 
     .form-panel:hover {
-      box-shadow: var(--shadow-lg);
+      box-shadow: var(--shadow-xl);
+      transform: translateY(-4px) scale(1.01);
+    }
+
+    .nav-panel {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.3s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary:hover {
+      background: var(--accent-gradient);
+      border-color: var(--accent);
+      color: var(--bg-primary);
       transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
     }
 
     .input-group {
@@ -420,19 +484,20 @@
     textarea {
       width: 100%;
       background: var(--input-bg);
-      border: 1px solid var(--border);
+      border: 2px solid var(--input-border);
       border-radius: 50px;
-      padding: 0.8rem 1.2rem;
-      font-size: 0.9rem;
+      padding: 0.9rem 1.3rem;
+      font-size: 0.95rem;
       color: var(--text-primary);
       outline: none;
-      transition: all 0.3s;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
     }
 
     textarea {
-      border-radius: 20px;
+      border-radius: 24px;
       resize: vertical;
-      min-height: 100px;
+      min-height: 120px;
       font-family: inherit;
     }
 
@@ -449,8 +514,9 @@
     select:focus,
     textarea:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
-      transform: translateX(2px);
+      box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.12);
+      transform: translateY(-2px);
+      background: var(--bg-primary);
     }
 
     input[type="number"]::-webkit-inner-spin-button,
@@ -552,95 +618,65 @@
       margin-top: 0.4rem;
     }
 
-    .category-option {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 50px;
-      padding: 0.5rem 1rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: var(--text-primary);
-    }
-
-    .category-option i {
-      font-size: 0.9rem;
-      color: var(--accent);
-    }
-
-    .category-option.selected {
-      background: var(--accent-gradient);
-      border-color: var(--accent);
-      color: white;
-    }
-
-    .category-option.selected i {
-      color: white;
-    }
-
-    .category-option:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    /* Season Buttons */
-    .season-selector {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 0.4rem;
-    }
-
+    .category-option,
     .season-option {
       background: var(--bg-secondary);
-      border: 1px solid var(--border);
+      border: 2px solid var(--border);
       border-radius: 50px;
-      padding: 0.5rem 1rem;
+      padding: 0.6rem 1.2rem;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: var(--text-primary);
-    }
-
-    .season-option i {
+      gap: 8px;
       font-size: 0.9rem;
-      color: var(--accent);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      color: var(--text-primary);
+      position: relative;
+      overflow: hidden;
     }
 
+    .category-option i,
+    .season-option i {
+      font-size: 1rem;
+      color: var(--accent);
+      transition: transform 0.3s;
+    }
+
+    .category-option.selected,
     .season-option.selected {
       background: var(--accent-gradient);
       border-color: var(--accent);
       color: white;
+      transform: scale(1.05);
+      box-shadow: var(--shadow-md);
     }
 
+    .category-option.selected i,
     .season-option.selected i {
       color: white;
+      transform: scale(1.1);
     }
 
+    .category-option:hover,
     .season-option:hover {
       border-color: var(--accent);
-      transform: translateY(-2px);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: var(--shadow-sm);
     }
 
     .btn-primary {
       background: var(--accent-gradient);
       border: none;
       color: var(--bg-primary);
-      padding: 0.9rem;
+      padding: 1rem 2rem;
       border-radius: 50px;
-      font-size: 0.9rem;
+      font-size: 1rem;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       font-weight: 600;
       width: 100%;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       margin-top: 0.5rem;
       display: flex;
       align-items: center;
@@ -648,6 +684,7 @@
       gap: 8px;
       position: relative;
       overflow: hidden;
+      box-shadow: var(--shadow-md);
     }
 
     .btn-primary::before {
@@ -669,8 +706,12 @@
     }
 
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .btn-primary:active {
+      transform: translateY(-1px) scale(1.01);
     }
 
     .list-panel {
@@ -1097,6 +1138,7 @@
         <a href="women.html">FEMME</a>
         <a href="unisexe.html">UNISEXE</a>
         <a href="kids.html">ENFANTS</a>
+        <a href="existed.html">PARFUMS EXISTANTS</a>
         <div class="lang-menu" id="langMenu">
           <button class="lang-current" id="langCurrentBtn">
             <span id="currentLangText">FRANÇAIS</span>
@@ -1110,6 +1152,7 @@
         </div>
         <a href="login146.html" id="authLink">Se connecter</a>
         <a href="profile.html" id="profileLink" style="display: none;">Mon Profil</a>
+        <a href="adminadd.html" id="adminLink" style="display: none;" class="admin-nav-link"><i class="fas fa-crown"></i> Admin</a>
       </div>
     </div>
   </header>
@@ -1135,7 +1178,7 @@
         <span style="flex:1; text-align: right; font-size: 0.7rem; opacity:0.7;" id="loggedInAs"></span>
       </h1>
 
-      <div class="two-column">
+      <div class="single-column">
         <!-- ADD PRODUCT FORM -->
         <div class="form-panel">
           <h2><i class="fas fa-plus-circle"></i> Ajouter un parfum</h2>
@@ -1208,13 +1251,11 @@
             stockées en Base64</p>
         </div>
 
-        <!-- PRODUCTS LIST -->
-        <div class="list-panel">
-          <h2><i class="fas fa-box-open"></i> Parfums existants</h2>
-          <div id="loadingAdmin" class="loading-spinner" style="display: none;">
-            <i class="fas fa-spinner fa-spin"></i> Chargement...
-          </div>
-          <div id="adminProductListContainer"></div>
+        <!-- NAVIGATE TO EXISTING PRODUCTS -->
+        <div class="nav-panel">
+          <a href="existed.html" class="btn-secondary">
+            <i class="fas fa-box-open"></i> Voir les parfums existants
+          </a>
         </div>
       </div>
       <div style="margin-top: 1.5rem; text-align: right;">
@@ -1789,6 +1830,29 @@
     }
 
     initLanguage();
+
+    // Update user nav links
+    async function updateUserDisplay() {
+      const { data: { user } } = await supabase.auth.getUser();
+      const authLink = document.getElementById('authLink');
+      const profileLink = document.getElementById('profileLink');
+      const adminLink = document.getElementById('adminLink');
+      if (user) {
+        if (authLink) authLink.style.display = 'none';
+        if (profileLink) profileLink.style.display = 'block';
+        if (user.email === 'azmmeli146@gmail.com') {
+          if (adminLink) adminLink.style.display = 'block';
+        } else {
+          if (adminLink) adminLink.style.display = 'none';
+        }
+      } else {
+        if (authLink) authLink.style.display = 'block';
+        if (profileLink) profileLink.style.display = 'none';
+        if (adminLink) adminLink.style.display = 'none';
+      }
+    }
+    updateUserDisplay();
+    supabase.auth.onAuthStateChange(() => updateUserDisplay());
 
     document.addEventListener('DOMContentLoaded', () => {
       setupLanguageSwitcher();
