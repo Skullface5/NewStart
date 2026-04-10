@@ -1673,6 +1673,47 @@
       document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
       initTheme();
     });
+
+    async function translateText(text, targetLang, sourceLang = null) {
+      // Use the correct URL for your plan
+      const url = "https://api-free.deepl.com/v2/translate";
+      const authKey = "YOUR_DEEPL_API_KEY_HERE"; // Replace with your actual key
+
+      const body = {
+        text: [text],
+        target_lang: targetLang
+      };
+
+      if (sourceLang) {
+        body.source_lang = sourceLang;
+      }
+
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Authorization': `DeepL-Auth-Key ${authKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(`DeepL API error: ${errorData.message || response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log("Translated text:", data.translations[0].text);
+        return data.translations[0].text;
+
+      } catch (error) {
+        console.error('Translation failed:', error);
+      }
+    }
+
+    // Example usage
+    translateText('Hello, world!', 'fr');
   </script>
 </body>
 
