@@ -1152,7 +1152,8 @@
         </div>
         <a href="login146.html" id="authLink">Se connecter</a>
         <a href="profile.html" id="profileLink" style="display: none;">Mon Profil</a>
-        <a href="adminadd.html" id="adminLink" style="display: none;" class="admin-nav-link"><i class="fas fa-crown"></i> Admin</a>
+        <a href="adminadd.html" id="adminLink" style="display: none;" class="admin-nav-link"><i
+            class="fas fa-crown"></i> Admin</a>
       </div>
     </div>
   </header>
@@ -1161,7 +1162,7 @@
     <!-- ADMIN PANEL -->
     <div id="adminPanel">
       <h1>
-        <i class="fas fa-spa"></i> Rosa Fragrances · Gérer les produits
+        <img style="width: 65px;" src="is.png"> Rosa Fragrances · Gérer les produits
         <span style="flex:1; text-align: right; font-size: 0.7rem; opacity:0.7;" id="loggedInAs"></span>
       </h1>
 
@@ -1784,78 +1785,78 @@
     initLanguage();
 
     // Update user nav links
-let updateUserTimeout;
-      let isUpdatingUser = false;
-      
-      async function updateUserDisplay() {
-        // Prevent concurrent calls
-        if (isUpdatingUser) return;
-        isUpdatingUser = true;
-        
-        try {
-          const { data: { user } } = await supabase.auth.getUser();
-          const authLink = document.getElementById('authLink');
-          const profileLink = document.getElementById('profileLink');
-          const adminLink = document.getElementById('adminLink');
-          
-          console.log('Checking user auth state...', user); // Debug log
-          
-          if (user) {
-            console.log('✅ User logged in:', user.email); // Debug log
-            if (authLink) {
-              authLink.style.display = 'none';
-              console.log('Hidden authLink');
-            }
-            if (profileLink) {
-              profileLink.style.display = 'block';
-              console.log('Shown profileLink');
-            }
-            // Check if user is the admin account
-            if (user.email === 'azmmeli146@gmail.com') {
-              if (adminLink) {
-                adminLink.style.display = 'block';
-                console.log('Shown adminLink');
-              }
-            } else {
-              if (adminLink) {
-                adminLink.style.display = 'none';
-              }
+    let updateUserTimeout;
+    let isUpdatingUser = false;
+
+    async function updateUserDisplay() {
+      // Prevent concurrent calls
+      if (isUpdatingUser) return;
+      isUpdatingUser = true;
+
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        const authLink = document.getElementById('authLink');
+        const profileLink = document.getElementById('profileLink');
+        const adminLink = document.getElementById('adminLink');
+
+        console.log('Checking user auth state...', user); // Debug log
+
+        if (user) {
+          console.log('✅ User logged in:', user.email); // Debug log
+          if (authLink) {
+            authLink.style.display = 'none';
+            console.log('Hidden authLink');
+          }
+          if (profileLink) {
+            profileLink.style.display = 'block';
+            console.log('Shown profileLink');
+          }
+          // Check if user is the admin account
+          if (user.email === 'azmmeli146@gmail.com') {
+            if (adminLink) {
+              adminLink.style.display = 'block';
+              console.log('Shown adminLink');
             }
           } else {
-            console.log('❌ User not logged in'); // Debug log
-            if (authLink) {
-              authLink.style.display = 'block';
-              console.log('Shown authLink');
-            }
-            if (profileLink) {
-              profileLink.style.display = 'none';
-              console.log('Hidden profileLink');
-            }
             if (adminLink) {
               adminLink.style.display = 'none';
             }
           }
-        } catch (error) {
-          console.error('Error checking user:', error);
-        } finally {
-          isUpdatingUser = false;
+        } else {
+          console.log('❌ User not logged in'); // Debug log
+          if (authLink) {
+            authLink.style.display = 'block';
+            console.log('Shown authLink');
+          }
+          if (profileLink) {
+            profileLink.style.display = 'none';
+            console.log('Hidden profileLink');
+          }
+          if (adminLink) {
+            adminLink.style.display = 'none';
+          }
         }
+      } catch (error) {
+        console.error('Error checking user:', error);
+      } finally {
+        isUpdatingUser = false;
       }
-      
-      // Call immediately
-      updateUserDisplay();
-      
-      // Also set up listener for auth state changes with debounce
-      // Only respond to meaningful events, skip TOKEN_REFRESHED which happens automatically
-      supabase.auth.onAuthStateChange((event, session) => {
-        console.log('Auth state changed:', event, session);
-        // Only update on meaningful auth events, not token refreshes
-        if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
-          // Clear any pending update
-          if (updateUserTimeout) clearTimeout(updateUserTimeout);
-          // Debounce the update by 100ms to avoid concurrent calls
-          updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
-        }
+    }
+
+    // Call immediately
+    updateUserDisplay();
+
+    // Also set up listener for auth state changes with debounce
+    // Only respond to meaningful events, skip TOKEN_REFRESHED which happens automatically
+    supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth state changed:', event, session);
+      // Only update on meaningful auth events, not token refreshes
+      if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
+        // Clear any pending update
+        if (updateUserTimeout) clearTimeout(updateUserTimeout);
+        // Debounce the update by 100ms to avoid concurrent calls
+        updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
+      }
     });
   </script>
 </body>
