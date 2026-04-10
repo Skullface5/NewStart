@@ -1410,7 +1410,7 @@
         return copy;
       }
 
-      function selectRandomProductsByCategory(items, maxCount = 16) {
+      function selectRandomProductsByCategory(items, maxCount = 12) {
         const categories = [...new Set(items.map(p => (p.category || 'inconnu').toString().toLowerCase()))];
         const selected = [];
 
@@ -1463,7 +1463,7 @@
           productGrid.innerHTML = '<div class="empty-cart-message">Aucun parfum disponible</div>';
           return;
         }
-        const displayProducts = selectRandomProductsByCategory(products, 16);
+        const displayProducts = selectRandomProductsByCategory(products, 12);
         let html = '';
         displayProducts.forEach(p => {
           const imgHtml = p.image ? `<img src="${p.image}" alt="${escapeHtml(p.name)}">` : `<i class="fas fa-crown"></i>`;
