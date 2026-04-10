@@ -18,52 +18,43 @@
 
     /* ========== EYE-FRIENDLY LIGHT MODE - Soft & Warm ========== */
     :root {
-      /* Primary background - Very soft warm cream (not white!) */
       --bg-primary: #F2ECE4;
       --bg-secondary: #EDE5DB;
       --bg-tertiary: #E8DFD3;
       --bg-gradient: radial-gradient(ellipse at 20% 30%, #F2ECE4 0%, #EDE5DB 100%);
 
-      /* Card & Surface colors - Gentle and soft */
       --card-base: #F5F0EA;
       --card-warm: #F2EDE6;
       --card-elevated: #F7F2EC;
       --card-shadow: rgba(100, 80, 60, 0.06);
 
-      /* Text hierarchy - Lower contrast, easier on eyes */
       --text-primary: #5C4F42;
       --text-secondary: #8A7B6B;
       --text-tertiary: #B0A392;
       --text-light: #C9BFB0;
 
-      /* Gold accents - Muted and elegant */
       --gold-light: #DFCEA8;
       --gold-base: #C4AF7D;
       --gold-deep: #B09A68;
       --gold-rich: #9C8658;
       --gold-gradient: linear-gradient(135deg, #DFCEA8 0%, #C4AF7D 50%, #DFCEA8 100%);
 
-      /* Rose/Blush accents - Very subtle */
       --rose-light: #F0E6E2;
       --rose-base: #E2D5CE;
       --rose-deep: #D2C2B8;
 
-      /* Border & divider - Almost invisible */
       --border-light: rgba(180, 155, 120, 0.12);
       --border-medium: rgba(180, 155, 120, 0.2);
 
-      /* Shadows - Very soft, almost no shadow */
       --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
       --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.03);
       --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.04);
       --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.06);
 
-      /* Input & form */
       --input-bg: #F9F6F2;
       --input-border: #E2D9CF;
       --input-focus: #C4AF7D;
 
-      /* Hover states */
       --hover-subtle: rgba(180, 155, 120, 0.05);
       --hover-medium: rgba(180, 155, 120, 0.1);
     }
@@ -572,6 +563,27 @@
       box-shadow: var(--shadow-hover);
     }
 
+    /* Hero Image Section */
+    .hero-image-wrapper {
+      margin: 12px 5px;
+      text-align: center;
+    }
+
+    .hero-image {
+      max-width: 1200px;
+      width: 100%;
+      border-radius: 32px;
+      box-shadow: var(--shadow-md);
+      display: block;
+      margin: 0 auto;
+      transition: box-shadow 0.3s ease;
+      border: 1px solid var(--border-light);
+    }
+
+    .hero-image:hover {
+      box-shadow: var(--shadow-hover);
+    }
+
     /* Product grid */
     .product-grid {
       display: grid;
@@ -610,6 +622,13 @@
       transform: translateY(-6px);
       box-shadow: var(--shadow-hover);
       border-color: var(--gold-light);
+    }
+
+    .product-clickable {
+      cursor: pointer;
+      width: 100%;
+      text-decoration: none;
+      color: inherit;
     }
 
     .product-img {
@@ -1115,7 +1134,7 @@
     </div>
   </div>
 
-  <!-- Product Modal -->
+  <!-- Product Modal (kept for potential future use but not triggered on card click) -->
   <div id="productModal" class="modal-overlay">
     <div class="modal-content">
       <div class="modal-header">
@@ -1180,9 +1199,10 @@
     </div>
   </header>
 
-  <div style="margin: 8px 5px;">
+  <!-- Hero Image (Optimized) -->
+  <div class="hero-image-wrapper">
     <img src="https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/card.jpg" alt="Rosa Fragrances"
-      style="max-width: 1200px; width: 100%; display: block; border-radius: 0; box-shadow: var(--shadow-sm); margin: 0 auto;">
+      class="hero-image">
   </div>
 
   <main class="container">
@@ -1416,7 +1436,7 @@
           const imgHtml = p.image ? `<img src="${p.image}" alt="${escapeHtml(p.name)}">` : `<i class="fas fa-crown"></i>`;
           html += `
             <div class="product-card" data-product-id="${p.id}">
-              <div class="product-clickable" style="cursor:pointer; width:100%;">
+              <div class="product-clickable" data-product-id="${p.id}">
                 <div class="product-img">${imgHtml}</div>
                 <div class="product-title">${escapeHtml(p.name)}</div>
                 <div class="product-brand">${escapeHtml(p.brand)}</div>
@@ -1428,12 +1448,12 @@
         });
         productGrid.innerHTML = html;
 
+        // Navigate to product detail page on click (like women.html)
         document.querySelectorAll('.product-clickable').forEach(el => {
           el.addEventListener('click', (e) => {
             if (e.target.closest('.add-to-cart')) return;
-            const productId = el.closest('.product-card').dataset.productId;
-            const product = products.find(p => p.id === productId);
-            if (product) openProductModal(product);
+            const productId = el.dataset.productId;
+            window.location.href = `product.html?id=${productId}`;
           });
         });
 
@@ -1518,7 +1538,6 @@
       let isUpdatingUser = false;
 
       async function updateUserDisplay() {
-        // Prevent concurrent calls
         if (isUpdatingUser) return;
         isUpdatingUser = true;
 
@@ -1528,42 +1547,18 @@
           const profileLink = document.getElementById('profileLink');
           const adminLink = document.getElementById('adminLink');
 
-          console.log('Checking user auth state...', user); // Debug log
-
           if (user) {
-            console.log('✅ User logged in:', user.email); // Debug log
-            if (authLink) {
-              authLink.style.display = 'none';
-              console.log('Hidden authLink');
-            }
-            if (profileLink) {
-              profileLink.style.display = 'block';
-              console.log('Shown profileLink');
-            }
-            // Check if user is the admin account
+            if (authLink) authLink.style.display = 'none';
+            if (profileLink) profileLink.style.display = 'block';
             if (user.email === 'azmmeli146@gmail.com') {
-              if (adminLink) {
-                adminLink.style.display = 'block';
-                console.log('Shown adminLink');
-              }
+              if (adminLink) adminLink.style.display = 'block';
             } else {
-              if (adminLink) {
-                adminLink.style.display = 'none';
-              }
+              if (adminLink) adminLink.style.display = 'none';
             }
           } else {
-            console.log('❌ User not logged in'); // Debug log
-            if (authLink) {
-              authLink.style.display = 'block';
-              console.log('Shown authLink');
-            }
-            if (profileLink) {
-              profileLink.style.display = 'none';
-              console.log('Hidden profileLink');
-            }
-            if (adminLink) {
-              adminLink.style.display = 'none';
-            }
+            if (authLink) authLink.style.display = 'block';
+            if (profileLink) profileLink.style.display = 'none';
+            if (adminLink) adminLink.style.display = 'none';
           }
         } catch (error) {
           console.error('Error checking user:', error);
@@ -1572,18 +1567,11 @@
         }
       }
 
-      // Call immediately
       updateUserDisplay();
 
-      // Also set up listener for auth state changes with debounce
-      // Only respond to meaningful events, skip TOKEN_REFRESHED which happens automatically
       supabase.auth.onAuthStateChange((event, session) => {
-        console.log('Auth state changed:', event, session);
-        // Only update on meaningful auth events, not token refreshes
         if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
-          // Clear any pending update
           if (updateUserTimeout) clearTimeout(updateUserTimeout);
-          // Debounce the update by 100ms to avoid concurrent calls
           updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
         }
       });
