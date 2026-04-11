@@ -562,6 +562,7 @@
       box-shadow: var(--shadow-hover);
     }
 
+    /* Hero Image Section */
     .hero-image-wrapper {
       margin: 12px 5px;
       text-align: center;
@@ -576,6 +577,25 @@
       margin: 0 auto;
       transition: box-shadow 0.3s ease;
       border: 1px solid var(--border-light);
+      object-fit: cover;
+    }
+
+    /* Desktop - wider aspect ratio (16:6) */
+    @media (min-width: 769px) {
+      .hero-image {
+        height: auto;
+        max-height: 350px;
+        object-position: center 30%;
+      }
+    }
+
+    /* Mobile - keep original proportions */
+    @media (max-width: 768px) {
+      .hero-image {
+        height: auto;
+        max-height: none;
+        object-position: center;
+      }
     }
 
     .hero-image:hover {
