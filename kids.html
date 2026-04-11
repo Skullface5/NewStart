@@ -1367,10 +1367,30 @@
             if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
             if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
 
-            const langMenu = document.getElementById('langMenu'); const langCurrentBtn = document.getElementById('langCurrentBtn');
-            if (langCurrentBtn) { langCurrentBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); langMenu.classList.toggle('active'); }); }
-            document.querySelectorAll('.lang-option').forEach(opt => { opt.addEventListener('click', (e) => { e.stopPropagation(); const lang = opt.dataset.lang; const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' }; document.getElementById('currentLangText').textContent = names[lang]; langMenu.classList.remove('active'); localStorage.setItem('language', lang); }); });
-            document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
+            // Language switcher
+            const langMenu = document.getElementById('langMenu');
+            const langCurrentBtn = document.getElementById('langCurrentBtn');
+            if (langCurrentBtn) {
+                langCurrentBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    langMenu.classList.toggle('active');
+                });
+            }
+
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                opt.addEventListener('click', (e) => {
+                    const lang = opt.dataset.lang;
+                    translatePage(lang);
+                    langMenu.classList.remove('active');
+                    // Re-render dynamic content if needed
+                    if (typeof renderProducts === 'function') renderProducts();
+                    if (typeof renderCart === 'function') renderCart();
+                });
+            });
+
+            document.addEventListener('click', (e) => {
+                if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active');
+            });
 
             loadProducts(); saveCart();
         })();
@@ -1378,6 +1398,294 @@
         function initTheme() { const saved = localStorage.getItem('theme') || 'light'; if (saved === 'dark') { document.body.classList.add('dark'); document.querySelector('#themeToggle .fa-sun').style.display = 'none'; document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block'; } }
         function toggleTheme() { if (document.body.classList.contains('dark')) { document.body.classList.remove('dark'); localStorage.setItem('theme', 'light'); document.querySelector('#themeToggle .fa-sun').style.display = 'inline-block'; document.querySelector('#themeToggle .fa-moon').style.display = 'none'; } else { document.body.classList.add('dark'); localStorage.setItem('theme', 'dark'); document.querySelector('#themeToggle .fa-sun').style.display = 'none'; document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block'; } }
         document.addEventListener('DOMContentLoaded', () => { document.getElementById('themeToggle')?.addEventListener('click', toggleTheme); initTheme(); });
+
+
+
+
+
+
+        // ========== TRANSLATION SYSTEM ==========
+        let currentLanguage = localStorage.getItem('language') || 'fr';
+
+        const translations = {
+            fr: {
+                // Navigation
+                home: 'ACCUEIL',
+                men: 'HOMME',
+                women: 'FEMME',
+                unisex: 'UNISEXE',
+                kids: 'ENFANTS',
+                collection: 'COLLECTION',
+                exclusives: 'EXCLUSIVITÉS',
+                gifts: 'COFFRETS',
+                login: 'Se connecter',
+                profile: 'Mon Profil',
+                admin: 'Admin',
+
+                // Categories
+                menCat: 'Homme',
+                menDesc: 'Boisés & épicés',
+                womenCat: 'Femme',
+                womenDesc: 'Floraux & sensuels',
+                unisexCat: 'Unisexe',
+                unisexDesc: 'Pour tous',
+                kidsCat: 'Enfants',
+                kidsDesc: 'Douceurs',
+
+                // Product
+                addToCart: 'Ajouter',
+                addedToCart: '✨ Article ajouté',
+
+                // Cart
+                cart: 'Panier',
+                emptyCart: 'Votre panier est vide.',
+                total: 'Total',
+                payment: 'PAIEMENT',
+
+                // Checkout
+                delivery: 'Livraison',
+                fullName: 'Nom complet *',
+                phone: 'Téléphone *',
+                email: 'Email *',
+                address: 'Adresse *',
+                yourOrder: 'Votre commande',
+                cancel: 'Annuler',
+                confirm: 'Confirmer',
+                orderConfirmed: '✅ Commande confirmée!',
+                cartEmptyWarning: '🛒 Panier vide',
+                error: '❌ Erreur',
+
+                // Product Modal
+                details: 'Détails',
+                close: 'Fermer',
+
+                // Contact
+                contact: 'Contact',
+                contactDesc: 'Une question ? Nous sommes là.',
+
+                // Loading
+                loading: 'Chargement...',
+                noProducts: 'Aucun parfum disponible',
+                errorLoading: '❌ Erreur',
+                reload: 'Recharger',
+                removed: '🗑️ Retiré',
+
+                // Profile
+                totalOrders: 'Commandes totales',
+                pending: 'En cours',
+                delivered: 'Livrées',
+                orderHistory: 'Historique des commandes',
+                all: 'Toutes',
+                pendingStatus: 'En attente',
+                review: 'En révision',
+                shipped: 'Expédiées',
+                deliveredStatus: 'Livrées',
+                cancelOrder: 'Annuler',
+                shopNow: 'Découvrir nos parfums',
+                notLoggedIn: 'Non connecté',
+                pleaseLogin: 'Veuillez vous connecter pour voir votre profil et vos commandes.',
+                logout: 'Déconnexion',
+                noOrders: 'Aucune commande trouvée'
+            },
+            en: {
+                // Navigation
+                home: 'HOME',
+                men: 'MEN',
+                women: 'WOMEN',
+                unisex: 'UNISEX',
+                kids: 'KIDS',
+                collection: 'COLLECTION',
+                exclusives: 'EXCLUSIVES',
+                gifts: 'GIFT SETS',
+                login: 'Sign in',
+                profile: 'My Profile',
+                admin: 'Admin',
+
+                // Categories
+                menCat: 'Men',
+                menDesc: 'Woody & spicy',
+                womenCat: 'Women',
+                womenDesc: 'Floral & sensual',
+                unisexCat: 'Unisex',
+                unisexDesc: 'For everyone',
+                kidsCat: 'Kids',
+                kidsDesc: 'Sweet scents',
+
+                // Product
+                addToCart: 'Add to cart',
+                addedToCart: '✨ Added to cart',
+
+                // Cart
+                cart: 'Cart',
+                emptyCart: 'Your cart is empty.',
+                total: 'Total',
+                payment: 'PAYMENT',
+
+                // Checkout
+                delivery: 'Delivery',
+                fullName: 'Full name *',
+                phone: 'Phone *',
+                email: 'Email *',
+                address: 'Address *',
+                yourOrder: 'Your order',
+                cancel: 'Cancel',
+                confirm: 'Confirm',
+                orderConfirmed: '✅ Order confirmed!',
+                cartEmptyWarning: '🛒 Cart is empty',
+                error: '❌ Error',
+
+                // Product Modal
+                details: 'Details',
+                close: 'Close',
+
+                // Contact
+                contact: 'Contact',
+                contactDesc: 'Have a question? We\'re here.',
+
+                // Loading
+                loading: 'Loading...',
+                noProducts: 'No perfumes available',
+                errorLoading: '❌ Error',
+                reload: 'Reload',
+                removed: '🗑️ Removed',
+
+                // Profile
+                totalOrders: 'Total orders',
+                pending: 'In progress',
+                delivered: 'Delivered',
+                orderHistory: 'Order history',
+                all: 'All',
+                pendingStatus: 'Pending',
+                review: 'Under review',
+                shipped: 'Shipped',
+                deliveredStatus: 'Delivered',
+                cancelOrder: 'Cancel',
+                shopNow: 'Discover our perfumes',
+                notLoggedIn: 'Not logged in',
+                pleaseLogin: 'Please log in to view your profile and orders.',
+                logout: 'Logout',
+                noOrders: 'No orders found'
+            },
+            ar: {
+                // Navigation
+                home: 'الرئيسية',
+                men: 'رجالي',
+                women: 'نسائي',
+                unisex: 'للجنسين',
+                kids: 'أطفال',
+                collection: 'المجموعة',
+                exclusives: 'الحصريات',
+                gifts: 'الهدايا',
+                login: 'تسجيل الدخول',
+                profile: 'ملفي الشخصي',
+                admin: 'المشرف',
+
+                // Categories
+                menCat: 'رجالي',
+                menDesc: 'خشبي وحار',
+                womenCat: 'نسائي',
+                womenDesc: 'زهري وحسي',
+                unisexCat: 'للجنسين',
+                unisexDesc: 'للجميع',
+                kidsCat: 'أطفال',
+                kidsDesc: 'روائح حلوة',
+
+                // Product
+                addToCart: 'أضف إلى السلة',
+                addedToCart: '✨ تمت الإضافة إلى السلة',
+
+                // Cart
+                cart: 'سلة التسوق',
+                emptyCart: 'سلة التسوق فارغة.',
+                total: 'المجموع',
+                payment: 'الدفع',
+
+                // Checkout
+                delivery: 'التوصيل',
+                fullName: 'الاسم الكامل *',
+                phone: 'الهاتف *',
+                email: 'البريد الإلكتروني *',
+                address: 'العنوان *',
+                yourOrder: 'طلبك',
+                cancel: 'إلغاء',
+                confirm: 'تأكيد',
+                orderConfirmed: '✅ تم تأكيد الطلب!',
+                cartEmptyWarning: '🛒 السلة فارغة',
+                error: '❌ خطأ',
+
+                // Product Modal
+                details: 'التفاصيل',
+                close: 'إغلاق',
+
+                // Contact
+                contact: 'اتصل بنا',
+                contactDesc: 'هل لديك سؤال؟ نحن هنا.',
+
+                // Loading
+                loading: 'جاري التحميل...',
+                noProducts: 'لا توجد عطور متاحة',
+                errorLoading: '❌ خطأ',
+                reload: 'إعادة تحميل',
+                removed: '🗑️ تمت الإزالة',
+
+                // Profile
+                totalOrders: 'إجمالي الطلبات',
+                pending: 'قيد المعالجة',
+                delivered: 'تم التوصيل',
+                orderHistory: 'سجل الطلبات',
+                all: 'الكل',
+                pendingStatus: 'قيد الانتظار',
+                review: 'قيد المراجعة',
+                shipped: 'تم الشحن',
+                deliveredStatus: 'تم التوصيل',
+                cancelOrder: 'إلغاء',
+                shopNow: 'اكتشف عطورنا',
+                notLoggedIn: 'غير مسجل الدخول',
+                pleaseLogin: 'الرجاء تسجيل الدخول لعرض ملفك الشخصي وطلباتك.',
+                logout: 'تسجيل الخروج',
+                noOrders: 'لا توجد طلبات'
+            }
+        };
+
+        function translatePage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('language', lang);
+
+            // Set RTL for Arabic
+            if (lang === 'ar') {
+                document.body.style.direction = 'rtl';
+                document.body.style.textAlign = 'right';
+            } else {
+                document.body.style.direction = 'ltr';
+                document.body.style.textAlign = 'left';
+            }
+
+            // Update language display
+            const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+            const langSpan = document.getElementById('currentLangText');
+            if (langSpan) langSpan.textContent = names[lang];
+
+            // Translate all elements with data-translate attribute
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+        }
+
+        // Initialize language on page load
+        function initLanguage() {
+            const savedLang = localStorage.getItem('language') || 'fr';
+            translatePage(savedLang);
+        }
+
+        // Call initLanguage after DOM is ready
+        document.addEventListener('DOMContentLoaded', initLanguage);
     </script>
 </body>
 

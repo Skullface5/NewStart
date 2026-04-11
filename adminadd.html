@@ -1296,8 +1296,6 @@
       const menuToggle = document.getElementById('menuToggle');
       const navLinks = document.getElementById('navLinks');
       const closeMenuBtn = document.getElementById('closeMenuBtn');
-      const langMenu = document.getElementById('langMenu');
-
       function closeMenu() {
         navLinks.classList.remove('active');
         document.body.style.overflow = '';
@@ -1335,6 +1333,33 @@
         if (navLinks && !navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
           closeMenu();
         }
+      });
+
+
+
+      // Language switcher
+      const langMenu = document.getElementById('langMenu');
+      const langCurrentBtn = document.getElementById('langCurrentBtn');
+      if (langCurrentBtn) {
+        langCurrentBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          langMenu.classList.toggle('active');
+        });
+      }
+
+      document.querySelectorAll('.lang-option').forEach(opt => {
+        opt.addEventListener('click', (e) => {
+          const lang = opt.dataset.lang;
+          translatePage(lang);
+          langMenu.classList.remove('active');
+          // Re-render dynamic content if needed
+          if (typeof renderProducts === 'function') renderProducts();
+          if (typeof renderCart === 'function') renderCart();
+        });
+      });
+
+      document.addEventListener('click', (e) => {
+        if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active');
       });
 
       // Password Gate removed - Admin panel shows directly
@@ -1607,182 +1632,288 @@
       updateImagePreview();
     })();
 
-    // ========== TRANSLATION - APPLIED IMMEDIATELY ==========
+    // ========== TRANSLATION SYSTEM ==========
     let currentLanguage = localStorage.getItem('language') || 'fr';
-    let originalTexts = new Map();
 
-    function storeOriginalTexts() {
-      const elementsToStore = [
-        document.querySelector('.gate h2'),
-        document.querySelector('#passwordInput'),
-        document.querySelector('.gate .hint'),
-        document.querySelector('#backToShopLink'),
-        document.querySelector('#authLink'),
-        document.querySelector('#profileLink'),
-        document.querySelector('.form-panel h2'),
-        ...document.querySelectorAll('.form-panel label'),
-        document.querySelector('#productName'),
-        document.querySelector('#productBrand'),
-        document.querySelector('#productPrice'),
-        document.querySelector('#productDescription'),
-        document.querySelector('.add-more-btn span'),
-        document.querySelector('#addProductBtn'),
-        document.querySelector('.list-panel h2'),
-        document.querySelector('#logoutBtn'),
-        document.querySelector('.form-panel hr + p'),
-        ...document.querySelectorAll('.season-option'),
-        ...document.querySelectorAll('.category-option')
-      ];
+    const translations = {
+      fr: {
+        // Navigation
+        home: 'ACCUEIL',
+        men: 'HOMME',
+        women: 'FEMME',
+        unisex: 'UNISEXE',
+        kids: 'ENFANTS',
+        collection: 'COLLECTION',
+        exclusives: 'EXCLUSIVITÉS',
+        gifts: 'COFFRETS',
+        login: 'Se connecter',
+        profile: 'Mon Profil',
+        admin: 'Admin',
 
-      elementsToStore.forEach(el => {
-        if (el && el.textContent && el.textContent.trim() && !originalTexts.has(el)) {
-          originalTexts.set(el, el.textContent);
-        }
-      });
-    }
+        // Categories
+        menCat: 'Homme',
+        menDesc: 'Boisés & épicés',
+        womenCat: 'Femme',
+        womenDesc: 'Floraux & sensuels',
+        unisexCat: 'Unisexe',
+        unisexDesc: 'Pour tous',
+        kidsCat: 'Enfants',
+        kidsDesc: 'Douceurs',
 
-    function resetToFrench() {
-      originalTexts.forEach((originalText, element) => {
-        if (element && element.isConnected) {
-          if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-            element.placeholder = originalText;
-          } else if (element.classList.contains('season-option') || element.classList.contains('category-option')) {
-            const icon = element.querySelector('i');
-            if (icon) {
-              element.innerHTML = '';
-              element.appendChild(icon.cloneNode(true));
-              element.appendChild(document.createTextNode(' ' + originalText));
-            } else {
-              element.textContent = originalText;
-            }
+        // Product
+        addToCart: 'Ajouter',
+        addedToCart: '✨ Article ajouté',
+
+        // Cart
+        cart: 'Panier',
+        emptyCart: 'Votre panier est vide.',
+        total: 'Total',
+        payment: 'PAIEMENT',
+
+        // Checkout
+        delivery: 'Livraison',
+        fullName: 'Nom complet *',
+        phone: 'Téléphone *',
+        email: 'Email *',
+        address: 'Adresse *',
+        yourOrder: 'Votre commande',
+        cancel: 'Annuler',
+        confirm: 'Confirmer',
+        orderConfirmed: '✅ Commande confirmée!',
+        cartEmptyWarning: '🛒 Panier vide',
+        error: '❌ Erreur',
+
+        // Product Modal
+        details: 'Détails',
+        close: 'Fermer',
+
+        // Contact
+        contact: 'Contact',
+        contactDesc: 'Une question ? Nous sommes là.',
+
+        // Loading
+        loading: 'Chargement...',
+        noProducts: 'Aucun parfum disponible',
+        errorLoading: '❌ Erreur',
+        reload: 'Recharger',
+        removed: '🗑️ Retiré',
+
+        // Profile
+        totalOrders: 'Commandes totales',
+        pending: 'En cours',
+        delivered: 'Livrées',
+        orderHistory: 'Historique des commandes',
+        all: 'Toutes',
+        pendingStatus: 'En attente',
+        review: 'En révision',
+        shipped: 'Expédiées',
+        deliveredStatus: 'Livrées',
+        cancelOrder: 'Annuler',
+        shopNow: 'Découvrir nos parfums',
+        notLoggedIn: 'Non connecté',
+        pleaseLogin: 'Veuillez vous connecter pour voir votre profil et vos commandes.',
+        logout: 'Déconnexion',
+        noOrders: 'Aucune commande trouvée'
+      },
+      en: {
+        // Navigation
+        home: 'HOME',
+        men: 'MEN',
+        women: 'WOMEN',
+        unisex: 'UNISEX',
+        kids: 'KIDS',
+        collection: 'COLLECTION',
+        exclusives: 'EXCLUSIVES',
+        gifts: 'GIFT SETS',
+        login: 'Sign in',
+        profile: 'My Profile',
+        admin: 'Admin',
+
+        // Categories
+        menCat: 'Men',
+        menDesc: 'Woody & spicy',
+        womenCat: 'Women',
+        womenDesc: 'Floral & sensual',
+        unisexCat: 'Unisex',
+        unisexDesc: 'For everyone',
+        kidsCat: 'Kids',
+        kidsDesc: 'Sweet scents',
+
+        // Product
+        addToCart: 'Add to cart',
+        addedToCart: '✨ Added to cart',
+
+        // Cart
+        cart: 'Cart',
+        emptyCart: 'Your cart is empty.',
+        total: 'Total',
+        payment: 'PAYMENT',
+
+        // Checkout
+        delivery: 'Delivery',
+        fullName: 'Full name *',
+        phone: 'Phone *',
+        email: 'Email *',
+        address: 'Address *',
+        yourOrder: 'Your order',
+        cancel: 'Cancel',
+        confirm: 'Confirm',
+        orderConfirmed: '✅ Order confirmed!',
+        cartEmptyWarning: '🛒 Cart is empty',
+        error: '❌ Error',
+
+        // Product Modal
+        details: 'Details',
+        close: 'Close',
+
+        // Contact
+        contact: 'Contact',
+        contactDesc: 'Have a question? We\'re here.',
+
+        // Loading
+        loading: 'Loading...',
+        noProducts: 'No perfumes available',
+        errorLoading: '❌ Error',
+        reload: 'Reload',
+        removed: '🗑️ Removed',
+
+        // Profile
+        totalOrders: 'Total orders',
+        pending: 'In progress',
+        delivered: 'Delivered',
+        orderHistory: 'Order history',
+        all: 'All',
+        pendingStatus: 'Pending',
+        review: 'Under review',
+        shipped: 'Shipped',
+        deliveredStatus: 'Delivered',
+        cancelOrder: 'Cancel',
+        shopNow: 'Discover our perfumes',
+        notLoggedIn: 'Not logged in',
+        pleaseLogin: 'Please log in to view your profile and orders.',
+        logout: 'Logout',
+        noOrders: 'No orders found'
+      },
+      ar: {
+        // Navigation
+        home: 'الرئيسية',
+        men: 'رجالي',
+        women: 'نسائي',
+        unisex: 'للجنسين',
+        kids: 'أطفال',
+        collection: 'المجموعة',
+        exclusives: 'الحصريات',
+        gifts: 'الهدايا',
+        login: 'تسجيل الدخول',
+        profile: 'ملفي الشخصي',
+        admin: 'المشرف',
+
+        // Categories
+        menCat: 'رجالي',
+        menDesc: 'خشبي وحار',
+        womenCat: 'نسائي',
+        womenDesc: 'زهري وحسي',
+        unisexCat: 'للجنسين',
+        unisexDesc: 'للجميع',
+        kidsCat: 'أطفال',
+        kidsDesc: 'روائح حلوة',
+
+        // Product
+        addToCart: 'أضف إلى السلة',
+        addedToCart: '✨ تمت الإضافة إلى السلة',
+
+        // Cart
+        cart: 'سلة التسوق',
+        emptyCart: 'سلة التسوق فارغة.',
+        total: 'المجموع',
+        payment: 'الدفع',
+
+        // Checkout
+        delivery: 'التوصيل',
+        fullName: 'الاسم الكامل *',
+        phone: 'الهاتف *',
+        email: 'البريد الإلكتروني *',
+        address: 'العنوان *',
+        yourOrder: 'طلبك',
+        cancel: 'إلغاء',
+        confirm: 'تأكيد',
+        orderConfirmed: '✅ تم تأكيد الطلب!',
+        cartEmptyWarning: '🛒 السلة فارغة',
+        error: '❌ خطأ',
+
+        // Product Modal
+        details: 'التفاصيل',
+        close: 'إغلاق',
+
+        // Contact
+        contact: 'اتصل بنا',
+        contactDesc: 'هل لديك سؤال؟ نحن هنا.',
+
+        // Loading
+        loading: 'جاري التحميل...',
+        noProducts: 'لا توجد عطور متاحة',
+        errorLoading: '❌ خطأ',
+        reload: 'إعادة تحميل',
+        removed: '🗑️ تمت الإزالة',
+
+        // Profile
+        totalOrders: 'إجمالي الطلبات',
+        pending: 'قيد المعالجة',
+        delivered: 'تم التوصيل',
+        orderHistory: 'سجل الطلبات',
+        all: 'الكل',
+        pendingStatus: 'قيد الانتظار',
+        review: 'قيد المراجعة',
+        shipped: 'تم الشحن',
+        deliveredStatus: 'تم التوصيل',
+        cancelOrder: 'إلغاء',
+        shopNow: 'اكتشف عطورنا',
+        notLoggedIn: 'غير مسجل الدخول',
+        pleaseLogin: 'الرجاء تسجيل الدخول لعرض ملفك الشخصي وطلباتك.',
+        logout: 'تسجيل الخروج',
+        noOrders: 'لا توجد طلبات'
+      }
+    };
+
+    function translatePage(lang) {
+      currentLanguage = lang;
+      localStorage.setItem('language', lang);
+
+      // Set RTL for Arabic
+      if (lang === 'ar') {
+        document.body.style.direction = 'rtl';
+        document.body.style.textAlign = 'right';
+      } else {
+        document.body.style.direction = 'ltr';
+        document.body.style.textAlign = 'left';
+      }
+
+      // Update language display
+      const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+      const langSpan = document.getElementById('currentLangText');
+      if (langSpan) langSpan.textContent = names[lang];
+
+      // Translate all elements with data-translate attribute
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+            el.placeholder = translations[lang][key];
           } else {
-            element.textContent = originalText;
+            el.textContent = translations[lang][key];
           }
         }
       });
-      document.body.style.direction = 'ltr';
-      currentLanguage = 'fr';
-      localStorage.setItem('language', 'fr');
     }
 
-    async function translatePage(targetLang) {
-      if (targetLang === 'fr') {
-        resetToFrench();
-        return;
-      }
-      if (targetLang === currentLanguage && currentLanguage !== 'fr') return;
-
-      const toast = document.getElementById('adminToast');
-      if (toast) {
-        toast.textContent = '🌍 Traduction en cours...';
-        toast.classList.add('show');
-      }
-
-      if (originalTexts.size === 0) storeOriginalTexts();
-
-      const elementsToTranslate = [];
-      const textsToTranslate = [];
-
-      originalTexts.forEach((originalText, element) => {
-        if (element && element.isConnected && originalText && originalText.trim()) {
-          textsToTranslate.push(originalText);
-          elementsToTranslate.push(element);
-        }
-      });
-
-      if (textsToTranslate.length === 0) {
-        if (toast) toast.classList.remove('show');
-        return;
-      }
-
-      try {
-        const response = await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/functions/v1/translate', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_'
-          },
-          body: JSON.stringify({
-            texts: textsToTranslate,
-            targetLang: targetLang,
-            sourceLang: 'FR'
-          })
-        });
-
-        const data = await response.json();
-
-        if (data.success && data.translations) {
-          elementsToTranslate.forEach((element, index) => {
-            const translated = data.translations[index];
-            if (translated && translated !== element.textContent) {
-              if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                element.placeholder = translated;
-              } else if (element.classList.contains('season-option') || element.classList.contains('category-option')) {
-                const icon = element.querySelector('i');
-                if (icon) {
-                  element.innerHTML = '';
-                  element.appendChild(icon.cloneNode(true));
-                  element.appendChild(document.createTextNode(' ' + translated));
-                } else {
-                  element.textContent = translated;
-                }
-              } else {
-                element.textContent = translated;
-              }
-            }
-          });
-        }
-
-        if (targetLang === 'ar') {
-          document.body.style.direction = 'rtl';
-        } else {
-          document.body.style.direction = 'ltr';
-        }
-
-        currentLanguage = targetLang;
-        localStorage.setItem('language', targetLang);
-
-        if (toast) {
-          toast.textContent = '✅ Traduction terminée!';
-          setTimeout(() => toast.classList.remove('show'), 1500);
-        }
-      } catch (error) {
-        console.error('Translation error:', error);
-        if (toast) {
-          toast.textContent = '❌ Erreur de traduction';
-          setTimeout(() => toast.classList.remove('show'), 2000);
-        }
-      }
-    }
-
-    function setupLanguageSwitcher() {
-      const langOptions = document.querySelectorAll('.lang-option');
-      const currentLangSpan = document.getElementById('currentLangText');
-      const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-
-      langOptions.forEach(option => {
-        option.addEventListener('click', async () => {
-          const lang = option.getAttribute('data-lang');
-          if (currentLangSpan) currentLangSpan.textContent = langNames[lang];
-          document.getElementById('langMenu')?.classList.remove('active');
-          await translatePage(lang);
-        });
-      });
-    }
-
+    // Initialize language on page load
     function initLanguage() {
-      storeOriginalTexts();
       const savedLang = localStorage.getItem('language') || 'fr';
-      const langNames = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-      const currentLangSpan = document.getElementById('currentLangText');
-      if (currentLangSpan) currentLangSpan.textContent = langNames[savedLang];
-
-      if (savedLang !== 'fr') {
-        setTimeout(() => translatePage(savedLang), 10);
-      }
+      translatePage(savedLang);
     }
 
-    initLanguage();
+    // Call initLanguage after DOM is ready
+    document.addEventListener('DOMContentLoaded', initLanguage);
 
     // Update user nav links
     let updateUserTimeout;

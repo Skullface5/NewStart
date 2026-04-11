@@ -222,9 +222,9 @@
             text-decoration: none;
         }
 
-        .logo i {
-            font-size: 2rem;
-            color: var(--accent);
+        .logo img {
+            width: 45px;
+            height: auto;
         }
 
         .logo h1 {
@@ -498,8 +498,9 @@
                 font-size: 1.2rem;
             }
 
-            .logo i {
-                font-size: 1.5rem;
+            .theme-toggle,
+            .cart-icon {
+                margin-right: 10px;
             }
         }
 
@@ -1011,14 +1012,6 @@
             background: var(--accent);
             border-radius: 3px;
         }
-
-        @media (max-width: 768px) {
-
-            .theme-toggle,
-            .cart-icon {
-                margin-right: 10px;
-            }
-        }
     </style>
 </head>
 
@@ -1044,29 +1037,35 @@
     <div id="checkoutModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fas fa-truck"></i> Informations de livraison</h3>
+                <h3><i class="fas fa-truck"></i> <span data-translate="delivery">Livraison</span></h3>
                 <button class="close-modal" onclick="closeCheckoutModal()"><i class="fas fa-times"></i></button>
             </div>
             <form id="checkoutForm">
-                <div class="form-group"><label>Nom complet *</label><input type="text" id="customerName" required></div>
-                <div class="form-group"><label>Téléphone *</label><input type="tel" id="customerPhone" required></div>
-                <div id="emailFieldGroup" class="form-group"><label>Email *</label><input type="email"
-                        id="customerEmail"></div>
-                <div id="loggedInEmailDisplay" style="display:none;" class="form-group"><label>Email</label>
+                <div class="form-group"><label data-translate="fullName">Nom complet</label><input type="text"
+                        id="customerName" required></div>
+                <div class="form-group"><label data-translate="phone">Téléphone</label><input type="tel"
+                        id="customerPhone" required></div>
+                <div id="emailFieldGroup" class="form-group"><label data-translate="email">Email</label><input
+                        type="email" id="customerEmail"></div>
+                <div id="loggedInEmailDisplay" style="display:none;" class="form-group"><label
+                        data-translate="email">Email</label>
                     <div style="padding:0.8rem; background:var(--bg-secondary); border-radius:12px;"><i
                             class="fas fa-check-circle" style="color:#2c682c;"></i> <span id="displayEmail"></span>
                     </div>
                 </div>
-                <div class="form-group"><label>Adresse complète *</label><input type="text" id="shippingAddress"
-                        required></div>
+                <div class="form-group"><label data-translate="address">Adresse </label><input type="text"
+                        id="shippingAddress" required></div>
                 <div class="order-summary">
-                    <h4>Votre commande</h4>
+                    <h4 data-translate="yourOrder">Votre commande</h4>
                     <div id="modalCartItems"></div>
-                    <div class="summary-total"><span>Total</span><span id="modalTotal">0 TND</span></div>
+                    <div class="summary-total"><span data-translate="total">Total</span><span id="modalTotal">0
+                            TND</span></div>
                 </div>
                 <div style="display: flex; gap: 10px; margin-top: 0.8rem;">
-                    <button type="button" class="btn-secondary" onclick="closeCheckoutModal()">Annuler</button>
-                    <button type="submit" class="btn-primary" id="submitOrderBtn">Confirmer</button>
+                    <button type="button" class="btn-secondary" onclick="closeCheckoutModal()"
+                        data-translate="cancel">Annuler</button>
+                    <button type="submit" class="btn-primary" id="submitOrderBtn"
+                        data-translate="confirm">Confirmer</button>
                 </div>
             </form>
         </div>
@@ -1075,13 +1074,14 @@
     <div id="productModal" class="modal-overlay">
         <div class="modal-content" style="padding:0;">
             <div class="modal-header">
-                <h3 id="productModalTitle"><i class="fas fa-info-circle"></i> Détails du produit</h3>
+                <h3 id="productModalTitle"><i class="fas fa-info-circle"></i> <span
+                        data-translate="details">Détails</span></h3>
                 <button class="close-modal" onclick="closeProductModal()"><i class="fas fa-times"></i></button>
             </div>
             <div id="productModalBody" style="padding: 1.5rem; text-align: center;"></div>
             <div style="display: flex; gap: 10px; padding: 1rem 1.5rem; border-top: 1px solid var(--border);">
-                <button class="btn-secondary" onclick="closeProductModal()">Fermer</button>
-                <button class="btn-primary" id="modalAddToCartBtn">Ajouter au panier</button>
+                <button class="btn-secondary" onclick="closeProductModal()" data-translate="close">Fermer</button>
+                <button class="btn-primary" id="modalAddToCartBtn" data-translate="addToCart">Ajouter</button>
             </div>
         </div>
     </div>
@@ -1089,24 +1089,26 @@
     <div id="cartOverlay" class="cart-overlay"></div>
     <aside id="cartSidebar" class="cart-sidebar">
         <div class="cart-header">
-            <h3><i class="fas fa-bag-shopping"></i> Votre panier</h3>
+            <h3><i class="fas fa-bag-shopping"></i> <span data-translate="cart">Panier</span></h3>
             <button class="close-cart" id="closeCartBtn"
                 style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--accent);"><i
                     class="fas fa-times"></i></button>
         </div>
         <div id="cartItemsContainer" class="cart-items">
-            <div class="empty-cart-message">Votre panier est vide.</div>
+            <div class="empty-cart-message" data-translate="emptyCart">Votre panier est vide.</div>
         </div>
         <div class="cart-footer">
-            <div class="cart-total"><span>Total</span><span id="cartTotalPrice">0,000 TND</span></div>
-            <button class="checkout-btn" id="checkoutBtn">PAIEMENT <i class="fas fa-arrow-right"></i></button>
+            <div class="cart-total"><span data-translate="total">Total</span><span id="cartTotalPrice">0,000 TND</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn"><span data-translate="payment">PAIEMENT</span> <i
+                    class="fas fa-arrow-right"></i></button>
         </div>
     </aside>
 
     <header>
         <div class="container header-flex">
             <a href="index.html" class="logo">
-                <img style="width: 65px;" src="is.png">
+                <img src="is.png" alt="Rosa Fragrances">
                 <h1>Rosa Fragrances</h1>
             </a>
             <div style="display: flex; align-items: center;">
@@ -1117,10 +1119,10 @@
                 <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
             </div>
             <div class="nav-links" id="navLinks">
-                <a href="index.html">ACCUEIL</a>
-                <a href="women.html">Femme</a>
-                <a href="unisexe.html">UNISEXE</a>
-                <a href="kids.html">ENFANTS</a>
+                <a href="index.html" data-translate="home">ACCUEIL</a>
+                <a href="women.html" data-translate="women">FEMME</a>
+                <a href="unisexe.html" data-translate="unisex">UNISEXE</a>
+                <a href="kids.html" data-translate="kids">ENFANTS</a>
                 <div class="lang-menu" id="langMenu">
                     <button class="lang-current" id="langCurrentBtn">
                         <span id="currentLangText">FRANÇAIS</span>
@@ -1132,20 +1134,22 @@
                         <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
                     </div>
                 </div>
-                <a href="login146.html" id="authLink">Se connecter</a>
-                <a href="profile.html" id="profileLink" style="display: none;">Mon Profil</a>
+                <a href="login146.html" id="authLink" data-translate="login">Se connecter</a>
+                <a href="profile.html" id="profileLink" style="display: none;" data-translate="profile">Mon Profil</a>
             </div>
         </div>
     </header>
 
     <main class="container">
-        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Retour à l'accueil</a>
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> <span
+                data-translate="back">Retour</span></a>
         <div class="category-hero">
-            <h2>Parfums Homme</h2>
-            <p></p>
+            <h2 data-translate="menCat">Parfums Homme</h2>
+            <p data-translate="menDesc">Des fragrances boisées, épicées et audacieuses qui révèlent votre caractère et
+                votre élégance.</p>
         </div>
         <div id="loadingProducts" class="loading-spinner"><i class="fas fa-spinner fa-spin fa-3x"></i>
-            <p>Chargement des parfums...</p>
+            <p data-translate="loading">Chargement des parfums...</p>
         </div>
         <div class="product-grid" id="productGrid" style="display: none;"></div>
     </main>
@@ -1155,17 +1159,20 @@
             <div class="contact-section">
                 <div style="text-align:center; margin-bottom:1rem;">
                     <h3 style="color:var(--gold-base); font-weight: 400; font-size: 1rem; letter-spacing: 0.1em;">📞
-                        Contact</h3>
-                    <p style="color:var(--text-secondary); font-size: 0.75rem;">Une question ? Nous sommes là.</p>
+                        <span data-translate="contact">Contact</span>
+                    </h3>
+                    <p style="color:var(--text-secondary); font-size: 0.75rem;" data-translate="contactDesc">Une
+                        question ? Nous sommes là.</p>
                 </div>
                 <div class="contact-grid">
                     <div class="contact-item">
                         <div class="contact-icon"><i class="fas fa-envelope"></i></div>
-                        <p>Email</p><a href="mailto:rosafragrances.tn@gmail.com">rosafragrances.tn@gmail.com</a>
+                        <p data-translate="email">Email</p><a
+                            href="mailto:rosafragrances.tn@gmail.com">rosafragrances.tn@gmail.com</a>
                     </div>
                     <div class="contact-item">
                         <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
-                        <p>Téléphone</p><a href="tel:+21696163366">+216 96 163 366</a>
+                        <p data-translate="phone">Téléphone</p><a href="tel:+21696163366">+216 96 163 366</a>
                     </div>
                     <div class="contact-item">
                         <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
@@ -1189,6 +1196,79 @@
             const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
             const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+            // ========== TRANSLATION SYSTEM ==========
+            let currentLanguage = localStorage.getItem('language') || 'fr';
+
+            const translations = {
+                fr: {
+                    home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
+                    login: 'Se connecter', profile: 'Mon Profil', back: 'Retour',
+                    menCat: 'Parfums Homme', menDesc: 'Des fragrances boisées, épicées et audacieuses qui révèlent votre caractère et votre élégance.',
+                    addToCart: 'Ajouter', addedToCart: '✨ Article ajouté', cart: 'Panier', emptyCart: 'Votre panier est vide.',
+                    total: 'Total', payment: 'PAIEMENT', delivery: 'Livraison', fullName: 'Nom complet',
+                    phone: 'Téléphone', email: 'Email', address: 'Adresse', yourOrder: 'Votre commande',
+                    cancel: 'Annuler', confirm: 'Confirmer', orderConfirmed: '✅ Commande confirmée!',
+                    cartEmptyWarning: '🛒 Panier vide', error: '❌ Erreur', details: 'Détails', close: 'Fermer',
+                    contact: 'Contact', contactDesc: 'Une question ? Nous sommes là.', loading: 'Chargement...',
+                    noProducts: 'Aucun parfum disponible', errorLoading: '❌ Erreur', reload: 'Recharger', removed: '🗑️ Retiré'
+                },
+                en: {
+                    home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
+                    login: 'Sign in', profile: 'My Profile', back: 'Back',
+                    menCat: 'Men Perfumes', menDesc: 'Woody, spicy and bold fragrances that reveal your character and elegance.',
+                    addToCart: 'Add to cart', addedToCart: '✨ Added to cart', cart: 'Cart', emptyCart: 'Your cart is empty.',
+                    total: 'Total', payment: 'PAYMENT', delivery: 'Delivery', fullName: 'Full name',
+                    phone: 'Phone', email: 'Email', address: 'Address', yourOrder: 'Your order',
+                    cancel: 'Cancel', confirm: 'Confirm', orderConfirmed: '✅ Order confirmed!',
+                    cartEmptyWarning: '🛒 Cart is empty', error: '❌ Error', details: 'Details', close: 'Close',
+                    contact: 'Contact', contactDesc: 'Have a question? We\'re here.', loading: 'Loading...',
+                    noProducts: 'No perfumes available', errorLoading: '❌ Error', reload: 'Reload', removed: '🗑️ Removed'
+                },
+                ar: {
+                    home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
+                    login: 'تسجيل الدخول', profile: 'ملفي الشخصي', back: 'رجوع',
+                    menCat: 'عطور رجالية', menDesc: 'عطور خشبية وحارة وجريئة تكشف عن شخصيتك وأناقتك.',
+                    addToCart: 'أضف إلى السلة', addedToCart: '✨ تمت الإضافة', cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.',
+                    total: 'المجموع', payment: 'الدفع', delivery: 'التوصيل', fullName: 'الاسم الكامل',
+                    phone: 'الهاتف ', email: 'البريد الإلكتروني ', address: 'العنوان', yourOrder: 'طلبك',
+                    cancel: 'إلغاء', confirm: 'تأكيد', orderConfirmed: '✅ تم تأكيد الطلب!',
+                    cartEmptyWarning: '🛒 السلة فارغة', error: '❌ خطأ', details: 'التفاصيل', close: 'إغلاق',
+                    contact: 'اتصل بنا', contactDesc: 'هل لديك سؤال؟ نحن هنا.', loading: 'جاري التحميل...',
+                    noProducts: 'لا توجد عطور', errorLoading: '❌ خطأ', reload: 'إعادة تحميل', removed: '🗑️ تمت الإزالة'
+                }
+            };
+
+            function translatePage(lang) {
+                currentLanguage = lang;
+                localStorage.setItem('language', lang);
+
+                if (lang === 'ar') {
+                    document.body.style.direction = 'rtl';
+                    document.body.style.textAlign = 'right';
+                } else {
+                    document.body.style.direction = 'ltr';
+                    document.body.style.textAlign = 'left';
+                }
+
+                const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+                const langSpan = document.getElementById('currentLangText');
+                if (langSpan) langSpan.textContent = names[lang];
+
+                document.querySelectorAll('[data-translate]').forEach(el => {
+                    const key = el.getAttribute('data-translate');
+                    if (translations[lang] && translations[lang][key]) {
+                        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                            el.placeholder = translations[lang][key];
+                        } else {
+                            el.textContent = translations[lang][key];
+                        }
+                    }
+                });
+
+                if (typeof renderProducts === 'function' && products.length > 0) renderProducts();
+                if (typeof renderCart === 'function') renderCart();
+            }
+
             let products = [];
             let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
 
@@ -1207,15 +1287,36 @@
             const navLinks = document.getElementById('navLinks');
             const menuOverlay = document.getElementById('menuOverlay');
 
-            function showToast(msg) { if (toast) { toast.textContent = msg; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2000); } }
+            function showToast(msgKey, productName = '') {
+                if (!toast) return;
+                let msg = translations[currentLanguage][msgKey] || msgKey;
+                if (productName) msg = msg.replace('✨', '✨ ') + ' ' + productName;
+                toast.textContent = msg;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            }
+
             function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
             function calculateTotal() { return cart.reduce((sum, i) => sum + (i.price * i.quantity), 0); }
-            function updateCartCount() { const total = cart.reduce((acc, i) => acc + (i.quantity || 1), 0); if (cartCountSpan) cartCountSpan.textContent = total; }
-            function saveCart() { localStorage.setItem('RosaFragrances_cart', JSON.stringify(cart)); updateCartCount(); renderCart(); }
+
+            function updateCartCount() {
+                const total = cart.reduce((acc, i) => acc + (i.quantity || 1), 0);
+                if (cartCountSpan) cartCountSpan.textContent = total;
+            }
+
+            function saveCart() {
+                localStorage.setItem('RosaFragrances_cart', JSON.stringify(cart));
+                updateCartCount();
+                renderCart();
+            }
 
             function renderCart() {
                 if (!cartItemsContainer) return;
-                if (cart.length === 0) { cartItemsContainer.innerHTML = '<div class="empty-cart-message">Votre panier est vide.</div>'; if (cartTotalSpan) cartTotalSpan.textContent = '0,000 TND'; return; }
+                if (cart.length === 0) {
+                    cartItemsContainer.innerHTML = `<div class="empty-cart-message">${translations[currentLanguage].emptyCart}</div>`;
+                    if (cartTotalSpan) cartTotalSpan.textContent = '0,000 TND';
+                    return;
+                }
                 let html = ''; let total = 0;
                 cart.forEach(item => {
                     const sub = item.price * (item.quantity || 1); total += sub;
@@ -1226,7 +1327,7 @@
                             <div class="cart-item-price">${formatPrice(item.price)}</div>
                             <div class="cart-item-quantity">
                                 <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
-                                <span class="quantity-value">${item.quantity || 1}</span>
+                                <span>${item.quantity || 1}</span>
                                 <button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button>
                             </div>
                         </div>
@@ -1241,41 +1342,42 @@
                 const existing = cart.find(i => i.id === id);
                 if (existing) existing.quantity = (existing.quantity || 1) + 1;
                 else cart.push({ id, name, price, icon: icon || 'fa-leaf', image, quantity: 1 });
-                saveCart(); showToast('✨ ' + name + ' ajouté');
+                saveCart();
+                showToast('addedToCart', name);
             }
 
-            function removeFromCart(id) { cart = cart.filter(i => i.id !== id); saveCart(); showToast('🗑️ Retiré'); }
+            function removeFromCart(id) {
+                cart = cart.filter(i => i.id !== id);
+                saveCart();
+                showToast('removed');
+            }
 
             function updateQuantity(id, action) {
-                const item = cart.find(i => i.id === id); if (!item) return;
+                const item = cart.find(i => i.id === id);
+                if (!item) return;
                 if (action === 'increase') item.quantity = (item.quantity || 1) + 1;
-                else if (action === 'decrease') { if (item.quantity > 1) item.quantity -= 1; else { removeFromCart(id); return; } }
+                else if (action === 'decrease') {
+                    if (item.quantity > 1) item.quantity -= 1;
+                    else { removeFromCart(id); return; }
+                }
                 saveCart();
             }
 
-            function openCart() { cartSidebar?.classList.add('open'); cartOverlay?.classList.add('active'); document.body.style.overflow = 'hidden'; }
-            function closeCart() { cartSidebar?.classList.remove('open'); cartOverlay?.classList.remove('active'); document.body.style.overflow = ''; }
+            function openCart() {
+                cartSidebar?.classList.add('open');
+                cartOverlay?.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
 
-            window.openProductModal = function (product) {
-                const modal = document.getElementById('productModal'); const modalBody = document.getElementById('productModalBody');
-                const modalTitle = document.getElementById('productModalTitle'); const formattedPrice = product.price.toFixed(3).replace('.', ',');
-                const imgHtml = product.image ? `<img src="${product.image}" alt="${escapeHtml(product.name)}">` : `<i class="fas fa-crown"></i>`;
-                modalBody.innerHTML = `<div style="width:130px;height:130px;margin:0 auto 1rem;background:var(--bg-tertiary);border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;">${imgHtml}</div>
-                    <h2 style="font-size:1.3rem;font-weight:400;margin-bottom:0.3rem;color:var(--text-primary);">${escapeHtml(product.name)}</h2>
-                    <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--accent);margin-bottom:0.4rem;">${escapeHtml(product.brand)}</div>
-                    <div style="font-size:1.3rem;color:var(--accent);margin:0.8rem 0;">${formattedPrice} TND</div>
-                    <div style="color:var(--text-secondary);line-height:1.5;font-size:0.8rem;">${escapeHtml(product.description || 'Découvrez ce parfum d\'exception.')}</div>`;
-                modalTitle.innerHTML = `<i class="fas fa-info-circle"></i> ${escapeHtml(product.name)}`;
-                modal.style.display = 'flex'; document.body.style.overflow = 'hidden';
-                document.getElementById('modalAddToCartBtn').onclick = () => { addToCart(product.id, product.name, product.price, product.icon || 'fa-crown', product.image); closeProductModal(); };
-            };
-
-            window.closeProductModal = function () { document.getElementById('productModal').style.display = 'none'; document.body.style.overflow = ''; };
-            window.closeCheckoutModal = () => { document.getElementById('checkoutModal').style.display = 'none'; document.body.style.overflow = ''; };
+            function closeCart() {
+                cartSidebar?.classList.remove('open');
+                cartOverlay?.classList.remove('active');
+                document.body.style.overflow = '';
+            }
 
             function escapeHtml(str) {
                 if (!str) return '';
-                return str.replace(/[&<>]/g, function (m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; });
+                return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
             }
 
             async function loadProducts() {
@@ -1283,22 +1385,38 @@
                     const response = await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/rest/v1/products?select=*&category=eq.man', {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
                     });
-                    const data = await response.json(); products = data || []; renderProducts();
+                    const data = await response.json();
+                    products = data || [];
+                    renderProducts();
                 } catch (err) {
                     console.error('Product loading error:', err);
-                    if (loadingEl) { loadingEl.innerHTML = '<div style="color: #c1654c;">❌ Impossible de charger les produits.</div>'; loadingEl.style.display = 'block'; }
-                    if (productGrid) { productGrid.style.display = 'grid'; productGrid.innerHTML = '<div class="empty-cart-message" style="grid-column:1/-1;">Erreur de chargement. Veuillez réessayer.</div>'; }
+                    if (loadingEl) {
+                        loadingEl.innerHTML = `<div style="color: #c1654c;">${translations[currentLanguage].errorLoading}</div>`;
+                        loadingEl.style.display = 'block';
+                    }
                 }
             }
 
             function renderProducts() {
-                if (!loadingEl || !productGrid) return; loadingEl.style.display = 'none';
-                if (!products || products.length === 0) { productGrid.style.display = 'grid'; productGrid.innerHTML = '<div class="empty-cart-message" style="grid-column:1/-1;">Aucun parfum Homme disponible pour le moment.</div>'; return; }
-                productGrid.style.display = 'grid'; let html = '';
+                if (!loadingEl || !productGrid) return;
+                loadingEl.style.display = 'none';
+                if (!products || products.length === 0) {
+                    productGrid.style.display = 'grid';
+                    productGrid.innerHTML = `<div class="empty-cart-message" style="grid-column:1/-1;">${translations[currentLanguage].noProducts}</div>`;
+                    return;
+                }
+                productGrid.style.display = 'grid';
+                let html = '';
                 products.forEach((p) => {
-                    let firstImage = ''; if (p.images) { try { const imagesArray = typeof p.images === 'string' ? JSON.parse(p.images) : p.images; firstImage = imagesArray[0] || ''; } catch (e) { firstImage = ''; } }
+                    let firstImage = '';
+                    if (p.images) {
+                        try {
+                            const imagesArray = typeof p.images === 'string' ? JSON.parse(p.images) : p.images;
+                            firstImage = imagesArray[0] || '';
+                        } catch (e) { firstImage = ''; }
+                    }
                     if (!firstImage && p.image) firstImage = p.image;
-                    const imgHtml = firstImage ? `<img src="${firstImage}" alt="${escapeHtml(p.name)}">` : `<i class="fas ${p.icon || 'fa-leaf'}"></i>`;
+                    const imgHtml = firstImage ? `<img src="${firstImage}" alt="${escapeHtml(p.name)}">` : `<i class="fas fa-crown"></i>`;
                     html += `<div class="product-card" data-product-id="${p.id}">
                         <div class="product-clickable" style="cursor:pointer; width:100%;">
                             <div class="product-img">${imgHtml}</div>
@@ -1306,22 +1424,30 @@
                             <div class="product-brand">${escapeHtml(p.brand)}</div>
                             <div class="product-price">${parseFloat(p.price).toFixed(3).replace('.', ',')} TND</div>
                         </div>
-                        <button class="add-to-cart" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${p.price}" data-icon="${p.icon || 'fa-leaf'}" data-image="${firstImage}">Ajouter au panier</button>
+                        <button class="add-to-cart" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${p.price}" data-image="${firstImage}">${translations[currentLanguage].addToCart}</button>
                     </div>`;
                 });
                 productGrid.innerHTML = html;
-                document.querySelectorAll('.product-clickable').forEach((el) => {
-                    el.addEventListener('click', (e) => { if (e.target.closest('.add-to-cart')) return; const productId = el.closest('.product-card').dataset.productId; window.location.href = `product.html?id=${productId}`; });
+                document.querySelectorAll('.product-clickable').forEach(el => {
+                    el.addEventListener('click', (e) => {
+                        if (e.target.closest('.add-to-cart')) return;
+                        window.location.href = `product.html?id=${el.closest('.product-card').dataset.productId}`;
+                    });
                 });
                 document.querySelectorAll('.add-to-cart').forEach(btn => {
-                    btn.addEventListener('click', (e) => { e.stopPropagation(); addToCart(btn.dataset.id, btn.dataset.name, parseFloat(btn.dataset.price), btn.dataset.icon, btn.dataset.image); });
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        addToCart(btn.dataset.id, btn.dataset.name, parseFloat(btn.dataset.price), 'fa-crown', btn.dataset.image);
+                    });
                 });
             }
 
             if (cartItemsContainer) {
                 cartItemsContainer.addEventListener('click', (e) => {
-                    const rm = e.target.closest('.cart-item-remove'); if (rm) { removeFromCart(rm.dataset.id); return; }
-                    const qtyBtn = e.target.closest('.quantity-btn'); if (qtyBtn) updateQuantity(qtyBtn.dataset.id, qtyBtn.dataset.action);
+                    const rm = e.target.closest('.cart-item-remove');
+                    if (rm) { removeFromCart(rm.dataset.id); return; }
+                    const qtyBtn = e.target.closest('.quantity-btn');
+                    if (qtyBtn) updateQuantity(qtyBtn.dataset.id, qtyBtn.dataset.action);
                 });
             }
 
@@ -1330,54 +1456,160 @@
             if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
 
             checkoutBtn?.addEventListener('click', async () => {
-                if (cart.length === 0) { showToast('🛒 Votre panier est vide'); return; }
+                if (cart.length === 0) { showToast('cartEmptyWarning'); return; }
                 const { data: { user } } = await supabase.auth.getUser();
-                const emailField = document.getElementById('emailFieldGroup'); const loggedDiv = document.getElementById('loggedInEmailDisplay'); const emailInp = document.getElementById('customerEmail');
-                if (user) { emailField.style.display = 'none'; loggedDiv.style.display = 'block'; document.getElementById('displayEmail').textContent = user.email; emailInp.required = false; }
-                else { emailField.style.display = 'block'; loggedDiv.style.display = 'none'; emailInp.required = true; }
+                const emailField = document.getElementById('emailFieldGroup');
+                const loggedDiv = document.getElementById('loggedInEmailDisplay');
+                const emailInp = document.getElementById('customerEmail');
+                if (user) {
+                    emailField.style.display = 'none';
+                    loggedDiv.style.display = 'block';
+                    document.getElementById('displayEmail').textContent = user.email;
+                    emailInp.required = false;
+                } else {
+                    emailField.style.display = 'block';
+                    loggedDiv.style.display = 'none';
+                    emailInp.required = true;
+                }
                 document.getElementById('modalCartItems').innerHTML = cart.map(i => `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed var(--border);"><span>${escapeHtml(i.name)} <span style="color:var(--accent);">x${i.quantity}</span></span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`).join('');
                 document.getElementById('modalTotal').textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND';
-                document.getElementById('checkoutModal').style.display = 'flex'; document.body.style.overflow = 'hidden';
+                document.getElementById('checkoutModal').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
             });
 
             window.processOrder = async (event) => {
-                event.preventDefault(); const btn = document.getElementById('submitOrderBtn'); btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                event.preventDefault();
+                const btn = document.getElementById('submitOrderBtn');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
                 try {
-                    const { data: { user } } = await supabase.auth.getUser(); const email = user ? user.email : document.getElementById('customerEmail').value;
-                    const orderData = { items: cart, total: calculateTotal(), customer_name: document.getElementById('customerName').value, customer_phone: document.getElementById('customerPhone').value, customer_email: email, shipping_address: document.getElementById('shippingAddress').value, status: 'pending' };
+                    const { data: { user } } = await supabase.auth.getUser();
+                    const email = user ? user.email : document.getElementById('customerEmail').value;
+                    const orderData = {
+                        items: cart,
+                        total: calculateTotal(),
+                        customer_name: document.getElementById('customerName').value,
+                        customer_phone: document.getElementById('customerPhone').value,
+                        customer_email: email,
+                        shipping_address: document.getElementById('shippingAddress').value,
+                        status: 'pending'
+                    };
                     if (user) orderData.user_id = user.id;
                     await supabase.from('orders').insert([orderData]);
-                    await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/functions/v1/send-order-email', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_' }, body: JSON.stringify({ order: orderData, customerEmail: email }) });
-                    cart = []; localStorage.removeItem('RosaFragrances_cart'); saveCart(); closeCheckoutModal(); closeCart(); showToast('✅ Commande confirmée! Un email vous a été envoyé.');
-                } catch (error) { console.error('Order error:', error); showToast('❌ Erreur lors de la commande'); }
-                finally { btn.disabled = false; btn.innerHTML = 'Confirmer'; }
+                    await fetch('https://dtwciuhwwanwlwpydeko.supabase.co/functions/v1/send-order-email', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer sb_publishable_ONI_1fHQUMD969B1TElxwA_m9rqzyk_' },
+                        body: JSON.stringify({ order: orderData, customerEmail: email })
+                    });
+                    cart = [];
+                    localStorage.removeItem('RosaFragrances_cart');
+                    saveCart();
+                    closeCheckoutModal();
+                    closeCart();
+                    showToast('orderConfirmed');
+                } catch (error) {
+                    console.error('Order error:', error);
+                    showToast('error');
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = translations[currentLanguage].confirm;
+                }
             };
 
             document.getElementById('checkoutForm')?.addEventListener('submit', window.processOrder);
+            window.closeCheckoutModal = () => {
+                document.getElementById('checkoutModal').style.display = 'none';
+                document.body.style.overflow = '';
+            };
+            window.closeProductModal = function () {
+                document.getElementById('productModal').style.display = 'none';
+                document.body.style.overflow = '';
+            };
 
             let isUpdatingUser = false; let updateUserTimeout;
             async function updateUserDisplay() {
                 if (isUpdatingUser) return; isUpdatingUser = true;
-                try { const { data: { user } } = await supabase.auth.getUser(); const authLink = document.getElementById('authLink'); const profileLink = document.getElementById('profileLink'); if (user) { if (authLink) authLink.style.display = 'none'; if (profileLink) profileLink.style.display = 'block'; } else { if (authLink) authLink.style.display = 'block'; if (profileLink) profileLink.style.display = 'none'; } } finally { isUpdatingUser = false; }
+                try {
+                    const { data: { user } } = await supabase.auth.getUser();
+                    const authLink = document.getElementById('authLink');
+                    const profileLink = document.getElementById('profileLink');
+                    if (user) {
+                        if (authLink) authLink.style.display = 'none';
+                        if (profileLink) profileLink.style.display = 'block';
+                    } else {
+                        if (authLink) authLink.style.display = 'block';
+                        if (profileLink) profileLink.style.display = 'none';
+                    }
+                } finally { isUpdatingUser = false; }
             }
             updateUserDisplay();
-            supabase.auth.onAuthStateChange((event, session) => { if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) { if (updateUserTimeout) clearTimeout(updateUserTimeout); updateUserTimeout = setTimeout(() => updateUserDisplay(), 100); } });
+            supabase.auth.onAuthStateChange((event, session) => {
+                if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
+                    if (updateUserTimeout) clearTimeout(updateUserTimeout);
+                    updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
+                }
+            });
 
-            function toggleMenu() { navLinks.classList.toggle('active'); menuOverlay.classList.toggle('active'); document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : ''; if (navLinks.classList.contains('active')) closeCart(); }
+            function toggleMenu() {
+                navLinks.classList.toggle('active');
+                menuOverlay.classList.toggle('active');
+                document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+                if (navLinks.classList.contains('active')) closeCart();
+            }
             if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
             if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
 
-            const langMenu = document.getElementById('langMenu'); const langCurrentBtn = document.getElementById('langCurrentBtn');
-            if (langCurrentBtn) { langCurrentBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); langMenu.classList.toggle('active'); }); }
-            document.querySelectorAll('.lang-option').forEach(opt => { opt.addEventListener('click', (e) => { e.stopPropagation(); const lang = opt.dataset.lang; const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' }; document.getElementById('currentLangText').textContent = names[lang]; langMenu.classList.remove('active'); localStorage.setItem('language', lang); }); });
-            document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
+            const langMenu = document.getElementById('langMenu');
+            const langCurrentBtn = document.getElementById('langCurrentBtn');
+            if (langCurrentBtn) {
+                langCurrentBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    langMenu.classList.toggle('active');
+                });
+            }
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                opt.addEventListener('click', (e) => {
+                    const lang = opt.dataset.lang;
+                    translatePage(lang);
+                    langMenu.classList.remove('active');
+                });
+            });
+            document.addEventListener('click', (e) => {
+                if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active');
+            });
 
-            loadProducts(); saveCart();
+            translatePage(currentLanguage);
+            loadProducts();
+            saveCart();
         })();
 
-        function initTheme() { const saved = localStorage.getItem('theme') || 'light'; if (saved === 'dark') { document.body.classList.add('dark'); document.querySelector('#themeToggle .fa-sun').style.display = 'none'; document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block'; } }
-        function toggleTheme() { if (document.body.classList.contains('dark')) { document.body.classList.remove('dark'); localStorage.setItem('theme', 'light'); document.querySelector('#themeToggle .fa-sun').style.display = 'inline-block'; document.querySelector('#themeToggle .fa-moon').style.display = 'none'; } else { document.body.classList.add('dark'); localStorage.setItem('theme', 'dark'); document.querySelector('#themeToggle .fa-sun').style.display = 'none'; document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block'; } }
-        document.addEventListener('DOMContentLoaded', () => { document.getElementById('themeToggle')?.addEventListener('click', toggleTheme); initTheme(); });
+        function initTheme() {
+            const saved = localStorage.getItem('theme') || 'light';
+            if (saved === 'dark') {
+                document.body.classList.add('dark');
+                document.querySelector('#themeToggle .fa-sun').style.display = 'none';
+                document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
+            }
+        }
+
+        function toggleTheme() {
+            if (document.body.classList.contains('dark')) {
+                document.body.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                document.querySelector('#themeToggle .fa-sun').style.display = 'inline-block';
+                document.querySelector('#themeToggle .fa-moon').style.display = 'none';
+            } else {
+                document.body.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                document.querySelector('#themeToggle .fa-sun').style.display = 'none';
+                document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
+            initTheme();
+        });
     </script>
 </body>
 
