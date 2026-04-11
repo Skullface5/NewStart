@@ -14,7 +14,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    /* ... (keep all existing CSS unchanged) ... */
     * {
       margin: 0;
       padding: 0;
@@ -106,16 +105,14 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background:
-        radial-gradient(circle at 20% 40%, rgba(180, 155, 120, 0.03) 0%, transparent 50%),
+      background: radial-gradient(circle at 20% 40%, rgba(180, 155, 120, 0.03) 0%, transparent 50%),
         radial-gradient(circle at 80% 70%, rgba(180, 155, 120, 0.02) 0%, transparent 60%);
       pointer-events: none;
       z-index: -1;
     }
 
     body.dark::before {
-      background:
-        radial-gradient(circle at 20% 40%, rgba(184, 155, 94, 0.05) 0%, transparent 50%),
+      background: radial-gradient(circle at 20% 40%, rgba(184, 155, 94, 0.05) 0%, transparent 50%),
         radial-gradient(circle at 80% 70%, rgba(212, 184, 122, 0.04) 0%, transparent 60%);
     }
 
@@ -177,26 +174,25 @@
       align-items: center;
       justify-content: space-between;
       position: relative;
-      margin-left: -28px;
     }
 
     .logo {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
       z-index: 102;
       text-decoration: none;
     }
 
     .logo img {
-      width: 45px;
+      width: 38px;
       height: auto;
     }
 
     .logo h1 {
-      font-size: 1rem;
+      font-size: 0.9rem;
       text-transform: uppercase;
-      letter-spacing: 0.25em;
+      letter-spacing: 0.2em;
       font-weight: 400;
       background: var(--gold-gradient);
       -webkit-background-clip: text;
@@ -209,7 +205,7 @@
       font-size: 1.1rem;
       color: var(--gold-base);
       transition: all 0.3s ease;
-      margin-right: 12px;
+      margin-right: 8px;
       width: 34px;
       height: 34px;
       display: flex;
@@ -229,7 +225,7 @@
       cursor: pointer;
       font-size: 1.3rem;
       color: var(--gold-base);
-      margin-right: 12px;
+      margin-right: 8px;
       width: 34px;
       height: 34px;
       display: flex;
@@ -337,19 +333,9 @@
       transition: all 0.3s ease;
     }
 
-    .admin-nav-link[style*="display: block"] {
-      display: flex !important;
-    }
-
     .admin-nav-link:hover {
       background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.08) 100%) !important;
-      color: var(--accent-dark) !important;
       padding-left: 2.5rem !important;
-      transform: translateX(2px);
-    }
-
-    .admin-nav-link i {
-      font-size: 0.95rem;
     }
 
     .lang-menu {
@@ -437,7 +423,8 @@
       }
 
       .logo h1 {
-        font-size: 1.3rem;
+        font-size: 0.85rem;
+        letter-spacing: 0.15em;
       }
     }
 
@@ -463,8 +450,22 @@
         grid-column: auto;
       }
 
+      .container {
+        padding: 1rem;
+      }
+
+      .logo img {
+        width: 32px;
+      }
+
       .logo h1 {
-        font-size: 1.1rem;
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+      }
+
+      .theme-toggle,
+      .cart-icon {
+        margin-right: 4px;
       }
     }
 
@@ -479,7 +480,12 @@
       }
 
       .logo h1 {
-        font-size: 1rem;
+        font-size: 0.6rem;
+        letter-spacing: 0.05em;
+      }
+
+      .logo img {
+        width: 28px;
       }
     }
 
@@ -1088,7 +1094,6 @@
   <div id="menuOverlay" class="cart-overlay" style="z-index: 99;"></div>
   <div id="toast" class="notification">✨ Article ajouté</div>
 
-  <!-- Checkout Modal -->
   <div id="checkoutModal" class="modal-overlay">
     <div class="modal-content">
       <div class="modal-header">
@@ -1131,7 +1136,6 @@
     </div>
   </div>
 
-  <!-- Product Modal -->
   <div id="productModal" class="modal-overlay">
     <div class="modal-content">
       <div class="modal-header">
@@ -1144,12 +1148,11 @@
         <button class="btn-secondary" onclick="closeProductModal()" style="font-size: 0.8rem;"
           data-translate="close">Fermer</button>
         <button class="btn-primary" id="modalAddToCartBtn" style="font-size: 0.8rem;"
-          data-translate="add">Ajouter</button>
+          data-translate="addToCart">Ajouter</button>
       </div>
     </div>
   </div>
 
-  <!-- Cart Sidebar -->
   <div id="cartOverlay" class="cart-overlay"></div>
   <aside id="cartSidebar" class="cart-sidebar">
     <div class="cart-header">
@@ -1169,14 +1172,13 @@
     </div>
   </aside>
 
-  <!-- Header -->
   <header>
     <div class="container header-flex">
       <a href="index.html" class="logo" style="text-decoration: none;">
-        <img style="width: 65px;" src="is.png">
+        <img src="is.png" alt="Rosa">
         <h1>Rosa Fragrances</h1>
       </a>
-      <div style="display: flex; align-items: center; gap: 4px;">
+      <div style="display: flex; align-items: center; gap: 2px;">
         <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon"
             style="display: none;"></i></div>
         <div class="cart-icon" id="cartToggle"><i class="fas fa-bag-shopping"></i><span id="cartCount"
@@ -1204,7 +1206,6 @@
     </div>
   </header>
 
-  <!-- Hero Image -->
   <div class="hero-image-wrapper">
     <img src="https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/card.jpg" alt="Rosa Fragrances"
       class="hero-image">
@@ -1214,19 +1215,19 @@
     <div class="categories-section">
       <div class="category-grid">
         <a href="man.html" class="category-card cat-man">
-          <h3 data-translate="men">Homme</h3>
+          <h3 data-translate="menCat">Homme</h3>
           <p data-translate="menDesc">Boisés & épicés</p>
         </a>
         <a href="women.html" class="category-card cat-women">
-          <h3 data-translate="women">Femme</h3>
+          <h3 data-translate="womenCat">Femme</h3>
           <p data-translate="womenDesc">Floraux & sensuels</p>
         </a>
         <a href="unisexe.html" class="category-card cat-unisex">
-          <h3 data-translate="unisex">Unisexe</h3>
+          <h3 data-translate="unisexCat">Unisexe</h3>
           <p data-translate="unisexDesc">Pour tous</p>
         </a>
         <a href="kids.html" class="category-card cat-kids">
-          <h3 data-translate="kids">Enfants</h3>
+          <h3 data-translate="kidsCat">Enfants</h3>
           <p data-translate="kidsDesc">Douceurs</p>
         </a>
       </div>
@@ -1250,12 +1251,12 @@
         <div class="contact-grid">
           <div class="contact-item">
             <div class="contact-icon"><i class="fas fa-envelope"></i></div>
-            <p data-translate="email">Email</p><a
+            <p data-translate="emailLabel">Email</p><a
               href="mailto:rosafragrances.tn@gmail.com">rosafragrances.tn@gmail.com</a>
           </div>
           <div class="contact-item">
             <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
-            <p data-translate="phone">Téléphone</p><a href="tel:+21696163366">+216 96 163 366</a>
+            <p data-translate="phoneLabel">Téléphone</p><a href="tel:+21696163366">+216 96 163 366</a>
           </div>
           <div class="contact-item">
             <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
@@ -1279,143 +1280,64 @@
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      let products = [];
-      let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
+      // ========== TRANSLATION SYSTEM ==========
       let currentLanguage = localStorage.getItem('language') || 'fr';
 
-      // Translation dictionary
       const translations = {
         fr: {
-          collection: 'COLLECTION',
-          exclusives: 'EXCLUSIVITÉS',
-          gifts: 'COFFRETS',
-          login: 'Se connecter',
-          profile: 'Mon Profil',
-          men: 'Homme',
-          menDesc: 'Boisés & épicés',
-          women: 'Femme',
-          womenDesc: 'Floraux & sensuels',
-          unisex: 'Unisexe',
-          unisexDesc: 'Pour tous',
-          kids: 'Enfants',
-          kidsDesc: 'Douceurs',
-          loading: 'Chargement...',
-          cart: 'Panier',
-          emptyCart: 'Votre panier est vide.',
-          total: 'Total',
-          payment: 'PAIEMENT',
-          delivery: 'Livraison',
-          fullName: 'Nom complet *',
-          phone: 'Téléphone *',
-          email: 'Email *',
-          address: 'Adresse *',
-          yourOrder: 'Votre commande',
-          cancel: 'Annuler',
-          confirm: 'Confirmer',
-          details: 'Détails',
-          close: 'Fermer',
-          add: 'Ajouter',
-          contact: 'Contact',
-          contactDesc: 'Une question ? Nous sommes là.',
-          addedToCart: '✨ Article ajouté',
-          orderConfirmed: '✅ Commande confirmée!',
-          cartEmpty: '🛒 Panier vide',
-          error: '❌ Erreur',
-          removed: '🗑️ Retiré',
-          noProducts: 'Aucun parfum disponible',
-          errorLoading: '❌ Erreur',
-          reload: 'Recharger'
+          collection: 'COLLECTION', exclusives: 'EXCLUSIVITÉS', gifts: 'COFFRETS',
+          login: 'Se connecter', profile: 'Mon Profil',
+          menCat: 'Homme', menDesc: 'Boisés & épicés',
+          womenCat: 'Femme', womenDesc: 'Floraux & sensuels',
+          unisexCat: 'Unisexe', unisexDesc: 'Pour tous',
+          kidsCat: 'Enfants', kidsDesc: 'Douceurs',
+          addToCart: 'Ajouter', addedToCart: '✨ Article ajouté', cart: 'Panier', emptyCart: 'Votre panier est vide.',
+          total: 'Total', payment: 'PAIEMENT', delivery: 'Livraison', fullName: 'Nom complet *',
+          phone: 'Téléphone *', email: 'Email *', address: 'Adresse *', yourOrder: 'Votre commande',
+          cancel: 'Annuler', confirm: 'Confirmer', orderConfirmed: '✅ Commande confirmée!',
+          cartEmptyWarning: '🛒 Panier vide', error: '❌ Erreur', details: 'Détails', close: 'Fermer',
+          contact: 'Contact', contactDesc: 'Une question ? Nous sommes là.', loading: 'Chargement...',
+          noProducts: 'Aucun parfum disponible', errorLoading: '❌ Erreur', reload: 'Recharger', removed: '🗑️ Retiré',
+          emailLabel: 'Email', phoneLabel: 'Téléphone'
         },
         en: {
-          collection: 'COLLECTION',
-          exclusives: 'EXCLUSIVES',
-          gifts: 'GIFT SETS',
-          login: 'Sign in',
-          profile: 'My Profile',
-          men: 'Men',
-          menDesc: 'Woody & spicy',
-          women: 'Women',
-          womenDesc: 'Floral & sensual',
-          unisex: 'Unisex',
-          unisexDesc: 'For everyone',
-          kids: 'Kids',
-          kidsDesc: 'Sweet scents',
-          loading: 'Loading...',
-          cart: 'Cart',
-          emptyCart: 'Your cart is empty.',
-          total: 'Total',
-          payment: 'PAYMENT',
-          delivery: 'Delivery',
-          fullName: 'Full name *',
-          phone: 'Phone *',
-          email: 'Email *',
-          address: 'Address *',
-          yourOrder: 'Your order',
-          cancel: 'Cancel',
-          confirm: 'Confirm',
-          details: 'Details',
-          close: 'Close',
-          add: 'Add',
-          contact: 'Contact',
-          contactDesc: 'Have a question? We\'re here.',
-          addedToCart: '✨ Item added',
-          orderConfirmed: '✅ Order confirmed!',
-          cartEmpty: '🛒 Cart is empty',
-          error: '❌ Error',
-          removed: '🗑️ Removed',
-          noProducts: 'No perfumes available',
-          errorLoading: '❌ Error',
-          reload: 'Reload'
+          collection: 'COLLECTION', exclusives: 'EXCLUSIVES', gifts: 'GIFT SETS',
+          login: 'Sign in', profile: 'My Profile',
+          menCat: 'Men', menDesc: 'Woody & spicy',
+          womenCat: 'Women', womenDesc: 'Floral & sensual',
+          unisexCat: 'Unisex', unisexDesc: 'For everyone',
+          kidsCat: 'Kids', kidsDesc: 'Sweet scents',
+          addToCart: 'Add to cart', addedToCart: '✨ Added to cart', cart: 'Cart', emptyCart: 'Your cart is empty.',
+          total: 'Total', payment: 'PAYMENT', delivery: 'Delivery', fullName: 'Full name *',
+          phone: 'Phone *', email: 'Email *', address: 'Address *', yourOrder: 'Your order',
+          cancel: 'Cancel', confirm: 'Confirm', orderConfirmed: '✅ Order confirmed!',
+          cartEmptyWarning: '🛒 Cart is empty', error: '❌ Error', details: 'Details', close: 'Close',
+          contact: 'Contact', contactDesc: 'Have a question? We\'re here.', loading: 'Loading...',
+          noProducts: 'No perfumes available', errorLoading: '❌ Error', reload: 'Reload', removed: '🗑️ Removed',
+          emailLabel: 'Email', phoneLabel: 'Phone'
         },
         ar: {
-          collection: 'المجموعة',
-          exclusives: 'الحصريات',
-          gifts: 'الهدايا',
-          login: 'تسجيل الدخول',
-          profile: 'ملفي الشخصي',
-          men: 'رجالي',
-          menDesc: 'خشبي وحار',
-          women: 'نسائي',
-          womenDesc: 'زهري وحسي',
-          unisex: 'للجنسين',
-          unisexDesc: 'للجميع',
-          kids: 'أطفال',
-          kidsDesc: 'روائح حلوة',
-          loading: 'جاري التحميل...',
-          cart: 'سلة التسوق',
-          emptyCart: 'سلة التسوق فارغة.',
-          total: 'المجموع',
-          payment: 'الدفع',
-          delivery: 'التوصيل',
-          fullName: 'الاسم الكامل *',
-          phone: 'الهاتف *',
-          email: 'البريد الإلكتروني *',
-          address: 'العنوان *',
-          yourOrder: 'طلبك',
-          cancel: 'إلغاء',
-          confirm: 'تأكيد',
-          details: 'التفاصيل',
-          close: 'إغلاق',
-          add: 'إضافة',
-          contact: 'اتصل بنا',
-          contactDesc: 'هل لديك سؤال؟ نحن هنا.',
-          addedToCart: '✨ تمت الإضافة',
-          orderConfirmed: '✅ تم تأكيد الطلب!',
-          cartEmpty: '🛒 السلة فارغة',
-          error: '❌ خطأ',
-          removed: '🗑️ تمت الإزالة',
-          noProducts: 'لا توجد عطور متاحة',
-          errorLoading: '❌ خطأ',
-          reload: 'إعادة تحميل'
+          collection: 'المجموعة', exclusives: 'الحصريات', gifts: 'الهدايا',
+          login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
+          menCat: 'رجالي', menDesc: 'خشبي وحار',
+          womenCat: 'نسائي', womenDesc: 'زهري وحسي',
+          unisexCat: 'للجنسين', unisexDesc: 'للجميع',
+          kidsCat: 'أطفال', kidsDesc: 'روائح حلوة',
+          addToCart: 'أضف إلى السلة', addedToCart: '✨ تمت الإضافة', cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.',
+          total: 'المجموع', payment: 'الدفع', delivery: 'التوصيل', fullName: 'الاسم الكامل *',
+          phone: 'الهاتف *', email: 'البريد الإلكتروني *', address: 'العنوان *', yourOrder: 'طلبك',
+          cancel: 'إلغاء', confirm: 'تأكيد', orderConfirmed: '✅ تم تأكيد الطلب!',
+          cartEmptyWarning: '🛒 السلة فارغة', error: '❌ خطأ', details: 'التفاصيل', close: 'إغلاق',
+          contact: 'اتصل بنا', contactDesc: 'هل لديك سؤال؟ نحن هنا.', loading: 'جاري التحميل...',
+          noProducts: 'لا توجد عطور', errorLoading: '❌ خطأ', reload: 'إعادة تحميل', removed: '🗑️ تمت الإزالة',
+          emailLabel: 'البريد الإلكتروني', phoneLabel: 'الهاتف'
         }
       };
 
-      // Translation function
       function translatePage(lang) {
         currentLanguage = lang;
         localStorage.setItem('language', lang);
 
-        // Set RTL for Arabic
         if (lang === 'ar') {
           document.body.style.direction = 'rtl';
           document.body.style.textAlign = 'right';
@@ -1424,18 +1346,27 @@
           document.body.style.textAlign = 'left';
         }
 
-        // Translate all elements with data-translate attribute
+        const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+        const langSpan = document.getElementById('currentLangText');
+        if (langSpan) langSpan.textContent = names[lang];
+
         document.querySelectorAll('[data-translate]').forEach(el => {
           const key = el.getAttribute('data-translate');
           if (translations[lang] && translations[lang][key]) {
-            el.textContent = translations[lang][key];
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+              el.placeholder = translations[lang][key];
+            } else {
+              el.textContent = translations[lang][key];
+            }
           }
         });
 
-        // Update language display
-        const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-        document.getElementById('currentLangText').textContent = names[lang];
+        if (typeof renderProducts === 'function' && products.length > 0) renderProducts();
+        if (typeof renderCart === 'function') renderCart();
       }
+
+      let products = [];
+      let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
 
       const productGrid = document.getElementById('productGrid');
       const loadingEl = document.getElementById('loadingProducts');
@@ -1452,12 +1383,13 @@
       const navLinks = document.getElementById('navLinks');
       const menuOverlay = document.getElementById('menuOverlay');
 
-      function showToast(msg) {
-        if (toast) {
-          toast.textContent = msg;
-          toast.classList.add('show');
-          setTimeout(() => toast.classList.remove('show'), 2000);
-        }
+      function showToast(msgKey, productName = '') {
+        if (!toast) return;
+        let msg = translations[currentLanguage][msgKey] || msgKey;
+        if (productName) msg = msg.replace('✨', '✨ ') + ' ' + productName;
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
       }
 
       function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
@@ -1483,8 +1415,7 @@
         }
         let html = ''; let total = 0;
         cart.forEach(item => {
-          const sub = item.price * (item.quantity || 1);
-          total += sub;
+          const sub = item.price * (item.quantity || 1); total += sub;
           html += `<div class="cart-item" data-id="${item.id}"><div class="cart-item-icon"><i class="fas fa-crown"></i></div><div class="cart-item-info"><div class="cart-item-title">${escapeHtml(item.name)}</div><div class="cart-item-price">${formatPrice(item.price)}</div><div class="cart-item-quantity"><button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button><span>${item.quantity || 1}</span><button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button></div></div><button class="cart-item-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button></div>`;
         });
         cartItemsContainer.innerHTML = html;
@@ -1496,13 +1427,13 @@
         if (existing) existing.quantity = (existing.quantity || 1) + 1;
         else cart.push({ id, name, price, icon: icon || 'fa-crown', image, quantity: 1 });
         saveCart();
-        showToast(translations[currentLanguage].addedToCart.replace('✨', '✨ ') + ' ' + name);
+        showToast('addedToCart', name);
       }
 
       function removeFromCart(id) {
         cart = cart.filter(i => i.id !== id);
         saveCart();
-        showToast(translations[currentLanguage].removed);
+        showToast('removed');
       }
 
       function updateQuantity(id, action) {
@@ -1519,39 +1450,9 @@
       function openCart() { cartSidebar?.classList.add('open'); cartOverlay?.classList.add('active'); }
       function closeCart() { cartSidebar?.classList.remove('open'); cartOverlay?.classList.remove('active'); }
 
-      window.openProductModal = function (product) {
-        const modal = document.getElementById('productModal');
-        const modalBody = document.getElementById('productModalBody');
-        const modalTitle = document.getElementById('productModalTitle');
-        const formattedPrice = product.price.toFixed(3).replace('.', ',');
-        const imgHtml = product.image ? `<img src="${product.image}" alt="${escapeHtml(product.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">` : `<i class="fas fa-crown" style="font-size:3rem;color:var(--gold-base);"></i>`;
-        modalBody.innerHTML = `
-          <div style="width:130px;height:130px;margin:0 auto 1rem;background:var(--bg-tertiary);border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;">${imgHtml}</div>
-          <h2 style="font-size:1.3rem;font-weight:400;margin-bottom:0.3rem;color:var(--text-primary);">${escapeHtml(product.name)}</h2>
-          <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--gold-base);margin-bottom:0.4rem;">${escapeHtml(product.brand)}</div>
-          <div style="font-size:1.3rem;color:var(--gold-deep);margin:0.8rem 0;">${formattedPrice} TND</div>
-          <div style="color:var(--text-secondary);line-height:1.5;font-size:0.8rem;">${escapeHtml(product.description || 'Découvrez ce parfum d\'exception.')}</div>
-        `;
-        modalTitle.innerHTML = `<i class="fas fa-info-circle"></i> ${translations[currentLanguage].details}`;
-        modal.style.display = 'flex';
-        const addBtn = document.getElementById('modalAddToCartBtn');
-        addBtn.onclick = () => {
-          addToCart(product.id, product.name, product.price, product.icon || 'fa-crown', product.image);
-          closeProductModal();
-        };
-      };
-
-      window.closeProductModal = function () { document.getElementById('productModal').style.display = 'none'; };
-      window.closeCheckoutModal = () => document.getElementById('checkoutModal').style.display = 'none';
-
       function escapeHtml(str) {
         if (!str) return '';
-        return str.replace(/[&<>]/g, function (m) {
-          if (m === '&') return '&amp;';
-          if (m === '<') return '&lt;';
-          if (m === '>') return '&gt;';
-          return m;
-        });
+        return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
       }
 
       function shuffleArray(array) {
@@ -1566,20 +1467,12 @@
       function selectRandomProductsByCategory(items, maxCount = 12) {
         const categories = [...new Set(items.map(p => (p.category || 'inconnu').toString().toLowerCase()))];
         const selected = [];
-
         categories.forEach(category => {
           const group = items.filter(p => (p.category || 'inconnu').toString().toLowerCase() === category);
-          if (group.length) {
-            const randomIndex = Math.floor(Math.random() * group.length);
-            selected.push(group[randomIndex]);
-          }
+          if (group.length) selected.push(group[Math.floor(Math.random() * group.length)]);
         });
-
         const remaining = shuffleArray(items.filter(p => !selected.some(s => s.id === p.id)));
-        while (selected.length < maxCount && remaining.length > 0) {
-          selected.push(remaining.shift());
-        }
-
+        while (selected.length < maxCount && remaining.length > 0) selected.push(remaining.shift());
         return selected.slice(0, maxCount);
       }
 
@@ -1594,9 +1487,7 @@
               try {
                 const imagesArray = typeof p.images === 'string' ? JSON.parse(p.images) : p.images;
                 firstImage = Array.isArray(imagesArray) ? imagesArray[0] || '' : '';
-              } catch (e) {
-                firstImage = '';
-              }
+              } catch (e) { firstImage = ''; }
             }
             if (!firstImage && p.image) firstImage = p.image;
             return { ...p, image: firstImage };
@@ -1628,7 +1519,7 @@
                 <div class="product-brand">${escapeHtml(p.brand)}</div>
                 <div class="product-price">${parseFloat(p.price).toFixed(3).replace('.', ',')} TND</div>
               </div>
-              <button class="add-to-cart" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${p.price}" data-image="${p.image || ''}"><i class="fas fa-shopping-cart"></i> ${translations[currentLanguage].add}</button>
+              <button class="add-to-cart" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${p.price}" data-image="${p.image || ''}"><i class="fas fa-shopping-cart"></i> ${translations[currentLanguage].addToCart}</button>
             </div>
           `;
         });
@@ -1637,8 +1528,7 @@
         document.querySelectorAll('.product-clickable').forEach(el => {
           el.addEventListener('click', (e) => {
             if (e.target.closest('.add-to-cart')) return;
-            const productId = el.dataset.productId;
-            window.location.href = `product.html?id=${productId}`;
+            window.location.href = `product.html?id=${el.dataset.productId}`;
           });
         });
 
@@ -1664,7 +1554,7 @@
       if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
 
       checkoutBtn?.addEventListener('click', async () => {
-        if (cart.length === 0) { showToast(translations[currentLanguage].cartEmpty); return; }
+        if (cart.length === 0) { showToast('cartEmptyWarning'); return; }
         const { data: { user } } = await supabase.auth.getUser();
         const emailField = document.getElementById('emailFieldGroup');
         const loggedDiv = document.getElementById('loggedInEmailDisplay');
@@ -1708,9 +1598,9 @@
           saveCart();
           closeCheckoutModal();
           closeCart();
-          showToast(translations[currentLanguage].orderConfirmed);
+          showToast('orderConfirmed');
         } catch (error) {
-          showToast(translations[currentLanguage].error);
+          showToast('error');
         } finally {
           btn.disabled = false;
           btn.innerHTML = translations[currentLanguage].confirm;
@@ -1718,20 +1608,18 @@
       };
 
       document.getElementById('checkoutForm')?.addEventListener('submit', window.processOrder);
+      window.closeCheckoutModal = () => document.getElementById('checkoutModal').style.display = 'none';
+      window.closeProductModal = function () { document.getElementById('productModal').style.display = 'none'; };
 
-      let updateUserTimeout;
-      let isUpdatingUser = false;
+      let updateUserTimeout, isUpdatingUser = false;
 
       async function updateUserDisplay() {
-        if (isUpdatingUser) return;
-        isUpdatingUser = true;
-
+        if (isUpdatingUser) return; isUpdatingUser = true;
         try {
           const { data: { user } } = await supabase.auth.getUser();
           const authLink = document.getElementById('authLink');
           const profileLink = document.getElementById('profileLink');
           const adminLink = document.getElementById('adminLink');
-
           if (user) {
             if (authLink) authLink.style.display = 'none';
             if (profileLink) profileLink.style.display = 'block';
@@ -1745,15 +1633,11 @@
             if (profileLink) profileLink.style.display = 'none';
             if (adminLink) adminLink.style.display = 'none';
           }
-        } catch (error) {
-          console.error('Error checking user:', error);
-        } finally {
-          isUpdatingUser = false;
-        }
+        } catch (error) { console.error('Error checking user:', error); }
+        finally { isUpdatingUser = false; }
       }
 
       updateUserDisplay();
-
       supabase.auth.onAuthStateChange((event, session) => {
         if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
           if (updateUserTimeout) clearTimeout(updateUserTimeout);
@@ -1773,28 +1657,17 @@
       const langMenu = document.getElementById('langMenu');
       const langCurrentBtn = document.getElementById('langCurrentBtn');
       if (langCurrentBtn) langCurrentBtn.addEventListener('click', (e) => { e.stopPropagation(); langMenu.classList.toggle('active'); });
-
       document.querySelectorAll('.lang-option').forEach(opt => {
         opt.addEventListener('click', () => {
           const lang = opt.dataset.lang;
           translatePage(lang);
           langMenu.classList.remove('active');
-          // Re-render products with new language
-          if (products.length > 0) renderProducts();
-          renderCart();
         });
       });
-
       document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
 
-      // Initialize with saved language
       translatePage(currentLanguage);
-
-      supabase.auth.refreshSession().then(() => {
-        loadProducts();
-        saveCart();
-      });
-
+      supabase.auth.refreshSession().then(() => { loadProducts(); saveCart(); });
     })();
 
     function initTheme() {

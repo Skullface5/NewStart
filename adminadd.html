@@ -119,9 +119,9 @@
       text-decoration: none;
     }
 
-    .logo i {
-      font-size: 1.8rem;
-      color: var(--accent);
+    .logo img {
+      width: 45px;
+      height: auto;
     }
 
     .logo h1 {
@@ -143,10 +143,18 @@
       font-size: 1.2rem;
       color: var(--accent);
       transition: transform 0.3s ease;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--hover-subtle);
     }
 
     .theme-toggle:hover {
       transform: rotate(15deg);
+      background: var(--hover-medium);
     }
 
     .menu-toggle {
@@ -159,47 +167,41 @@
       padding: 0.3rem;
       display: flex;
       align-items: center;
+      width: 34px;
+      height: 34px;
+      justify-content: center;
+      border-radius: 50%;
     }
 
     .menu-toggle:hover {
+      background: var(--hover-subtle);
       color: var(--accent);
     }
 
     .nav-links {
       display: flex;
       flex-direction: column;
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 85%;
-      max-width: 300px;
-      height: 100vh;
-      background: var(--bg-primary);
+      position: absolute;
+      top: 100%;
+      right: 0;
+      width: 260px;
+      background: var(--card-warm);
+      backdrop-filter: blur(16px);
       gap: 0;
-      overflow-y: auto;
-      transition: right 0.3s ease-out;
-      box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
-      border-left: 1px solid var(--border);
-      z-index: 1001;
-      border-radius: 0;
-      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+      z-index: 101;
+      border-radius: 20px;
     }
 
     .nav-links.active {
-      right: 0;
-    }
-
-    .close-menu-btn {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--accent);
-      padding: 1rem;
-      text-align: right;
-      display: block;
-      width: 100%;
-      border-bottom: 1px solid var(--border);
+      max-height: 450px;
+      opacity: 1;
+      padding: 0.5rem 0;
     }
 
     .nav-links a {
@@ -230,22 +232,10 @@
       border-bottom: 2px solid var(--accent) !important;
       align-items: center;
       gap: 8px;
-      transition: all 0.3s ease;
-    }
-
-    .admin-nav-link[style*="display: block"] {
-      display: flex !important;
     }
 
     .admin-nav-link:hover {
       background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.08) 100%) !important;
-      color: var(--accent-dark) !important;
-      padding-left: 2.5rem !important;
-      transform: translateX(2px);
-    }
-
-    .admin-nav-link i {
-      font-size: 0.95rem;
     }
 
     .lang-menu {
@@ -283,7 +273,7 @@
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s ease-out;
-      background: var(--bg-primary);
+      background: var(--card-warm);
     }
 
     .lang-menu.active .lang-options {
@@ -320,17 +310,8 @@
         font-size: 1.2rem;
       }
 
-      .logo i {
-        font-size: 1.5rem;
-      }
-
       .right-group {
         gap: 8px;
-      }
-
-      .nav-links {
-        width: 85%;
-        right: -85%;
       }
     }
 
@@ -529,7 +510,6 @@
       -moz-appearance: textfield;
     }
 
-    /* Multiple Image Upload */
     .multi-image-upload {
       border: 1px dashed var(--border);
       border-radius: 20px;
@@ -610,7 +590,6 @@
       font-size: 0.7rem;
     }
 
-    /* Category Selector */
     .category-selector {
       display: flex;
       flex-wrap: wrap;
@@ -714,232 +693,6 @@
       transform: translateY(-1px) scale(1.01);
     }
 
-    .list-panel {
-      background: var(--card-gradient);
-      padding: 1.5rem;
-      border-radius: 28px;
-      border: 1px solid var(--border);
-      max-height: 650px;
-      overflow-y: auto;
-      box-shadow: var(--shadow-md);
-    }
-
-    .list-panel::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .list-panel::-webkit-scrollbar-track {
-      background: var(--bg-secondary);
-      border-radius: 3px;
-    }
-
-    .list-panel::-webkit-scrollbar-thumb {
-      background: var(--accent);
-      border-radius: 3px;
-    }
-
-    .admin-product-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 0.8rem;
-      border-bottom: 1px solid var(--border);
-      transition: all 0.2s;
-    }
-
-    .admin-product-item:hover {
-      background: var(--hover-bg);
-      border-radius: 16px;
-      transform: translateX(5px);
-    }
-
-    .admin-product-img {
-      width: 50px;
-      height: 50px;
-      background: var(--bg-secondary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      overflow: hidden;
-    }
-
-    .admin-product-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .admin-product-img i {
-      font-size: 1.6rem;
-      color: var(--accent);
-    }
-
-    .admin-product-info {
-      flex: 1;
-    }
-
-    .admin-product-title {
-      font-weight: 500;
-      font-size: 1rem;
-      color: var(--text-primary);
-    }
-
-    .admin-product-brand {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-    }
-
-    .admin-product-price {
-      font-weight: 500;
-      color: var(--accent-dark);
-      font-size: 0.9rem;
-    }
-
-    .admin-product-price::before {
-      content: 'TND ';
-      font-size: 0.7rem;
-      color: var(--text-secondary);
-    }
-
-    .product-category-badge {
-      font-size: 0.65rem;
-      color: var(--text-secondary);
-      margin-top: 0.2rem;
-      display: inline-block;
-      background: var(--bg-secondary);
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-    }
-
-    .product-season-badge {
-      font-size: 0.65rem;
-      color: var(--text-secondary);
-      margin-top: 0.2rem;
-      display: inline-block;
-      margin-left: 0.5rem;
-    }
-
-    .product-description-preview {
-      font-size: 0.7rem;
-      color: var(--text-secondary);
-      margin-top: 0.2rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 180px;
-    }
-
-    .image-count-badge {
-      font-size: 0.65rem;
-      color: var(--accent);
-      margin-top: 0.2rem;
-    }
-
-    .delete-btn {
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      padding: 8px;
-      border-radius: 50%;
-    }
-
-    .delete-btn:hover {
-      color: #c1654c;
-      background: var(--hover-bg);
-      transform: scale(1.1);
-    }
-
-    .empty-list {
-      text-align: center;
-      padding: 2rem;
-      color: var(--text-secondary);
-      font-style: italic;
-    }
-
-    .gate {
-      background: var(--card-gradient);
-      border-radius: 40px;
-      padding: 2rem;
-      text-align: center;
-      border: 1px solid var(--border);
-      animation: fadeIn 0.5s ease-out;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    .gate h2 {
-      justify-content: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .password-input {
-      display: flex;
-      gap: 10px;
-      max-width: 320px;
-      margin: 0 auto;
-    }
-
-    .password-input input {
-      flex: 1;
-    }
-
-    .password-input button {
-      background: var(--accent-gradient);
-      border: none;
-      color: var(--bg-primary);
-      padding: 0 1.5rem;
-      border-radius: 50px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .password-input button:hover {
-      transform: scale(1.02);
-    }
-
-    .hint {
-      margin-top: 1rem;
-      color: var(--text-secondary);
-      font-size: 0.8rem;
-    }
-
-    .back-link {
-      margin-top: 1.5rem;
-      display: inline-block;
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px dotted var(--accent);
-      transition: all 0.2s;
-    }
-
-    .back-link:hover {
-      color: var(--accent-dark);
-      transform: translateX(-3px);
-    }
-
-    hr {
-      border: 0.5px solid var(--border);
-      margin: 1.2rem 0;
-    }
-
     .admin-toast {
       position: fixed;
       bottom: 30px;
@@ -967,7 +720,11 @@
       color: var(--accent);
     }
 
-    /* Theme Variables */
+    hr {
+      border: 0.5px solid var(--border);
+      margin: 1.2rem 0;
+    }
+
     :root {
       --bg-primary: #F2ECE4;
       --bg-secondary: #EDE5DB;
@@ -1048,31 +805,6 @@
       --hover-medium: rgba(184, 155, 94, 0.15);
     }
 
-    .theme-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      cursor: pointer;
-      font-size: 1.3rem;
-      color: var(--accent);
-      background: var(--bg-primary);
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      box-shadow: var(--shadow-md);
-      border: 1px solid var(--border);
-      z-index: 1000;
-    }
-
-    .theme-toggle:hover {
-      transform: rotate(15deg) scale(1.05);
-      box-shadow: var(--shadow-lg);
-    }
-
     @media (max-width: 480px) {
       .admin-wrapper {
         padding: 1.2rem;
@@ -1080,14 +812,6 @@
 
       h1 {
         font-size: 1.5rem;
-      }
-
-      .theme-toggle {
-        top: 15px;
-        right: 15px;
-        width: 38px;
-        height: 38px;
-        font-size: 1.1rem;
       }
 
       .image-preview-grid {
@@ -1099,7 +823,6 @@
 </head>
 
 <body>
-  <!-- Floating Gold Particles -->
   <script>
     for (let i = 0; i < 40; i++) {
       const particle = document.createElement('div');
@@ -1115,11 +838,15 @@
     }
   </script>
 
-  <!-- Header -->
+  <div id="menuOverlay" class="cart-overlay"
+    style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(6px);z-index:99;visibility:hidden;opacity:0;transition:0.3s;">
+  </div>
+  <div id="adminToast" class="admin-toast">✨ Enregistré</div>
+
   <header>
     <div class="header-flex">
       <a href="index.html" class="logo">
-        <i class="fas fa-spa"></i>
+        <img src="is.png" alt="Rosa Fragrances">
         <h1>Rosa Fragrances</h1>
       </a>
       <div class="right-group">
@@ -1132,13 +859,12 @@
         </button>
       </div>
       <div class="nav-links" id="navLinks">
-        <button class="close-menu-btn" id="closeMenuBtn"><i class="fas fa-times"></i></button>
-        <a href="index.html">ACCUEIL</a>
-        <a href="man.html">HOMME</a>
-        <a href="women.html">FEMME</a>
-        <a href="unisexe.html">UNISEXE</a>
-        <a href="kids.html">ENFANTS</a>
-        <a href="existed.html">PARFUMS EXISTANTS</a>
+        <a href="index.html" data-translate="home">ACCUEIL</a>
+        <a href="man.html" data-translate="men">HOMME</a>
+        <a href="women.html" data-translate="women">FEMME</a>
+        <a href="unisexe.html" data-translate="unisex">UNISEXE</a>
+        <a href="kids.html" data-translate="kids">ENFANTS</a>
+        <a href="existed.html" data-translate="existing">PARFUMS EXISTANTS</a>
         <div class="lang-menu" id="langMenu">
           <button class="lang-current" id="langCurrentBtn">
             <span id="currentLangText">FRANÇAIS</span>
@@ -1150,113 +876,199 @@
             <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
           </div>
         </div>
-        <a href="login146.html" id="authLink">Se connecter</a>
-        <a href="profile.html" id="profileLink" style="display: none;">Mon Profil</a>
+        <a href="login146.html" id="authLink" data-translate="login">Se connecter</a>
+        <a href="profile.html" id="profileLink" style="display: none;" data-translate="profile">Mon Profil</a>
         <a href="adminadd.html" id="adminLink" style="display: none;" class="admin-nav-link"><i
-            class="fas fa-crown"></i> Admin</a>
+            class="fas fa-crown"></i> <span data-translate="admin">Admin</span></a>
       </div>
     </div>
   </header>
 
   <div class="admin-wrapper" id="adminWrapper">
-    <!-- ADMIN PANEL -->
     <div id="adminPanel">
       <h1>
-        <img style="width: 65px;" src="is.png"> Rosa Fragrances · Gérer les produits
+        <img style="width: 65px;" src="is.png" alt="Rosa"> <span data-translate="manageProducts">Gérer les
+          produits</span>
         <span style="flex:1; text-align: right; font-size: 0.7rem; opacity:0.7;" id="loggedInAs"></span>
       </h1>
 
       <div class="single-column">
-        <!-- ADD PRODUCT FORM -->
         <div class="form-panel">
-          <h2><i class="fas fa-plus-circle"></i> Ajouter un parfum</h2>
+          <h2><i class="fas fa-plus-circle"></i> <span data-translate="addPerfume">Ajouter un parfum</span></h2>
 
           <div class="input-group">
-            <label>Nom du produit</label>
+            <label data-translate="productName">Nom du produit</label>
             <input type="text" id="productName" placeholder="ex. Bois d'Argent" autocomplete="off">
           </div>
 
           <div class="input-group">
-            <label>Marque / Maison</label>
+            <label data-translate="brand">Marque / Maison</label>
             <input type="text" id="productBrand" placeholder="PHYSALIS / NAEVE ...">
           </div>
 
           <div class="input-group">
-            <label>Prix (TND)</label>
+            <label data-translate="price">Prix (TND)</label>
             <input type="number" id="productPrice" step="0.001" min="0" placeholder="0.000">
           </div>
 
-          <!-- DESCRIPTION FIELD -->
           <div class="input-group">
-            <label>Description</label>
+            <label data-translate="description">Description</label>
             <textarea id="productDescription" rows="3"
               placeholder="Décrivez ce parfum... Notes de tête, cœur, fond, inspiration..."></textarea>
           </div>
 
-          <!-- MULTIPLE IMAGE UPLOAD -->
           <div class="input-group">
-            <label>Images du produit</label>
+            <label data-translate="productImages">Images du produit</label>
             <div class="multi-image-upload">
               <div class="image-preview-grid" id="imagePreviewGrid"></div>
               <div class="add-more-btn" id="addMoreImagesBtn">
                 <i class="fas fa-plus-circle"></i>
-                <span>Ajouter des images</span>
+                <span data-translate="addImages">Ajouter des images</span>
               </div>
               <input type="file" id="imageUpload" accept="image/*" multiple style="display: none;">
             </div>
             <p style="font-size:0.65rem; color:var(--text-secondary); margin-top:0.5rem;">
-              <i class="fas fa-info-circle"></i> Vous pouvez ajouter plusieurs images. La première sera l'image
-              principale.
+              <i class="fas fa-info-circle"></i> <span data-translate="imagesInfo">Vous pouvez ajouter plusieurs images.
+                La première sera l'image principale.</span>
             </p>
           </div>
 
-          <!-- CATEGORY SELECTOR -->
           <div class="input-group">
-            <label>Catégorie</label>
+            <label data-translate="category">Catégorie</label>
             <div class="category-selector" id="categorySelector">
-              <div class="category-option selected" data-category="man"><i class="fas fa-male"></i> Homme</div>
-              <div class="category-option" data-category="women"><i class="fas fa-female"></i> Femme</div>
-              <div class="category-option" data-category="unisexe"><i class="fas fa-genderless"></i> Unisexe</div>
-              <div class="category-option" data-category="kids"><i class="fas fa-child"></i> Enfants</div>
+              <div class="category-option selected" data-category="man"><i class="fas fa-male"></i> <span
+                  data-translate="menCat">Homme</span></div>
+              <div class="category-option" data-category="women"><i class="fas fa-female"></i> <span
+                  data-translate="womenCat">Femme</span></div>
+              <div class="category-option" data-category="unisexe"><i class="fas fa-genderless"></i> <span
+                  data-translate="unisexCat">Unisexe</span></div>
+              <div class="category-option" data-category="kids"><i class="fas fa-child"></i> <span
+                  data-translate="kidsCat">Enfants</span></div>
             </div>
           </div>
 
-          <!-- Season Buttons -->
           <div class="input-group">
-            <label>Saison</label>
+            <label data-translate="season">Saison</label>
             <div class="season-selector" id="seasonSelector">
-              <div class="season-option selected" data-season="all"><i class="fas fa-globe"></i> Toutes saisons</div>
-              <div class="season-option" data-season="summer"><i class="fas fa-sun"></i> Été</div>
-              <div class="season-option" data-season="winter"><i class="fas fa-snowflake"></i> Hiver</div>
-              <div class="season-option" data-season="spring"><i class="fas fa-seedling"></i> Printemps</div>
-              <div class="season-option" data-season="autumn"><i class="fas fa-leaf"></i> Automne</div>
+              <div class="season-option selected" data-season="all"><i class="fas fa-globe"></i> <span
+                  data-translate="allSeasons">Toutes saisons</span></div>
+              <div class="season-option" data-season="summer"><i class="fas fa-sun"></i> <span
+                  data-translate="summer">Été</span></div>
+              <div class="season-option" data-season="winter"><i class="fas fa-snowflake"></i> <span
+                  data-translate="winter">Hiver</span></div>
+              <div class="season-option" data-season="spring"><i class="fas fa-seedling"></i> <span
+                  data-translate="spring">Printemps</span></div>
+              <div class="season-option" data-season="autumn"><i class="fas fa-leaf"></i> <span
+                  data-translate="autumn">Automne</span></div>
             </div>
           </div>
 
-          <button class="btn-primary" id="addProductBtn"><i class="fas fa-gem"></i> Enregistrer le produit</button>
+          <button class="btn-primary" id="addProductBtn"><i class="fas fa-gem"></i> <span
+              data-translate="saveProduct">Enregistrer le produit</span></button>
           <hr>
-          <p style="font-size:0.7rem; color:var(--text-secondary);"><i class="fas fa-info-circle"></i> Les images sont
-            stockées en Base64</p>
+          <p style="font-size:0.7rem; color:var(--text-secondary);"><i class="fas fa-info-circle"></i> <span
+              data-translate="storageInfo">Les images sont stockées en Base64</span></p>
         </div>
 
-        <!-- NAVIGATE TO EXISTING PRODUCTS -->
         <div class="nav-panel">
           <a href="existed.html" class="btn-secondary">
-            <i class="fas fa-box-open"></i> Voir les parfums existants
+            <i class="fas fa-box-open"></i> <span data-translate="viewExisting">Voir les parfums existants</span>
           </a>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="adminToast" class="admin-toast">✨ Enregistré</div>
-
   <script>
     (function () {
-      // Supabase Config
       const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      // ========== TRANSLATION SYSTEM ==========
+      let currentLanguage = localStorage.getItem('language') || 'fr';
+
+      const translations = {
+        fr: {
+          home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
+          existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil', admin: 'Admin',
+          manageProducts: 'Gérer les produits', addPerfume: 'Ajouter un parfum',
+          productName: 'Nom du produit', brand: 'Marque / Maison', price: 'Prix (TND)',
+          description: 'Description', productImages: 'Images du produit', addImages: 'Ajouter des images',
+          imagesInfo: 'Vous pouvez ajouter plusieurs images. La première sera l\'image principale.',
+          category: 'Catégorie', menCat: 'Homme', womenCat: 'Femme', unisexCat: 'Unisexe', kidsCat: 'Enfants',
+          season: 'Saison', allSeasons: 'Toutes saisons', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne',
+          saveProduct: 'Enregistrer le produit', storageInfo: 'Les images sont stockées en Base64',
+          viewExisting: 'Voir les parfums existants',
+          productAdded: '✅ Produit ajouté', errorAdding: '❌ Erreur lors de l\'ajout',
+          invalidFields: '❌ Nom, marque et prix valides requis', noImages: 'Aucune image'
+        },
+        en: {
+          home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
+          existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile', admin: 'Admin',
+          manageProducts: 'Manage Products', addPerfume: 'Add Perfume',
+          productName: 'Product Name', brand: 'Brand / House', price: 'Price (TND)',
+          description: 'Description', productImages: 'Product Images', addImages: 'Add Images',
+          imagesInfo: 'You can add multiple images. The first one will be the main image.',
+          category: 'Category', menCat: 'Men', womenCat: 'Women', unisexCat: 'Unisex', kidsCat: 'Kids',
+          season: 'Season', allSeasons: 'All seasons', summer: 'Summer', winter: 'Winter', spring: 'Spring', autumn: 'Autumn',
+          saveProduct: 'Save Product', storageInfo: 'Images are stored in Base64',
+          viewExisting: 'View existing perfumes',
+          productAdded: '✅ Product added', errorAdding: '❌ Error adding product',
+          invalidFields: '❌ Valid name, brand and price required', noImages: 'No images'
+        },
+        ar: {
+          home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
+          existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي', admin: 'المشرف',
+          manageProducts: 'إدارة المنتجات', addPerfume: 'إضافة عطر',
+          productName: 'اسم المنتج', brand: 'العلامة التجارية', price: 'السعر (دينار)',
+          description: 'الوصف', productImages: 'صور المنتج', addImages: 'إضافة صور',
+          imagesInfo: 'يمكنك إضافة عدة صور. الصورة الأولى ستكون الصورة الرئيسية.',
+          category: 'الفئة', menCat: 'رجالي', womenCat: 'نسائي', unisexCat: 'للجنسين', kidsCat: 'أطفال',
+          season: 'الموسم', allSeasons: 'كل المواسم', summer: 'صيف', winter: 'شتاء', spring: 'ربيع', autumn: 'خريف',
+          saveProduct: 'حفظ المنتج', storageInfo: 'يتم تخزين الصور بصيغة Base64',
+          viewExisting: 'عرض العطور الموجودة',
+          productAdded: '✅ تمت إضافة المنتج', errorAdding: '❌ خطأ في إضافة المنتج',
+          invalidFields: '❌ الاسم والعلامة التجارية والسعر مطلوبة', noImages: 'لا توجد صور'
+        }
+      };
+
+      function translatePage(lang) {
+        currentLanguage = lang;
+        localStorage.setItem('language', lang);
+
+        if (lang === 'ar') {
+          document.body.style.direction = 'rtl';
+          document.body.style.textAlign = 'right';
+        } else {
+          document.body.style.direction = 'ltr';
+          document.body.style.textAlign = 'left';
+        }
+
+        const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+        const langSpan = document.getElementById('currentLangText');
+        if (langSpan) langSpan.textContent = names[lang];
+
+        document.querySelectorAll('[data-translate]').forEach(el => {
+          const key = el.getAttribute('data-translate');
+          if (translations[lang] && translations[lang][key]) {
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+              el.placeholder = translations[lang][key];
+            } else {
+              el.textContent = translations[lang][key];
+            }
+          }
+        });
+
+        updateImagePreview();
+      }
+
+      function showAdminToast(msgKey) {
+        const toast = document.getElementById('adminToast');
+        toast.textContent = translations[currentLanguage][msgKey] || msgKey;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+      }
 
       // Theme Switcher
       function initTheme() {
@@ -1274,17 +1086,13 @@
         if (document.body.classList.contains('dark')) {
           document.body.classList.remove('dark');
           localStorage.setItem('theme', 'light');
-          const sun = document.querySelector('#themeToggle .fa-sun');
-          const moon = document.querySelector('#themeToggle .fa-moon');
-          if (sun) sun.style.display = 'inline-block';
-          if (moon) moon.style.display = 'none';
+          document.querySelector('#themeToggle .fa-sun').style.display = 'inline-block';
+          document.querySelector('#themeToggle .fa-moon').style.display = 'none';
         } else {
           document.body.classList.add('dark');
           localStorage.setItem('theme', 'dark');
-          const sun = document.querySelector('#themeToggle .fa-sun');
-          const moon = document.querySelector('#themeToggle .fa-moon');
-          if (sun) sun.style.display = 'none';
-          if (moon) moon.style.display = 'inline-block';
+          document.querySelector('#themeToggle .fa-sun').style.display = 'none';
+          document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
         }
       }
 
@@ -1295,49 +1103,27 @@
       // Menu Toggle
       const menuToggle = document.getElementById('menuToggle');
       const navLinks = document.getElementById('navLinks');
-      const closeMenuBtn = document.getElementById('closeMenuBtn');
-      function closeMenu() {
-        navLinks.classList.remove('active');
-        document.body.style.overflow = '';
+      const menuOverlay = document.getElementById('menuOverlay');
+
+      function toggleMenu() {
+        navLinks.classList.toggle('active');
+        menuOverlay.style.visibility = navLinks.classList.contains('active') ? 'visible' : 'hidden';
+        menuOverlay.style.opacity = navLinks.classList.contains('active') ? '1' : '0';
+        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
       }
 
-      function openMenu() {
-        navLinks.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }
+      if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
+      if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
 
-      if (menuToggle) menuToggle.addEventListener('click', () => {
-        navLinks.classList.contains('active') ? closeMenu() : openMenu();
-      });
-
-      if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
       document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', closeMenu);
-      });
-
-      if (langMenu) {
-        const langCurrent = langMenu.querySelector('.lang-current');
-        if (langCurrent) {
-          langCurrent.addEventListener('click', (e) => {
-            e.stopPropagation();
-            langMenu.classList.toggle('active');
-          });
-        }
-        document.querySelectorAll('.lang-option').forEach(opt => {
-          opt.addEventListener('click', () => langMenu.classList.remove('active'));
+        link.addEventListener('click', () => {
+          navLinks.classList.remove('active');
+          menuOverlay.style.visibility = 'hidden';
+          menuOverlay.style.opacity = '0';
+          document.body.style.overflow = '';
         });
-        langMenu.addEventListener('click', (e) => e.stopPropagation());
-      }
-
-      document.addEventListener('click', (e) => {
-        if (navLinks && !navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
-          closeMenu();
-        }
       });
 
-
-
-      // Language switcher
       const langMenu = document.getElementById('langMenu');
       const langCurrentBtn = document.getElementById('langCurrentBtn');
       if (langCurrentBtn) {
@@ -1346,27 +1132,16 @@
           langMenu.classList.toggle('active');
         });
       }
-
       document.querySelectorAll('.lang-option').forEach(opt => {
         opt.addEventListener('click', (e) => {
           const lang = opt.dataset.lang;
           translatePage(lang);
           langMenu.classList.remove('active');
-          // Re-render dynamic content if needed
-          if (typeof renderProducts === 'function') renderProducts();
-          if (typeof renderCart === 'function') renderCart();
         });
       });
-
       document.addEventListener('click', (e) => {
         if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active');
       });
-
-      // Password Gate removed - Admin panel shows directly
-      const adminPanel = document.getElementById('adminPanel');
-      const loggedInSpan = document.getElementById('loggedInAs');
-      const loadingAdmin = document.getElementById('loadingAdmin');
-      const adminListContainer = document.getElementById('adminProductListContainer');
 
       // Form Elements
       const productName = document.getElementById('productName');
@@ -1374,11 +1149,10 @@
       const productPrice = document.getElementById('productPrice');
       const productDescription = document.getElementById('productDescription');
 
-      // Multiple Image Upload
       const imageUpload = document.getElementById('imageUpload');
       const addMoreImagesBtn = document.getElementById('addMoreImagesBtn');
       const imagePreviewGrid = document.getElementById('imagePreviewGrid');
-      let uploadedImages = []; // Array of base64 strings
+      let uploadedImages = [];
 
       function updateImagePreview() {
         imagePreviewGrid.innerHTML = '';
@@ -1392,7 +1166,6 @@
           imagePreviewGrid.appendChild(div);
         });
 
-        // Add remove button handlers
         document.querySelectorAll('.remove-image-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -1402,18 +1175,15 @@
           });
         });
 
-        // If no images, show placeholder
         if (uploadedImages.length === 0) {
           const emptyDiv = document.createElement('div');
           emptyDiv.style.cssText = 'grid-column:1/-1; text-align:center; padding:1rem; color:var(--text-secondary);';
-          emptyDiv.innerHTML = '<i class="fas fa-images"></i> Aucune image';
+          emptyDiv.innerHTML = `<i class="fas fa-images"></i> ${translations[currentLanguage].noImages}`;
           imagePreviewGrid.appendChild(emptyDiv);
         }
       }
 
-      addMoreImagesBtn.addEventListener('click', () => {
-        imageUpload.click();
-      });
+      addMoreImagesBtn.addEventListener('click', () => imageUpload.click());
 
       imageUpload.addEventListener('change', function (e) {
         const files = Array.from(e.target.files);
@@ -1429,148 +1199,6 @@
         imageUpload.value = '';
       });
 
-      function showAdminToast(msg) {
-        const toast = document.getElementById('adminToast');
-        toast.textContent = msg;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2500);
-      }
-
-      // Load Products
-      async function loadAdminProducts() {
-        try {
-          adminListContainer.innerHTML = '';
-          loadingAdmin.style.display = 'block';
-
-          const { data, error } = await supabase
-            .from('products')
-            .select('*')
-            .order('created_at', { ascending: true });
-
-          if (error) throw error;
-
-          loadingAdmin.style.display = 'none';
-
-          if (!data || data.length === 0) {
-            adminListContainer.innerHTML = '<div class="empty-list">✨ Aucun parfum. Ajoutez le premier.</div>';
-            return;
-          }
-
-          const seasonNames = { all: 'Toutes saisons', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne' };
-          const categoryNames = { man: 'Homme', women: 'Femme', unisexe: 'Unisexe', kids: 'Enfants' };
-          const categoryIcons = { man: '👔', women: '🌸', unisexe: '🕊️', kids: '🧸' };
-
-          let html = '';
-          data.forEach(prod => {
-            const priceStr = parseFloat(prod.price).toFixed(3).replace('.', ',');
-
-            // Get first image or default icon
-            let imagesArray = [];
-            try {
-              imagesArray = typeof prod.images === 'string' ? JSON.parse(prod.images) : (prod.images || []);
-            } catch (e) { imagesArray = []; }
-
-            const firstImage = imagesArray.length > 0 ? imagesArray[0] : null;
-            const iconOrImage = firstImage ? `<img src="${firstImage}" alt="${prod.name}">` : `<i class="fas fa-crown"></i>`;
-            const imageCount = imagesArray.length;
-
-            const seasonName = seasonNames[prod.season] || prod.season || 'Toutes saisons';
-            let seasonIcon = '';
-            if (prod.season === 'summer') seasonIcon = '<i class="fas fa-sun"></i> ';
-            else if (prod.season === 'winter') seasonIcon = '<i class="fas fa-snowflake"></i> ';
-            else if (prod.season === 'spring') seasonIcon = '<i class="fas fa-seedling"></i> ';
-            else if (prod.season === 'autumn') seasonIcon = '<i class="fas fa-leaf"></i> ';
-            else seasonIcon = '<i class="fas fa-globe"></i> ';
-
-            const categoryName = categoryNames[prod.category] || prod.category || 'Non catégorisé';
-            const categoryIcon = categoryIcons[prod.category] || '📦';
-
-            const descriptionPreview = prod.description ? prod.description.substring(0, 50) + (prod.description.length > 50 ? '...' : '') : '';
-
-            html += `
-              <div class="admin-product-item" data-id="${prod.id}">
-                <div class="admin-product-img">${iconOrImage}</div>
-                <div class="admin-product-info">
-                  <div class="admin-product-title">${prod.name}</div>
-                  <div class="admin-product-brand">${prod.brand}</div>
-                  <div class="admin-product-price">${priceStr} TND</div>
-                  <div>
-                    <span class="product-category-badge">${categoryIcon} ${categoryName}</span>
-                    <span class="product-season-badge">${seasonIcon}${seasonName}</span>
-                    ${imageCount > 0 ? `<span class="product-season-badge"><i class="fas fa-images"></i> ${imageCount}</span>` : ''}
-                  </div>
-                  ${descriptionPreview ? `<div class="product-description-preview">📝 ${descriptionPreview}</div>` : ''}
-                </div>
-                <button class="delete-btn" data-id="${prod.id}" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
-              </div>
-            `;
-          });
-          adminListContainer.innerHTML = html;
-        } catch (error) {
-          console.error('Erreur chargement:', error);
-          loadingAdmin.style.display = 'none';
-          adminListContainer.innerHTML = '<div class="empty-list">❌ Erreur de chargement</div>';
-          showAdminToast('❌ Erreur chargement produits');
-        }
-      }
-
-      // Add Product
-      async function addProduct() {
-        const name = productName.value.trim();
-        const brand = productBrand.value.trim();
-        const price = parseFloat(productPrice.value);
-        const description = productDescription.value.trim();
-
-        if (!name || !brand || isNaN(price) || price <= 0) {
-          showAdminToast('❌ Nom, marque et prix valides requis');
-          return;
-        }
-
-        try {
-          const newProduct = {
-            name: name,
-            brand: brand,
-            price: price,
-            description: description || null,
-            images: JSON.stringify(uploadedImages), // Store all images as JSON array
-            icon: 'fa-crown',
-            category: selectedCategory,
-            season: selectedSeason
-          };
-
-          const { error } = await supabase
-            .from('products')
-            .insert([newProduct]);
-
-          if (error) throw error;
-
-          // Reset form
-          productName.value = '';
-          productBrand.value = '';
-          productPrice.value = '';
-          productDescription.value = '';
-          uploadedImages = [];
-          updateImagePreview();
-
-          // Reset category to default
-          categoryOptions.forEach(o => o.classList.remove('selected'));
-          document.querySelector('.category-option[data-category="man"]').classList.add('selected');
-          selectedCategory = 'man';
-
-          // Reset season to default
-          seasonOptions.forEach(o => o.classList.remove('selected'));
-          document.querySelector('.season-option[data-season="all"]').classList.add('selected');
-          selectedSeason = 'all';
-
-          showAdminToast('✅ Produit ajouté');
-          loadAdminProducts();
-        } catch (error) {
-          console.error('Erreur ajout:', error);
-          showAdminToast('❌ Erreur lors de l\'ajout');
-        }
-      }
-
-      // Category Buttons
       const categoryOptions = document.querySelectorAll('.category-option');
       let selectedCategory = 'man';
 
@@ -1582,7 +1210,6 @@
         });
       });
 
-      // Season Buttons
       const seasonOptions = document.querySelectorAll('.season-option');
       let selectedSeason = 'all';
 
@@ -1594,401 +1221,97 @@
         });
       });
 
-      // Delete Product
-      async function deleteProduct(id) {
-        if (!confirm('Supprimer ce produit ?')) return;
+      async function addProduct() {
+        const name = productName.value.trim();
+        const brand = productBrand.value.trim();
+        const price = parseFloat(productPrice.value);
+        const description = productDescription.value.trim();
+
+        if (!name || !brand || isNaN(price) || price <= 0) {
+          showAdminToast('invalidFields');
+          return;
+        }
 
         try {
-          const { error } = await supabase
-            .from('products')
-            .delete()
-            .match({ id });
+          const newProduct = {
+            name, brand, price,
+            description: description || null,
+            images: JSON.stringify(uploadedImages),
+            icon: 'fa-crown',
+            category: selectedCategory,
+            season: selectedSeason
+          };
 
+          const { error } = await supabase.from('products').insert([newProduct]);
           if (error) throw error;
 
-          showAdminToast('🗑️ Produit supprimé');
-          loadAdminProducts();
+          productName.value = '';
+          productBrand.value = '';
+          productPrice.value = '';
+          productDescription.value = '';
+          uploadedImages = [];
+          updateImagePreview();
+
+          categoryOptions.forEach(o => o.classList.remove('selected'));
+          document.querySelector('.category-option[data-category="man"]').classList.add('selected');
+          selectedCategory = 'man';
+
+          seasonOptions.forEach(o => o.classList.remove('selected'));
+          document.querySelector('.season-option[data-season="all"]').classList.add('selected');
+          selectedSeason = 'all';
+
+          showAdminToast('productAdded');
         } catch (error) {
-          console.error('Erreur suppression:', error);
-          showAdminToast('❌ Erreur lors de la suppression');
+          console.error('Erreur ajout:', error);
+          showAdminToast('errorAdding');
         }
       }
 
-      // Event Listeners
       document.getElementById('addProductBtn').addEventListener('click', addProduct);
 
-      adminListContainer.addEventListener('click', (e) => {
-        const deleteBtn = e.target.closest('.delete-btn');
-        if (deleteBtn) {
-          const id = deleteBtn.dataset.id;
-          deleteProduct(id);
+      let isUpdatingUser = false, updateUserTimeout;
+
+      async function updateUserDisplay() {
+        if (isUpdatingUser) return; isUpdatingUser = true;
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          const authLink = document.getElementById('authLink');
+          const profileLink = document.getElementById('profileLink');
+          const adminLink = document.getElementById('adminLink');
+          const loggedInAs = document.getElementById('loggedInAs');
+
+          if (user) {
+            if (authLink) authLink.style.display = 'none';
+            if (profileLink) profileLink.style.display = 'block';
+            if (loggedInAs) loggedInAs.textContent = `⚡ ${user.email} · ${new Date().toLocaleDateString('fr-FR')}`;
+            if (user.email === 'azmmeli146@gmail.com') {
+              if (adminLink) adminLink.style.display = 'block';
+            } else {
+              if (adminLink) adminLink.style.display = 'none';
+            }
+          } else {
+            if (authLink) authLink.style.display = 'block';
+            if (profileLink) profileLink.style.display = 'none';
+            if (adminLink) adminLink.style.display = 'none';
+          }
+        } catch (error) {
+          console.error('Error checking user:', error);
+        } finally {
+          isUpdatingUser = false;
+        }
+      }
+
+      updateUserDisplay();
+      supabase.auth.onAuthStateChange((event, session) => {
+        if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
+          if (updateUserTimeout) clearTimeout(updateUserTimeout);
+          updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
         }
       });
 
-      // Initialize - show admin panel and load products
-      adminPanel.style.display = 'block';
-      loggedInSpan.textContent = '⚡ propriétaire · ' + new Date().toLocaleDateString('fr-FR');
-      loadAdminProducts();
+      translatePage(currentLanguage);
       updateImagePreview();
     })();
-
-    // ========== TRANSLATION SYSTEM ==========
-    let currentLanguage = localStorage.getItem('language') || 'fr';
-
-    const translations = {
-      fr: {
-        // Navigation
-        home: 'ACCUEIL',
-        men: 'HOMME',
-        women: 'FEMME',
-        unisex: 'UNISEXE',
-        kids: 'ENFANTS',
-        collection: 'COLLECTION',
-        exclusives: 'EXCLUSIVITÉS',
-        gifts: 'COFFRETS',
-        login: 'Se connecter',
-        profile: 'Mon Profil',
-        admin: 'Admin',
-
-        // Categories
-        menCat: 'Homme',
-        menDesc: 'Boisés & épicés',
-        womenCat: 'Femme',
-        womenDesc: 'Floraux & sensuels',
-        unisexCat: 'Unisexe',
-        unisexDesc: 'Pour tous',
-        kidsCat: 'Enfants',
-        kidsDesc: 'Douceurs',
-
-        // Product
-        addToCart: 'Ajouter',
-        addedToCart: '✨ Article ajouté',
-
-        // Cart
-        cart: 'Panier',
-        emptyCart: 'Votre panier est vide.',
-        total: 'Total',
-        payment: 'PAIEMENT',
-
-        // Checkout
-        delivery: 'Livraison',
-        fullName: 'Nom complet *',
-        phone: 'Téléphone *',
-        email: 'Email *',
-        address: 'Adresse *',
-        yourOrder: 'Votre commande',
-        cancel: 'Annuler',
-        confirm: 'Confirmer',
-        orderConfirmed: '✅ Commande confirmée!',
-        cartEmptyWarning: '🛒 Panier vide',
-        error: '❌ Erreur',
-
-        // Product Modal
-        details: 'Détails',
-        close: 'Fermer',
-
-        // Contact
-        contact: 'Contact',
-        contactDesc: 'Une question ? Nous sommes là.',
-
-        // Loading
-        loading: 'Chargement...',
-        noProducts: 'Aucun parfum disponible',
-        errorLoading: '❌ Erreur',
-        reload: 'Recharger',
-        removed: '🗑️ Retiré',
-
-        // Profile
-        totalOrders: 'Commandes totales',
-        pending: 'En cours',
-        delivered: 'Livrées',
-        orderHistory: 'Historique des commandes',
-        all: 'Toutes',
-        pendingStatus: 'En attente',
-        review: 'En révision',
-        shipped: 'Expédiées',
-        deliveredStatus: 'Livrées',
-        cancelOrder: 'Annuler',
-        shopNow: 'Découvrir nos parfums',
-        notLoggedIn: 'Non connecté',
-        pleaseLogin: 'Veuillez vous connecter pour voir votre profil et vos commandes.',
-        logout: 'Déconnexion',
-        noOrders: 'Aucune commande trouvée'
-      },
-      en: {
-        // Navigation
-        home: 'HOME',
-        men: 'MEN',
-        women: 'WOMEN',
-        unisex: 'UNISEX',
-        kids: 'KIDS',
-        collection: 'COLLECTION',
-        exclusives: 'EXCLUSIVES',
-        gifts: 'GIFT SETS',
-        login: 'Sign in',
-        profile: 'My Profile',
-        admin: 'Admin',
-
-        // Categories
-        menCat: 'Men',
-        menDesc: 'Woody & spicy',
-        womenCat: 'Women',
-        womenDesc: 'Floral & sensual',
-        unisexCat: 'Unisex',
-        unisexDesc: 'For everyone',
-        kidsCat: 'Kids',
-        kidsDesc: 'Sweet scents',
-
-        // Product
-        addToCart: 'Add to cart',
-        addedToCart: '✨ Added to cart',
-
-        // Cart
-        cart: 'Cart',
-        emptyCart: 'Your cart is empty.',
-        total: 'Total',
-        payment: 'PAYMENT',
-
-        // Checkout
-        delivery: 'Delivery',
-        fullName: 'Full name *',
-        phone: 'Phone *',
-        email: 'Email *',
-        address: 'Address *',
-        yourOrder: 'Your order',
-        cancel: 'Cancel',
-        confirm: 'Confirm',
-        orderConfirmed: '✅ Order confirmed!',
-        cartEmptyWarning: '🛒 Cart is empty',
-        error: '❌ Error',
-
-        // Product Modal
-        details: 'Details',
-        close: 'Close',
-
-        // Contact
-        contact: 'Contact',
-        contactDesc: 'Have a question? We\'re here.',
-
-        // Loading
-        loading: 'Loading...',
-        noProducts: 'No perfumes available',
-        errorLoading: '❌ Error',
-        reload: 'Reload',
-        removed: '🗑️ Removed',
-
-        // Profile
-        totalOrders: 'Total orders',
-        pending: 'In progress',
-        delivered: 'Delivered',
-        orderHistory: 'Order history',
-        all: 'All',
-        pendingStatus: 'Pending',
-        review: 'Under review',
-        shipped: 'Shipped',
-        deliveredStatus: 'Delivered',
-        cancelOrder: 'Cancel',
-        shopNow: 'Discover our perfumes',
-        notLoggedIn: 'Not logged in',
-        pleaseLogin: 'Please log in to view your profile and orders.',
-        logout: 'Logout',
-        noOrders: 'No orders found'
-      },
-      ar: {
-        // Navigation
-        home: 'الرئيسية',
-        men: 'رجالي',
-        women: 'نسائي',
-        unisex: 'للجنسين',
-        kids: 'أطفال',
-        collection: 'المجموعة',
-        exclusives: 'الحصريات',
-        gifts: 'الهدايا',
-        login: 'تسجيل الدخول',
-        profile: 'ملفي الشخصي',
-        admin: 'المشرف',
-
-        // Categories
-        menCat: 'رجالي',
-        menDesc: 'خشبي وحار',
-        womenCat: 'نسائي',
-        womenDesc: 'زهري وحسي',
-        unisexCat: 'للجنسين',
-        unisexDesc: 'للجميع',
-        kidsCat: 'أطفال',
-        kidsDesc: 'روائح حلوة',
-
-        // Product
-        addToCart: 'أضف إلى السلة',
-        addedToCart: '✨ تمت الإضافة إلى السلة',
-
-        // Cart
-        cart: 'سلة التسوق',
-        emptyCart: 'سلة التسوق فارغة.',
-        total: 'المجموع',
-        payment: 'الدفع',
-
-        // Checkout
-        delivery: 'التوصيل',
-        fullName: 'الاسم الكامل *',
-        phone: 'الهاتف *',
-        email: 'البريد الإلكتروني *',
-        address: 'العنوان *',
-        yourOrder: 'طلبك',
-        cancel: 'إلغاء',
-        confirm: 'تأكيد',
-        orderConfirmed: '✅ تم تأكيد الطلب!',
-        cartEmptyWarning: '🛒 السلة فارغة',
-        error: '❌ خطأ',
-
-        // Product Modal
-        details: 'التفاصيل',
-        close: 'إغلاق',
-
-        // Contact
-        contact: 'اتصل بنا',
-        contactDesc: 'هل لديك سؤال؟ نحن هنا.',
-
-        // Loading
-        loading: 'جاري التحميل...',
-        noProducts: 'لا توجد عطور متاحة',
-        errorLoading: '❌ خطأ',
-        reload: 'إعادة تحميل',
-        removed: '🗑️ تمت الإزالة',
-
-        // Profile
-        totalOrders: 'إجمالي الطلبات',
-        pending: 'قيد المعالجة',
-        delivered: 'تم التوصيل',
-        orderHistory: 'سجل الطلبات',
-        all: 'الكل',
-        pendingStatus: 'قيد الانتظار',
-        review: 'قيد المراجعة',
-        shipped: 'تم الشحن',
-        deliveredStatus: 'تم التوصيل',
-        cancelOrder: 'إلغاء',
-        shopNow: 'اكتشف عطورنا',
-        notLoggedIn: 'غير مسجل الدخول',
-        pleaseLogin: 'الرجاء تسجيل الدخول لعرض ملفك الشخصي وطلباتك.',
-        logout: 'تسجيل الخروج',
-        noOrders: 'لا توجد طلبات'
-      }
-    };
-
-    function translatePage(lang) {
-      currentLanguage = lang;
-      localStorage.setItem('language', lang);
-
-      // Set RTL for Arabic
-      if (lang === 'ar') {
-        document.body.style.direction = 'rtl';
-        document.body.style.textAlign = 'right';
-      } else {
-        document.body.style.direction = 'ltr';
-        document.body.style.textAlign = 'left';
-      }
-
-      // Update language display
-      const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-      const langSpan = document.getElementById('currentLangText');
-      if (langSpan) langSpan.textContent = names[lang];
-
-      // Translate all elements with data-translate attribute
-      document.querySelectorAll('[data-translate]').forEach(el => {
-        const key = el.getAttribute('data-translate');
-        if (translations[lang] && translations[lang][key]) {
-          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-            el.placeholder = translations[lang][key];
-          } else {
-            el.textContent = translations[lang][key];
-          }
-        }
-      });
-    }
-
-    // Initialize language on page load
-    function initLanguage() {
-      const savedLang = localStorage.getItem('language') || 'fr';
-      translatePage(savedLang);
-    }
-
-    // Call initLanguage after DOM is ready
-    document.addEventListener('DOMContentLoaded', initLanguage);
-
-    // Update user nav links
-    let updateUserTimeout;
-    let isUpdatingUser = false;
-
-    async function updateUserDisplay() {
-      // Prevent concurrent calls
-      if (isUpdatingUser) return;
-      isUpdatingUser = true;
-
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        const authLink = document.getElementById('authLink');
-        const profileLink = document.getElementById('profileLink');
-        const adminLink = document.getElementById('adminLink');
-
-        console.log('Checking user auth state...', user); // Debug log
-
-        if (user) {
-          console.log('✅ User logged in:', user.email); // Debug log
-          if (authLink) {
-            authLink.style.display = 'none';
-            console.log('Hidden authLink');
-          }
-          if (profileLink) {
-            profileLink.style.display = 'block';
-            console.log('Shown profileLink');
-          }
-          // Check if user is the admin account
-          if (user.email === 'azmmeli146@gmail.com') {
-            if (adminLink) {
-              adminLink.style.display = 'block';
-              console.log('Shown adminLink');
-            }
-          } else {
-            if (adminLink) {
-              adminLink.style.display = 'none';
-            }
-          }
-        } else {
-          console.log('❌ User not logged in'); // Debug log
-          if (authLink) {
-            authLink.style.display = 'block';
-            console.log('Shown authLink');
-          }
-          if (profileLink) {
-            profileLink.style.display = 'none';
-            console.log('Hidden profileLink');
-          }
-          if (adminLink) {
-            adminLink.style.display = 'none';
-          }
-        }
-      } catch (error) {
-        console.error('Error checking user:', error);
-      } finally {
-        isUpdatingUser = false;
-      }
-    }
-
-    // Call immediately
-    updateUserDisplay();
-
-    // Also set up listener for auth state changes with debounce
-    // Only respond to meaningful events, skip TOKEN_REFRESHED which happens automatically
-    supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth state changed:', event, session);
-      // Only update on meaningful auth events, not token refreshes
-      if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
-        // Clear any pending update
-        if (updateUserTimeout) clearTimeout(updateUserTimeout);
-        // Debounce the update by 100ms to avoid concurrent calls
-        updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
-      }
-    });
   </script>
 </body>
 

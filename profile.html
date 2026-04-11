@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Rosa Fragrances | Mon Profil</title>
-    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Supabase client library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -24,7 +22,6 @@
             min-height: 100vh;
         }
 
-        /* Header */
         header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -58,9 +55,9 @@
             text-decoration: none;
         }
 
-        .logo i {
-            font-size: 1.8rem;
-            color: var(--accent);
+        .logo img {
+            width: 45px;
+            height: auto;
         }
 
         .logo h1 {
@@ -152,7 +149,6 @@
             color: var(--gold-base);
         }
 
-        /* Navigation Dropdown */
         .nav-links {
             display: flex;
             flex-direction: column;
@@ -201,7 +197,6 @@
             padding-left: 2rem;
         }
 
-        /* Language Dropdown inside menu */
         .lang-menu {
             border-bottom: 1px solid var(--border-light);
         }
@@ -254,7 +249,6 @@
             color: var(--gold-base);
         }
 
-        /* Cart Overlay */
         .cart-overlay {
             position: fixed;
             top: 0;
@@ -274,7 +268,6 @@
             opacity: 1;
         }
 
-        /* Cart Sidebar */
         .cart-sidebar {
             position: fixed;
             top: 0;
@@ -442,7 +435,6 @@
             opacity: 1;
         }
 
-        /* Profile Container - Responsive */
         .profile-container {
             max-width: 1200px;
             margin: 1rem auto;
@@ -861,7 +853,6 @@
             transition: all 0.3s;
         }
 
-        /* Contact section */
         .contact-section {
             background: var(--card-warm);
             border-radius: 32px;
@@ -1021,10 +1012,6 @@
                 font-size: 1.2rem;
             }
 
-            .logo i {
-                font-size: 1.5rem;
-            }
-
             .right-group {
                 gap: 8px;
             }
@@ -1065,55 +1052,47 @@
 </head>
 
 <body>
-    <!-- Menu Overlay (separate from cart overlay) -->
     <div id="menuOverlay" class="cart-overlay" style="z-index: 99;"></div>
     <div id="toast" class="notification">✨ Article ajouté</div>
 
-    <!-- Cart Sidebar -->
     <div id="cartOverlay" class="cart-overlay"></div>
     <aside id="cartSidebar" class="cart-sidebar">
         <div class="cart-header">
-            <h3><i class="fas fa-bag-shopping"></i> Panier</h3>
+            <h3><i class="fas fa-bag-shopping"></i> <span data-translate="cart">Panier</span></h3>
             <button class="close-cart" id="closeCartBtn"
                 style="background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--text-tertiary);"><i
                     class="fas fa-times"></i></button>
         </div>
         <div id="cartItemsContainer" class="cart-items">
-            <div class="empty-cart-message">Votre panier est vide.</div>
+            <div class="empty-cart-message" data-translate="emptyCart">Votre panier est vide.</div>
         </div>
         <div class="cart-footer">
-            <div class="cart-total"><span>Total</span><span id="cartTotalPrice">0,000 TND</span></div>
-            <button class="checkout-btn" id="checkoutBtn" style="font-size: 0.8rem;">PAIEMENT <i
-                    class="fas fa-arrow-right"></i></button>
+            <div class="cart-total"><span data-translate="total">Total</span><span id="cartTotalPrice">0,000 TND</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn" style="font-size: 0.8rem;"><span
+                    data-translate="payment">PAIEMENT</span> <i class="fas fa-arrow-right"></i></button>
         </div>
     </aside>
 
-    <!-- Header -->
     <header>
         <div class="header-flex">
             <a href="index.html" class="logo">
-                <img style="width: 65px;" src="is.png">
+                <img src="is.png" alt="Rosa Fragrances">
                 <h1>Rosa Fragrances</h1>
             </a>
             <div class="right-group">
-                <div class="theme-toggle" id="themeToggle">
-                    <i class="fas fa-sun"></i>
-                    <i class="fas fa-moon" style="display: none;"></i>
-                </div>
-                <div class="cart-icon" id="cartToggle">
-                    <i class="fas fa-bag-shopping"></i>
-                    <span id="cartCount" class="cart-count">0</span>
-                </div>
-                <button class="menu-toggle" id="menuToggle">
-                    <i class="fas fa-bars"></i>
-                </button>
+                <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon"
+                        style="display: none;"></i></div>
+                <div class="cart-icon" id="cartToggle"><i class="fas fa-bag-shopping"></i><span id="cartCount"
+                        class="cart-count">0</span></div>
+                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
             </div>
             <div class="nav-links" id="navLinks">
-                <a href="index.html">ACCUEIL</a>
-                <a href="man.html">HOMME</a>
-                <a href="women.html">FEMME</a>
-                <a href="unisexe.html">UNISEXE</a>
-                <a href="kids.html">ENFANTS</a>
+                <a href="index.html" data-translate="home">ACCUEIL</a>
+                <a href="man.html" data-translate="men">HOMME</a>
+                <a href="women.html" data-translate="women">FEMME</a>
+                <a href="unisexe.html" data-translate="unisex">UNISEXE</a>
+                <a href="kids.html" data-translate="kids">ENFANTS</a>
                 <div class="lang-menu" id="langMenu">
                     <button class="lang-current" id="langCurrentBtn">
                         <span id="currentLangText">FRANÇAIS</span>
@@ -1125,24 +1104,21 @@
                         <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
                     </div>
                 </div>
-                <a href="login146.html" id="authLink">Se connecter</a>
-                <a href="profile.html" id="profileLink" style="display: none;">Mon Profil</a>
+                <a href="login146.html" id="authLink" data-translate="login">Se connecter</a>
+                <a href="profile.html" id="profileLink" style="display: none;" data-translate="profile">Mon Profil</a>
             </div>
         </div>
     </header>
 
     <main class="profile-container" id="profileContainer" style="display: none;">
         <div class="profile-header">
-            <div class="profile-avatar">
-                <i class="fas fa-user-circle"></i>
-            </div>
+            <div class="profile-avatar"><i class="fas fa-user-circle"></i></div>
             <div class="profile-info">
                 <h2 id="userName">Chargement...</h2>
                 <p><i class="fas fa-envelope"></i> <span id="userEmail"></span></p>
             </div>
-            <button class="logout-btn" id="logoutBtn">
-                <i class="fas fa-sign-out-alt"></i> Déconnexion
-            </button>
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> <span
+                    data-translate="logout">Déconnexion</span></button>
         </div>
 
         <div class="stats-grid">
@@ -1150,21 +1126,21 @@
                 <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
                 <div class="stat-content">
                     <h3 id="totalOrders">0</h3>
-                    <p>Commandes totales</p>
+                    <p data-translate="totalOrders">Commandes totales</p>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-clock"></i></div>
                 <div class="stat-content">
                     <h3 id="pendingOrders">0</h3>
-                    <p>En cours</p>
+                    <p data-translate="pending">En cours</p>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
                 <div class="stat-content">
                     <h3 id="deliveredOrders">0</h3>
-                    <p>Livrées</p>
+                    <p data-translate="delivered">Livrées</p>
                 </div>
             </div>
         </div>
@@ -1172,15 +1148,17 @@
         <div class="orders-section">
             <div class="section-title">
                 <i class="fas fa-history"></i>
-                <h2>Historique des commandes</h2>
+                <h2 data-translate="orderHistory">Historique des commandes</h2>
             </div>
 
             <div class="order-filters">
-                <button class="filter-btn active" onclick="filterOrders('all')">Toutes</button>
-                <button class="filter-btn" onclick="filterOrders('pending')">En attente</button>
-                <button class="filter-btn" onclick="filterOrders('review')">En révision</button>
-                <button class="filter-btn" onclick="filterOrders('shipped')">Expédiées</button>
-                <button class="filter-btn" onclick="filterOrders('delivered')">Livrées</button>
+                <button class="filter-btn active" onclick="filterOrders('all')" data-translate="all">Toutes</button>
+                <button class="filter-btn" onclick="filterOrders('pending')" data-translate="pendingStatus">En
+                    attente</button>
+                <button class="filter-btn" onclick="filterOrders('review')" data-translate="review">En révision</button>
+                <button class="filter-btn" onclick="filterOrders('shipped')" data-translate="shipped">Expédiées</button>
+                <button class="filter-btn" onclick="filterOrders('delivered')"
+                    data-translate="deliveredStatus">Livrées</button>
             </div>
 
             <div id="ordersList" class="orders-list"></div>
@@ -1190,9 +1168,9 @@
     <div id="notLoggedIn" class="profile-container" style="display: none;">
         <div class="not-logged-in">
             <i class="fas fa-user-lock"></i>
-            <h2>Non connecté</h2>
-            <p>Veuillez vous connecter pour voir votre profil et vos commandes.</p>
-            <a href="login146.html" class="login-btn">Se connecter</a>
+            <h2 data-translate="notLoggedIn">Non connecté</h2>
+            <p data-translate="pleaseLogin">Veuillez vous connecter pour voir votre profil et vos commandes.</p>
+            <a href="login146.html" class="login-btn" data-translate="login">Se connecter</a>
         </div>
     </div>
 
@@ -1201,17 +1179,19 @@
             <div class="contact-section">
                 <div style="text-align:center; margin-bottom:1rem;">
                     <h3 style="color:var(--gold-base); font-weight: 400; font-size: 1rem; letter-spacing: 0.1em;">📞
-                        Contact</h3>
-                    <p style="color:var(--text-secondary); font-size: 0.75rem;">Une question ? Nous sommes là.</p>
+                        <span data-translate="contact">Contact</span></h3>
+                    <p style="color:var(--text-secondary); font-size: 0.75rem;" data-translate="contactDesc">Une
+                        question ? Nous sommes là.</p>
                 </div>
                 <div class="contact-grid">
                     <div class="contact-item">
                         <div class="contact-icon"><i class="fas fa-envelope"></i></div>
-                        <p>Email</p><a href="mailto:rosafragrances.tn@gmail.com">rosafragrances.tn@gmail.com</a>
+                        <p data-translate="emailLabel">Email</p><a
+                            href="mailto:rosafragrances.tn@gmail.com">rosafragrances.tn@gmail.com</a>
                     </div>
                     <div class="contact-item">
                         <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
-                        <p>Téléphone</p><a href="tel:+21696163366">+216 96 163 366</a>
+                        <p data-translate="phoneLabel">Téléphone</p><a href="tel:+21696163366">+216 96 163 366</a>
                     </div>
                     <div class="contact-item">
                         <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
@@ -1235,11 +1215,93 @@
             const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
             const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+            // ========== TRANSLATION SYSTEM ==========
+            let currentLanguage = localStorage.getItem('language') || 'fr';
+
+            const translations = {
+                fr: {
+                    home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
+                    login: 'Se connecter', profile: 'Mon Profil', logout: 'Déconnexion',
+                    cart: 'Panier', emptyCart: 'Votre panier est vide.', total: 'Total', payment: 'PAIEMENT',
+                    addedToCart: '✨ Article ajouté', removed: '🗑️ Retiré',
+                    totalOrders: 'Commandes totales', pending: 'En cours', delivered: 'Livrées',
+                    orderHistory: 'Historique des commandes', all: 'Toutes', pendingStatus: 'En attente',
+                    review: 'En révision', shipped: 'Expédiées', deliveredStatus: 'Livrées',
+                    cancelOrder: 'Annuler', shopNow: 'Découvrir nos parfums',
+                    notLoggedIn: 'Non connecté', pleaseLogin: 'Veuillez vous connecter pour voir votre profil et vos commandes.',
+                    noOrders: 'Aucune commande trouvée', errorLoading: 'Erreur lors du chargement',
+                    contact: 'Contact', contactDesc: 'Une question ? Nous sommes là.',
+                    emailLabel: 'Email', phoneLabel: 'Téléphone',
+                    orderCancelled: '✅ Commande annulée', cancelConfirm: 'Annuler cette commande ?'
+                },
+                en: {
+                    home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
+                    login: 'Sign in', profile: 'My Profile', logout: 'Logout',
+                    cart: 'Cart', emptyCart: 'Your cart is empty.', total: 'Total', payment: 'PAYMENT',
+                    addedToCart: '✨ Added to cart', removed: '🗑️ Removed',
+                    totalOrders: 'Total orders', pending: 'In progress', delivered: 'Delivered',
+                    orderHistory: 'Order history', all: 'All', pendingStatus: 'Pending',
+                    review: 'Under review', shipped: 'Shipped', deliveredStatus: 'Delivered',
+                    cancelOrder: 'Cancel', shopNow: 'Discover our perfumes',
+                    notLoggedIn: 'Not logged in', pleaseLogin: 'Please log in to view your profile and orders.',
+                    noOrders: 'No orders found', errorLoading: 'Error loading',
+                    contact: 'Contact', contactDesc: 'Have a question? We\'re here.',
+                    emailLabel: 'Email', phoneLabel: 'Phone',
+                    orderCancelled: '✅ Order cancelled', cancelConfirm: 'Cancel this order?'
+                },
+                ar: {
+                    home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
+                    login: 'تسجيل الدخول', profile: 'ملفي الشخصي', logout: 'تسجيل الخروج',
+                    cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.', total: 'المجموع', payment: 'الدفع',
+                    addedToCart: '✨ تمت الإضافة', removed: '🗑️ تمت الإزالة',
+                    totalOrders: 'إجمالي الطلبات', pending: 'قيد المعالجة', delivered: 'تم التوصيل',
+                    orderHistory: 'سجل الطلبات', all: 'الكل', pendingStatus: 'قيد الانتظار',
+                    review: 'قيد المراجعة', shipped: 'تم الشحن', deliveredStatus: 'تم التوصيل',
+                    cancelOrder: 'إلغاء', shopNow: 'اكتشف عطورنا',
+                    notLoggedIn: 'غير مسجل الدخول', pleaseLogin: 'الرجاء تسجيل الدخول لعرض ملفك الشخصي وطلباتك.',
+                    noOrders: 'لا توجد طلبات', errorLoading: 'خطأ في التحميل',
+                    contact: 'اتصل بنا', contactDesc: 'هل لديك سؤال؟ نحن هنا.',
+                    emailLabel: 'البريد الإلكتروني', phoneLabel: 'الهاتف',
+                    orderCancelled: '✅ تم إلغاء الطلب', cancelConfirm: 'إلغاء هذا الطلب؟'
+                }
+            };
+
+            function translatePage(lang) {
+                currentLanguage = lang;
+                localStorage.setItem('language', lang);
+
+                if (lang === 'ar') {
+                    document.body.style.direction = 'rtl';
+                    document.body.style.textAlign = 'right';
+                } else {
+                    document.body.style.direction = 'ltr';
+                    document.body.style.textAlign = 'left';
+                }
+
+                const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+                const langSpan = document.getElementById('currentLangText');
+                if (langSpan) langSpan.textContent = names[lang];
+
+                document.querySelectorAll('[data-translate]').forEach(el => {
+                    const key = el.getAttribute('data-translate');
+                    if (translations[lang] && translations[lang][key]) {
+                        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                            el.placeholder = translations[lang][key];
+                        } else {
+                            el.textContent = translations[lang][key];
+                        }
+                    }
+                });
+
+                if (typeof renderCart === 'function') renderCart();
+                if (allOrders.length > 0) displayOrders(currentFilter);
+            }
+
             let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
             let currentUser = null;
             let allOrders = [];
+            let currentFilter = 'all';
 
-            // DOM Elements
             const profileContainer = document.getElementById('profileContainer');
             const notLoggedIn = document.getElementById('notLoggedIn');
             const userName = document.getElementById('userName');
@@ -1252,13 +1314,13 @@
             const authLink = document.getElementById('authLink');
             const profileLink = document.getElementById('profileLink');
 
-            // Menu Elements
             const menuToggle = document.getElementById('menuToggle');
             const navLinks = document.getElementById('navLinks');
             const menuOverlay = document.getElementById('menuOverlay');
+            const langMenu = document.getElementById('langMenu');
+            const langCurrentBtn = document.getElementById('langCurrentBtn');
             const themeToggle = document.getElementById('themeToggle');
 
-            // Cart Elements
             const cartToggle = document.getElementById('cartToggle');
             const cartSidebar = document.getElementById('cartSidebar');
             const cartOverlayEl = document.getElementById('cartOverlay');
@@ -1266,10 +1328,17 @@
             const cartCountSpan = document.getElementById('cartCount');
             const cartItemsContainer = document.getElementById('cartItemsContainer');
             const cartTotalSpan = document.getElementById('cartTotalPrice');
-            const checkoutBtn = document.getElementById('checkoutBtn');
             const toast = document.getElementById('toast');
 
-            // Cart Functions
+            function showToast(msgKey, productName = '') {
+                if (!toast) return;
+                let msg = translations[currentLanguage][msgKey] || msgKey;
+                if (productName) msg = msg.replace('✨', '✨ ') + ' ' + productName;
+                toast.textContent = msg;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            }
+
             function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
             function calculateTotal() { return cart.reduce((sum, i) => sum + (i.price * i.quantity), 0); }
 
@@ -1281,29 +1350,26 @@
             function renderCart() {
                 if (!cartItemsContainer) return;
                 if (cart.length === 0) {
-                    cartItemsContainer.innerHTML = '<div class="empty-cart-message">Votre panier est vide.</div>';
+                    cartItemsContainer.innerHTML = `<div class="empty-cart-message">${translations[currentLanguage].emptyCart}</div>`;
                     if (cartTotalSpan) cartTotalSpan.textContent = '0,000 TND';
                     return;
                 }
                 let html = '', total = 0;
                 cart.forEach(item => {
-                    const sub = item.price * (item.quantity || 1);
-                    total += sub;
-                    html += `
-                        <div class="cart-item" data-id="${item.id}">
-                            <div class="cart-item-icon"><i class="fas ${item.icon || 'fa-crown'}"></i></div>
-                            <div class="cart-item-info">
-                                <div class="cart-item-title">${escapeHtml(item.name)}</div>
-                                <div class="cart-item-price">${formatPrice(item.price)}</div>
-                                <div class="cart-item-quantity">
-                                    <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
-                                    <span>${item.quantity || 1}</span>
-                                    <button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button>
-                                </div>
+                    const sub = item.price * (item.quantity || 1); total += sub;
+                    html += `<div class="cart-item" data-id="${item.id}">
+                        <div class="cart-item-icon"><i class="fas ${item.icon || 'fa-crown'}"></i></div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-title">${escapeHtml(item.name)}</div>
+                            <div class="cart-item-price">${formatPrice(item.price)}</div>
+                            <div class="cart-item-quantity">
+                                <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
+                                <span>${item.quantity || 1}</span>
+                                <button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button>
                             </div>
-                            <button class="cart-item-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
                         </div>
-                    `;
+                        <button class="cart-item-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
+                    </div>`;
                 });
                 cartItemsContainer.innerHTML = html;
                 if (cartTotalSpan) cartTotalSpan.textContent = formatPrice(total);
@@ -1315,25 +1381,18 @@
                 renderCart();
             }
 
-            function showToast(msg) {
-                if (!toast) return;
-                toast.textContent = msg;
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2000);
-            }
-
             function addToCart(id, name, price, icon, image) {
                 const existing = cart.find(i => i.id === id);
                 if (existing) existing.quantity = (existing.quantity || 1) + 1;
                 else cart.push({ id, name, price, icon: icon || 'fa-crown', image, quantity: 1 });
                 saveCart();
-                showToast('✨ ' + name + ' ajouté');
+                showToast('addedToCart', name);
             }
 
             function removeFromCart(id) {
                 cart = cart.filter(i => i.id !== id);
                 saveCart();
-                showToast('🗑️ Retiré');
+                showToast('removed');
             }
 
             function updateQuantity(id, action) {
@@ -1361,41 +1420,9 @@
 
             function escapeHtml(str) {
                 if (!str) return '';
-                return str.replace(/[&<>]/g, function (m) {
-                    if (m === '&') return '&amp;';
-                    if (m === '<') return '&lt;';
-                    if (m === '>') return '&gt;';
-                    return m;
-                });
+                return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
             }
 
-
-            // Language switcher
-            const langMenu = document.getElementById('langMenu');
-            const langCurrentBtn = document.getElementById('langCurrentBtn');
-            if (langCurrentBtn) {
-                langCurrentBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    langMenu.classList.toggle('active');
-                });
-            }
-
-            document.querySelectorAll('.lang-option').forEach(opt => {
-                opt.addEventListener('click', (e) => {
-                    const lang = opt.dataset.lang;
-                    translatePage(lang);
-                    langMenu.classList.remove('active');
-                    // Re-render dynamic content if needed
-                    if (typeof renderProducts === 'function') renderProducts();
-                    if (typeof renderCart === 'function') renderCart();
-                });
-            });
-
-            document.addEventListener('click', (e) => {
-                if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active');
-            });
-
-            // Menu Toggle
             function toggleMenu() {
                 navLinks.classList.toggle('active');
                 menuOverlay.classList.toggle('active');
@@ -1403,14 +1430,10 @@
                 if (navLinks.classList.contains('active')) closeCart();
             }
 
-            // Auth Functions
-            let isUpdatingUser = false;
-            let updateUserTimeout;
+            let isUpdatingUser = false, updateUserTimeout;
 
             async function updateUserDisplay() {
-                if (isUpdatingUser) return;
-                isUpdatingUser = true;
-
+                if (isUpdatingUser) return; isUpdatingUser = true;
                 try {
                     const { data: { user } } = await supabase.auth.getUser();
                     if (user) {
@@ -1420,9 +1443,7 @@
                         if (authLink) authLink.style.display = 'block';
                         if (profileLink) profileLink.style.display = 'none';
                     }
-                } finally {
-                    isUpdatingUser = false;
-                }
+                } finally { isUpdatingUser = false; }
             }
 
             async function checkUser() {
@@ -1450,18 +1471,14 @@
                 if (!ordersListEl) return;
                 try {
                     ordersListEl.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Chargement...</div>';
-                    const { data, error } = await supabase
-                        .from('orders')
-                        .select('*')
-                        .eq('user_id', currentUser.id)
-                        .order('created_at', { ascending: false });
+                    const { data, error } = await supabase.from('orders').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
                     if (error) throw error;
                     allOrders = data || [];
                     updateStats();
                     displayOrders('all');
                 } catch (error) {
                     console.error('Error loading orders:', error);
-                    ordersListEl.innerHTML = '<div class="empty-orders">Erreur lors du chargement</div>';
+                    ordersListEl.innerHTML = `<div class="empty-orders">${translations[currentLanguage].errorLoading}</div>`;
                 }
             }
 
@@ -1475,16 +1492,27 @@
 
             function displayOrders(filter) {
                 if (!ordersListEl) return;
+                currentFilter = filter;
                 let filtered = filter === 'all' ? allOrders : allOrders.filter(o => o.status === filter);
+
                 if (filtered.length === 0) {
-                    ordersListEl.innerHTML = `<div class="empty-orders"><i class="fas fa-box-open"></i><p>Aucune commande trouvée</p><a href="index.html" class="shop-now-btn">Découvrir nos parfums</a></div>`;
+                    ordersListEl.innerHTML = `<div class="empty-orders"><i class="fas fa-box-open"></i><p>${translations[currentLanguage].noOrders}</p><a href="index.html" class="shop-now-btn">${translations[currentLanguage].shopNow}</a></div>`;
                     return;
                 }
+
                 let html = '';
                 filtered.forEach((order) => {
-                    const statusText = { pending: 'En attente', review: 'En révision', shipped: 'Expédiée', delivered: 'Livrée', cancelled: 'Annulée' }[order.status];
+                    const statusText = {
+                        pending: translations[currentLanguage].pendingStatus,
+                        review: translations[currentLanguage].review,
+                        shipped: translations[currentLanguage].shipped,
+                        delivered: translations[currentLanguage].deliveredStatus,
+                        cancelled: 'Annulée'
+                    }[order.status];
+
                     const statusClass = `status-${order.status}`;
                     const date = new Date(order.created_at).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
                     let itemsHtml = '';
                     order.items.forEach(item => {
                         itemsHtml += `
@@ -1498,16 +1526,17 @@
                             </div>
                         `;
                     });
+
                     html += `
                         <div class="order-card">
                             <div class="order-header">
                                 <div class="order-id"><i class="fas fa-receipt"></i> ${order.id.slice(0, 8)}...</div>
                                 <div class="order-date"><i class="fas fa-calendar-alt"></i> ${date}</div>
-                                <div class="order-status ${statusClass}"><i class="fas ${statusClass === 'status-pending' ? 'fa-clock' : statusClass === 'status-review' ? 'fa-search' : statusClass === 'status-shipped' ? 'fa-truck' : statusClass === 'status-delivered' ? 'fa-check-circle' : 'fa-times-circle'}"></i> ${statusText}</div>
+                                <div class="order-status ${statusClass}"><i class="fas ${order.status === 'pending' ? 'fa-clock' : order.status === 'review' ? 'fa-search' : order.status === 'shipped' ? 'fa-truck' : order.status === 'delivered' ? 'fa-check-circle' : 'fa-times-circle'}"></i> ${statusText}</div>
                             </div>
                             <div class="order-items">${itemsHtml}</div>
-                            <div class="order-total"><span>Total</span><span>${order.total.toFixed(3).replace('.', ',')} TND</span></div>
-                            ${order.status === 'pending' ? `<div style="text-align: right;"><button onclick="cancelOrder('${order.id}')" class="cancel-btn"><i class="fas fa-times"></i> Annuler</button></div>` : ''}
+                            <div class="order-total"><span>${translations[currentLanguage].total}</span><span>${order.total.toFixed(3).replace('.', ',')} TND</span></div>
+                            ${order.status === 'pending' ? `<div style="text-align: right;"><button onclick="cancelOrder('${order.id}')" class="cancel-btn"><i class="fas fa-times"></i> ${translations[currentLanguage].cancelOrder}</button></div>` : ''}
                         </div>
                     `;
                 });
@@ -1515,11 +1544,11 @@
             }
 
             window.cancelOrder = async function (orderId) {
-                if (!confirm('Annuler cette commande ?')) return;
+                if (!confirm(translations[currentLanguage].cancelConfirm)) return;
                 try {
                     const { error } = await supabase.from('orders').update({ status: 'cancelled' }).eq('id', orderId).eq('user_id', currentUser.id);
                     if (error) throw error;
-                    alert('✅ Commande annulée');
+                    alert(translations[currentLanguage].orderCancelled);
                     await loadOrders();
                 } catch (err) { alert('❌ Erreur'); }
             };
@@ -1530,7 +1559,6 @@
                 displayOrders(filter);
             };
 
-            // Event Listeners
             if (cartToggle) cartToggle.addEventListener('click', openCart);
             if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
             if (cartOverlayEl) cartOverlayEl.addEventListener('click', closeCart);
@@ -1556,17 +1584,13 @@
             document.querySelectorAll('.lang-option').forEach(opt => {
                 opt.addEventListener('click', (e) => {
                     const lang = opt.dataset.lang;
-                    const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-                    document.getElementById('currentLangText').textContent = names[lang];
+                    translatePage(lang);
                     langMenu.classList.remove('active');
-                    localStorage.setItem('language', lang);
                 });
             });
 
             document.addEventListener('click', (e) => {
-                if (langMenu && !langMenu.contains(e.target)) {
-                    langMenu.classList.remove('active');
-                }
+                if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active');
             });
 
             if (logoutBtn) {
@@ -1576,7 +1600,6 @@
                 });
             }
 
-            // Theme Switcher
             function initTheme() {
                 const saved = localStorage.getItem('theme') || 'light';
                 if (saved === 'dark') {
@@ -1602,311 +1625,20 @@
 
             if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
 
-            // Initialize
             initTheme();
+            translatePage(currentLanguage);
             checkUser();
             updateUserDisplay();
 
             supabase.auth.onAuthStateChange((event, session) => {
                 if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
                     if (updateUserTimeout) clearTimeout(updateUserTimeout);
-                    updateUserTimeout = setTimeout(() => {
-                        checkUser();
-                        updateUserDisplay();
-                    }, 100);
+                    updateUserTimeout = setTimeout(() => { checkUser(); updateUserDisplay(); }, 100);
                 }
             });
 
             saveCart();
         })();
-
-
-
-
-
-
-        // ========== TRANSLATION SYSTEM ==========
-        let currentLanguage = localStorage.getItem('language') || 'fr';
-
-        const translations = {
-            fr: {
-                // Navigation
-                home: 'ACCUEIL',
-                men: 'HOMME',
-                women: 'FEMME',
-                unisex: 'UNISEXE',
-                kids: 'ENFANTS',
-                collection: 'COLLECTION',
-                exclusives: 'EXCLUSIVITÉS',
-                gifts: 'COFFRETS',
-                login: 'Se connecter',
-                profile: 'Mon Profil',
-                admin: 'Admin',
-
-                // Categories
-                menCat: 'Homme',
-                menDesc: 'Boisés & épicés',
-                womenCat: 'Femme',
-                womenDesc: 'Floraux & sensuels',
-                unisexCat: 'Unisexe',
-                unisexDesc: 'Pour tous',
-                kidsCat: 'Enfants',
-                kidsDesc: 'Douceurs',
-
-                // Product
-                addToCart: 'Ajouter',
-                addedToCart: '✨ Article ajouté',
-
-                // Cart
-                cart: 'Panier',
-                emptyCart: 'Votre panier est vide.',
-                total: 'Total',
-                payment: 'PAIEMENT',
-
-                // Checkout
-                delivery: 'Livraison',
-                fullName: 'Nom complet *',
-                phone: 'Téléphone *',
-                email: 'Email *',
-                address: 'Adresse *',
-                yourOrder: 'Votre commande',
-                cancel: 'Annuler',
-                confirm: 'Confirmer',
-                orderConfirmed: '✅ Commande confirmée!',
-                cartEmptyWarning: '🛒 Panier vide',
-                error: '❌ Erreur',
-
-                // Product Modal
-                details: 'Détails',
-                close: 'Fermer',
-
-                // Contact
-                contact: 'Contact',
-                contactDesc: 'Une question ? Nous sommes là.',
-
-                // Loading
-                loading: 'Chargement...',
-                noProducts: 'Aucun parfum disponible',
-                errorLoading: '❌ Erreur',
-                reload: 'Recharger',
-                removed: '🗑️ Retiré',
-
-                // Profile
-                totalOrders: 'Commandes totales',
-                pending: 'En cours',
-                delivered: 'Livrées',
-                orderHistory: 'Historique des commandes',
-                all: 'Toutes',
-                pendingStatus: 'En attente',
-                review: 'En révision',
-                shipped: 'Expédiées',
-                deliveredStatus: 'Livrées',
-                cancelOrder: 'Annuler',
-                shopNow: 'Découvrir nos parfums',
-                notLoggedIn: 'Non connecté',
-                pleaseLogin: 'Veuillez vous connecter pour voir votre profil et vos commandes.',
-                logout: 'Déconnexion',
-                noOrders: 'Aucune commande trouvée'
-            },
-            en: {
-                // Navigation
-                home: 'HOME',
-                men: 'MEN',
-                women: 'WOMEN',
-                unisex: 'UNISEX',
-                kids: 'KIDS',
-                collection: 'COLLECTION',
-                exclusives: 'EXCLUSIVES',
-                gifts: 'GIFT SETS',
-                login: 'Sign in',
-                profile: 'My Profile',
-                admin: 'Admin',
-
-                // Categories
-                menCat: 'Men',
-                menDesc: 'Woody & spicy',
-                womenCat: 'Women',
-                womenDesc: 'Floral & sensual',
-                unisexCat: 'Unisex',
-                unisexDesc: 'For everyone',
-                kidsCat: 'Kids',
-                kidsDesc: 'Sweet scents',
-
-                // Product
-                addToCart: 'Add to cart',
-                addedToCart: '✨ Added to cart',
-
-                // Cart
-                cart: 'Cart',
-                emptyCart: 'Your cart is empty.',
-                total: 'Total',
-                payment: 'PAYMENT',
-
-                // Checkout
-                delivery: 'Delivery',
-                fullName: 'Full name *',
-                phone: 'Phone *',
-                email: 'Email *',
-                address: 'Address *',
-                yourOrder: 'Your order',
-                cancel: 'Cancel',
-                confirm: 'Confirm',
-                orderConfirmed: '✅ Order confirmed!',
-                cartEmptyWarning: '🛒 Cart is empty',
-                error: '❌ Error',
-
-                // Product Modal
-                details: 'Details',
-                close: 'Close',
-
-                // Contact
-                contact: 'Contact',
-                contactDesc: 'Have a question? We\'re here.',
-
-                // Loading
-                loading: 'Loading...',
-                noProducts: 'No perfumes available',
-                errorLoading: '❌ Error',
-                reload: 'Reload',
-                removed: '🗑️ Removed',
-
-                // Profile
-                totalOrders: 'Total orders',
-                pending: 'In progress',
-                delivered: 'Delivered',
-                orderHistory: 'Order history',
-                all: 'All',
-                pendingStatus: 'Pending',
-                review: 'Under review',
-                shipped: 'Shipped',
-                deliveredStatus: 'Delivered',
-                cancelOrder: 'Cancel',
-                shopNow: 'Discover our perfumes',
-                notLoggedIn: 'Not logged in',
-                pleaseLogin: 'Please log in to view your profile and orders.',
-                logout: 'Logout',
-                noOrders: 'No orders found'
-            },
-            ar: {
-                // Navigation
-                home: 'الرئيسية',
-                men: 'رجالي',
-                women: 'نسائي',
-                unisex: 'للجنسين',
-                kids: 'أطفال',
-                collection: 'المجموعة',
-                exclusives: 'الحصريات',
-                gifts: 'الهدايا',
-                login: 'تسجيل الدخول',
-                profile: 'ملفي الشخصي',
-                admin: 'المشرف',
-
-                // Categories
-                menCat: 'رجالي',
-                menDesc: 'خشبي وحار',
-                womenCat: 'نسائي',
-                womenDesc: 'زهري وحسي',
-                unisexCat: 'للجنسين',
-                unisexDesc: 'للجميع',
-                kidsCat: 'أطفال',
-                kidsDesc: 'روائح حلوة',
-
-                // Product
-                addToCart: 'أضف إلى السلة',
-                addedToCart: '✨ تمت الإضافة إلى السلة',
-
-                // Cart
-                cart: 'سلة التسوق',
-                emptyCart: 'سلة التسوق فارغة.',
-                total: 'المجموع',
-                payment: 'الدفع',
-
-                // Checkout
-                delivery: 'التوصيل',
-                fullName: 'الاسم الكامل *',
-                phone: 'الهاتف *',
-                email: 'البريد الإلكتروني *',
-                address: 'العنوان *',
-                yourOrder: 'طلبك',
-                cancel: 'إلغاء',
-                confirm: 'تأكيد',
-                orderConfirmed: '✅ تم تأكيد الطلب!',
-                cartEmptyWarning: '🛒 السلة فارغة',
-                error: '❌ خطأ',
-
-                // Product Modal
-                details: 'التفاصيل',
-                close: 'إغلاق',
-
-                // Contact
-                contact: 'اتصل بنا',
-                contactDesc: 'هل لديك سؤال؟ نحن هنا.',
-
-                // Loading
-                loading: 'جاري التحميل...',
-                noProducts: 'لا توجد عطور متاحة',
-                errorLoading: '❌ خطأ',
-                reload: 'إعادة تحميل',
-                removed: '🗑️ تمت الإزالة',
-
-                // Profile
-                totalOrders: 'إجمالي الطلبات',
-                pending: 'قيد المعالجة',
-                delivered: 'تم التوصيل',
-                orderHistory: 'سجل الطلبات',
-                all: 'الكل',
-                pendingStatus: 'قيد الانتظار',
-                review: 'قيد المراجعة',
-                shipped: 'تم الشحن',
-                deliveredStatus: 'تم التوصيل',
-                cancelOrder: 'إلغاء',
-                shopNow: 'اكتشف عطورنا',
-                notLoggedIn: 'غير مسجل الدخول',
-                pleaseLogin: 'الرجاء تسجيل الدخول لعرض ملفك الشخصي وطلباتك.',
-                logout: 'تسجيل الخروج',
-                noOrders: 'لا توجد طلبات'
-            }
-        };
-
-        function translatePage(lang) {
-            currentLanguage = lang;
-            localStorage.setItem('language', lang);
-
-            // Set RTL for Arabic
-            if (lang === 'ar') {
-                document.body.style.direction = 'rtl';
-                document.body.style.textAlign = 'right';
-            } else {
-                document.body.style.direction = 'ltr';
-                document.body.style.textAlign = 'left';
-            }
-
-            // Update language display
-            const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-            const langSpan = document.getElementById('currentLangText');
-            if (langSpan) langSpan.textContent = names[lang];
-
-            // Translate all elements with data-translate attribute
-            document.querySelectorAll('[data-translate]').forEach(el => {
-                const key = el.getAttribute('data-translate');
-                if (translations[lang] && translations[lang][key]) {
-                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                        el.placeholder = translations[lang][key];
-                    } else {
-                        el.textContent = translations[lang][key];
-                    }
-                }
-            });
-        }
-
-        // Initialize language on page load
-        function initLanguage() {
-            const savedLang = localStorage.getItem('language') || 'fr';
-            translatePage(savedLang);
-        }
-
-        // Call initLanguage after DOM is ready
-        document.addEventListener('DOMContentLoaded', initLanguage);
     </script>
 </body>
 
