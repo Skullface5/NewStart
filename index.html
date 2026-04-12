@@ -1979,23 +1979,57 @@
           const { data: { user } } = await supabase.auth.getUser();
           const email = user ? user.email : document.getElementById('customerEmail').value;
           const orderData = {
-            items: cart, total: calculateTotal(),
+            items: cart.map(item => ({
+              name: item.name,
+              quantity: item.quantity,
+              price: item.price,
+              id: item.id
+            })),
+            total: calculateTotal(),
             customer_name: document.getElementById('customerName').value,
             customer_phone: document.getElementById('customerPhone').value,
             customer_email: email,
             shipping_address: document.getElementById('shippingAddress').value,
             status: 'pending'
           };
-          if (user) orderData.user_id = user.id;
-          await supabase.from('orders').insert([orderData]);
+
+          // 1. Save to database
+          const { data: orderResult, error: orderError } = await supabase
+            .from('orders')
+            .insert([orderData])
+            .select();
+
+          if (orderError) throw orderError;
+
+          const orderId = orderResult?.[0]?.id;
+
+          // 2. Send email via your edge function
+          const { error: emailError } = await supabase.functions.invoke('send-order-email', {
+            body: { order: { ...orderData, id: orderId } }
+          });
+
+          if (emailError) {
+            console.error('Email sending error:', emailError);
+            // Still show success to user - order is saved
+          } else {
+            console.log('✅ Email sent successfully');
+          }
+
+          // 3. Clear cart
           cart = [];
           localStorage.removeItem('RosaFragrances_cart');
           saveCart();
           closeCheckoutModal();
           closeCart();
           showToast('orderConfirmed');
-        } catch (error) { showToast('error'); }
-        finally { btn.disabled = false; btn.innerHTML = translations[currentLanguage].confirm; }
+
+        } catch (error) {
+          console.error('Order error:', error);
+          showToast('error');
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = translations[currentLanguage].confirm;
+        }
       };
 
       document.getElementById('checkoutForm')?.addEventListener('submit', window.processOrder);
