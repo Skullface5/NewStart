@@ -1978,6 +1978,7 @@
         try {
           const { data: { user } } = await supabase.auth.getUser();
           const email = user ? user.email : document.getElementById('customerEmail').value;
+
           const orderData = {
             items: cart.map(item => ({
               name: item.name,
@@ -1990,10 +1991,11 @@
             customer_phone: document.getElementById('customerPhone').value,
             customer_email: email,
             shipping_address: document.getElementById('shippingAddress').value,
-            status: 'pending'
+            status: 'pending',
+            user_id: user ? user.id : null  // ✅ ADD THIS LINE - link order to user
           };
 
-          // 1. Save to database
+          // Save to database
           const { data: orderResult, error: orderError } = await supabase
             .from('orders')
             .insert([orderData])
@@ -2003,19 +2005,16 @@
 
           const orderId = orderResult?.[0]?.id;
 
-          // 2. Send email via your edge function
+          // Send email via edge function
           const { error: emailError } = await supabase.functions.invoke('send-order-email', {
             body: { order: { ...orderData, id: orderId } }
           });
 
           if (emailError) {
             console.error('Email sending error:', emailError);
-            // Still show success to user - order is saved
-          } else {
-            console.log('✅ Email sent successfully');
           }
 
-          // 3. Clear cart
+          // Clear cart
           cart = [];
           localStorage.removeItem('RosaFragrances_cart');
           saveCart();
