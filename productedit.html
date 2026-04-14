@@ -508,7 +508,13 @@
         }
 
         /* Category & Season Selectors */
-        .category-selector,
+        .category-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 0.4rem;
+        }
+
         .season-selector {
             display: flex;
             flex-wrap: wrap;
@@ -553,6 +559,20 @@
         .season-option:hover {
             border-color: var(--gold);
             transform: translateY(-2px);
+        }
+
+        .season-hint {
+            font-size: 0.65rem;
+            color: var(--text-mid);
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .season-hint i {
+            color: var(--gold);
+            font-size: 0.7rem;
         }
 
         .button-group {
@@ -844,6 +864,17 @@
             .page-header h1 {
                 font-size: 1.5rem;
             }
+
+            .category-selector,
+            .season-selector {
+                gap: 0.5rem;
+            }
+
+            .category-option,
+            .season-option {
+                padding: 0.4rem 1rem;
+                font-size: 0.7rem;
+            }
         }
     </style>
 </head>
@@ -896,7 +927,8 @@
                 <a href="login146.html" id="authLink" data-translate="login">Se connecter</a>
                 <a href="profile.html" id="profileLink" style="display:none;" data-translate="profile">Mon Profil</a>
                 <a href="adminadd.html" id="adminLink" style="display:none;" class="admin-nav-link"><i
-                        class="fas fa-crown"></i> Admin</a>
+                        class="fas fa-crown"></i>
+                    Admin</a>
             </div>
         </div>
     </header>
@@ -958,7 +990,8 @@
                             <input type="file" id="imageUpload" accept="image/*" multiple style="display: none;">
                         </div>
                         <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="imagesInfo">Vous
-                                pouvez ajouter plusieurs images. La première sera l'image principale.</span></div>
+                                pouvez
+                                ajouter plusieurs images. La première sera l'image principale.</span></div>
                     </div>
 
                     <div class="input-group">
@@ -976,10 +1009,8 @@
                     </div>
 
                     <div class="input-group">
-                        <label data-translate="season">Saison</label>
+                        <label data-translate="season">Saisons (plusieurs choix possibles)</label>
                         <div class="season-selector" id="seasonSelector">
-                            <div class="season-option" data-season="all"><i class="fas fa-globe"></i> <span
-                                    data-translate="allSeasons">Toutes saisons</span></div>
                             <div class="season-option" data-season="summer"><i class="fas fa-sun"></i> <span
                                     data-translate="summer">Été</span></div>
                             <div class="season-option" data-season="winter"><i class="fas fa-snowflake"></i> <span
@@ -988,6 +1019,11 @@
                                     data-translate="spring">Printemps</span></div>
                             <div class="season-option" data-season="autumn"><i class="fas fa-leaf"></i> <span
                                     data-translate="autumn">Automne</span></div>
+                        </div>
+                        <div class="season-hint">
+                            <i class="fas fa-info-circle"></i>
+                            <span data-translate="seasonHint">Sélectionnez une ou plusieurs saisons (cliquez pour
+                                sélectionner/désélectionner)</span>
                         </div>
                     </div>
 
@@ -1009,7 +1045,8 @@
                     <img class="footer-logo-img" src="is.png" alt="Rosa">
                     <h3>ROSA FRAGRANCES</h3>
                     <p data-translate="footerDescription">Parfumerie d'exception depuis 1985. L'art de la parfumerie
-                        orientale réinventé pour les connaisseurs exigeants.</p>
+                        orientale
+                        réinventé pour les connaisseurs exigeants.</p>
                 </div>
                 <div class="footer-col">
                     <h4 data-translate="footerPerfumesTitle">Parfums</h4>
@@ -1062,7 +1099,8 @@
                     quantity: 'Quantité en stock', description: 'Description', productImages: 'Images du produit',
                     addImages: 'Ajouter des images', imagesInfo: 'Vous pouvez ajouter plusieurs images. La première sera l\'image principale.',
                     category: 'Catégorie', menCat: 'Homme', womenCat: 'Femme', unisexCat: 'Unisexe', kidsCat: 'Enfants',
-                    season: 'Saison', allSeasons: 'Toutes saisons', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne',
+                    season: 'Saisons (plusieurs choix possibles)', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne',
+                    seasonHint: 'Sélectionnez une ou plusieurs saisons (cliquez pour sélectionner/désélectionner)',
                     saveChanges: 'Enregistrer les modifications', cancel: 'Annuler',
                     loading: 'Chargement...', productNotFound: '❌ Produit non trouvé',
                     productUpdated: '✅ Produit mis à jour', errorUpdating: '❌ Erreur lors de la mise à jour',
@@ -1080,7 +1118,8 @@
                     quantity: 'Quantity in stock', description: 'Description', productImages: 'Product Images',
                     addImages: 'Add Images', imagesInfo: 'You can add multiple images. The first one will be the main image.',
                     category: 'Category', menCat: 'Men', womenCat: 'Women', unisexCat: 'Unisex', kidsCat: 'Kids',
-                    season: 'Season', allSeasons: 'All seasons', summer: 'Summer', winter: 'Winter', spring: 'Spring', autumn: 'Autumn',
+                    season: 'Seasons (multiple choices possible)', summer: 'Summer', winter: 'Winter', spring: 'Spring', autumn: 'Autumn',
+                    seasonHint: 'Select one or more seasons (click to select/deselect)',
                     saveChanges: 'Save changes', cancel: 'Cancel',
                     loading: 'Loading...', productNotFound: '❌ Product not found',
                     productUpdated: '✅ Product updated', errorUpdating: '❌ Error updating product',
@@ -1098,7 +1137,8 @@
                     quantity: 'الكمية في المخزون', description: 'الوصف', productImages: 'صور المنتج',
                     addImages: 'إضافة صور', imagesInfo: 'يمكنك إضافة عدة صور. الصورة الأولى ستكون الصورة الرئيسية.',
                     category: 'الفئة', menCat: 'رجالي', womenCat: 'نسائي', unisexCat: 'للجنسين', kidsCat: 'أطفال',
-                    season: 'الموسم', allSeasons: 'كل المواسم', summer: 'صيف', winter: 'شتاء', spring: 'ربيع', autumn: 'خريف',
+                    season: 'المواسم (اختيارات متعددة ممكنة)', summer: 'صيف', winter: 'شتاء', spring: 'ربيع', autumn: 'خريف',
+                    seasonHint: 'اختر موسماً واحداً أو أكثر (انقر للتحديد/إلغاء التحديد)',
                     saveChanges: 'حفظ التغييرات', cancel: 'إلغاء',
                     loading: 'جاري التحميل...', productNotFound: '❌ المنتج غير موجود',
                     productUpdated: '✅ تم تحديث المنتج', errorUpdating: '❌ خطأ في تحديث المنتج',
@@ -1141,6 +1181,12 @@
                 } catch (e) {
                     return [];
                 }
+            }
+
+            function parseSeasons(seasonStr) {
+                if (!seasonStr) return [];
+                if (seasonStr === 'all') return ['summer', 'winter', 'spring', 'autumn'];
+                return seasonStr.split(',');
             }
 
             function updateImagePreview() {
@@ -1228,11 +1274,13 @@
                     }
                 });
 
-                // Set season
+                // Set seasons (multi-select)
                 const seasonOptions = document.querySelectorAll('.season-option');
+                seasonOptions.forEach(opt => opt.classList.remove('selected'));
+
+                const selectedSeasons = parseSeasons(product.season);
                 seasonOptions.forEach(opt => {
-                    opt.classList.remove('selected');
-                    if (opt.dataset.season === product.season) {
+                    if (selectedSeasons.includes(opt.dataset.season)) {
                         opt.classList.add('selected');
                     }
                 });
@@ -1251,7 +1299,18 @@
                 }
 
                 const selectedCategory = document.querySelector('.category-option.selected')?.dataset.category || 'man';
-                const selectedSeason = document.querySelector('.season-option.selected')?.dataset.season || 'all';
+
+                // Get selected seasons (multi-select)
+                const selectedSeasons = [];
+                document.querySelectorAll('.season-option.selected').forEach(opt => {
+                    selectedSeasons.push(opt.dataset.season);
+                });
+
+                // Store as comma-separated string, or 'all' if all four are selected
+                let seasonValue = selectedSeasons.join(',');
+                if (selectedSeasons.length === 4) {
+                    seasonValue = 'all';
+                }
 
                 try {
                     const updateData = {
@@ -1262,7 +1321,7 @@
                         description: description || null,
                         images: JSON.stringify(uploadedImages),
                         category: selectedCategory,
-                        season: selectedSeason,
+                        season: seasonValue,
                         updated_at: new Date().toISOString()
                     };
 
@@ -1298,7 +1357,7 @@
                 imageUpload.value = '';
             });
 
-            // Category selection
+            // Category selection (single)
             document.querySelectorAll('.category-option').forEach(opt => {
                 opt.addEventListener('click', () => {
                     document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
@@ -1306,11 +1365,10 @@
                 });
             });
 
-            // Season selection
+            // Season selection (multi-select)
             document.querySelectorAll('.season-option').forEach(opt => {
                 opt.addEventListener('click', () => {
-                    document.querySelectorAll('.season-option').forEach(o => o.classList.remove('selected'));
-                    opt.classList.add('selected');
+                    opt.classList.toggle('selected');
                 });
             });
 

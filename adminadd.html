@@ -548,6 +548,35 @@
       transform: translateY(-2px);
     }
 
+    /* Multi-select for seasons */
+    .season-selector.multi-select .season-option {
+      cursor: pointer;
+    }
+
+    .season-selector.multi-select .season-option.selected {
+      background: var(--gold-dark);
+      border-color: var(--gold-dark);
+      color: var(--white);
+    }
+
+    .season-selector.multi-select .season-option.selected i {
+      color: var(--white);
+    }
+
+    .season-hint {
+      font-size: 0.65rem;
+      color: var(--text-mid);
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .season-hint i {
+      color: var(--gold);
+      font-size: 0.7rem;
+    }
+
     .btn-primary {
       background: var(--gold-dark);
       color: var(--white);
@@ -961,6 +990,11 @@
           </div>
 
           <div class="input-group">
+            <label data-translate="quantity">Quantité en stock</label>
+            <input type="number" id="productQuantity" step="1" min="0" value="0" placeholder="0">
+          </div>
+
+          <div class="input-group">
             <label data-translate="description">Description</label>
             <textarea id="productDescription" rows="3"
               placeholder="Décrivez ce parfum... Notes de tête, cœur, fond, inspiration..."></textarea>
@@ -995,10 +1029,8 @@
           </div>
 
           <div class="input-group">
-            <label data-translate="season">Saison</label>
-            <div class="season-selector" id="seasonSelector">
-              <div class="season-option selected" data-season="all"><i class="fas fa-globe"></i> <span
-                  data-translate="allSeasons">Toutes saisons</span></div>
+            <label data-translate="season">Saisons (plusieurs choix possibles)</label>
+            <div class="season-selector multi-select" id="seasonSelector">
               <div class="season-option" data-season="summer"><i class="fas fa-sun"></i> <span
                   data-translate="summer">Été</span></div>
               <div class="season-option" data-season="winter"><i class="fas fa-snowflake"></i> <span
@@ -1007,6 +1039,11 @@
                   data-translate="spring">Printemps</span></div>
               <div class="season-option" data-season="autumn"><i class="fas fa-leaf"></i> <span
                   data-translate="autumn">Automne</span></div>
+            </div>
+            <div class="season-hint">
+              <i class="fas fa-info-circle"></i>
+              <span data-translate="seasonHint">Sélectionnez une ou plusieurs saisons (cliquez pour
+                sélectionner/désélectionner)</span>
             </div>
           </div>
 
@@ -1087,10 +1124,12 @@
           existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil',
           manageProducts: 'Gérer les produits', addPerfume: 'Ajouter un parfum',
           productName: 'Nom du produit', brand: 'Marque / Maison', price: 'Prix (TND)',
+          quantity: 'Quantité en stock',
           description: 'Description', productImages: 'Images du produit', addImages: 'Ajouter des images',
           imagesInfo: 'Vous pouvez ajouter plusieurs images. La première sera l\'image principale.',
           category: 'Catégorie', menCat: 'Homme', womenCat: 'Femme', unisexCat: 'Unisexe', kidsCat: 'Enfants',
-          season: 'Saison', allSeasons: 'Toutes saisons', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne',
+          season: 'Saisons (plusieurs choix possibles)', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne',
+          seasonHint: 'Sélectionnez une ou plusieurs saisons (cliquez pour sélectionner/désélectionner)',
           saveProduct: 'Enregistrer le produit', storageInfo: 'Les images sont stockées en Base64',
           viewExisting: 'Voir les parfums existants', notAuthorized: 'Accès non autorisé',
           adminOnly: 'Cette page est réservée aux administrateurs. Veuillez vous connecter avec un compte administrateur.',
@@ -1106,10 +1145,12 @@
           existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
           manageProducts: 'Manage Products', addPerfume: 'Add Perfume',
           productName: 'Product Name', brand: 'Brand / House', price: 'Price (TND)',
+          quantity: 'Quantity in stock',
           description: 'Description', productImages: 'Product Images', addImages: 'Add Images',
           imagesInfo: 'You can add multiple images. The first one will be the main image.',
           category: 'Category', menCat: 'Men', womenCat: 'Women', unisexCat: 'Unisex', kidsCat: 'Kids',
-          season: 'Season', allSeasons: 'All seasons', summer: 'Summer', winter: 'Winter', spring: 'Spring', autumn: 'Autumn',
+          season: 'Seasons (multiple choices possible)', summer: 'Summer', winter: 'Winter', spring: 'Spring', autumn: 'Autumn',
+          seasonHint: 'Select one or more seasons (click to select/deselect)',
           saveProduct: 'Save Product', storageInfo: 'Images are stored in Base64',
           viewExisting: 'View existing perfumes', notAuthorized: 'Access Denied',
           adminOnly: 'This page is for administrators only. Please log in with an admin account.',
@@ -1125,10 +1166,12 @@
           existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
           manageProducts: 'إدارة المنتجات', addPerfume: 'إضافة عطر',
           productName: 'اسم المنتج', brand: 'العلامة التجارية', price: 'السعر (دينار)',
+          quantity: 'الكمية في المخزون',
           description: 'الوصف', productImages: 'صور المنتج', addImages: 'إضافة صور',
           imagesInfo: 'يمكنك إضافة عدة صور. الصورة الأولى ستكون الصورة الرئيسية.',
           category: 'الفئة', menCat: 'رجالي', womenCat: 'نسائي', unisexCat: 'للجنسين', kidsCat: 'أطفال',
-          season: 'الموسم', allSeasons: 'كل المواسم', summer: 'صيف', winter: 'شتاء', spring: 'ربيع', autumn: 'خريف',
+          season: 'المواسم (اختيارات متعددة ممكنة)', summer: 'صيف', winter: 'شتاء', spring: 'ربيع', autumn: 'خريف',
+          seasonHint: 'اختر موسماً واحداً أو أكثر (انقر للتحديد/إلغاء التحديد)',
           saveProduct: 'حفظ المنتج', storageInfo: 'يتم تخزين الصور بصيغة Base64',
           viewExisting: 'عرض العطور الموجودة', notAuthorized: 'وصول غير مصرح به',
           adminOnly: 'هذه الصفحة مخصصة للمشرفين فقط. الرجاء تسجيل الدخول بحساب مشرف.',
@@ -1278,9 +1321,8 @@
         imageUpload.value = '';
       });
 
-      // Category & Season
+      // Category selection
       let selectedCategory = 'man';
-      let selectedSeason = 'all';
 
       document.querySelectorAll('.category-option').forEach(opt => {
         opt.addEventListener('click', () => {
@@ -1290,11 +1332,19 @@
         });
       });
 
+      // Multi-season selection
+      let selectedSeasons = [];
+
       document.querySelectorAll('.season-option').forEach(opt => {
         opt.addEventListener('click', () => {
-          document.querySelectorAll('.season-option').forEach(o => o.classList.remove('selected'));
-          opt.classList.add('selected');
-          selectedSeason = opt.dataset.season;
+          const season = opt.dataset.season;
+          if (selectedSeasons.includes(season)) {
+            selectedSeasons = selectedSeasons.filter(s => s !== season);
+            opt.classList.remove('selected');
+          } else {
+            selectedSeasons.push(season);
+            opt.classList.add('selected');
+          }
         });
       });
 
@@ -1303,6 +1353,7 @@
         const name = document.getElementById('productName')?.value.trim();
         const brand = document.getElementById('productBrand')?.value.trim();
         const price = parseFloat(document.getElementById('productPrice')?.value);
+        const quantity = parseInt(document.getElementById('productQuantity')?.value) || 0;
         const description = document.getElementById('productDescription')?.value.trim();
 
         if (!name || !brand || isNaN(price) || price <= 0) {
@@ -1310,14 +1361,17 @@
           return;
         }
 
+        // If no seasons selected, default to all
+        const seasonsToSave = selectedSeasons.length > 0 ? selectedSeasons : ['all'];
+
         try {
           const newProduct = {
-            name, brand, price,
+            name, brand, price, quantity,
             description: description || null,
             images: JSON.stringify(uploadedImages),
             icon: 'fa-crown',
             category: selectedCategory,
-            season: selectedSeason
+            season: seasonsToSave.join(',') // Store as comma-separated string
           };
 
           const { error } = await supabase.from('products').insert([newProduct]);
@@ -1327,17 +1381,19 @@
           document.getElementById('productName').value = '';
           document.getElementById('productBrand').value = '';
           document.getElementById('productPrice').value = '';
+          document.getElementById('productQuantity').value = '0';
           document.getElementById('productDescription').value = '';
           uploadedImages = [];
           updateImagePreview();
 
+          // Reset category
           document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
           document.querySelector('.category-option[data-category="man"]').classList.add('selected');
           selectedCategory = 'man';
 
+          // Reset seasons
+          selectedSeasons = [];
           document.querySelectorAll('.season-option').forEach(o => o.classList.remove('selected'));
-          document.querySelector('.season-option[data-season="all"]').classList.add('selected');
-          selectedSeason = 'all';
 
           showAdminToast('productAdded');
         } catch (error) {
