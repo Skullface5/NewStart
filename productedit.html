@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta property="og:image" content="https://new-start-hdr1.vercel.app/tt.jpg" />
+    <meta name="twitter:image" content="https://new-start-hdr1.vercel.app/tt.jpg" />
+    <meta property="og:image:secure_url" content="https://new-start-hdr1.vercel.app/tt.jpg" />
+    <meta charset="UTF-8">
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Rosa Fragrances | Modifier le produit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cream: #F7F0E6;
+            --cream-dark: #EDE4D6;
+            --cream-deep: #E0D4C0;
+            --gold: #B49A6A;
+            --gold-light: #D4B98A;
+            --gold-dark: #8A7150;
+            --charcoal: #3A3228;
+            --text-mid: #6B5E4E;
+            --white: #FEFCF8;
+            --shadow: 0 8px 40px rgba(90, 70, 50, 0.10);
+            --card-base: #F5F0EA;
+            --card-warm: #F2EDE6;
+            --card-elevated: #F7F2EC;
+            --card-shadow: rgba(100, 80, 60, 0.06);
+            --border-light: rgba(180, 155, 120, 0.12);
+            --border-medium: rgba(180, 155, 120, 0.2);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.03);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.06);
+            --input-bg: #F9F6F2;
+            --input-border: #E2D9CF;
+            --input-focus: #C4AF7D;
+            --hover-subtle: rgba(180, 155, 120, 0.05);
+            --hover-medium: rgba(180, 155, 120, 0.1);
+        }
+
+        body {
+            font-family: 'Jost', sans-serif;
+            background: var(--cream);
+            color: var(--charcoal);
+            overflow-x: hidden;
+            transition: background 0.4s ease, color 0.3s ease;
+            line-height: 1.5;
+            padding-top: 80px;
+        }
+
+        body.dark {
+            --cream: #1A1814;
+            --cream-dark: #24201A;
+            --cream-deep: #2E2820;
+            --card-base: #2E2820;
+            --card-warm: #362F26;
+            --card-elevated: #40382D;
+            --charcoal: #F5EFE6;
+            --text-mid: #D4C5B0;
+            --gold: #B89B5E;
+            --gold-dark: #B89B5E;
+            --white: #1A1814;
+            --border-light: rgba(184, 155, 94, 0.15);
+            --input-bg: #3A352C;
+            --input-border: #4A4438;
+        }
+
+        .particle {
+            position: fixed;
+            background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: floatParticle 18s infinite;
+            z-index: 0;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg) scale(0);
+            }
+
+            20% {
+                opacity: 0.1;
+            }
+
+            80% {
+                opacity: 0.1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-20vh) rotate(360deg) scale(1.2);
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        header {
+            background: rgba(247, 240, 230, 0.92);
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-sm);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(180, 154, 106, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        body.dark header {
+            background: rgba(26, 24, 20, 0.92);
+        }
+
+        .header-flex {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0.8rem 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 102;
+            text-decoration: none;
+        }
+
+        .logo img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .logo h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+            color: var(--gold-dark);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .theme-toggle,
+        .menu-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: var(--gold-dark);
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover,
+        .menu-toggle:hover {
+            background: var(--hover-subtle);
+            color: var(--gold);
+        }
+
+        .right-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 250px;
+            background: var(--cream-dark);
+            backdrop-filter: blur(16px);
+            gap: 0;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            z-index: 101;
+            border-radius: 20px;
+        }
+
+        .nav-links.active {
+            max-height: 500px;
+            opacity: 1;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a {
+            padding: 0.9rem 1.5rem;
+            text-decoration: none;
+            color: var(--charcoal);
+            transition: all 0.2s;
+            border-bottom: 1px solid var(--border-light);
+            display: block;
+            font-weight: 400;
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .nav-links a:hover {
+            background: var(--hover-subtle);
+            color: var(--gold-dark);
+            padding-left: 2rem;
+        }
+
+        .admin-nav-link {
+            background: rgba(180, 154, 106, 0.08);
+            color: var(--gold-dark) !important;
+            font-weight: 600;
+            border-bottom: 2px solid var(--gold) !important;
+        }
+
+        .lang-menu {
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .lang-current {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 0.9rem 1.5rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--charcoal);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lang-current:hover {
+            background: var(--hover-subtle);
+            color: var(--gold-dark);
+        }
+
+        .lang-options {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: var(--cream-dark);
+        }
+
+        .lang-menu.active .lang-options {
+            max-height: 130px;
+        }
+
+        .lang-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.7rem 1.5rem 0.7rem 2.5rem;
+            background: none;
+            border: none;
+            font-size: 0.7rem;
+            cursor: pointer;
+            color: var(--text-mid);
+            transition: all 0.2s;
+        }
+
+        .lang-option:hover {
+            background: var(--hover-subtle);
+            color: var(--gold-dark);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(6px);
+            z-index: 99;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .menu-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Edit Form Styles */
+        .edit-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: var(--charcoal);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-header h1 i {
+            color: var(--gold);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold-dark);
+            text-decoration: none;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--gold);
+            transform: translateX(-5px);
+        }
+
+        .form-panel {
+            background: var(--card-warm);
+            border-radius: 28px;
+            padding: 2rem;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-panel h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            color: var(--gold-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-mid);
+            margin-bottom: 0.4rem;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--input-border);
+            border-radius: 14px;
+            background: var(--input-bg);
+            color: var(--charcoal);
+            font-size: 0.85rem;
+            font-family: 'Jost', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 3px rgba(180, 154, 106, 0.1);
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Image Upload */
+        .multi-image-upload {
+            border: 1px dashed var(--border-medium);
+            border-radius: 16px;
+            padding: 1rem;
+            background: var(--cream-deep);
+        }
+
+        .image-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .preview-item {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+            background: var(--card-warm);
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-image-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 10px;
+            transition: all 0.2s;
+        }
+
+        .remove-image-btn:hover {
+            background: #b34545;
+            transform: scale(1.1);
+        }
+
+        .add-more-btn {
+            background: var(--card-warm);
+            border: 1px dashed var(--gold);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            aspect-ratio: 1 / 1;
+            color: var(--gold-dark);
+        }
+
+        .add-more-btn:hover {
+            background: var(--hover-subtle);
+            transform: scale(1.02);
+        }
+
+        .add-more-btn i {
+            font-size: 1.5rem;
+        }
+
+        .add-more-btn span {
+            font-size: 0.7rem;
+        }
+
+        /* Category & Season Selectors */
+        .category-selector,
+        .season-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 0.4rem;
+        }
+
+        .category-option,
+        .season-option {
+            background: var(--cream-deep);
+            border: 1px solid var(--border-light);
+            border-radius: 50px;
+            padding: 0.5rem 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--charcoal);
+        }
+
+        .category-option i,
+        .season-option i {
+            color: var(--gold);
+            font-size: 0.8rem;
+        }
+
+        .category-option.selected,
+        .season-option.selected {
+            background: var(--gold-dark);
+            border-color: var(--gold-dark);
+            color: var(--white);
+        }
+
+        .category-option.selected i,
+        .season-option.selected i {
+            color: var(--white);
+        }
+
+        .category-option:hover,
+        .season-option:hover {
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--gold-dark);
+            color: var(--white);
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            background: var(--charcoal);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-medium);
+            color: var(--charcoal);
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            background: var(--gold-dark);
+            border-color: var(--gold-dark);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gold);
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 2rem;
+            color: #b34545;
+        }
+
+        .info-text {
+            font-size: 0.65rem;
+            color: var(--text-mid);
+            margin-top: 0.5rem;
+        }
+
+        .info-text i {
+            margin-right: 4px;
+            color: var(--gold);
+        }
+
+        /* Toast */
+        .admin-toast {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: var(--gold-dark);
+            color: var(--white);
+            padding: 0.7rem 1.2rem;
+            border-radius: 50px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: 0.3s ease;
+            z-index: 300;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .admin-toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--charcoal);
+            color: rgba(247, 240, 230, 0.65);
+            padding: 60px 40px 28px;
+            margin-top: 2rem;
+        }
+
+        body.dark footer {
+            background: #0F0E0C;
+        }
+
+        .footer-inner {
+            max-width: 1060px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 56px;
+            margin-bottom: 44px;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.55rem;
+            font-weight: 300;
+            color: var(--gold-light);
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .footer-brand p {
+            font-size: 0.8rem;
+            line-height: 1.8;
+            font-weight: 200;
+            max-width: 250px;
+        }
+
+        .footer-col h4 {
+            font-size: 0.65rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .footer-col a {
+            color: rgba(247, 240, 230, 0.55);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 200;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: var(--gold-light);
+        }
+
+        .contact-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .contact-list li {
+            font-size: 0.8rem;
+            font-weight: 200;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-list .ic {
+            color: var(--gold);
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(180, 154, 106, 0.15);
+            padding-top: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .footer-bottom p {
+            font-size: 0.7rem;
+            font-weight: 200;
+        }
+
+        .socials {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social {
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(180, 154, 106, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-light);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            border-radius: 50%;
+        }
+
+        .social:hover {
+            background: var(--gold-dark);
+            border-color: var(--gold-dark);
+            color: var(--white);
+        }
+
+        .footer-logo-img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            filter: brightness(0.9);
+            border-radius: 50%;
+        }
+
+        @media (max-width: 900px) {
+            .footer-top {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+
+            .footer-brand {
+                grid-column: 1/-1;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .footer-top {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                padding: 40px 18px 22px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .form-panel {
+                padding: 1.2rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            body {
+                padding-top: 70px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-flex {
+                padding: 0.6rem 1rem;
+            }
+
+            .logo h1 {
+                font-size: 0.9rem;
+            }
+
+            .logo img {
+                width: 36px;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        for (let i = 0; i < 25; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const s = Math.random() * 4 + 2;
+            p.style.width = s + 'px';
+            p.style.height = s + 'px';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 20 + 's';
+            p.style.animationDuration = Math.random() * 15 + 12 + 's';
+            p.style.opacity = Math.random() * 0.2 + 0.05;
+            document.body.appendChild(p);
+        }
+    </script>
+
+    <div id="menuOverlay" class="menu-overlay"></div>
+    <div id="adminToast" class="admin-toast">✨ Produit mis à jour</div>
+
+    <header>
+        <div class="header-flex">
+            <a href="index.html" class="logo"><img src="is.png" alt="Rosa">
+                <h1>Rosa Fragrances</h1>
+            </a>
+            <div class="right-group">
+                <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon"
+                        style="display:none;"></i></div>
+                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html" data-translate="home">ACCUEIL</a>
+                <a href="man.html" data-translate="men">HOMME</a>
+                <a href="women.html" data-translate="women">FEMME</a>
+                <a href="unisexe.html" data-translate="unisex">UNISEXE</a>
+                <a href="kids.html" data-translate="kids">ENFANTS</a>
+                <a href="existed.html" data-translate="existing">PARFUMS EXISTANTS</a>
+                <div class="lang-menu" id="langMenu">
+                    <button class="lang-current" id="langCurrentBtn"><span id="currentLangText">FRANÇAIS</span><i
+                            class="fas fa-chevron-down"></i></button>
+                    <div class="lang-options">
+                        <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
+                        <button class="lang-option" data-lang="en">🇬🇧 English</button>
+                        <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
+                    </div>
+                </div>
+                <a href="login146.html" id="authLink" data-translate="login">Se connecter</a>
+                <a href="profile.html" id="profileLink" style="display:none;" data-translate="profile">Mon Profil</a>
+                <a href="adminadd.html" id="adminLink" style="display:none;" class="admin-nav-link"><i
+                        class="fas fa-crown"></i> Admin</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="edit-wrapper">
+            <a href="javascript:history.back()" class="back-link"><i class="fas fa-arrow-left"></i> <span
+                    data-translate="back">Retour</span></a>
+
+            <div class="page-header">
+                <h1><i class="fas fa-edit"></i> <span data-translate="editProduct">Modifier le produit</span></h1>
+            </div>
+
+            <div id="loadingContent" class="loading-spinner" style="display: none;">
+                <i class="fas fa-spinner fa-spin"></i> <span data-translate="loading">Chargement...</span>
+            </div>
+
+            <div id="errorContent" class="error-message" style="display: none;"></div>
+
+            <div id="editFormContainer" style="display: none;">
+                <div class="form-panel">
+                    <h2><i class="fas fa-info-circle"></i> <span data-translate="productInfo">Informations
+                            produit</span></h2>
+
+                    <div class="input-group">
+                        <label data-translate="productName">Nom du produit</label>
+                        <input type="text" id="productName" placeholder="ex. Bois d'Argent" autocomplete="off">
+                    </div>
+
+                    <div class="input-group">
+                        <label data-translate="brand">Marque / Maison</label>
+                        <input type="text" id="productBrand" placeholder="Dior / Chanel / ...">
+                    </div>
+
+                    <div class="input-group">
+                        <label data-translate="price">Prix (TND)</label>
+                        <input type="number" id="productPrice" step="0.001" min="0" placeholder="0.000">
+                    </div>
+
+                    <div class="input-group">
+                        <label data-translate="quantity">Quantité en stock</label>
+                        <input type="number" id="productQuantity" step="1" min="0" placeholder="0">
+                    </div>
+
+                    <div class="input-group">
+                        <label data-translate="description">Description</label>
+                        <textarea id="productDescription" rows="3"
+                            placeholder="Décrivez ce parfum... Notes de tête, cœur, fond, inspiration..."></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label data-translate="productImages">Images du produit</label>
+                        <div class="multi-image-upload">
+                            <div class="image-preview-grid" id="imagePreviewGrid"></div>
+                            <div class="add-more-btn" id="addMoreImagesBtn">
+                                <i class="fas fa-plus-circle"></i>
+                                <span data-translate="addImages">Ajouter des images</span>
+                            </div>
+                            <input type="file" id="imageUpload" accept="image/*" multiple style="display: none;">
+                        </div>
+                        <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="imagesInfo">Vous
+                                pouvez ajouter plusieurs images. La première sera l'image principale.</span></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label data-translate="category">Catégorie</label>
+                        <div class="category-selector" id="categorySelector">
+                            <div class="category-option" data-category="man"><i class="fas fa-male"></i> <span
+                                    data-translate="menCat">Homme</span></div>
+                            <div class="category-option" data-category="women"><i class="fas fa-female"></i> <span
+                                    data-translate="womenCat">Femme</span></div>
+                            <div class="category-option" data-category="unisexe"><i class="fas fa-genderless"></i> <span
+                                    data-translate="unisexCat">Unisexe</span></div>
+                            <div class="category-option" data-category="kids"><i class="fas fa-child"></i> <span
+                                    data-translate="kidsCat">Enfants</span></div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label data-translate="season">Saison</label>
+                        <div class="season-selector" id="seasonSelector">
+                            <div class="season-option" data-season="all"><i class="fas fa-globe"></i> <span
+                                    data-translate="allSeasons">Toutes saisons</span></div>
+                            <div class="season-option" data-season="summer"><i class="fas fa-sun"></i> <span
+                                    data-translate="summer">Été</span></div>
+                            <div class="season-option" data-season="winter"><i class="fas fa-snowflake"></i> <span
+                                    data-translate="winter">Hiver</span></div>
+                            <div class="season-option" data-season="spring"><i class="fas fa-seedling"></i> <span
+                                    data-translate="spring">Printemps</span></div>
+                            <div class="season-option" data-season="autumn"><i class="fas fa-leaf"></i> <span
+                                    data-translate="autumn">Automne</span></div>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-primary" id="updateProductBtn"><i class="fas fa-save"></i> <span
+                                data-translate="saveChanges">Enregistrer les modifications</span></button>
+                        <a href="javascript:history.back()" class="btn-secondary"><i class="fas fa-times"></i> <span
+                                data-translate="cancel">Annuler</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img class="footer-logo-img" src="is.png" alt="Rosa">
+                    <h3>ROSA FRAGRANCES</h3>
+                    <p data-translate="footerDescription">Parfumerie d'exception depuis 1985. L'art de la parfumerie
+                        orientale réinventé pour les connaisseurs exigeants.</p>
+                </div>
+                <div class="footer-col">
+                    <h4 data-translate="footerPerfumesTitle">Parfums</h4>
+                    <ul>
+                        <li><a href="man.html" data-translate="footerMen">Homme</a></li>
+                        <li><a href="women.html" data-translate="footerWomen">Femme</a></li>
+                        <li><a href="unisexe.html" data-translate="footerUnisex">Unisexe</a></li>
+                        <li><a href="kids.html" data-translate="footerKids">Enfants</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 data-translate="footerContactTitle">Contact</h4>
+                    <ul class="contact-list">
+                        <li><span class="ic">📍</span> <span data-translate="footerAddress">Tunis, Tunisie</span></li>
+                        <li><span class="ic">📞</span> <span data-translate="footerPhone">+216 96 163 366</span></li>
+                        <li><span class="ic">✉️</span> <span
+                                data-translate="footerEmail">contact@rosafragrances.tn</span></li>
+                        <div class="socials">
+                            <a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/" class="social"
+                                target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://wa.me/21696163366" class="social" target="_blank"><i
+                                    class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p><span data-translate="footerCopyright">© 2026 Rosa Fragrances. Tous droits réservés.</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
+            const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            let currentLanguage = localStorage.getItem('language') || 'fr';
+            let productId = null;
+            let currentProduct = null;
+            let uploadedImages = [];
+
+            const translations = {
+                fr: {
+                    home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
+                    existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil',
+                    back: 'Retour', editProduct: 'Modifier le produit', productInfo: 'Informations produit',
+                    productName: 'Nom du produit', brand: 'Marque / Maison', price: 'Prix (TND)',
+                    quantity: 'Quantité en stock', description: 'Description', productImages: 'Images du produit',
+                    addImages: 'Ajouter des images', imagesInfo: 'Vous pouvez ajouter plusieurs images. La première sera l\'image principale.',
+                    category: 'Catégorie', menCat: 'Homme', womenCat: 'Femme', unisexCat: 'Unisexe', kidsCat: 'Enfants',
+                    season: 'Saison', allSeasons: 'Toutes saisons', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne',
+                    saveChanges: 'Enregistrer les modifications', cancel: 'Annuler',
+                    loading: 'Chargement...', productNotFound: '❌ Produit non trouvé',
+                    productUpdated: '✅ Produit mis à jour', errorUpdating: '❌ Erreur lors de la mise à jour',
+                    invalidFields: '❌ Nom, marque et prix valides requis',
+                    footerDescription: "Parfumerie d'exception depuis 1985. L'art de la parfumerie orientale réinventé pour les connaisseurs exigeants.",
+                    footerPerfumesTitle: "Parfums", footerMen: "Homme", footerWomen: "Femme", footerUnisex: "Unisexe", footerKids: "Enfants",
+                    footerContactTitle: "Contact", footerAddress: "Tunis, Tunisie", footerPhone: "+216 96 163 366",
+                    footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. Tous droits réservés."
+                },
+                en: {
+                    home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
+                    existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
+                    back: 'Back', editProduct: 'Edit Product', productInfo: 'Product Information',
+                    productName: 'Product Name', brand: 'Brand / House', price: 'Price (TND)',
+                    quantity: 'Quantity in stock', description: 'Description', productImages: 'Product Images',
+                    addImages: 'Add Images', imagesInfo: 'You can add multiple images. The first one will be the main image.',
+                    category: 'Category', menCat: 'Men', womenCat: 'Women', unisexCat: 'Unisex', kidsCat: 'Kids',
+                    season: 'Season', allSeasons: 'All seasons', summer: 'Summer', winter: 'Winter', spring: 'Spring', autumn: 'Autumn',
+                    saveChanges: 'Save changes', cancel: 'Cancel',
+                    loading: 'Loading...', productNotFound: '❌ Product not found',
+                    productUpdated: '✅ Product updated', errorUpdating: '❌ Error updating product',
+                    invalidFields: '❌ Valid name, brand and price required',
+                    footerDescription: "Exceptional perfumery since 1985. The art of oriental perfumery reinvented for discerning connoisseurs.",
+                    footerPerfumesTitle: "Perfumes", footerMen: "Men", footerWomen: "Women", footerUnisex: "Unisex", footerKids: "Kids",
+                    footerContactTitle: "Contact", footerAddress: "Tunis, Tunisia", footerPhone: "+216 96 163 366",
+                    footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. All rights reserved."
+                },
+                ar: {
+                    home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
+                    existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
+                    back: 'رجوع', editProduct: 'تعديل المنتج', productInfo: 'معلومات المنتج',
+                    productName: 'اسم المنتج', brand: 'العلامة التجارية', price: 'السعر (دينار)',
+                    quantity: 'الكمية في المخزون', description: 'الوصف', productImages: 'صور المنتج',
+                    addImages: 'إضافة صور', imagesInfo: 'يمكنك إضافة عدة صور. الصورة الأولى ستكون الصورة الرئيسية.',
+                    category: 'الفئة', menCat: 'رجالي', womenCat: 'نسائي', unisexCat: 'للجنسين', kidsCat: 'أطفال',
+                    season: 'الموسم', allSeasons: 'كل المواسم', summer: 'صيف', winter: 'شتاء', spring: 'ربيع', autumn: 'خريف',
+                    saveChanges: 'حفظ التغييرات', cancel: 'إلغاء',
+                    loading: 'جاري التحميل...', productNotFound: '❌ المنتج غير موجود',
+                    productUpdated: '✅ تم تحديث المنتج', errorUpdating: '❌ خطأ في تحديث المنتج',
+                    invalidFields: '❌ الاسم والعلامة التجارية والسعر مطلوبة',
+                    footerDescription: "عطور استثنائية منذ 1985. فن العطور الشرقية المعاد ابتكاره للخبراء المميزين.",
+                    footerPerfumesTitle: "العطور", footerMen: "رجالي", footerWomen: "نسائي", footerUnisex: "للجنسين", footerKids: "أطفال",
+                    footerContactTitle: "اتصل بنا", footerAddress: "تونس، تونس", footerPhone: "366 163 96 216+",
+                    footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 روزا للعطور. جميع الحقوق محفوظة."
+                }
+            };
+
+            function translatePage(lang) {
+                currentLanguage = lang;
+                localStorage.setItem('language', lang);
+                document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
+                document.body.style.textAlign = lang === 'ar' ? 'right' : 'left';
+                const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+                const langSpan = document.getElementById('currentLangText');
+                if (langSpan) langSpan.textContent = names[lang];
+                document.querySelectorAll('[data-translate]').forEach(el => {
+                    const key = el.getAttribute('data-translate');
+                    if (translations[lang] && translations[lang][key]) {
+                        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = translations[lang][key];
+                        else el.textContent = translations[lang][key];
+                    }
+                });
+            }
+
+            function showToast(msg) {
+                const toast = document.getElementById('adminToast');
+                toast.textContent = msg;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2500);
+            }
+
+            function parseImages(images) {
+                if (!images) return [];
+                try {
+                    return typeof images === 'string' ? JSON.parse(images) : (images || []);
+                } catch (e) {
+                    return [];
+                }
+            }
+
+            function updateImagePreview() {
+                const grid = document.getElementById('imagePreviewGrid');
+                if (!grid) return;
+
+                grid.innerHTML = '';
+                if (uploadedImages.length === 0) {
+                    const emptyDiv = document.createElement('div');
+                    emptyDiv.style.cssText = 'grid-column:1/-1; text-align:center; padding:1rem; color:var(--text-mid);';
+                    emptyDiv.innerHTML = `<i class="fas fa-images"></i> ${translations[currentLanguage].noImages || 'Aucune image'}`;
+                    grid.appendChild(emptyDiv);
+                } else {
+                    uploadedImages.forEach((imgBase64, index) => {
+                        const div = document.createElement('div');
+                        div.className = 'preview-item';
+                        div.innerHTML = `
+              <img src="${imgBase64}" alt="image ${index + 1}">
+              <button class="remove-image-btn" data-index="${index}"><i class="fas fa-times"></i></button>
+            `;
+                        grid.appendChild(div);
+                    });
+                }
+
+                document.querySelectorAll('.remove-image-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const index = parseInt(btn.dataset.index);
+                        uploadedImages.splice(index, 1);
+                        updateImagePreview();
+                    });
+                });
+            }
+
+            async function loadProduct() {
+                const urlParams = new URLSearchParams(window.location.search);
+                productId = urlParams.get('id');
+
+                if (!productId) {
+                    document.getElementById('errorContent').style.display = 'block';
+                    document.getElementById('errorContent').innerHTML = translations[currentLanguage].productNotFound;
+                    document.getElementById('loadingContent').style.display = 'none';
+                    return;
+                }
+
+                try {
+                    const { data, error } = await supabase.from('products').select('*').eq('id', productId).single();
+                    if (error) throw error;
+                    if (!data) {
+                        document.getElementById('errorContent').style.display = 'block';
+                        document.getElementById('errorContent').innerHTML = translations[currentLanguage].productNotFound;
+                        document.getElementById('loadingContent').style.display = 'none';
+                        return;
+                    }
+
+                    currentProduct = data;
+                    populateForm(data);
+                    document.getElementById('loadingContent').style.display = 'none';
+                    document.getElementById('editFormContainer').style.display = 'block';
+                } catch (error) {
+                    console.error('Error loading product:', error);
+                    document.getElementById('errorContent').style.display = 'block';
+                    document.getElementById('errorContent').innerHTML = translations[currentLanguage].productNotFound;
+                    document.getElementById('loadingContent').style.display = 'none';
+                }
+            }
+
+            function populateForm(product) {
+                document.getElementById('productName').value = product.name || '';
+                document.getElementById('productBrand').value = product.brand || '';
+                document.getElementById('productPrice').value = product.price || '';
+                document.getElementById('productQuantity').value = product.quantity || 0;
+                document.getElementById('productDescription').value = product.description || '';
+
+                const existingImages = parseImages(product.images);
+                uploadedImages = [...existingImages];
+                updateImagePreview();
+
+                // Set category
+                const categoryOptions = document.querySelectorAll('.category-option');
+                categoryOptions.forEach(opt => {
+                    opt.classList.remove('selected');
+                    if (opt.dataset.category === product.category) {
+                        opt.classList.add('selected');
+                    }
+                });
+
+                // Set season
+                const seasonOptions = document.querySelectorAll('.season-option');
+                seasonOptions.forEach(opt => {
+                    opt.classList.remove('selected');
+                    if (opt.dataset.season === product.season) {
+                        opt.classList.add('selected');
+                    }
+                });
+            }
+
+            async function updateProduct() {
+                const name = document.getElementById('productName').value.trim();
+                const brand = document.getElementById('productBrand').value.trim();
+                const price = parseFloat(document.getElementById('productPrice').value);
+                const quantity = parseInt(document.getElementById('productQuantity').value) || 0;
+                const description = document.getElementById('productDescription').value.trim();
+
+                if (!name || !brand || isNaN(price) || price <= 0) {
+                    showToast(translations[currentLanguage].invalidFields);
+                    return;
+                }
+
+                const selectedCategory = document.querySelector('.category-option.selected')?.dataset.category || 'man';
+                const selectedSeason = document.querySelector('.season-option.selected')?.dataset.season || 'all';
+
+                try {
+                    const updateData = {
+                        name,
+                        brand,
+                        price,
+                        quantity,
+                        description: description || null,
+                        images: JSON.stringify(uploadedImages),
+                        category: selectedCategory,
+                        season: selectedSeason,
+                        updated_at: new Date().toISOString()
+                    };
+
+                    const { error } = await supabase.from('products').update(updateData).eq('id', productId);
+                    if (error) throw error;
+
+                    showToast(translations[currentLanguage].productUpdated);
+                    setTimeout(() => {
+                        window.location.href = document.referrer || 'existed.html';
+                    }, 1500);
+                } catch (error) {
+                    console.error('Error updating product:', error);
+                    showToast(translations[currentLanguage].errorUpdating);
+                }
+            }
+
+            // Image upload
+            const imageUpload = document.getElementById('imageUpload');
+            const addMoreImagesBtn = document.getElementById('addMoreImagesBtn');
+
+            addMoreImagesBtn?.addEventListener('click', () => imageUpload.click());
+            imageUpload?.addEventListener('change', function (e) {
+                const files = Array.from(e.target.files);
+                files.forEach(file => {
+                    if (!file.type.startsWith('image/')) return;
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        uploadedImages.push(ev.target.result);
+                        updateImagePreview();
+                    };
+                    reader.readAsDataURL(file);
+                });
+                imageUpload.value = '';
+            });
+
+            // Category selection
+            document.querySelectorAll('.category-option').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
+                    opt.classList.add('selected');
+                });
+            });
+
+            // Season selection
+            document.querySelectorAll('.season-option').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    document.querySelectorAll('.season-option').forEach(o => o.classList.remove('selected'));
+                    opt.classList.add('selected');
+                });
+            });
+
+            document.getElementById('updateProductBtn')?.addEventListener('click', updateProduct);
+
+            // Theme
+            function initTheme() {
+                const saved = localStorage.getItem('theme') || 'light';
+                if (saved === 'dark') {
+                    document.body.classList.add('dark');
+                    document.querySelector('#themeToggle .fa-sun').style.display = 'none';
+                    document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
+                }
+            }
+
+            function toggleTheme() {
+                if (document.body.classList.contains('dark')) {
+                    document.body.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                    document.querySelector('#themeToggle .fa-sun').style.display = 'inline-block';
+                    document.querySelector('#themeToggle .fa-moon').style.display = 'none';
+                } else {
+                    document.body.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                    document.querySelector('#themeToggle .fa-sun').style.display = 'none';
+                    document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
+                }
+            }
+
+            document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
+            initTheme();
+
+            // Menu
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            const menuOverlay = document.getElementById('menuOverlay');
+
+            function toggleMenu() {
+                navLinks.classList.toggle('active');
+                menuOverlay.classList.toggle('active');
+                document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+            }
+
+            menuToggle?.addEventListener('click', toggleMenu);
+            menuOverlay?.addEventListener('click', toggleMenu);
+
+            // Language
+            const langMenu = document.getElementById('langMenu');
+            const langCurrentBtn = document.getElementById('langCurrentBtn');
+            if (langCurrentBtn) {
+                langCurrentBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    langMenu.classList.toggle('active');
+                });
+            }
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    translatePage(opt.dataset.lang);
+                    langMenu.classList.remove('active');
+                });
+            });
+            document.addEventListener('click', (e) => {
+                if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active');
+            });
+
+            // Auth
+            let updateUserTimeout, isUpdatingUser = false;
+
+            async function updateUserDisplay() {
+                if (isUpdatingUser) return;
+                isUpdatingUser = true;
+                try {
+                    const { data: { user } } = await supabase.auth.getUser();
+                    const authLink = document.getElementById('authLink');
+                    const profileLink = document.getElementById('profileLink');
+                    const adminLink = document.getElementById('adminLink');
+
+                    if (user) {
+                        if (authLink) authLink.style.display = 'none';
+                        if (profileLink) profileLink.style.display = 'block';
+                        if (user.email === 'azmmeli146@gmail.com') {
+                            if (adminLink) adminLink.style.display = 'block';
+                        } else {
+                            if (adminLink) adminLink.style.display = 'none';
+                        }
+                    } else {
+                        if (authLink) authLink.style.display = 'block';
+                        if (profileLink) profileLink.style.display = 'none';
+                        if (adminLink) adminLink.style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error('Error checking user:', error);
+                } finally {
+                    isUpdatingUser = false;
+                }
+            }
+
+            updateUserDisplay();
+            supabase.auth.onAuthStateChange((event, session) => {
+                if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
+                    if (updateUserTimeout) clearTimeout(updateUserTimeout);
+                    updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
+                }
+            });
+
+            // Initialize
+            translatePage(currentLanguage);
+            document.getElementById('loadingContent').style.display = 'block';
+            loadProduct();
+        })();
+    </script>
+</body>
+
+</html>

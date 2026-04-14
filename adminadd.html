@@ -2,112 +2,143 @@
 <html lang="fr">
 
 <head>
+  <meta property="og:image" content="https://new-start-hdr1.vercel.app/tt.jpg" />
+  <meta name="twitter:image" content="https://new-start-hdr1.vercel.app/tt.jpg" />
+  <meta property="og:image:secure_url" content="https://new-start-hdr1.vercel.app/tt.jpg" />
   <meta charset="UTF-8">
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Rosa Fragrances · Console Administrateur</title>
-  <!-- Font Awesome 6 -->
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Rosa Fragrances | Admin - Ajouter un produit</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Supabase client library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap"
+    rel="stylesheet">
+
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    :root {
+      --cream: #F7F0E6;
+      --cream-dark: #EDE4D6;
+      --cream-deep: #E0D4C0;
+      --gold: #B49A6A;
+      --gold-light: #D4B98A;
+      --gold-dark: #8A7150;
+      --charcoal: #3A3228;
+      --text-mid: #6B5E4E;
+      --white: #FEFCF8;
+      --shadow: 0 8px 40px rgba(90, 70, 50, 0.10);
+      --card-base: #F5F0EA;
+      --card-warm: #F2EDE6;
+      --card-elevated: #F7F2EC;
+      --card-shadow: rgba(100, 80, 60, 0.06);
+      --border-light: rgba(180, 155, 120, 0.12);
+      --border-medium: rgba(180, 155, 120, 0.2);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.04);
+      --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.06);
+      --input-bg: #F9F6F2;
+      --input-border: #E2D9CF;
+      --input-focus: #C4AF7D;
+      --hover-subtle: rgba(180, 155, 120, 0.05);
+      --hover-medium: rgba(180, 155, 120, 0.1);
     }
 
     body {
-      background: var(--bg-gradient);
-      color: var(--text-primary);
-      min-height: 100vh;
-      transition: background 0.3s ease, color 0.3s ease;
-      position: relative;
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
       overflow-x: hidden;
+      transition: background 0.4s ease, color 0.3s ease;
+      line-height: 1.5;
       padding-top: 80px;
     }
 
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
-      pointer-events: none;
-      z-index: -1;
-      animation: backgroundPulse 8s ease-in-out infinite;
-    }
-
-    @keyframes backgroundPulse {
-
-      0%,
-      100% {
-        opacity: 0.6;
-        transform: scale(1);
-      }
-
-      50% {
-        opacity: 1;
-        transform: scale(1.02);
-      }
+    body.dark {
+      --cream: #1A1814;
+      --cream-dark: #24201A;
+      --cream-deep: #2E2820;
+      --card-base: #2E2820;
+      --card-warm: #362F26;
+      --card-elevated: #40382D;
+      --charcoal: #F5EFE6;
+      --text-mid: #D4C5B0;
+      --gold: #B89B5E;
+      --gold-dark: #B89B5E;
+      --white: #1A1814;
+      --border-light: rgba(184, 155, 94, 0.15);
+      --input-bg: #3A352C;
+      --input-border: #4A4438;
     }
 
     .particle {
       position: fixed;
-      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
       border-radius: 50%;
       pointer-events: none;
       opacity: 0;
-      animation: floatParticle 12s infinite;
+      animation: floatParticle 18s infinite;
       z-index: 0;
     }
 
     @keyframes floatParticle {
       0% {
         opacity: 0;
-        transform: translateY(100vh) rotate(0deg);
+        transform: translateY(100vh) rotate(0deg) scale(0);
       }
 
-      10% {
-        opacity: 0.3;
+      20% {
+        opacity: 0.1;
       }
 
-      90% {
-        opacity: 0.3;
+      80% {
+        opacity: 0.1;
       }
 
       100% {
         opacity: 0;
-        transform: translateY(-20vh) rotate(360deg);
+        transform: translateY(-20vh) rotate(360deg) scale(1.2);
       }
     }
 
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+      position: relative;
+      z-index: 10;
+    }
+
     header {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: rgba(247, 240, 230, 0.92);
+      backdrop-filter: blur(12px);
       box-shadow: var(--shadow-sm);
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 100;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(180, 154, 106, 0.2);
+      transition: all 0.3s ease;
     }
 
     body.dark header {
-      background: rgba(10, 10, 10, 0.95);
+      background: rgba(26, 24, 20, 0.92);
     }
 
     .header-flex {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      max-width: 1300px;
+      position: relative;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 0.8rem 2rem;
     }
@@ -116,66 +147,52 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      z-index: 102;
       text-decoration: none;
     }
 
     .logo img {
-      width: 45px;
-      height: auto;
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      border-radius: 50%;
     }
 
     .logo h1 {
-      font-size: 1.5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--gold-dark);
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      letter-spacing: 0.2em;
-      font-weight: 350;
-      color: var(--text-primary);
+    }
+
+    .theme-toggle,
+    .menu-toggle {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: var(--gold-dark);
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover,
+    .menu-toggle:hover {
+      background: var(--hover-subtle);
+      color: var(--gold);
     }
 
     .right-group {
       display: flex;
       align-items: center;
-      gap: 12px;
-    }
-
-    .theme-toggle {
-      cursor: pointer;
-      font-size: 1.2rem;
-      color: var(--accent);
-      transition: transform 0.3s ease;
-      width: 34px;
-      height: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: var(--hover-subtle);
-    }
-
-    .theme-toggle:hover {
-      transform: rotate(15deg);
-      background: var(--hover-medium);
-    }
-
-    .menu-toggle {
-      background: none;
-      border: none;
-      font-size: 1.6rem;
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: color 0.2s;
-      padding: 0.3rem;
-      display: flex;
-      align-items: center;
-      width: 34px;
-      height: 34px;
-      justify-content: center;
-      border-radius: 50%;
-    }
-
-    .menu-toggle:hover {
-      background: var(--hover-subtle);
-      color: var(--accent);
+      gap: 8px;
     }
 
     .nav-links {
@@ -184,8 +201,8 @@
       position: absolute;
       top: 100%;
       right: 0;
-      width: 260px;
-      background: var(--card-warm);
+      width: 250px;
+      background: var(--cream-dark);
       backdrop-filter: blur(16px);
       gap: 0;
       max-height: 0;
@@ -193,335 +210,228 @@
       opacity: 0;
       transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
       box-shadow: var(--shadow-lg);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-light);
       z-index: 101;
       border-radius: 20px;
     }
 
     .nav-links.active {
-      max-height: 450px;
+      max-height: 500px;
       opacity: 1;
       padding: 0.5rem 0;
     }
 
     .nav-links a {
-      padding: 1rem 1.5rem;
+      padding: 0.9rem 1.5rem;
       text-decoration: none;
-      color: var(--text-primary);
+      color: var(--charcoal);
       transition: all 0.2s;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-light);
       display: block;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    .nav-links a:last-child {
-      border-bottom: none;
+      font-weight: 400;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
     }
 
     .nav-links a:hover {
-      background: var(--hover-bg);
-      color: var(--accent);
+      background: var(--hover-subtle);
+      color: var(--gold-dark);
       padding-left: 2rem;
     }
 
     .admin-nav-link {
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.04) 100%) !important;
-      color: var(--accent) !important;
+      background: rgba(180, 154, 106, 0.08);
+      color: var(--gold-dark) !important;
       font-weight: 600;
-      border-bottom: 2px solid var(--accent) !important;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .admin-nav-link:hover {
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.08) 100%) !important;
+      border-bottom: 2px solid var(--gold) !important;
     }
 
     .lang-menu {
-      position: relative;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-light);
     }
 
     .lang-current {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       width: 100%;
       background: none;
       border: none;
-      padding: 1rem 1.5rem;
-      font-size: 1rem;
-      color: var(--text-primary);
+      padding: 0.9rem 1.5rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--charcoal);
       cursor: pointer;
+      transition: all 0.2s;
     }
 
     .lang-current:hover {
-      background: var(--hover-bg);
-      color: var(--accent);
-    }
-
-    .lang-current i {
-      transition: transform 0.3s ease;
-    }
-
-    .lang-menu.active .lang-current i {
-      transform: rotate(180deg);
+      background: var(--hover-subtle);
+      color: var(--gold-dark);
     }
 
     .lang-options {
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s ease-out;
-      background: var(--card-warm);
+      background: var(--cream-dark);
     }
 
     .lang-menu.active .lang-options {
-      max-height: 150px;
+      max-height: 130px;
     }
 
     .lang-option {
       display: block;
       width: 100%;
       text-align: left;
-      padding: 0.8rem 1.5rem 0.8rem 2.5rem;
+      padding: 0.7rem 1.5rem 0.7rem 2.5rem;
       background: none;
       border: none;
-      font-size: 0.9rem;
+      font-size: 0.7rem;
       cursor: pointer;
-      color: var(--text-secondary);
+      color: var(--text-mid);
+      transition: all 0.2s;
     }
 
     .lang-option:hover {
-      background: var(--hover-bg);
-      color: var(--accent);
+      background: var(--hover-subtle);
+      color: var(--gold-dark);
     }
 
-    @media (max-width: 768px) {
-      body {
-        padding-top: 65px;
-      }
-
-      .header-flex {
-        padding: 0.6rem 1rem;
-      }
-
-      .logo h1 {
-        font-size: 1.2rem;
-      }
-
-      .right-group {
-        gap: 8px;
-      }
-    }
-
-    .admin-wrapper {
-      max-width: 1100px;
-      width: 100%;
-      background: var(--bg-primary);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 42px;
-      box-shadow: var(--shadow-xl);
-      border: 1px solid var(--border);
-      overflow: hidden;
-      padding: 2.2rem 2.5rem;
-      transition: all 0.3s ease;
-      animation: slideUp 0.6s ease-out;
-      position: relative;
-      z-index: 10;
-      margin: 1rem auto;
-    }
-
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    h1 {
-      font-weight: 320;
-      font-size: 2rem;
-      letter-spacing: 0.02em;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 1.2rem;
-      margin-bottom: 2rem;
-    }
-
-    h1 i {
-      color: var(--accent);
-      font-size: 2.2rem;
-    }
-
-    h2 {
-      font-weight: 350;
-      font-size: 1.3rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.2rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .single-column {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-
-    @media (max-width: 768px) {
-      .single-column {
-        gap: 1.5rem;
-      }
-
-      .admin-wrapper {
-        padding: 1.5rem;
-      }
-    }
-
-    .form-panel {
-      background: var(--card-gradient);
-      padding: 2rem;
-      border-radius: 32px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-md);
-      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .form-panel::before {
-      content: '';
-      position: absolute;
+    .menu-overlay {
+      position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      height: 4px;
-      background: var(--accent-gradient);
-      border-radius: 32px 32px 0 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(6px);
+      z-index: 99;
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.3s;
     }
 
-    .form-panel:hover {
-      box-shadow: var(--shadow-xl);
-      transform: translateY(-4px) scale(1.01);
+    .menu-overlay.active {
+      visibility: visible;
+      opacity: 1;
     }
 
-    .nav-panel {
-      text-align: center;
-      margin-top: 1rem;
+    /* Admin Wrapper */
+    .admin-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem;
     }
 
-    .btn-secondary {
-      display: inline-flex;
+    .admin-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .admin-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: var(--charcoal);
+    }
+
+    .admin-header img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .logged-in-as {
+      margin-left: auto;
+      font-size: 0.7rem;
+      color: var(--text-mid);
+      background: var(--cream-deep);
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+    }
+
+    .form-panel {
+      background: var(--card-warm);
+      border-radius: 28px;
+      padding: 2rem;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2rem;
+    }
+
+    .form-panel h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      color: var(--gold-dark);
+      margin-bottom: 1.5rem;
+      display: flex;
       align-items: center;
       gap: 10px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      color: var(--text-primary);
-      padding: 1rem 2rem;
-      border-radius: 50px;
-      font-size: 1rem;
-      text-decoration: none;
-      transition: all 0.3s;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .btn-secondary:hover {
-      background: var(--accent-gradient);
-      border-color: var(--accent);
-      color: var(--bg-primary);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
     }
 
     .input-group {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.2rem;
     }
 
-    label {
+    .input-group label {
       display: block;
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: var(--text-secondary);
+      color: var(--text-mid);
       margin-bottom: 0.4rem;
-      font-weight: 500;
     }
 
-    input,
-    select,
-    textarea {
+    .input-group input,
+    .input-group select,
+    .input-group textarea {
       width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--input-border);
+      border-radius: 14px;
       background: var(--input-bg);
-      border: 2px solid var(--input-border);
-      border-radius: 50px;
-      padding: 0.9rem 1.3rem;
-      font-size: 0.95rem;
-      color: var(--text-primary);
+      color: var(--charcoal);
+      font-size: 0.85rem;
+      font-family: 'Jost', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus,
+    .input-group textarea:focus {
       outline: none;
-      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      position: relative;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 3px rgba(180, 154, 106, 0.1);
     }
 
-    textarea {
-      border-radius: 24px;
+    .input-group textarea {
       resize: vertical;
-      min-height: 120px;
-      font-family: inherit;
+      min-height: 100px;
     }
 
-    select {
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      background-size: 1rem;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.12);
-      transform: translateY(-2px);
-      background: var(--bg-primary);
-    }
-
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    input[type="number"] {
-      -moz-appearance: textfield;
-    }
-
+    /* Image Upload */
     .multi-image-upload {
-      border: 1px dashed var(--border);
-      border-radius: 20px;
+      border: 1px dashed var(--border-medium);
+      border-radius: 16px;
       padding: 1rem;
-      background: var(--bg-secondary);
+      background: var(--cream-deep);
     }
 
     .image-preview-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
       gap: 0.8rem;
-      margin-top: 1rem;
+      margin-bottom: 1rem;
     }
 
     .preview-item {
@@ -529,8 +439,8 @@
       aspect-ratio: 1 / 1;
       border-radius: 12px;
       overflow: hidden;
-      border: 1px solid var(--border);
-      background: var(--bg-primary);
+      border: 1px solid var(--border-light);
+      background: var(--card-warm);
     }
 
     .preview-item img {
@@ -541,8 +451,8 @@
 
     .remove-image-btn {
       position: absolute;
-      top: 2px;
-      right: 2px;
+      top: 4px;
+      right: 4px;
       background: rgba(0, 0, 0, 0.6);
       color: white;
       border: none;
@@ -558,13 +468,13 @@
     }
 
     .remove-image-btn:hover {
-      background: #c1654c;
+      background: #b34545;
       transform: scale(1.1);
     }
 
     .add-more-btn {
-      background: var(--bg-secondary);
-      border: 1px dashed var(--accent);
+      background: var(--card-warm);
+      border: 1px dashed var(--gold);
       border-radius: 12px;
       display: flex;
       flex-direction: column;
@@ -574,11 +484,11 @@
       cursor: pointer;
       transition: all 0.2s;
       aspect-ratio: 1 / 1;
-      color: var(--accent);
+      color: var(--gold-dark);
     }
 
     .add-more-btn:hover {
-      background: var(--hover-bg);
+      background: var(--hover-subtle);
       transform: scale(1.02);
     }
 
@@ -590,233 +500,381 @@
       font-size: 0.7rem;
     }
 
-    .category-selector {
+    /* Category & Season Selectors */
+    .category-selector,
+    .season-selector {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 0.8rem;
       margin-top: 0.4rem;
     }
 
     .category-option,
     .season-option {
-      background: var(--bg-secondary);
-      border: 2px solid var(--border);
+      background: var(--cream-deep);
+      border: 1px solid var(--border-light);
       border-radius: 50px;
-      padding: 0.6rem 1.2rem;
+      padding: 0.5rem 1.2rem;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      color: var(--text-primary);
-      position: relative;
-      overflow: hidden;
+      transition: all 0.3s ease;
+      color: var(--charcoal);
     }
 
     .category-option i,
     .season-option i {
-      font-size: 1rem;
-      color: var(--accent);
-      transition: transform 0.3s;
+      color: var(--gold);
+      font-size: 0.8rem;
     }
 
     .category-option.selected,
     .season-option.selected {
-      background: var(--accent-gradient);
-      border-color: var(--accent);
-      color: white;
-      transform: scale(1.05);
-      box-shadow: var(--shadow-md);
+      background: var(--gold-dark);
+      border-color: var(--gold-dark);
+      color: var(--white);
     }
 
     .category-option.selected i,
     .season-option.selected i {
-      color: white;
-      transform: scale(1.1);
+      color: var(--white);
     }
 
     .category-option:hover,
     .season-option:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: var(--shadow-sm);
+      border-color: var(--gold);
+      transform: translateY(-2px);
     }
 
     .btn-primary {
-      background: var(--accent-gradient);
+      background: var(--gold-dark);
+      color: var(--white);
       border: none;
-      color: var(--bg-primary);
-      padding: 1rem 2rem;
+      padding: 0.9rem 2rem;
       border-radius: 50px;
-      font-size: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 600;
-      width: 100%;
+      font-size: 0.85rem;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      margin-top: 0.5rem;
+      transition: all 0.3s ease;
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: var(--shadow-md);
-    }
-
-    .btn-primary::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
-    }
-
-    .btn-primary:hover::before {
-      width: 300px;
-      height: 300px;
+      gap: 10px;
+      margin-top: 0.5rem;
     }
 
     .btn-primary:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: var(--shadow-xl);
+      background: var(--charcoal);
+      transform: translateY(-2px);
     }
 
-    .btn-primary:active {
-      transform: translateY(-1px) scale(1.01);
-    }
-
-    .admin-toast {
-      position: fixed;
-      bottom: 30px;
-      left: 30px;
-      background: var(--accent-gradient);
-      color: var(--bg-primary);
-      padding: 0.8rem 1.5rem;
-      border-radius: 60px;
-      box-shadow: var(--shadow-lg);
-      opacity: 0;
-      transform: translateY(80px);
-      transition: 0.3s;
-      z-index: 1000;
-      font-weight: 500;
-    }
-
-    .admin-toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .loading-spinner {
+    .nav-panel {
       text-align: center;
-      padding: 1.5rem;
-      color: var(--accent);
+      margin-top: 1rem;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      border: 1px solid var(--border-medium);
+      color: var(--charcoal);
+      padding: 0.8rem 1.8rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background: var(--gold-dark);
+      border-color: var(--gold-dark);
+      color: var(--white);
+      transform: translateY(-2px);
     }
 
     hr {
-      border: 0.5px solid var(--border);
-      margin: 1.2rem 0;
+      border: none;
+      border-top: 1px solid var(--border-light);
+      margin: 1.5rem 0;
     }
 
-    :root {
-      --bg-primary: #F2ECE4;
-      --bg-secondary: #EDE5DB;
-      --bg-tertiary: #E8DFD3;
-      --bg-gradient: radial-gradient(ellipse at 20% 30%, #F2ECE4 0%, #EDE5DB 100%);
-      --card-base: #F5F0EA;
-      --card-warm: #F2EDE6;
-      --card-elevated: #F7F2EC;
-      --card-shadow: rgba(100, 80, 60, 0.06);
-      --text-primary: #5C4F42;
-      --text-secondary: #8A7B6B;
-      --text-tertiary: #B0A392;
-      --text-light: #C9BFB0;
-      --gold-light: #DFCEA8;
-      --gold-base: #C4AF7D;
-      --gold-deep: #B09A68;
-      --gold-rich: #9C8658;
-      --gold-gradient: linear-gradient(135deg, #DFCEA8 0%, #C4AF7D 50%, #DFCEA8 100%);
-      --rose-light: #F0E6E2;
-      --rose-base: #E2D5CE;
-      --rose-deep: #D2C2B8;
-      --accent: #C4AF7D;
-      --accent-dark: #B09A68;
-      --accent-light: #DFCEA8;
-      --accent-gradient: linear-gradient(135deg, #DFCEA8 0%, #C4AF7D 50%, #DFCEA8 100%);
-      --border: rgba(180, 155, 120, 0.12);
-      --card-gradient: linear-gradient(145deg, #F5F0EA 0%, #F7F2EC 100%);
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
-      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.03);
-      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.04);
-      --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.08);
-      --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.06);
-      --input-bg: #F9F6F2;
-      --input-border: #E2D9CF;
-      --input-focus: #C4AF7D;
-      --hover-bg: rgba(180, 155, 120, 0.05);
-      --hover-subtle: rgba(180, 155, 120, 0.05);
-      --hover-medium: rgba(180, 155, 120, 0.1);
+    .info-text {
+      font-size: 0.65rem;
+      color: var(--text-mid);
+      margin-top: 0.5rem;
     }
 
-    body.dark {
-      --bg-primary: #1A1814;
-      --bg-secondary: #24201A;
-      --bg-tertiary: #2E2820;
-      --bg-gradient: radial-gradient(ellipse at 20% 30%, #1A1814 0%, #24201A 100%);
-      --card-base: #2E2820;
-      --card-warm: #362F26;
-      --card-elevated: #40382D;
-      --card-shadow: rgba(0, 0, 0, 0.3);
-      --text-primary: #F5EFE6;
-      --text-secondary: #D4C5B0;
-      --text-tertiary: #A89A82;
-      --text-light: #7A6E5A;
-      --gold-light: #D4B87A;
-      --gold-base: #B89B5E;
-      --gold-deep: #9E8048;
-      --gold-rich: #8A6E3A;
-      --gold-gradient: linear-gradient(135deg, #D4B87A 0%, #B89B5E 40%, #C9A96E 70%, #B89B5E 100%);
-      --rose-light: #3A2A25;
-      --rose-base: #5A4038;
-      --rose-deep: #7A5850;
-      --accent: #B89B5E;
-      --accent-dark: #9E8048;
-      --accent-light: #D4B87A;
-      --accent-gradient: linear-gradient(135deg, #D4B87A 0%, #B89B5E 40%, #C9A96E 70%, #B89B5E 100%);
-      --border: rgba(184, 155, 94, 0.15);
-      --card-gradient: linear-gradient(145deg, #2E2820 0%, #40382D 100%);
-      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
-      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
-      --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
-      --shadow-hover: 0 24px 48px rgba(0, 0, 0, 0.6);
-      --shadow-xl: 0 24px 60px rgba(0, 0, 0, 0.7);
-      --input-bg: #3A352C;
-      --input-border: #4A4438;
-      --input-focus: #B89B5E;
-      --hover-bg: rgba(184, 155, 94, 0.08);
-      --hover-subtle: rgba(184, 155, 94, 0.08);
-      --hover-medium: rgba(184, 155, 94, 0.15);
+    .info-text i {
+      margin-right: 4px;
+      color: var(--gold);
     }
 
-    @media (max-width: 480px) {
-      .admin-wrapper {
+    /* Not Authorized */
+    .not-authorized {
+      text-align: center;
+      padding: 3rem;
+      background: var(--card-warm);
+      border-radius: 28px;
+      border: 1px solid var(--border-light);
+      max-width: 500px;
+      margin: 3rem auto;
+    }
+
+    .not-authorized i {
+      font-size: 3rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .not-authorized h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+
+    .not-authorized p {
+      color: var(--text-mid);
+      margin-bottom: 1.5rem;
+    }
+
+    .login-redirect {
+      display: inline-block;
+      background: var(--gold-dark);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 50px;
+    }
+
+    /* Toast */
+    .admin-toast {
+      position: fixed;
+      bottom: 25px;
+      left: 25px;
+      background: var(--gold-dark);
+      color: var(--white);
+      padding: 0.7rem 1.2rem;
+      border-radius: 50px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: 0.3s ease;
+      z-index: 300;
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+
+    .admin-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--charcoal);
+      color: rgba(247, 240, 230, 0.65);
+      padding: 60px 40px 28px;
+      margin-top: 2rem;
+    }
+
+    body.dark footer {
+      background: #0F0E0C;
+    }
+
+    .footer-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 56px;
+      margin-bottom: 44px;
+    }
+
+    .footer-brand h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.55rem;
+      font-weight: 300;
+      color: var(--gold-light);
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+    }
+
+    .footer-brand p {
+      font-size: 0.8rem;
+      line-height: 1.8;
+      font-weight: 200;
+      max-width: 250px;
+    }
+
+    .footer-col h4 {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .footer-col a {
+      color: rgba(247, 240, 230, 0.55);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 200;
+      transition: color 0.3s;
+    }
+
+    .footer-col a:hover {
+      color: var(--gold-light);
+    }
+
+    .contact-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .contact-list li {
+      font-size: 0.8rem;
+      font-weight: 200;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .contact-list .ic {
+      color: var(--gold);
+      font-size: 0.9rem;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(180, 154, 106, 0.15);
+      padding-top: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-bottom p {
+      font-size: 0.7rem;
+      font-weight: 200;
+    }
+
+    .socials {
+      display: flex;
+      gap: 10px;
+    }
+
+    .social {
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(180, 154, 106, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-light);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+      border-radius: 50%;
+    }
+
+    .social:hover {
+      background: var(--gold-dark);
+      border-color: var(--gold-dark);
+      color: var(--white);
+    }
+
+    .footer-logo-img {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+      margin-bottom: 10px;
+      filter: brightness(0.9);
+      border-radius: 50%;
+    }
+
+    @media (max-width: 900px) {
+      .footer-top {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+      }
+
+      .footer-brand {
+        grid-column: 1/-1;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .footer-top {
+        grid-template-columns: 1fr;
+      }
+
+      footer {
+        padding: 40px 18px 22px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .admin-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .logged-in-as {
+        margin-left: 0;
+      }
+
+      .form-panel {
         padding: 1.2rem;
       }
 
-      h1 {
-        font-size: 1.5rem;
+      body {
+        padding-top: 70px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-flex {
+        padding: 0.6rem 1rem;
       }
 
-      .image-preview-grid {
-        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      .logo h1 {
+        font-size: 0.9rem;
+      }
+
+      .logo img {
+        width: 36px;
+      }
+
+      .category-selector,
+      .season-selector {
         gap: 0.5rem;
+      }
+
+      .category-option,
+      .season-option {
+        padding: 0.4rem 1rem;
+        font-size: 0.7rem;
       }
     }
   </style>
@@ -824,39 +882,32 @@
 
 <body>
   <script>
-    for (let i = 0; i < 40; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
-      const size = Math.random() * 6 + 2;
-      particle.style.width = size + 'px';
-      particle.style.height = size + 'px';
-      particle.style.left = Math.random() * 100 + '%';
-      particle.style.animationDelay = Math.random() * 15 + 's';
-      particle.style.animationDuration = Math.random() * 10 + 8 + 's';
-      particle.style.opacity = Math.random() * 0.4 + 0.1;
-      document.body.appendChild(particle);
+    for (let i = 0; i < 25; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const s = Math.random() * 4 + 2;
+      p.style.width = s + 'px';
+      p.style.height = s + 'px';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDelay = Math.random() * 20 + 's';
+      p.style.animationDuration = Math.random() * 15 + 12 + 's';
+      p.style.opacity = Math.random() * 0.2 + 0.05;
+      document.body.appendChild(p);
     }
   </script>
 
-  <div id="menuOverlay" class="cart-overlay"
-    style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(6px);z-index:99;visibility:hidden;opacity:0;transition:0.3s;">
-  </div>
-  <div id="adminToast" class="admin-toast">✨ Enregistré</div>
+  <div id="menuOverlay" class="menu-overlay"></div>
+  <div id="adminToast" class="admin-toast">✨ Produit ajouté</div>
 
   <header>
     <div class="header-flex">
-      <a href="index.html" class="logo">
-        <img src="is.png" alt="Rosa Fragrances">
+      <a href="index.html" class="logo"><img src="is.png" alt="Rosa">
         <h1>Rosa Fragrances</h1>
       </a>
       <div class="right-group">
-        <div class="theme-toggle" id="themeToggle">
-          <i class="fas fa-sun"></i>
-          <i class="fas fa-moon" style="display: none;"></i>
-        </div>
-        <button class="menu-toggle" id="menuToggle">
-          <i class="fas fa-bars"></i>
-        </button>
+        <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon"
+            style="display:none;"></i></div>
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
       </div>
       <div class="nav-links" id="navLinks">
         <a href="index.html" data-translate="home">ACCUEIL</a>
@@ -866,10 +917,8 @@
         <a href="kids.html" data-translate="kids">ENFANTS</a>
         <a href="existed.html" data-translate="existing">PARFUMS EXISTANTS</a>
         <div class="lang-menu" id="langMenu">
-          <button class="lang-current" id="langCurrentBtn">
-            <span id="currentLangText">FRANÇAIS</span>
-            <i class="fas fa-chevron-down"></i>
-          </button>
+          <button class="lang-current" id="langCurrentBtn"><span id="currentLangText">FRANÇAIS</span><i
+              class="fas fa-chevron-down"></i></button>
           <div class="lang-options">
             <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
             <button class="lang-option" data-lang="en">🇬🇧 English</button>
@@ -877,22 +926,22 @@
           </div>
         </div>
         <a href="login146.html" id="authLink" data-translate="login">Se connecter</a>
-        <a href="profile.html" id="profileLink" style="display: none;" data-translate="profile">Mon Profil</a>
-        <a href="adminadd.html" id="adminLink" style="display: none;" class="admin-nav-link"><i
-            class="fas fa-crown"></i> <span data-translate="admin">Admin</span></a>
+        <a href="profile.html" id="profileLink" style="display:none;" data-translate="profile">Mon Profil</a>
+        <a href="adminadd.html" id="adminLink" style="display:none;" class="admin-nav-link"><i class="fas fa-crown"></i>
+          Admin</a>
       </div>
     </div>
   </header>
 
-  <div class="admin-wrapper" id="adminWrapper">
-    <div id="adminPanel">
-      <h1>
-        <img style="width: 65px;" src="is.png" alt="Rosa"> <span data-translate="manageProducts">Gérer les
-          produits</span>
-        <span style="flex:1; text-align: right; font-size: 0.7rem; opacity:0.7;" id="loggedInAs"></span>
-      </h1>
+  <main>
+    <div id="adminContent" style="display: none;">
+      <div class="admin-wrapper">
+        <div class="admin-header">
+          <img src="is.png" alt="Rosa">
+          <h1 data-translate="manageProducts">Gérer les produits</h1>
+          <span class="logged-in-as" id="loggedInAs"></span>
+        </div>
 
-      <div class="single-column">
         <div class="form-panel">
           <h2><i class="fas fa-plus-circle"></i> <span data-translate="addPerfume">Ajouter un parfum</span></h2>
 
@@ -903,7 +952,7 @@
 
           <div class="input-group">
             <label data-translate="brand">Marque / Maison</label>
-            <input type="text" id="productBrand" placeholder="PHYSALIS / NAEVE ...">
+            <input type="text" id="productBrand" placeholder="Dior / Chanel / ...">
           </div>
 
           <div class="input-group">
@@ -927,10 +976,8 @@
               </div>
               <input type="file" id="imageUpload" accept="image/*" multiple style="display: none;">
             </div>
-            <p style="font-size:0.65rem; color:var(--text-secondary); margin-top:0.5rem;">
-              <i class="fas fa-info-circle"></i> <span data-translate="imagesInfo">Vous pouvez ajouter plusieurs images.
-                La première sera l'image principale.</span>
-            </p>
+            <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="imagesInfo">Vous pouvez
+                ajouter plusieurs images. La première sera l'image principale.</span></div>
           </div>
 
           <div class="input-group">
@@ -966,18 +1013,65 @@
           <button class="btn-primary" id="addProductBtn"><i class="fas fa-gem"></i> <span
               data-translate="saveProduct">Enregistrer le produit</span></button>
           <hr>
-          <p style="font-size:0.7rem; color:var(--text-secondary);"><i class="fas fa-info-circle"></i> <span
-              data-translate="storageInfo">Les images sont stockées en Base64</span></p>
+          <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="storageInfo">Les images sont
+              stockées en Base64</span></div>
         </div>
 
         <div class="nav-panel">
-          <a href="existed.html" class="btn-secondary">
-            <i class="fas fa-box-open"></i> <span data-translate="viewExisting">Voir les parfums existants</span>
-          </a>
+          <a href="existed.html" class="btn-secondary"><i class="fas fa-box-open"></i> <span
+              data-translate="viewExisting">Voir les parfums existants</span></a>
         </div>
       </div>
     </div>
-  </div>
+
+    <div id="notAuthorized" style="display: none;">
+      <div class="not-authorized">
+        <i class="fas fa-lock"></i>
+        <h2 data-translate="notAuthorized">Accès non autorisé</h2>
+        <p data-translate="adminOnly">Cette page est réservée aux administrateurs. Veuillez vous connecter avec un
+          compte administrateur.</p>
+        <a href="login146.html" class="login-redirect" data-translate="login">Se connecter</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="footer-logo-img" src="is.png" alt="Rosa">
+          <h3>ROSA FRAGRANCES</h3>
+          <p data-translate="footerDescription">Parfumerie d'exception depuis 1985. L'art de la parfumerie orientale
+            réinventé pour les connaisseurs exigeants.</p>
+        </div>
+        <div class="footer-col">
+          <h4 data-translate="footerPerfumesTitle">Parfums</h4>
+          <ul>
+            <li><a href="man.html" data-translate="footerMen">Homme</a></li>
+            <li><a href="women.html" data-translate="footerWomen">Femme</a></li>
+            <li><a href="unisexe.html" data-translate="footerUnisex">Unisexe</a></li>
+            <li><a href="kids.html" data-translate="footerKids">Enfants</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 data-translate="footerContactTitle">Contact</h4>
+          <ul class="contact-list">
+            <li><span class="ic">📍</span> <span data-translate="footerAddress">Tunis, Tunisie</span></li>
+            <li><span class="ic">📞</span> <span data-translate="footerPhone">+216 96 163 366</span></li>
+            <li><span class="ic">✉️</span> <span data-translate="footerEmail">contact@rosafragrances.tn</span></li>
+            <div class="socials">
+              <a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/" class="social"
+                target="_blank"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://wa.me/21696163366" class="social" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p><span data-translate="footerCopyright">© 2026 Rosa Fragrances. Tous droits réservés.</span></p>
+      </div>
+    </div>
+  </footer>
 
   <script>
     (function () {
@@ -985,13 +1079,12 @@
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      // ========== TRANSLATION SYSTEM ==========
       let currentLanguage = localStorage.getItem('language') || 'fr';
 
       const translations = {
         fr: {
           home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
-          existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil', admin: 'Admin',
+          existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil',
           manageProducts: 'Gérer les produits', addPerfume: 'Ajouter un parfum',
           productName: 'Nom du produit', brand: 'Marque / Maison', price: 'Prix (TND)',
           description: 'Description', productImages: 'Images du produit', addImages: 'Ajouter des images',
@@ -999,13 +1092,18 @@
           category: 'Catégorie', menCat: 'Homme', womenCat: 'Femme', unisexCat: 'Unisexe', kidsCat: 'Enfants',
           season: 'Saison', allSeasons: 'Toutes saisons', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne',
           saveProduct: 'Enregistrer le produit', storageInfo: 'Les images sont stockées en Base64',
-          viewExisting: 'Voir les parfums existants',
+          viewExisting: 'Voir les parfums existants', notAuthorized: 'Accès non autorisé',
+          adminOnly: 'Cette page est réservée aux administrateurs. Veuillez vous connecter avec un compte administrateur.',
           productAdded: '✅ Produit ajouté', errorAdding: '❌ Erreur lors de l\'ajout',
-          invalidFields: '❌ Nom, marque et prix valides requis', noImages: 'Aucune image'
+          invalidFields: '❌ Nom, marque et prix valides requis', noImages: 'Aucune image',
+          footerDescription: "Parfumerie d'exception depuis 1985. L'art de la parfumerie orientale réinventé pour les connaisseurs exigeants.",
+          footerPerfumesTitle: "Parfums", footerMen: "Homme", footerWomen: "Femme", footerUnisex: "Unisexe", footerKids: "Enfants",
+          footerContactTitle: "Contact", footerAddress: "Tunis, Tunisie", footerPhone: "+216 96 163 366",
+          footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. Tous droits réservés."
         },
         en: {
           home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
-          existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile', admin: 'Admin',
+          existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
           manageProducts: 'Manage Products', addPerfume: 'Add Perfume',
           productName: 'Product Name', brand: 'Brand / House', price: 'Price (TND)',
           description: 'Description', productImages: 'Product Images', addImages: 'Add Images',
@@ -1013,13 +1111,18 @@
           category: 'Category', menCat: 'Men', womenCat: 'Women', unisexCat: 'Unisex', kidsCat: 'Kids',
           season: 'Season', allSeasons: 'All seasons', summer: 'Summer', winter: 'Winter', spring: 'Spring', autumn: 'Autumn',
           saveProduct: 'Save Product', storageInfo: 'Images are stored in Base64',
-          viewExisting: 'View existing perfumes',
+          viewExisting: 'View existing perfumes', notAuthorized: 'Access Denied',
+          adminOnly: 'This page is for administrators only. Please log in with an admin account.',
           productAdded: '✅ Product added', errorAdding: '❌ Error adding product',
-          invalidFields: '❌ Valid name, brand and price required', noImages: 'No images'
+          invalidFields: '❌ Valid name, brand and price required', noImages: 'No images',
+          footerDescription: "Exceptional perfumery since 1985. The art of oriental perfumery reinvented for discerning connoisseurs.",
+          footerPerfumesTitle: "Perfumes", footerMen: "Men", footerWomen: "Women", footerUnisex: "Unisex", footerKids: "Kids",
+          footerContactTitle: "Contact", footerAddress: "Tunis, Tunisia", footerPhone: "+216 96 163 366",
+          footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. All rights reserved."
         },
         ar: {
           home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
-          existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي', admin: 'المشرف',
+          existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
           manageProducts: 'إدارة المنتجات', addPerfume: 'إضافة عطر',
           productName: 'اسم المنتج', brand: 'العلامة التجارية', price: 'السعر (دينار)',
           description: 'الوصف', productImages: 'صور المنتج', addImages: 'إضافة صور',
@@ -1027,39 +1130,32 @@
           category: 'الفئة', menCat: 'رجالي', womenCat: 'نسائي', unisexCat: 'للجنسين', kidsCat: 'أطفال',
           season: 'الموسم', allSeasons: 'كل المواسم', summer: 'صيف', winter: 'شتاء', spring: 'ربيع', autumn: 'خريف',
           saveProduct: 'حفظ المنتج', storageInfo: 'يتم تخزين الصور بصيغة Base64',
-          viewExisting: 'عرض العطور الموجودة',
+          viewExisting: 'عرض العطور الموجودة', notAuthorized: 'وصول غير مصرح به',
+          adminOnly: 'هذه الصفحة مخصصة للمشرفين فقط. الرجاء تسجيل الدخول بحساب مشرف.',
           productAdded: '✅ تمت إضافة المنتج', errorAdding: '❌ خطأ في إضافة المنتج',
-          invalidFields: '❌ الاسم والعلامة التجارية والسعر مطلوبة', noImages: 'لا توجد صور'
+          invalidFields: '❌ الاسم والعلامة التجارية والسعر مطلوبة', noImages: 'لا توجد صور',
+          footerDescription: "عطور استثنائية منذ 1985. فن العطور الشرقية المعاد ابتكاره للخبراء المميزين.",
+          footerPerfumesTitle: "العطور", footerMen: "رجالي", footerWomen: "نسائي", footerUnisex: "للجنسين", footerKids: "أطفال",
+          footerContactTitle: "اتصل بنا", footerAddress: "تونس، تونس", footerPhone: "366 163 96 216+",
+          footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 روزا للعطور. جميع الحقوق محفوظة."
         }
       };
 
       function translatePage(lang) {
         currentLanguage = lang;
         localStorage.setItem('language', lang);
-
-        if (lang === 'ar') {
-          document.body.style.direction = 'rtl';
-          document.body.style.textAlign = 'right';
-        } else {
-          document.body.style.direction = 'ltr';
-          document.body.style.textAlign = 'left';
-        }
-
+        document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
+        document.body.style.textAlign = lang === 'ar' ? 'right' : 'left';
         const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
         const langSpan = document.getElementById('currentLangText');
         if (langSpan) langSpan.textContent = names[lang];
-
         document.querySelectorAll('[data-translate]').forEach(el => {
           const key = el.getAttribute('data-translate');
           if (translations[lang] && translations[lang][key]) {
-            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-              el.placeholder = translations[lang][key];
-            } else {
-              el.textContent = translations[lang][key];
-            }
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = translations[lang][key];
+            else el.textContent = translations[lang][key];
           }
         });
-
         updateImagePreview();
       }
 
@@ -1070,15 +1166,13 @@
         setTimeout(() => toast.classList.remove('show'), 2500);
       }
 
-      // Theme Switcher
+      // Theme
       function initTheme() {
         const saved = localStorage.getItem('theme') || 'light';
         if (saved === 'dark') {
           document.body.classList.add('dark');
-          const sun = document.querySelector('#themeToggle .fa-sun');
-          const moon = document.querySelector('#themeToggle .fa-moon');
-          if (sun) sun.style.display = 'none';
-          if (moon) moon.style.display = 'inline-block';
+          document.querySelector('#themeToggle .fa-sun').style.display = 'none';
+          document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
         }
       }
 
@@ -1096,34 +1190,25 @@
         }
       }
 
-      const themeToggle = document.getElementById('themeToggle');
-      if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+      document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
       initTheme();
 
-      // Menu Toggle
+      // Menu
       const menuToggle = document.getElementById('menuToggle');
       const navLinks = document.getElementById('navLinks');
       const menuOverlay = document.getElementById('menuOverlay');
 
       function toggleMenu() {
         navLinks.classList.toggle('active');
-        menuOverlay.style.visibility = navLinks.classList.contains('active') ? 'visible' : 'hidden';
-        menuOverlay.style.opacity = navLinks.classList.contains('active') ? '1' : '0';
+        menuOverlay.classList.toggle('active');
         document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+        if (navLinks.classList.contains('active')) closeCart?.();
       }
 
-      if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
-      if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
+      menuToggle?.addEventListener('click', toggleMenu);
+      menuOverlay?.addEventListener('click', toggleMenu);
 
-      document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-          navLinks.classList.remove('active');
-          menuOverlay.style.visibility = 'hidden';
-          menuOverlay.style.opacity = '0';
-          document.body.style.overflow = '';
-        });
-      });
-
+      // Language
       const langMenu = document.getElementById('langMenu');
       const langCurrentBtn = document.getElementById('langCurrentBtn');
       if (langCurrentBtn) {
@@ -1133,9 +1218,8 @@
         });
       }
       document.querySelectorAll('.lang-option').forEach(opt => {
-        opt.addEventListener('click', (e) => {
-          const lang = opt.dataset.lang;
-          translatePage(lang);
+        opt.addEventListener('click', () => {
+          translatePage(opt.dataset.lang);
           langMenu.classList.remove('active');
         });
       });
@@ -1143,28 +1227,31 @@
         if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active');
       });
 
-      // Form Elements
-      const productName = document.getElementById('productName');
-      const productBrand = document.getElementById('productBrand');
-      const productPrice = document.getElementById('productPrice');
-      const productDescription = document.getElementById('productDescription');
-
+      // Image Upload
+      let uploadedImages = [];
+      const imagePreviewGrid = document.getElementById('imagePreviewGrid');
       const imageUpload = document.getElementById('imageUpload');
       const addMoreImagesBtn = document.getElementById('addMoreImagesBtn');
-      const imagePreviewGrid = document.getElementById('imagePreviewGrid');
-      let uploadedImages = [];
 
       function updateImagePreview() {
+        if (!imagePreviewGrid) return;
         imagePreviewGrid.innerHTML = '';
-        uploadedImages.forEach((imgBase64, index) => {
-          const div = document.createElement('div');
-          div.className = 'preview-item';
-          div.innerHTML = `
-            <img src="${imgBase64}" alt="image ${index + 1}">
-            <button class="remove-image-btn" data-index="${index}"><i class="fas fa-times"></i></button>
-          `;
-          imagePreviewGrid.appendChild(div);
-        });
+        if (uploadedImages.length === 0) {
+          const emptyDiv = document.createElement('div');
+          emptyDiv.style.cssText = 'grid-column:1/-1; text-align:center; padding:1rem; color:var(--text-mid);';
+          emptyDiv.innerHTML = `<i class="fas fa-images"></i> ${translations[currentLanguage].noImages}`;
+          imagePreviewGrid.appendChild(emptyDiv);
+        } else {
+          uploadedImages.forEach((imgBase64, index) => {
+            const div = document.createElement('div');
+            div.className = 'preview-item';
+            div.innerHTML = `
+              <img src="${imgBase64}" alt="image ${index + 1}">
+              <button class="remove-image-btn" data-index="${index}"><i class="fas fa-times"></i></button>
+            `;
+            imagePreviewGrid.appendChild(div);
+          });
+        }
 
         document.querySelectorAll('.remove-image-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
@@ -1174,18 +1261,10 @@
             updateImagePreview();
           });
         });
-
-        if (uploadedImages.length === 0) {
-          const emptyDiv = document.createElement('div');
-          emptyDiv.style.cssText = 'grid-column:1/-1; text-align:center; padding:1rem; color:var(--text-secondary);';
-          emptyDiv.innerHTML = `<i class="fas fa-images"></i> ${translations[currentLanguage].noImages}`;
-          imagePreviewGrid.appendChild(emptyDiv);
-        }
       }
 
-      addMoreImagesBtn.addEventListener('click', () => imageUpload.click());
-
-      imageUpload.addEventListener('change', function (e) {
+      addMoreImagesBtn?.addEventListener('click', () => imageUpload.click());
+      imageUpload?.addEventListener('change', function (e) {
         const files = Array.from(e.target.files);
         files.forEach(file => {
           if (!file.type.startsWith('image/')) return;
@@ -1199,33 +1278,32 @@
         imageUpload.value = '';
       });
 
-      const categoryOptions = document.querySelectorAll('.category-option');
+      // Category & Season
       let selectedCategory = 'man';
+      let selectedSeason = 'all';
 
-      categoryOptions.forEach(opt => {
+      document.querySelectorAll('.category-option').forEach(opt => {
         opt.addEventListener('click', () => {
-          categoryOptions.forEach(o => o.classList.remove('selected'));
+          document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
           opt.classList.add('selected');
           selectedCategory = opt.dataset.category;
         });
       });
 
-      const seasonOptions = document.querySelectorAll('.season-option');
-      let selectedSeason = 'all';
-
-      seasonOptions.forEach(opt => {
+      document.querySelectorAll('.season-option').forEach(opt => {
         opt.addEventListener('click', () => {
-          seasonOptions.forEach(o => o.classList.remove('selected'));
+          document.querySelectorAll('.season-option').forEach(o => o.classList.remove('selected'));
           opt.classList.add('selected');
           selectedSeason = opt.dataset.season;
         });
       });
 
+      // Add Product
       async function addProduct() {
-        const name = productName.value.trim();
-        const brand = productBrand.value.trim();
-        const price = parseFloat(productPrice.value);
-        const description = productDescription.value.trim();
+        const name = document.getElementById('productName')?.value.trim();
+        const brand = document.getElementById('productBrand')?.value.trim();
+        const price = parseFloat(document.getElementById('productPrice')?.value);
+        const description = document.getElementById('productDescription')?.value.trim();
 
         if (!name || !brand || isNaN(price) || price <= 0) {
           showAdminToast('invalidFields');
@@ -1245,45 +1323,79 @@
           const { error } = await supabase.from('products').insert([newProduct]);
           if (error) throw error;
 
-          productName.value = '';
-          productBrand.value = '';
-          productPrice.value = '';
-          productDescription.value = '';
+          // Reset form
+          document.getElementById('productName').value = '';
+          document.getElementById('productBrand').value = '';
+          document.getElementById('productPrice').value = '';
+          document.getElementById('productDescription').value = '';
           uploadedImages = [];
           updateImagePreview();
 
-          categoryOptions.forEach(o => o.classList.remove('selected'));
+          document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
           document.querySelector('.category-option[data-category="man"]').classList.add('selected');
           selectedCategory = 'man';
 
-          seasonOptions.forEach(o => o.classList.remove('selected'));
+          document.querySelectorAll('.season-option').forEach(o => o.classList.remove('selected'));
           document.querySelector('.season-option[data-season="all"]').classList.add('selected');
           selectedSeason = 'all';
 
           showAdminToast('productAdded');
         } catch (error) {
-          console.error('Erreur ajout:', error);
+          console.error('Error adding product:', error);
           showAdminToast('errorAdding');
         }
       }
 
-      document.getElementById('addProductBtn').addEventListener('click', addProduct);
+      document.getElementById('addProductBtn')?.addEventListener('click', addProduct);
 
+      // Auth Check
       let isUpdatingUser = false, updateUserTimeout;
 
+      async function checkAdminAccess() {
+        const adminContent = document.getElementById('adminContent');
+        const notAuthorized = document.getElementById('notAuthorized');
+        const loggedInAs = document.getElementById('loggedInAs');
+
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+
+          if (!user) {
+            if (adminContent) adminContent.style.display = 'none';
+            if (notAuthorized) notAuthorized.style.display = 'block';
+            return;
+          }
+
+          // Check if user is admin (azmmeli146@gmail.com)
+          if (user.email !== 'azmmeli146@gmail.com') {
+            if (adminContent) adminContent.style.display = 'none';
+            if (notAuthorized) notAuthorized.style.display = 'block';
+            return;
+          }
+
+          // User is admin - show content
+          if (adminContent) adminContent.style.display = 'block';
+          if (notAuthorized) notAuthorized.style.display = 'none';
+          if (loggedInAs) loggedInAs.textContent = `⚡ ${user.email} · ${new Date().toLocaleDateString('fr-FR')}`;
+
+        } catch (error) {
+          console.error('Auth check error:', error);
+          if (adminContent) adminContent.style.display = 'none';
+          if (notAuthorized) notAuthorized.style.display = 'block';
+        }
+      }
+
       async function updateUserDisplay() {
-        if (isUpdatingUser) return; isUpdatingUser = true;
+        if (isUpdatingUser) return;
+        isUpdatingUser = true;
         try {
           const { data: { user } } = await supabase.auth.getUser();
           const authLink = document.getElementById('authLink');
           const profileLink = document.getElementById('profileLink');
           const adminLink = document.getElementById('adminLink');
-          const loggedInAs = document.getElementById('loggedInAs');
 
           if (user) {
             if (authLink) authLink.style.display = 'none';
             if (profileLink) profileLink.style.display = 'block';
-            if (loggedInAs) loggedInAs.textContent = `⚡ ${user.email} · ${new Date().toLocaleDateString('fr-FR')}`;
             if (user.email === 'azmmeli146@gmail.com') {
               if (adminLink) adminLink.style.display = 'block';
             } else {
@@ -1301,11 +1413,16 @@
         }
       }
 
+      checkAdminAccess();
       updateUserDisplay();
+
       supabase.auth.onAuthStateChange((event, session) => {
         if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
           if (updateUserTimeout) clearTimeout(updateUserTimeout);
-          updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
+          updateUserTimeout = setTimeout(() => {
+            checkAdminAccess();
+            updateUserDisplay();
+          }, 100);
         }
       });
 

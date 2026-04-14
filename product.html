@@ -2,58 +2,44 @@
 <html lang="fr">
 
 <head>
+    <meta property="og:image" content="https://new-start-hdr1.vercel.app/tt.jpg" />
+    <meta name="twitter:image" content="https://new-start-hdr1.vercel.app/tt.jpg" />
+    <meta property="og:image:secure_url" content="https://new-start-hdr1.vercel.app/tt.jpg" />
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Rosa Fragrances | Détail du produit</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap"
+        rel="stylesheet">
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-
-        body {
-            background: var(--bg-gradient);
-            color: var(--text-primary);
-            transition: background 0.3s ease, color 0.3s ease;
-            line-height: 1.5;
-            position: relative;
-            overflow-x: hidden;
         }
 
         :root {
-            --bg-primary: #F2ECE4;
-            --bg-secondary: #EDE5DB;
-            --bg-tertiary: #E8DFD3;
-            --bg-gradient: radial-gradient(ellipse at 20% 30%, #F2ECE4 0%, #EDE5DB 100%);
+            --cream: #F7F0E6;
+            --cream-dark: #EDE4D6;
+            --cream-deep: #E0D4C0;
+            --gold: #B49A6A;
+            --gold-light: #D4B98A;
+            --gold-dark: #8A7150;
+            --charcoal: #3A3228;
+            --text-mid: #6B5E4E;
+            --white: #FEFCF8;
+            --shadow: 0 8px 40px rgba(90, 70, 50, 0.10);
             --card-base: #F5F0EA;
             --card-warm: #F2EDE6;
             --card-elevated: #F7F2EC;
             --card-shadow: rgba(100, 80, 60, 0.06);
-            --text-primary: #5C4F42;
-            --text-secondary: #8A7B6B;
-            --text-tertiary: #B0A392;
-            --text-light: #C9BFB0;
-            --gold-light: #DFCEA8;
-            --gold-base: #C4AF7D;
-            --gold-deep: #B09A68;
-            --gold-rich: #9C8658;
-            --gold-gradient: linear-gradient(135deg, #DFCEA8 0%, #C4AF7D 50%, #DFCEA8 100%);
-            --rose-light: #F0E6E2;
-            --rose-base: #E2D5CE;
-            --rose-deep: #D2C2B8;
-            --accent: #C4AF7D;
-            --accent-dark: #B09A68;
-            --accent-light: #DFCEA8;
-            --accent-gradient: linear-gradient(135deg, #DFCEA8 0%, #C4AF7D 50%, #DFCEA8 100%);
-            --border: rgba(180, 155, 120, 0.12);
             --border-light: rgba(180, 155, 120, 0.12);
             --border-medium: rgba(180, 155, 120, 0.2);
-            --card-gradient: linear-gradient(145deg, #F5F0EA 0%, #F7F2EC 100%);
             --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
             --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.03);
             --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.04);
@@ -61,77 +47,95 @@
             --input-bg: #F9F6F2;
             --input-border: #E2D9CF;
             --input-focus: #C4AF7D;
-            --hover-bg: rgba(180, 155, 120, 0.05);
             --hover-subtle: rgba(180, 155, 120, 0.05);
             --hover-medium: rgba(180, 155, 120, 0.1);
         }
 
+        body {
+            font-family: 'Jost', sans-serif;
+            background: var(--cream);
+            color: var(--charcoal);
+            overflow-x: hidden;
+            transition: background 0.4s ease, color 0.3s ease;
+            line-height: 1.5;
+        }
+
         body.dark {
-            --bg-primary: #1A1814;
-            --bg-secondary: #24201A;
-            --bg-tertiary: #2E2820;
-            --bg-gradient: radial-gradient(ellipse at 20% 30%, #1A1814 0%, #24201A 100%);
+            --cream: #1A1814;
+            --cream-dark: #24201A;
+            --cream-deep: #2E2820;
             --card-base: #2E2820;
             --card-warm: #362F26;
             --card-elevated: #40382D;
-            --card-shadow: rgba(0, 0, 0, 0.3);
-            --text-primary: #F5EFE6;
-            --text-secondary: #D4C5B0;
-            --text-tertiary: #A89A82;
-            --text-light: #7A6E5A;
-            --gold-light: #D4B87A;
-            --gold-base: #B89B5E;
-            --gold-deep: #9E8048;
-            --gold-rich: #8A6E3A;
-            --gold-gradient: linear-gradient(135deg, #D4B87A 0%, #B89B5E 40%, #C9A96E 70%, #B89B5E 100%);
-            --rose-light: #3A2A25;
-            --rose-base: #5A4038;
-            --rose-deep: #7A5850;
-            --accent: #B89B5E;
-            --accent-dark: #9E8048;
-            --accent-light: #D4B87A;
-            --accent-gradient: linear-gradient(135deg, #D4B87A 0%, #B89B5E 40%, #C9A96E 70%, #B89B5E 100%);
-            --border: rgba(184, 155, 94, 0.15);
+            --charcoal: #F5EFE6;
+            --text-mid: #D4C5B0;
+            --gold: #B89B5E;
+            --gold-dark: #B89B5E;
+            --white: #1A1814;
             --border-light: rgba(184, 155, 94, 0.15);
-            --border-medium: rgba(184, 155, 94, 0.25);
-            --card-gradient: linear-gradient(145deg, #2E2820 0%, #40382D 100%);
-            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
-            --shadow-hover: 0 24px 48px rgba(0, 0, 0, 0.6);
             --input-bg: #3A352C;
             --input-border: #4A4438;
-            --input-focus: #B89B5E;
-            --hover-bg: rgba(184, 155, 94, 0.08);
-            --hover-subtle: rgba(184, 155, 94, 0.08);
-            --hover-medium: rgba(184, 155, 94, 0.15);
+        }
+
+        .particle {
+            position: fixed;
+            background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: floatParticle 18s infinite;
+            z-index: 0;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg) scale(0);
+            }
+
+            20% {
+                opacity: 0.1;
+            }
+
+            80% {
+                opacity: 0.1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-20vh) rotate(360deg) scale(1.2);
+            }
         }
 
         .container {
-            max-width: 1300px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 1.5rem 2rem;
+            position: relative;
+            z-index: 10;
         }
 
         header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(247, 240, 230, 0.92);
+            backdrop-filter: blur(12px);
             box-shadow: var(--shadow-sm);
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid rgba(180, 154, 106, 0.2);
+            transition: all 0.3s ease;
         }
 
         body.dark header {
-            background: rgba(10, 10, 10, 0.95);
+            background: rgba(26, 24, 20, 0.92);
         }
 
         .header-flex {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            max-width: 1300px;
+            position: relative;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0.8rem 2rem;
         }
@@ -140,92 +144,68 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            z-index: 102;
             text-decoration: none;
         }
 
         .logo img {
-            width: 45px;
-            height: auto;
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            border-radius: 50%;
         }
 
         .logo h1 {
-            font-size: 1.5rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+            color: var(--gold-dark);
+            letter-spacing: 0.15em;
             text-transform: uppercase;
-            letter-spacing: 0.2em;
-            font-weight: 350;
-            color: var(--text-primary);
+        }
+
+        .theme-toggle,
+        .cart-icon,
+        .menu-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: var(--gold-dark);
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover,
+        .cart-icon:hover,
+        .menu-toggle:hover {
+            background: var(--hover-subtle);
+            color: var(--gold);
         }
 
         .cart-icon {
             position: relative;
-            cursor: pointer;
-            font-size: 1.6rem;
-            color: var(--accent);
-            margin-right: 15px;
-            width: 34px;
-            height: 34px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-
-        .cart-icon:hover {
-            background: var(--hover-subtle);
         }
 
         .cart-count {
             position: absolute;
-            top: -8px;
-            right: -10px;
-            background: var(--accent);
-            color: var(--bg-primary);
-            font-size: 0.7rem;
+            top: -2px;
+            right: -2px;
+            background: var(--gold-dark);
+            color: var(--white);
+            font-size: 0.6rem;
             font-weight: 600;
-            width: 20px;
-            height: 20px;
+            width: 17px;
+            height: 17px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-        }
-
-        .theme-toggle {
-            cursor: pointer;
-            font-size: 1.3rem;
-            color: var(--accent);
-            margin-right: 15px;
-            width: 34px;
-            height: 34px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: var(--hover-subtle);
-        }
-
-        .theme-toggle:hover {
-            transform: rotate(15deg);
-            background: var(--hover-medium);
-        }
-
-        .menu-toggle {
-            background: none;
-            border: none;
-            font-size: 1.6rem;
-            color: var(--text-primary);
-            cursor: pointer;
-            width: 34px;
-            height: 34px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-
-        .menu-toggle:hover {
-            background: var(--hover-subtle);
-            color: var(--accent);
         }
 
         .nav-links {
@@ -234,8 +214,8 @@
             position: absolute;
             top: 100%;
             right: 0;
-            width: 260px;
-            background: var(--card-warm);
+            width: 250px;
+            background: var(--cream-dark);
             backdrop-filter: blur(16px);
             gap: 0;
             max-height: 0;
@@ -243,117 +223,124 @@
             opacity: 0;
             transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
             box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-light);
             z-index: 101;
             border-radius: 20px;
         }
 
         .nav-links.active {
-            max-height: 450px;
+            max-height: 460px;
             opacity: 1;
             padding: 0.5rem 0;
         }
 
         .nav-links a {
-            padding: 1rem 1.5rem;
+            padding: 0.9rem 1.5rem;
             text-decoration: none;
-            color: var(--text-primary);
+            color: var(--charcoal);
             transition: all 0.2s;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-light);
             display: block;
-            cursor: pointer;
-        }
-
-        .nav-links a:last-child {
-            border-bottom: none;
+            font-weight: 400;
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
         }
 
         .nav-links a:hover {
-            background: var(--hover-bg);
-            color: var(--accent);
+            background: var(--hover-subtle);
+            color: var(--gold-dark);
             padding-left: 2rem;
         }
 
+        .admin-nav-link {
+            background: rgba(180, 154, 106, 0.08);
+            color: var(--gold-dark) !important;
+            font-weight: 600;
+            border-bottom: 2px solid var(--gold) !important;
+        }
+
         .lang-menu {
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-light);
         }
 
         .lang-current {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             width: 100%;
             background: none;
             border: none;
-            padding: 1rem 1.5rem;
-            font-size: 1rem;
-            color: var(--text-primary);
+            padding: 0.9rem 1.5rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--charcoal);
             cursor: pointer;
+            transition: all 0.2s;
         }
 
         .lang-current:hover {
-            background: var(--hover-bg);
-            color: var(--accent);
-        }
-
-        .lang-current i {
-            transition: transform 0.3s ease;
-        }
-
-        .lang-menu.active .lang-current i {
-            transform: rotate(180deg);
+            background: var(--hover-subtle);
+            color: var(--gold-dark);
         }
 
         .lang-options {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
-            background: var(--card-warm);
+            background: var(--cream-dark);
         }
 
         .lang-menu.active .lang-options {
-            max-height: 150px;
+            max-height: 130px;
         }
 
         .lang-option {
             display: block;
             width: 100%;
             text-align: left;
-            padding: 0.8rem 1.5rem 0.8rem 2.5rem;
+            padding: 0.7rem 1.5rem 0.7rem 2.5rem;
             background: none;
             border: none;
-            font-size: 0.9rem;
+            font-size: 0.7rem;
             cursor: pointer;
-            color: var(--text-secondary);
-        }
-
-        .lang-option:hover {
-            background: var(--hover-bg);
-            color: var(--accent);
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-bottom: 1.5rem;
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 500;
+            color: var(--text-mid);
             transition: all 0.2s;
         }
 
+        .lang-option:hover {
+            background: var(--hover-subtle);
+            color: var(--gold-dark);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gold-dark);
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
         .back-link:hover {
+            color: var(--gold);
             transform: translateX(-5px);
         }
 
+        /* Product Detail */
         .product-detail {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 3rem;
-            background: var(--card-gradient);
+            background: var(--card-warm);
             border-radius: 32px;
             padding: 2rem;
             margin-bottom: 3rem;
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-light);
         }
 
         @media (max-width: 768px) {
@@ -372,7 +359,11 @@
             }
 
             .logo h1 {
-                font-size: 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .logo img {
+                width: 36px;
             }
         }
 
@@ -387,11 +378,10 @@
             position: relative;
             width: 100%;
             aspect-ratio: 1 / 1;
-            background: var(--bg-secondary);
+            background: var(--cream-deep);
             border-radius: 24px;
             overflow: hidden;
-            border: 1px solid var(--border);
-            touch-action: pan-y pinch-zoom;
+            border: 1px solid var(--border-light);
         }
 
         .image-container {
@@ -411,9 +401,13 @@
             transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .main-image i {
+        .image-container i {
             font-size: 5rem;
-            color: var(--accent);
+            color: var(--gold);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         .swipe-indicators {
@@ -438,7 +432,7 @@
         .swipe-dot.active {
             width: 20px;
             border-radius: 4px;
-            background: var(--accent);
+            background: var(--gold);
         }
 
         .nav-arrow {
@@ -461,7 +455,7 @@
         }
 
         .nav-arrow:hover {
-            background: var(--accent);
+            background: var(--gold-dark);
             transform: translateY(-50%) scale(1.1);
         }
 
@@ -489,11 +483,11 @@
             border: 2px solid transparent;
             transition: all 0.2s ease;
             flex-shrink: 0;
-            background: var(--bg-secondary);
+            background: var(--cream-deep);
         }
 
         .thumbnail.active {
-            border-color: var(--accent);
+            border-color: var(--gold);
             transform: scale(1.05);
         }
 
@@ -510,31 +504,32 @@
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            color: var(--accent);
+            color: var(--gold);
         }
 
         .product-info h1 {
+            font-family: 'Cormorant Garamond', serif;
             font-size: 2rem;
             margin-bottom: 0.5rem;
-            color: var(--text-primary);
+            color: var(--charcoal);
         }
 
         .product-brand {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.2em;
-            color: var(--accent);
+            color: var(--gold-dark);
             margin-bottom: 0.5rem;
         }
 
         .product-price {
             font-size: 1.8rem;
-            color: var(--accent);
+            color: var(--gold-dark);
             margin: 1rem 0;
         }
 
         .product-description {
-            color: var(--text-secondary);
+            color: var(--text-mid);
             line-height: 1.6;
             margin: 1rem 0;
         }
@@ -547,73 +542,98 @@
         }
 
         .meta-badge {
-            background: var(--bg-secondary);
+            background: var(--cream-deep);
             padding: 0.3rem 0.8rem;
             border-radius: 20px;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
+            font-size: 0.7rem;
+            color: var(--text-mid);
+            border: 1px solid var(--border-light);
         }
 
         .add-to-cart-btn {
-            background: var(--accent-gradient);
+            background: var(--gold-dark);
             border: none;
-            color: var(--bg-primary);
+            color: var(--white);
             padding: 0.8rem 2rem;
             border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
+            font-size: 0.9rem;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
             margin-top: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .add-to-cart-btn:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+            background: var(--charcoal);
         }
 
+        /* Suggestions Section */
         .suggestions-section {
             margin-top: 2rem;
         }
 
         .suggestions-section h2 {
+            font-family: 'Cormorant Garamond', serif;
             font-size: 1.5rem;
-            color: var(--accent);
+            font-weight: 300;
+            color: var(--gold-dark);
             margin-bottom: 1.5rem;
         }
 
         .suggestions-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
         }
 
+        @media (max-width: 1024px) {
+            .suggestions-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .suggestions-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .suggestions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .suggestion-card {
-            background: var(--card-gradient);
-            border-radius: 24px;
+            background: var(--card-warm);
+            border-radius: 16px;
             padding: 1rem;
             text-align: center;
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-light);
             transition: all 0.3s;
             cursor: pointer;
             text-decoration: none;
-            color: var(--text-primary);
+            color: var(--charcoal);
         }
 
         .suggestion-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-md);
-            border-color: var(--accent);
+            border-color: var(--gold-light);
         }
 
         .suggestion-img {
-            width: 100px;
-            height: 100px;
+            width: 100%;
+            aspect-ratio: 1 / 1;
             margin: 0 auto 0.8rem;
-            border-radius: 50%;
+            border-radius: 12px;
             overflow: hidden;
-            background: var(--bg-secondary);
+            background: var(--cream-deep);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -627,7 +647,7 @@
 
         .suggestion-img i {
             font-size: 2.5rem;
-            color: var(--accent);
+            color: var(--gold);
         }
 
         .suggestion-name {
@@ -637,29 +657,19 @@
         }
 
         .suggestion-brand {
-            font-size: 0.7rem;
-            color: var(--accent);
+            font-size: 0.6rem;
+            color: var(--gold-dark);
             text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         .suggestion-price {
             font-size: 0.85rem;
-            color: var(--accent);
+            color: var(--gold-dark);
             margin-top: 0.3rem;
         }
 
-        .loading {
-            text-align: center;
-            padding: 2rem;
-            color: var(--accent);
-        }
-
-        .error-message {
-            text-align: center;
-            padding: 2rem;
-            color: #c1654c;
-        }
-
+        /* Cart Sidebar */
         .cart-overlay {
             position: fixed;
             top: 0;
@@ -683,17 +693,18 @@
             position: fixed;
             top: 0;
             right: -100%;
-            width: 85%;
-            max-width: 400px;
+            width: 400px;
+            max-width: 90vw;
             height: 100vh;
-            background: var(--bg-primary);
-            padding: 1.5rem 1rem;
+            background: var(--card-warm);
+            backdrop-filter: blur(20px);
+            padding: 1.2rem;
             display: flex;
             flex-direction: column;
-            transition: right 0.3s ease-out;
+            transition: right 0.4s ease;
             z-index: 250;
-            border-left: 1px solid var(--border);
-            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
+            border-left: 1px solid var(--border-light);
+            box-shadow: var(--shadow-lg);
         }
 
         .cart-sidebar.open {
@@ -704,9 +715,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 1rem;
-            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 0.8rem;
+            margin-bottom: 0.8rem;
         }
 
         .cart-items {
@@ -718,30 +729,36 @@
             display: flex;
             gap: 0.8rem;
             align-items: center;
-            margin-bottom: 1rem;
-            border-bottom: 1px dashed var(--border);
-            padding-bottom: 1rem;
+            margin-bottom: 0.8rem;
+            border-bottom: 1px dashed var(--border-light);
+            padding-bottom: 0.8rem;
         }
 
         .cart-item-icon {
             width: 50px;
             height: 50px;
-            background: var(--bg-secondary);
-            border-radius: 30px;
+            background: var(--cream-deep);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
         }
 
         .cart-item-icon img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 30px;
+        }
+
+        .cart-item-icon i {
+            font-size: 1.3rem;
+            color: var(--gold);
         }
 
         .cart-item-info {
-            flex: 1;
+            flex: 2;
         }
 
         .cart-item-title {
@@ -750,22 +767,22 @@
         }
 
         .cart-item-price {
+            color: var(--text-mid);
             font-size: 0.8rem;
-            color: var(--text-secondary);
         }
 
         .cart-item-quantity {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            margin-top: 0.3rem;
+            gap: 0.4rem;
+            margin-top: 0.2rem;
         }
 
         .quantity-btn {
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
-            background: var(--bg-secondary);
+            background: var(--cream-deep);
             border: none;
             cursor: pointer;
         }
@@ -774,43 +791,51 @@
             background: none;
             border: none;
             cursor: pointer;
-            color: var(--text-secondary);
+            color: var(--text-mid);
         }
 
         .cart-footer {
-            border-top: 1px solid var(--border);
-            padding-top: 1rem;
+            border-top: 1px solid var(--border-light);
+            padding-top: 0.8rem;
         }
 
         .cart-total {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 1rem;
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
         }
 
         .checkout-btn {
             width: 100%;
-            background: var(--accent-gradient);
-            color: var(--bg-primary);
+            background: var(--gold-dark);
+            color: var(--white);
             border: none;
             padding: 0.8rem;
             border-radius: 50px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
         }
 
         .notification {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: var(--accent-gradient);
-            color: var(--bg-primary);
-            padding: 0.6rem 1.2rem;
-            border-radius: 60px;
+            bottom: 25px;
+            left: 25px;
+            background: var(--gold-dark);
+            color: var(--white);
+            padding: 0.7rem 1.2rem;
+            border-radius: 50px;
             transform: translateY(100px);
             opacity: 0;
-            transition: 0.2s;
+            transition: 0.3s ease;
             z-index: 300;
+            font-weight: 500;
+            font-size: 0.85rem;
         }
 
         .notification.show {
@@ -818,115 +843,238 @@
             opacity: 1;
         }
 
-        @media (max-width: 768px) {
-            .suggestions-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
-            }
-
-            .suggestion-img {
-                width: 80px;
-                height: 80px;
-            }
-
-            .thumbnail {
-                width: 55px;
-                height: 55px;
-            }
-
-            .nav-arrow {
-                width: 30px;
-                height: 30px;
-                font-size: 0.9rem;
-            }
-        }
-
-        .contact-section {
-            background: var(--card-warm);
-            border-radius: 32px;
-            padding: 1.5rem;
-            margin: 2rem 0 1rem;
-            border: 1px solid var(--border-light);
-        }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.2rem;
-            align-items: stretch;
-        }
-
-        .contact-item {
+        .empty-cart-message {
             text-align: center;
-            width: 100%;
-            max-width: 100%;
+            color: var(--text-mid);
+            padding: 1.5rem;
+            font-style: italic;
         }
 
-        .contact-icon {
-            width: 45px;
-            height: 45px;
-            background: var(--bg-tertiary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 0.6rem;
-            transition: all 0.3s ease;
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gold);
         }
 
-        .contact-item:hover .contact-icon {
-            transform: scale(1.05);
-        }
-
-        .contact-icon i {
-            font-size: 1.2rem;
-            color: var(--gold-base);
-        }
-
-        .contact-item p:first-of-type {
-            font-weight: 500;
-            margin-bottom: 0.2rem;
-            color: var(--text-primary);
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
-        }
-
-        .contact-item a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.75rem;
-        }
-
-        .contact-item a:hover {
-            color: var(--gold-base);
+        .error-message {
+            text-align: center;
+            padding: 2rem;
+            color: #c1654c;
         }
 
         footer {
-            text-align: center;
-            padding: 1.5rem 1rem 1rem;
-            border-top: 1px solid var(--border-light);
+            background: var(--charcoal);
+            color: rgba(247, 240, 230, 0.65);
+            padding: 60px 40px 28px;
+            margin-top: 2rem;
         }
 
-        .empty-cart-message {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-secondary);
-            font-style: italic;
+        body.dark footer {
+            background: #0F0E0C;
+        }
+
+        .footer-inner {
+            max-width: 1060px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 56px;
+            margin-bottom: 44px;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.55rem;
+            font-weight: 300;
+            color: var(--gold-light);
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .footer-brand p {
+            font-size: 0.8rem;
+            line-height: 1.8;
+            font-weight: 200;
+            max-width: 250px;
+        }
+
+        .footer-col h4 {
+            font-size: 0.65rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .footer-col a {
+            color: rgba(247, 240, 230, 0.55);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 200;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: var(--gold-light);
+        }
+
+        .contact-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .contact-list li {
+            font-size: 0.8rem;
+            font-weight: 200;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-list .ic {
+            color: var(--gold);
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(180, 154, 106, 0.15);
+            padding-top: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .footer-bottom p {
+            font-size: 0.7rem;
+            font-weight: 200;
+        }
+
+        .socials {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social {
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(180, 154, 106, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-light);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            border-radius: 50%;
+        }
+
+        .social:hover {
+            background: var(--gold-dark);
+            border-color: var(--gold-dark);
+            color: var(--white);
+        }
+
+        .footer-logo-img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            filter: brightness(0.9);
+            border-radius: 50%;
+        }
+
+        @media (max-width: 900px) {
+            .footer-top {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+
+            .footer-brand {
+                grid-column: 1/-1;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .footer-top {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                padding: 40px 18px 22px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        .reveal-on-scroll.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--cream-deep);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 3px;
         }
     </style>
 </head>
 
 <body>
-    <div id="menuOverlay" class="cart-overlay" style="z-index: 99;"></div>
+    <script>
+        for (let i = 0; i < 25; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const s = Math.random() * 4 + 2;
+            p.style.width = s + 'px';
+            p.style.height = s + 'px';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 20 + 's';
+            p.style.animationDuration = Math.random() * 15 + 12 + 's';
+            p.style.opacity = Math.random() * 0.2 + 0.05;
+            document.body.appendChild(p);
+        }
+    </script>
+
+    <div id="menuOverlay" class="cart-overlay" style="z-index:99;"></div>
     <div id="toast" class="notification">✨ Article ajouté</div>
 
     <div id="cartOverlay" class="cart-overlay"></div>
     <aside id="cartSidebar" class="cart-sidebar">
         <div class="cart-header">
-            <h3><i class="fas fa-bag-shopping"></i> <span data-translate="cart">Panier</span></h3>
+            <h3 style="font-weight:400;font-size:1rem;"><i class="fas fa-bag-shopping"></i> <span
+                    data-translate="cart">Panier</span></h3>
             <button id="closeCartBtn"
-                style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--accent);"><i
+                style="background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-mid);"><i
                     class="fas fa-times"></i></button>
         </div>
         <div id="cartItemsContainer" class="cart-items">
@@ -935,20 +1083,19 @@
         <div class="cart-footer">
             <div class="cart-total"><span data-translate="total">Total</span><span id="cartTotalPrice">0,000 TND</span>
             </div>
-            <button class="checkout-btn" id="checkoutBtn"><span data-translate="payment">PAIEMENT</span> <i
-                    class="fas fa-arrow-right"></i></button>
+            <button class="checkout-btn" id="checkoutBtn" style="font-size:0.8rem;"><span
+                    data-translate="payment">PAIEMENT</span> <i class="fas fa-arrow-right"></i></button>
         </div>
     </aside>
 
     <header>
         <div class="header-flex">
-            <a href="index.html" class="logo">
-                <img src="is.png" alt="Rosa Fragrances">
+            <a href="index.html" class="logo"><img src="is.png" alt="Rosa">
                 <h1>Rosa Fragrances</h1>
             </a>
-            <div style="display: flex; align-items: center;">
+            <div style="display:flex;align-items:center;gap:2px;">
                 <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon"
-                        style="display: none;"></i></div>
+                        style="display:none;"></i></div>
                 <div class="cart-icon" id="cartToggle"><i class="fas fa-bag-shopping"></i><span id="cartCount"
                         class="cart-count">0</span></div>
                 <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
@@ -960,10 +1107,8 @@
                 <a href="unisexe.html" data-translate="unisex">UNISEXE</a>
                 <a href="kids.html" data-translate="kids">ENFANTS</a>
                 <div class="lang-menu" id="langMenu">
-                    <button class="lang-current" id="langCurrentBtn">
-                        <span id="currentLangText">FRANÇAIS</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
+                    <button class="lang-current" id="langCurrentBtn"><span id="currentLangText">FRANÇAIS</span><i
+                            class="fas fa-chevron-down"></i></button>
                     <div class="lang-options">
                         <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
                         <button class="lang-option" data-lang="en">🇬🇧 English</button>
@@ -971,58 +1116,65 @@
                     </div>
                 </div>
                 <a href="login146.html" id="authLink" data-translate="login">Se connecter</a>
-                <a href="profile.html" id="profileLink" style="display: none;" data-translate="profile">Mon Profil</a>
+                <a href="profile.html" id="profileLink" style="display:none;" data-translate="profile">Mon Profil</a>
+                <a href="adminadd.html" id="adminLink" style="display:none;" class="admin-nav-link"><i
+                        class="fas fa-crown"></i> Admin</a>
             </div>
         </div>
     </header>
 
     <main class="container">
-        <a href="javascript:history.back()" class="back-link"><i class="fas fa-arrow-left"></i> <span
+        <a href="javascript:history.back()" class="back-link reveal-on-scroll"><i class="fas fa-arrow-left"></i> <span
                 data-translate="back">Retour</span></a>
 
-        <div id="productDetailContainer">
+        <div id="productDetailContainer" class="reveal-on-scroll">
             <div class="loading"><i class="fas fa-spinner fa-spin"></i> <span
                     data-translate="loading">Chargement...</span></div>
         </div>
 
-        <div id="suggestionsContainer" class="suggestions-section" style="display: none;">
+        <div id="suggestionsContainer" class="suggestions-section reveal-on-scroll" style="display: none;">
             <h2><i class="fas fa-star"></i> <span data-translate="youMayLike">Vous aimerez aussi</span></h2>
             <div id="suggestionsGrid" class="suggestions-grid"></div>
         </div>
     </main>
 
     <footer>
-        <div class="container">
-            <div class="contact-section">
-                <div style="text-align:center; margin-bottom:1rem;">
-                    <h3 style="color:var(--gold-base); font-weight: 400; font-size: 1rem; letter-spacing: 0.1em;">📞
-                        <span data-translate="contact">Contact</span></h3>
-                    <p style="color:var(--text-secondary); font-size: 0.75rem;" data-translate="contactDesc">Une
-                        question ? Nous sommes là.</p>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img class="footer-logo-img" src="is.png" alt="Rosa">
+                    <h3>ROSA FRAGRANCES</h3>
+                    <p data-translate="footerDescription">Parfumerie d'exception depuis 1985. L'art de la parfumerie
+                        orientale réinventé pour les connaisseurs exigeants.</p>
                 </div>
-                <div class="contact-grid">
-                    <div class="contact-item">
-                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
-                        <p data-translate="emailLabel">Email</p><a
-                            href="mailto:rosafragrances.tn@gmail.com">rosafragrances.tn@gmail.com</a>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
-                        <p data-translate="phoneLabel">Téléphone</p><a href="tel:+21696163366">+216 96 163 366</a>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
-                        <p>WhatsApp</p><a href="https://wa.me/21696163366" target="_blank">+216 96 163 366</a>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon"><i class="fab fa-facebook-f"></i></div>
-                        <p>Facebook</p><a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/"
-                            target="_blank">Rosa</a>
-                    </div>
+                <div class="footer-col">
+                    <h4 data-translate="footerPerfumesTitle">Parfums</h4>
+                    <ul>
+                        <li><a href="man.html" data-translate="footerMen">Homme</a></li>
+                        <li><a href="women.html" data-translate="footerWomen">Femme</a></li>
+                        <li><a href="unisexe.html" data-translate="footerUnisex">Unisexe</a></li>
+                        <li><a href="kids.html" data-translate="footerKids">Enfants</a></li>
+                    </ul>
                 </div>
-                <div style="width: 30px; height: 1px; background: var(--gold-gradient); margin: 1rem auto 0;"></div>
+                <div class="footer-col">
+                    <h4 data-translate="footerContactTitle">Contact</h4>
+                    <ul class="contact-list">
+                        <li><span class="ic">📍</span> <span data-translate="footerAddress">Tunis, Tunisie</span></li>
+                        <li><span class="ic">📞</span> <span data-translate="footerPhone">+216 96 163 366</span></li>
+                        <li><span class="ic">✉️</span> <span
+                                data-translate="footerEmail">contact@rosafragrances.tn</span></li>
+                        <div class="socials">
+                            <a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/" class="social"
+                                target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://wa.me/21696163366" class="social" target="_blank"><i
+                                    class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </ul>
+                </div>
             </div>
-            <p style="text-align: center; padding: 1rem 0 0.3rem; font-size: 0.65rem;">© Rosa Fragrances Atelier</p>
+            <div class="footer-bottom">
+                <p><span data-translate="footerCopyright">© 2026 Rosa Fragrances. Tous droits réservés.</span></p>
+            </div>
         </div>
     </footer>
 
@@ -1032,7 +1184,6 @@
             const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
             const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            // ========== TRANSLATION SYSTEM ==========
             let currentLanguage = localStorage.getItem('language') || 'fr';
 
             const translations = {
@@ -1042,11 +1193,11 @@
                     cart: 'Panier', emptyCart: 'Votre panier est vide.', total: 'Total', payment: 'PAIEMENT',
                     addToCart: 'Ajouter au panier', addedToCart: '✨ Article ajouté', removed: '🗑️ Retiré',
                     loading: 'Chargement...', errorLoading: '❌ Erreur de chargement', productNotFound: '❌ Produit non trouvé',
-                    youMayLike: 'Vous aimerez aussi', allSeasons: 'Toutes saisons', summer: 'Été', winter: 'Hiver',
-                    spring: 'Printemps', autumn: 'Automne', categoryMan: 'Homme', categoryWomen: 'Femme',
-                    categoryUnisex: 'Unisexe', categoryKids: 'Enfants', discover: 'Découvrez ce parfum d\'exception, une fragrance unique qui révèle votre personnalité.',
-                    contact: 'Contact', contactDesc: 'Une question ? Nous sommes là.',
-                    emailLabel: 'Email', phoneLabel: 'Téléphone'
+                    youMayLike: 'Vous aimerez aussi', discover: 'Découvrez ce parfum d\'exception, une fragrance unique qui révèle votre personnalité.',
+                    footerDescription: "Parfumerie d'exception depuis 1985. L'art de la parfumerie orientale réinventé pour les connaisseurs exigeants.",
+                    footerPerfumesTitle: "Parfums", footerMen: "Homme", footerWomen: "Femme", footerUnisex: "Unisexe", footerKids: "Enfants",
+                    footerContactTitle: "Contact", footerAddress: "Tunis, Tunisie", footerPhone: "+216 96 163 366",
+                    footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. Tous droits réservés."
                 },
                 en: {
                     home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
@@ -1054,11 +1205,11 @@
                     cart: 'Cart', emptyCart: 'Your cart is empty.', total: 'Total', payment: 'PAYMENT',
                     addToCart: 'Add to cart', addedToCart: '✨ Added to cart', removed: '🗑️ Removed',
                     loading: 'Loading...', errorLoading: '❌ Error loading', productNotFound: '❌ Product not found',
-                    youMayLike: 'You may also like', allSeasons: 'All seasons', summer: 'Summer', winter: 'Winter',
-                    spring: 'Spring', autumn: 'Autumn', categoryMan: 'Men', categoryWomen: 'Women',
-                    categoryUnisex: 'Unisex', categoryKids: 'Kids', discover: 'Discover this exceptional perfume, a unique fragrance that reveals your personality.',
-                    contact: 'Contact', contactDesc: 'Have a question? We\'re here.',
-                    emailLabel: 'Email', phoneLabel: 'Phone'
+                    youMayLike: 'You may also like', discover: 'Discover this exceptional perfume, a unique fragrance that reveals your personality.',
+                    footerDescription: "Exceptional perfumery since 1985. The art of oriental perfumery reinvented for discerning connoisseurs.",
+                    footerPerfumesTitle: "Perfumes", footerMen: "Men", footerWomen: "Women", footerUnisex: "Unisex", footerKids: "Kids",
+                    footerContactTitle: "Contact", footerAddress: "Tunis, Tunisia", footerPhone: "+216 96 163 366",
+                    footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. All rights reserved."
                 },
                 ar: {
                     home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
@@ -1066,41 +1217,29 @@
                     cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.', total: 'المجموع', payment: 'الدفع',
                     addToCart: 'أضف إلى السلة', addedToCart: '✨ تمت الإضافة', removed: '🗑️ تمت الإزالة',
                     loading: 'جاري التحميل...', errorLoading: '❌ خطأ في التحميل', productNotFound: '❌ المنتج غير موجود',
-                    youMayLike: 'قد يعجبك أيضاً', allSeasons: 'كل المواسم', summer: 'صيف', winter: 'شتاء',
-                    spring: 'ربيع', autumn: 'خريف', categoryMan: 'رجالي', categoryWomen: 'نسائي',
-                    categoryUnisex: 'للجنسين', categoryKids: 'أطفال', discover: 'اكتشف هذا العطر الاستثنائي، رائحة فريدة تكشف عن شخصيتك.',
-                    contact: 'اتصل بنا', contactDesc: 'هل لديك سؤال؟ نحن هنا.',
-                    emailLabel: 'البريد الإلكتروني', phoneLabel: 'الهاتف'
+                    youMayLike: 'قد يعجبك أيضاً', discover: 'اكتشف هذا العطر الاستثنائي، رائحة فريدة تكشف عن شخصيتك.',
+                    footerDescription: "عطور استثنائية منذ 1985. فن العطور الشرقية المعاد ابتكاره للخبراء المميزين.",
+                    footerPerfumesTitle: "العطور", footerMen: "رجالي", footerWomen: "نسائي", footerUnisex: "للجنسين", footerKids: "أطفال",
+                    footerContactTitle: "اتصل بنا", footerAddress: "تونس، تونس", footerPhone: "366 163 96 216+",
+                    footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 روزا للعطور. جميع الحقوق محفوظة."
                 }
             };
 
             function translatePage(lang) {
                 currentLanguage = lang;
                 localStorage.setItem('language', lang);
-
-                if (lang === 'ar') {
-                    document.body.style.direction = 'rtl';
-                    document.body.style.textAlign = 'right';
-                } else {
-                    document.body.style.direction = 'ltr';
-                    document.body.style.textAlign = 'left';
-                }
-
+                document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
+                document.body.style.textAlign = lang === 'ar' ? 'right' : 'left';
                 const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
                 const langSpan = document.getElementById('currentLangText');
                 if (langSpan) langSpan.textContent = names[lang];
-
                 document.querySelectorAll('[data-translate]').forEach(el => {
                     const key = el.getAttribute('data-translate');
                     if (translations[lang] && translations[lang][key]) {
-                        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                            el.placeholder = translations[lang][key];
-                        } else {
-                            el.textContent = translations[lang][key];
-                        }
+                        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = translations[lang][key];
+                        else el.textContent = translations[lang][key];
                     }
                 });
-
                 if (currentProduct) displayProduct(currentProduct);
                 if (typeof renderCart === 'function') renderCart();
             }
@@ -1128,6 +1267,7 @@
             const menuToggle = document.getElementById('menuToggle');
             const navLinks = document.getElementById('navLinks');
             const menuOverlay = document.getElementById('menuOverlay');
+            const checkoutBtn = document.getElementById('checkoutBtn');
 
             function showToast(msgKey, productName = '') {
                 if (!toast) return;
@@ -1162,20 +1302,20 @@
                 let html = ''; let total = 0;
                 cart.forEach(item => {
                     const sub = item.price * (item.quantity || 1); total += sub;
-                    const imageHtml = item.image ? `<img src="${item.image}" alt="${escapeHtml(item.name)}">` : `<i class="fas ${item.icon || 'fa-leaf'}"></i>`;
+                    const imageHtml = item.image ? `<img src="${item.image}" alt="${escapeHtml(item.name)}">` : `<i class="fas ${item.icon || 'fa-crown'}"></i>`;
                     html += `<div class="cart-item" data-id="${item.id}">
-                        <div class="cart-item-icon">${imageHtml}</div>
-                        <div class="cart-item-info">
-                            <div class="cart-item-title">${escapeHtml(item.name)}</div>
-                            <div class="cart-item-price">${formatPrice(item.price)}</div>
-                            <div class="cart-item-quantity">
-                                <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
-                                <span>${item.quantity || 1}</span>
-                                <button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button>
-                            </div>
-                        </div>
-                        <button class="cart-item-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
-                    </div>`;
+            <div class="cart-item-icon">${imageHtml}</div>
+            <div class="cart-item-info">
+              <div class="cart-item-title">${escapeHtml(item.name)}</div>
+              <div class="cart-item-price">${formatPrice(item.price)}</div>
+              <div class="cart-item-quantity">
+                <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
+                <span>${item.quantity || 1}</span>
+                <button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button>
+              </div>
+            </div>
+            <button class="cart-item-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
+          </div>`;
                 });
                 cartItemsContainer.innerHTML = html;
                 if (cartTotalSpan) cartTotalSpan.textContent = formatPrice(total);
@@ -1184,7 +1324,7 @@
             function addToCart(id, name, price, icon, image) {
                 const existing = cart.find(i => i.id === id);
                 if (existing) existing.quantity = (existing.quantity || 1) + 1;
-                else cart.push({ id, name, price, icon: icon || 'fa-leaf', image, quantity: 1 });
+                else cart.push({ id, name, price, icon: icon || 'fa-crown', image, quantity: 1 });
                 saveCart();
                 showToast('addedToCart', name);
             }
@@ -1256,50 +1396,12 @@
 
                 function changeImage(newIndex) {
                     if (newIndex < 0 || newIndex >= images.length || newIndex === currentImageIndex) return;
-                    const direction = newIndex > currentImageIndex ? 'left' : 'right';
-                    const container = document.querySelector('.image-container');
-                    const currentImg = document.getElementById('mainImage');
-                    if (!container || !currentImg) return;
-
                     currentImageIndex = newIndex;
-                    const nextImg = document.createElement('img');
-                    nextImg.src = images[currentImageIndex];
-                    nextImg.alt = currentImg.alt;
-                    nextImg.style.position = 'absolute';
-                    nextImg.style.top = '0'; nextImg.style.left = '0';
-                    nextImg.style.width = '100%'; nextImg.style.height = '100%';
-                    nextImg.style.objectFit = 'cover';
-
-                    if (direction === 'left') {
-                        nextImg.style.transform = 'translateX(100%)';
-                        currentImg.style.transform = 'translateX(0)';
-                    } else {
-                        nextImg.style.transform = 'translateX(-100%)';
-                        currentImg.style.transform = 'translateX(0)';
-                    }
-
-                    container.appendChild(nextImg);
-                    setTimeout(() => {
-                        if (direction === 'left') {
-                            currentImg.style.transform = 'translateX(-100%)';
-                            nextImg.style.transform = 'translateX(0)';
-                        } else {
-                            currentImg.style.transform = 'translateX(100%)';
-                            nextImg.style.transform = 'translateX(0)';
-                        }
-                    }, 10);
-
-                    setTimeout(() => {
-                        container.removeChild(currentImg);
-                        nextImg.id = 'mainImage';
-                        nextImg.style.position = '';
-                        nextImg.style.transform = '';
-                    }, 500);
-
+                    const mainImg = document.getElementById('mainImage');
+                    if (mainImg) mainImg.src = images[currentImageIndex];
                     document.querySelectorAll('.thumbnail').forEach((thumb, idx) => {
                         thumb.classList.toggle('active', idx === currentImageIndex);
                     });
-
                     document.querySelectorAll('.swipe-dot').forEach((dot, idx) => {
                         dot.classList.toggle('active', idx === currentImageIndex);
                     });
@@ -1352,21 +1454,9 @@
                     }
                 } catch (e) { productImages = []; }
 
-                const seasonNames = {
-                    all: translations[currentLanguage].allSeasons,
-                    summer: translations[currentLanguage].summer,
-                    winter: translations[currentLanguage].winter,
-                    spring: translations[currentLanguage].spring,
-                    autumn: translations[currentLanguage].autumn
-                };
                 const categoryNames = {
-                    man: translations[currentLanguage].categoryMan,
-                    women: translations[currentLanguage].categoryWomen,
-                    unisexe: translations[currentLanguage].categoryUnisex,
-                    kids: translations[currentLanguage].categoryKids
+                    man: 'Homme', women: 'Femme', unisexe: 'Unisexe', kids: 'Enfants'
                 };
-
-                const seasonName = seasonNames[product.season] || translations[currentLanguage].allSeasons;
                 const categoryName = categoryNames[product.category] || product.category;
 
                 let thumbnailsHtml = '', mainImageHtml = '', swipeIndicatorsHtml = '', arrowsHtml = '';
@@ -1374,48 +1464,47 @@
                 if (productImages.length > 0) {
                     mainImageHtml = `<img src="${productImages[0]}" alt="${escapeHtml(product.name)}" id="mainImage">`;
                     thumbnailsHtml = productImages.map((img, idx) => `
-                        <div class="thumbnail ${idx === 0 ? 'active' : ''}" data-img="${img}">
-                            <img src="${img}" alt="thumbnail ${idx + 1}">
-                        </div>
-                    `).join('');
+            <div class="thumbnail ${idx === 0 ? 'active' : ''}" data-img="${img}">
+              <img src="${img}" alt="thumbnail ${idx + 1}">
+            </div>
+          `).join('');
                     swipeIndicatorsHtml = productImages.map((_, idx) => `
-                        <div class="swipe-dot ${idx === 0 ? 'active' : ''}"></div>
-                    `).join('');
+            <div class="swipe-dot ${idx === 0 ? 'active' : ''}"></div>
+          `).join('');
                     if (productImages.length > 1) {
                         arrowsHtml = `
-                            <div class="nav-arrow prev"><i class="fas fa-chevron-left"></i></div>
-                            <div class="nav-arrow next"><i class="fas fa-chevron-right"></i></div>
-                        `;
+              <div class="nav-arrow prev"><i class="fas fa-chevron-left"></i></div>
+              <div class="nav-arrow next"><i class="fas fa-chevron-right"></i></div>
+            `;
                     }
                 } else {
                     mainImageHtml = `<i class="fas fa-crown"></i>`;
                 }
 
                 productDetailContainer.innerHTML = `
-                    <div class="product-detail">
-                        <div class="product-gallery">
-                            <div class="main-image-container">
-                                <div class="image-container">${mainImageHtml}</div>
-                                ${arrowsHtml}
-                                <div class="swipe-indicators">${swipeIndicatorsHtml}</div>
-                            </div>
-                            ${productImages.length > 1 ? `<div class="thumbnail-grid">${thumbnailsHtml}</div>` : ''}
-                        </div>
-                        <div class="product-info">
-                            <h1>${escapeHtml(product.name)}</h1>
-                            <div class="product-brand">${escapeHtml(product.brand)}</div>
-                            <div class="product-meta">
-                                <span class="meta-badge"><i class="fas fa-tag"></i> ${categoryName}</span>
-                                <span class="meta-badge"><i class="fas fa-calendar-alt"></i> ${seasonName}</span>
-                            </div>
-                            <div class="product-price">${formatPrice(product.price)}</div>
-                            <div class="product-description">${escapeHtml(product.description || translations[currentLanguage].discover)}</div>
-                            <button class="add-to-cart-btn" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${product.price}" data-icon="${product.icon || 'fa-crown'}" data-image="${productImages[0] || ''}">
-                                <i class="fas fa-shopping-cart"></i> ${translations[currentLanguage].addToCart}
-                            </button>
-                        </div>
-                    </div>
-                `;
+          <div class="product-detail">
+            <div class="product-gallery">
+              <div class="main-image-container">
+                <div class="image-container">${mainImageHtml}</div>
+                ${arrowsHtml}
+                <div class="swipe-indicators">${swipeIndicatorsHtml}</div>
+              </div>
+              ${productImages.length > 1 ? `<div class="thumbnail-grid">${thumbnailsHtml}</div>` : ''}
+            </div>
+            <div class="product-info">
+              <h1>${escapeHtml(product.name)}</h1>
+              <div class="product-brand">${escapeHtml(product.brand)}</div>
+              <div class="product-meta">
+                <span class="meta-badge"><i class="fas fa-tag"></i> ${categoryName}</span>
+              </div>
+              <div class="product-price">${formatPrice(product.price)}</div>
+              <div class="product-description">${escapeHtml(product.description || translations[currentLanguage].discover)}</div>
+              <button class="add-to-cart-btn" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${product.price}" data-icon="fa-crown" data-image="${productImages[0] || ''}">
+                <i class="fas fa-shopping-cart"></i> ${translations[currentLanguage].addToCart}
+              </button>
+            </div>
+          </div>
+        `;
 
                 const addBtn = document.querySelector('.add-to-cart-btn');
                 if (addBtn) {
@@ -1429,7 +1518,7 @@
 
             function loadSuggestions() {
                 if (!currentProduct || !allProducts.length) return;
-                const suggestions = allProducts.filter(p => p.id !== currentProduct.id && p.category === currentProduct.category).slice(0, 8);
+                const suggestions = allProducts.filter(p => p.id !== currentProduct.id && p.category === currentProduct.category).slice(0, 4);
                 if (suggestions.length === 0) { suggestionsContainer.style.display = 'none'; return; }
                 suggestionsContainer.style.display = 'block';
 
@@ -1440,15 +1529,15 @@
                         const prodImages = product.images ? JSON.parse(product.images) : [];
                         firstImage = prodImages[0] || '';
                     } catch (e) { }
-                    const imgHtml = firstImage ? `<img src="${firstImage}" alt="${escapeHtml(product.name)}">` : `<i class="fas fa-leaf"></i>`;
+                    const imgHtml = firstImage ? `<img src="${firstImage}" alt="${escapeHtml(product.name)}">` : `<i class="fas fa-crown"></i>`;
                     html += `
-                        <div class="suggestion-card" onclick="window.location.href='product.html?id=${product.id}'">
-                            <div class="suggestion-img">${imgHtml}</div>
-                            <div class="suggestion-name">${escapeHtml(product.name)}</div>
-                            <div class="suggestion-brand">${escapeHtml(product.brand)}</div>
-                            <div class="suggestion-price">${formatPrice(product.price)}</div>
-                        </div>
-                    `;
+            <div class="suggestion-card" onclick="window.location.href='product.html?id=${product.id}'">
+              <div class="suggestion-img">${imgHtml}</div>
+              <div class="suggestion-name">${escapeHtml(product.name)}</div>
+              <div class="suggestion-brand">${escapeHtml(product.brand)}</div>
+              <div class="suggestion-price">${formatPrice(product.price)}</div>
+            </div>
+          `;
                 });
                 suggestionsGrid.innerHTML = html;
             }
@@ -1506,17 +1595,20 @@
 
             let updateUserTimeout, isUpdatingUser = false;
             async function updateUserDisplay() {
-                if (isUpdatingUser) return; isUpdatingUser = true;
+                if (isUpdatingUser) return;
+                isUpdatingUser = true;
                 try {
                     const { data: { user } } = await supabase.auth.getUser();
-                    const authLink = document.getElementById('authLink');
-                    const profileLink = document.getElementById('profileLink');
+                    const authLink = document.getElementById('authLink'), profileLink = document.getElementById('profileLink'), adminLink = document.getElementById('adminLink');
                     if (user) {
                         if (authLink) authLink.style.display = 'none';
                         if (profileLink) profileLink.style.display = 'block';
+                        if (user.email === 'azmmeli146@gmail.com') { if (adminLink) adminLink.style.display = 'block'; }
+                        else { if (adminLink) adminLink.style.display = 'none'; }
                     } else {
                         if (authLink) authLink.style.display = 'block';
                         if (profileLink) profileLink.style.display = 'none';
+                        if (adminLink) adminLink.style.display = 'none';
                     }
                 } catch (error) { console.error('Error checking user:', error); }
                 finally { isUpdatingUser = false; }
@@ -1528,6 +1620,12 @@
                     updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
                 }
             });
+
+            const revealElements = document.querySelectorAll('.reveal-on-scroll');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('revealed'); observer.unobserve(entry.target); } });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+            revealElements.forEach(el => observer.observe(el));
 
             function initTheme() {
                 const saved = localStorage.getItem('theme') || 'light';
