@@ -23,7 +23,7 @@
       box-sizing: border-box;
     }
 
-    /* ===== TT.HTML WHITE/CREAM THEME ===== */
+    /* ===== WHITE/CREAM THEME ===== */
     :root {
       --cream: #F7F0E6;
       --cream-dark: #EDE4D6;
@@ -313,7 +313,68 @@
       color: var(--gold-dark);
     }
 
-    /* ===== PROMO CARD STYLES (ADDED - LEFT ALIGNED, AMPERSAND CENTERED, BUTTON LEFT) ===== */
+    /* ===== SEARCH BAR STYLES ===== */
+    .search-section {
+      margin-bottom: 2rem;
+    }
+
+    .search-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .search-wrapper i {
+      position: absolute;
+      left: 1.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    .search-wrapper input {
+      width: 100%;
+      padding: 0.9rem 1.2rem 0.9rem 3rem;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-family: 'Jost', sans-serif;
+      color: var(--charcoal);
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    .search-wrapper input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(180, 154, 106, 0.1);
+    }
+
+    .search-wrapper input::placeholder {
+      color: var(--text-mid);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 768px) {
+      .search-wrapper {
+        max-width: 100%;
+      }
+
+      .search-wrapper input {
+        padding: 0.7rem 1rem 0.7rem 2.8rem;
+        font-size: 0.85rem;
+      }
+
+      .search-wrapper i {
+        left: 1rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* ===== PROMO CARD STYLES ===== */
     .promo-card-section {
       margin-bottom: 2rem;
       position: relative;
@@ -429,13 +490,6 @@
       font-style: italic;
       color: #D4B98A;
       margin-left: 0.25rem;
-    }
-
-    .ampersand-center {
-      width: 100%;
-      text-align: center;
-      margin: 0.2rem 0;
-      animation: fadeUpPromo 0.8s ease-out 0.15s both;
     }
 
     .ampersand-symbol {
@@ -567,112 +621,6 @@
       }
     }
 
-    /* Categories section */
-    .categories-section {
-      margin: 0.5rem 0 2rem;
-    }
-
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
-    }
-
-    @media (max-width: 1024px) {
-      .category-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .category-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .container {
-        padding: 1rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .category-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .category-card {
-      border-radius: 24px;
-      padding: 2rem 1.5rem;
-      text-align: center;
-      text-decoration: none;
-      transition: all 0.4s ease;
-      display: block;
-      background-size: cover;
-      background-position: center;
-      min-height: 220px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: var(--shadow-md);
-    }
-
-    .category-card.cat-man {
-      background-image: url('https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/man.jfif');
-    }
-
-    .category-card.cat-women {
-      background-image: url('https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/women.jfif');
-    }
-
-    .category-card.cat-unisex {
-      background-image: url('https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/unisexe.jfif');
-    }
-
-    .category-card.cat-kids {
-      background-image: url('https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/kids.jfif');
-    }
-
-    .category-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.25) 100%);
-      border-radius: 24px;
-      z-index: 1;
-      transition: all 0.4s ease;
-    }
-
-    .category-card:hover::before {
-      background: linear-gradient(135deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.15) 100%);
-    }
-
-    .category-card h3,
-    .category-card p {
-      position: relative;
-      z-index: 2;
-      color: white;
-    }
-
-    .category-card h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
-      font-weight: 400;
-      margin-bottom: 0.4rem;
-      letter-spacing: 0.1em;
-    }
-
-    .category-card p {
-      font-size: 0.75rem;
-      opacity: 0.9;
-    }
-
-    .category-card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-hover);
-    }
-
     /* ===== TT HERO SECTION ===== */
     .hero-tt {
       min-height: 70vh;
@@ -802,6 +750,69 @@
       }
     }
 
+    /* ===== PRODUCTS SECTION WITH TABS ===== */
+    .products-section {
+      margin: 0 0 2rem 0;
+    }
+
+    .products-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      color: var(--charcoal);
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--gold-dark);
+    }
+
+    /* Tabs / Onglets */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      padding: 8px 20px;
+      border: 1px solid var(--cream-deep);
+      background: none;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Jost', sans-serif;
+      border-radius: 50px;
+    }
+
+    .tab.active,
+    .tab:hover {
+      background: var(--gold-dark);
+      color: var(--white);
+      border-color: var(--gold-dark);
+    }
+
     /* Product Grid */
     .product-grid {
       display: grid;
@@ -819,6 +830,12 @@
     @media (max-width: 768px) {
       .product-grid {
         grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .product-grid {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -1192,7 +1209,7 @@
       color: var(--gold);
     }
 
-    /* ===== TT.HTML FOOTER STYLES ===== */
+    /* Footer */
     footer {
       background: var(--charcoal);
       color: rgba(247, 240, 230, 0.65);
@@ -1328,22 +1345,6 @@
       border-radius: 50%;
     }
 
-    .legal-links {
-      display: flex;
-      gap: 20px;
-    }
-
-    .legal-links a {
-      color: rgba(247, 240, 230, 0.55);
-      text-decoration: none;
-      font-size: 0.7rem;
-      transition: color 0.3s;
-    }
-
-    .legal-links a:hover {
-      color: var(--gold-light);
-    }
-
     @media (max-width: 900px) {
       .footer-top {
         grid-template-columns: 1fr 1fr;
@@ -1367,10 +1368,6 @@
       .footer-bottom {
         flex-direction: column;
         text-align: center;
-      }
-
-      .legal-links {
-        justify-content: center;
       }
     }
 
@@ -1419,6 +1416,11 @@
 
       .logo img {
         width: 36px;
+      }
+
+      .products-header {
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
   </style>
@@ -1538,9 +1540,10 @@
         <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
       </div>
       <div class="nav-links" id="navLinks">
-        <a href="#" data-translate="collection">COLLECTION</a>
-        <a href="#" data-translate="exclusives">EXCLUSIVITÉS</a>
-        <a href="#" data-translate="gifts">COFFRETS</a>
+        <a href="man.html" data-translate="men">HOMME</a>
+        <a href="women.html" data-translate="women">FEMME</a>
+        <a href="unisexe.html" data-translate="unisex">UNISEXE</a>
+        <a href="kids.html" data-translate="kids">ENFANTS</a>
         <div class="lang-menu" id="langMenu">
           <button class="lang-current" id="langCurrentBtn"><span id="currentLangText">FRANÇAIS</span><i
               class="fas fa-chevron-down"></i></button>
@@ -1559,7 +1562,16 @@
   </header>
 
   <main class="container">
-    <!-- PROMO CARD - ADDED ON TOP OF CATEGORY SECTION (LEFT ALIGNED, AMPERSAND CENTERED, BUTTON LEFT) -->
+    <!-- SEARCH BAR - Added on top of promo card -->
+    <div class="search-section reveal-on-scroll">
+      <div class="search-wrapper">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Rechercher un parfum par nom ou marque..."
+          data-translate="searchPlaceholder">
+      </div>
+    </div>
+
+    <!-- 1. PROMO CARD -->
     <div class="promo-card-section reveal-on-scroll">
       <div class="promo-card-wrapper">
         <div class="promo-card-inner">
@@ -1579,36 +1591,14 @@
             <div class="promo-divider-left"></div>
             <div class="promo-cta-left">
               <a href="#" class="btn-promo btn-promo-primary"
-                onclick="document.getElementById('productGrid').scrollIntoView({behavior:'smooth'}); return false;">Découvrir</a>
+                onclick="document.querySelector('.products-section').scrollIntoView({behavior:'smooth'}); return false;">Découvrir</a>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Categories Section -->
-    <div class="categories-section reveal-on-scroll">
-      <div class="category-grid" id="category-grid">
-        <a href="man.html" class="category-card cat-man">
-          <h3 data-translate="menCat">Homme</h3>
-          <p data-translate="menDesc">Boisés & épicés</p>
-        </a>
-        <a href="women.html" class="category-card cat-women">
-          <h3 data-translate="womenCat">Femme</h3>
-          <p data-translate="womenDesc">Floraux & sensuels</p>
-        </a>
-        <a href="unisexe.html" class="category-card cat-unisex">
-          <h3 data-translate="unisexCat">Unisexe</h3>
-          <p data-translate="unisexDesc">Pour tous</p>
-        </a>
-        <a href="kids.html" class="category-card cat-kids">
-          <h3 data-translate="kidsCat">Enfants</h3>
-          <p data-translate="kidsDesc">Douceurs</p>
-        </a>
-      </div>
-    </div>
-
-    <!-- TT HERO - Right after categories -->
+    <!-- 2. HERO SECTION (image in the middle) -->
     <div class="hero-tt reveal-on-scroll">
       <img class="hero-logo-tt" src="is.png" alt="Rosa Fragrances Logo">
       <h1>L'Art du <em>Parfum</em><br>Oriental</h1>
@@ -1618,25 +1608,47 @@
         <a href="#" class="btn-tt btn-primary-tt"
           onclick="document.getElementById('foots').scrollIntoView({behavior:'smooth'}); return false;">Contactez-nous</a>
         <a href="#" class="btn-tt btn-outline-tt"
-          onclick="document.getElementById('category-grid').scrollIntoView({behavior:'smooth'}); return false;">catégorie</a>
+          onclick="document.querySelector('.products-section').scrollIntoView({behavior:'smooth'}); return false;">Collection</a>
       </div>
     </div>
 
+    <!-- 3. PRODUCTS SECTION WITH TABS (right on top of products) -->
+    <div class="products-section reveal-on-scroll">
+      <div class="products-header">
+        <div>
+          <p class="section-label" data-translate="collectionLabel">Notre Collection</p>
+          <h2 class="section-title" data-translate="collectionTitle">Parfums <em
+              data-translate="exclusive">Exclusifs</em></h2>
+        </div>
+        <div class="tabs">
+          <button class="tab active" onclick="filterProducts('all')" data-translate="allTab">Tous</button>
+          <button class="tab" onclick="filterProducts('man')" data-translate="menTab">Homme</button>
+          <button class="tab" onclick="filterProducts('women')" data-translate="womenTab">Femme</button>
+          <button class="tab" onclick="filterProducts('unisexe')" data-translate="unisexTab">Unisexe</button>
+          <button class="tab" onclick="filterProducts('kids')" data-translate="kidsTab">Enfants</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading Spinner -->
     <div id="loadingProducts" class="loading-spinner" style="display:none;"><i class="fas fa-spinner fa-spin"></i>
       <p style="margin-top:0.3rem;font-size:0.8rem;" data-translate="loading">Chargement...</p>
     </div>
+
+    <!-- 4. PRODUCT GRID -->
     <div class="product-grid reveal-on-scroll" id="productGrid"></div>
   </main>
 
-  <!-- ===== TT.HTML FOOTER WITH TRANSLATIONS ===== -->
+  <!-- FOOTER -->
   <footer>
     <div class="footer-inner">
       <div class="footer-top">
         <div class="footer-brand">
           <img class="footer-logo-img" src="is.png" alt="Rosa">
-          <h3>ROSA FRAGRANCEdS</h3>
-          <p data-translate="footerDescription">Nous vous proposons un univers de parfums luxueux, aux senteurs
-            élégantes et spontanées, qui touchent les émotions et laissent une impression durable.</p>
+          <h3>ROSA FRAGRANCES</h3>
+          <p data-translate="footerDescription">Nous vous proposons un univers de parfums luxueux, aux
+            senteurs élégantes et spontanées, qui touchent les émotions et laissent une impression durable.
+          </p>
         </div>
         <div class="footer-col">
           <h4 data-translate="footerPerfumesTitle">Parfums</h4>
@@ -1654,7 +1666,6 @@
             <li><span class="ic">📍</span> <span data-translate="footerAddress">Tunis, Tunisie</span></li>
             <li><span class="ic">📞</span> <span data-translate="footerPhone">+216 96 163 366</span></li>
             <li><span class="ic">✉️</span> <span data-translate="footerEmail">contact@rosafragrances.tn</span></li>
-
             <div class="socials">
               <a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/" class="social"
                 target="_blank"><i class="fab fa-facebook-f"></i></a>
@@ -1664,75 +1675,68 @@
         </div>
       </div>
       <div class="footer-bottom" id="foots">
-
         <p><span data-translate="footerCopyright">© 2026 Rosa Fragrances. Tous droits réservés.</span></p>
-
       </div>
     </div>
   </footer>
 
   <script>
+    // All the JavaScript remains the same as your original index.html with added search functionality
     (function () {
       const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co',
         SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
       let currentLanguage = localStorage.getItem('language') || 'fr';
+      let allProductsData = [];
+      let currentFilter = 'all';
+      let currentSearchTerm = '';
 
       const translations = {
         fr: {
-          collection: 'COLLECTION', exclusives: 'EXCLUSIVITÉS', gifts: 'COFFRETS', login: 'Se connecter', profile: 'Mon Profil', menCat: 'Homme', menDesc: 'Boisés & épicés', womenCat: 'Femme', womenDesc: 'Floraux & sensuels', unisexCat: 'Unisexe', unisexDesc: 'Pour tous', kidsCat: 'Enfants', kidsDesc: 'Douceurs', addToCart: 'Ajouter', addedToCart: '✨ Article ajouté', cart: 'Panier', emptyCart: 'Votre panier est vide.', total: 'Total', payment: 'PAIEMENT', delivery: 'Livraison', fullName: 'Nom complet *', phone: 'Téléphone *', email: 'Email *', address: 'Adresse *', yourOrder: 'Votre commande', cancel: 'Annuler', confirm: 'Confirmer', orderConfirmed: '✅ Commande confirmée!', cartEmptyWarning: '🛒 Panier vide', error: '❌ Erreur', details: 'Détails', close: 'Fermer', loading: 'Chargement...', noProducts: 'Aucun parfum disponible', errorLoading: '❌ Erreur', reload: 'Recharger', removed: '🗑️ Retiré',
+          collection: 'COLLECTION', exclusives: 'EXCLUSIVITÉS', gifts: 'COFFRETS', login: 'Se connecter', profile: 'Mon Profil',
+          addToCart: 'Ajouter', addedToCart: '✨ Article ajouté', cart: 'Panier', emptyCart: 'Votre panier est vide.',
+          total: 'Total', payment: 'PAIEMENT', delivery: 'Livraison', fullName: 'Nom complet *', phone: 'Téléphone *',
+          email: 'Email *', address: 'Adresse *', yourOrder: 'Votre commande', cancel: 'Annuler', confirm: 'Confirmer',
+          orderConfirmed: '✅ Commande confirmée!', cartEmptyWarning: '🛒 Panier vide', error: '❌ Erreur', details: 'Détails',
+          close: 'Fermer', loading: 'Chargement...', noProducts: 'Aucun parfum trouvé', errorLoading: '❌ Erreur',
+          reload: 'Recharger', removed: '🗑️ Retiré', collectionLabel: 'Notre Collection', collectionTitle: 'Parfums',
+          exclusive: 'Exclusifs', allTab: 'Tous', menTab: 'Homme', womenTab: 'Femme', unisexTab: 'Unisexe', kidsTab: 'Enfants',
+          searchPlaceholder: 'Rechercher un parfum par nom ou marque...',
           footerDescription: "Nous vous proposons un univers de parfums luxueux, aux senteurs élégantes et spontanées, qui touchent les émotions et laissent une impression durable.",
-          footerPerfumesTitle: "Parfums",
-          footerMen: "Homme",
-          footerWomen: "Femme",
-          footerUnisex: "Unisexe",
-          footerKids: "Enfants",
-          footerNew: "Nouveautés",
-          footerContactTitle: "Contact",
-          footerAddress: "Tunis, Tunisie",
-          footerPhone: "+216 96 163 366",
-          footerEmail: "contact@rosafragrances.tn",
-          footerCopyright: "© 2026 Rosa Fragrances. Tous droits réservés.",
-          footerLegal: "Mentions légales",
-          footerPrivacy: "Confidentialité",
-          footerTerms: "CGV"
+          footerPerfumesTitle: "Parfums", footerMen: "Homme", footerWomen: "Femme", footerUnisex: "Unisexe", footerKids: "Enfants",
+          footerNew: "Nouveautés", footerContactTitle: "Contact", footerAddress: "Tunis, Tunisie", footerPhone: "+216 96 163 366",
+          footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. Tous droits réservés."
         },
         en: {
-          collection: 'COLLECTION', exclusives: 'EXCLUSIVES', gifts: 'GIFT SETS', login: 'Sign in', profile: 'My Profile', menCat: 'Men', menDesc: 'Woody & spicy', womenCat: 'Women', womenDesc: 'Floral & sensual', unisexCat: 'Unisex', unisexDesc: 'For everyone', kidsCat: 'Kids', kidsDesc: 'Sweet scents', addToCart: 'Add to cart', addedToCart: '✨ Added to cart', cart: 'Cart', emptyCart: 'Your cart is empty.', total: 'Total', payment: 'PAYMENT', delivery: 'Delivery', fullName: 'Full name *', phone: 'Phone *', email: 'Email *', address: 'Address *', yourOrder: 'Your order', cancel: 'Cancel', confirm: 'Confirm', orderConfirmed: '✅ Order confirmed!', cartEmptyWarning: '🛒 Cart is empty', error: '❌ Error', details: 'Details', close: 'Close', loading: 'Loading...', noProducts: 'No perfumes available', errorLoading: '❌ Error', reload: 'Reload', removed: '🗑️ Removed',
+          collection: 'COLLECTION', exclusives: 'EXCLUSIVES', gifts: 'GIFT SETS', login: 'Sign in', profile: 'My Profile',
+          addToCart: 'Add to cart', addedToCart: '✨ Added to cart', cart: 'Cart', emptyCart: 'Your cart is empty.',
+          total: 'Total', payment: 'PAYMENT', delivery: 'Delivery', fullName: 'Full name *', phone: 'Phone *',
+          email: 'Email *', address: 'Address *', yourOrder: 'Your order', cancel: 'Cancel', confirm: 'Confirm',
+          orderConfirmed: '✅ Order confirmed!', cartEmptyWarning: '🛒 Cart is empty', error: '❌ Error', details: 'Details',
+          close: 'Close', loading: 'Loading...', noProducts: 'No perfumes found', errorLoading: '❌ Error',
+          reload: 'Reload', removed: '🗑️ Removed', collectionLabel: 'Our Collection', collectionTitle: 'Perfumes',
+          exclusive: 'Exclusive', allTab: 'All', menTab: 'Men', womenTab: 'Women', unisexTab: 'Unisex', kidsTab: 'Kids',
+          searchPlaceholder: 'Search perfume by name or brand...',
           footerDescription: "We offer you a world of luxurious perfumes, with elegant and spontaneous scents, that touch the emotions and leave a lasting impression.",
-          footerPerfumesTitle: "Perfumes",
-          footerMen: "Men",
-          footerWomen: "Women",
-          footerUnisex: "Unisex",
-          footerKids: "Kids",
-          footerNew: "New Arrivals",
-          footerContactTitle: "Contact",
-          footerAddress: "Tunis, Tunisia",
-          footerPhone: "+216 96 163 366",
-          footerEmail: "contact@rosafragrances.tn",
-          footerCopyright: "© 2026 Rosa Fragrances. All rights reserved.",
-          footerLegal: "Legal Notice",
-          footerPrivacy: "Privacy",
-          footerTerms: "Terms & Conditions"
+          footerPerfumesTitle: "Perfumes", footerMen: "Men", footerWomen: "Women", footerUnisex: "Unisex", footerKids: "Kids",
+          footerNew: "New Arrivals", footerContactTitle: "Contact", footerAddress: "Tunis, Tunisia", footerPhone: "+216 96 163 366",
+          footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. All rights reserved."
         },
         ar: {
-          collection: 'المجموعة', exclusives: 'الحصريات', gifts: 'الهدايا', login: 'تسجيل الدخول', profile: 'ملفي الشخصي', menCat: 'رجالي', menDesc: 'خشبي وحار', womenCat: 'نسائي', womenDesc: 'زهري وحسي', unisexCat: 'للجنسين', unisexDesc: 'للجميع', kidsCat: 'أطفال', kidsDesc: 'روائح حلوة', addToCart: 'أضف إلى السلة', addedToCart: '✨ تمت الإضافة', cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.', total: 'المجموع', payment: 'الدفع', delivery: 'التوصيل', fullName: 'الاسم الكامل *', phone: 'الهاتف *', email: 'البريد الإلكتروني *', address: 'العنوان *', yourOrder: 'طلبك', cancel: 'إلغاء', confirm: 'تأكيد', orderConfirmed: '✅ تم تأكيد الطلب!', cartEmptyWarning: '🛒 السلة فارغة', error: '❌ خطأ', details: 'التفاصيل', close: 'إغلاق', loading: 'جاري التحميل...', noProducts: 'لا توجد عطور', errorLoading: '❌ خطأ', reload: 'إعادة تحميل', removed: '🗑️ تمت الإزالة',
+          collection: 'المجموعة', exclusives: 'الحصريات', gifts: 'الهدايا', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
+          addToCart: 'أضف إلى السلة', addedToCart: '✨ تمت الإضافة', cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.',
+          total: 'المجموع', payment: 'الدفع', delivery: 'التوصيل', fullName: 'الاسم الكامل *', phone: 'الهاتف *',
+          email: 'البريد الإلكتروني *', address: 'العنوان *', yourOrder: 'طلبك', cancel: 'إلغاء', confirm: 'تأكيد',
+          orderConfirmed: '✅ تم تأكيد الطلب!', cartEmptyWarning: '🛒 السلة فارغة', error: '❌ خطأ', details: 'التفاصيل',
+          close: 'إغلاق', loading: 'جاري التحميل...', noProducts: 'لا توجد عطور', errorLoading: '❌ خطأ',
+          reload: 'إعادة تحميل', removed: '🗑️ تمت الإزالة', collectionLabel: 'مجموعتنا', collectionTitle: 'العطور',
+          exclusive: 'الحصرية', allTab: 'الكل', menTab: 'رجالي', womenTab: 'نسائي', unisexTab: 'للجنسين', kidsTab: 'أطفال',
+          searchPlaceholder: 'البحث عن عطر بالاسم أو العلامة...',
           footerDescription: "نقدم لكم عالماً من العطور الفاخرة، بروائح أنيقة وعفوية، تلامس المشاعر وتترك انطباعاً دائماً.",
-          footerPerfumesTitle: "العطور",
-          footerMen: "رجالي",
-          footerWomen: "نسائي",
-          footerUnisex: "للجنسين",
-          footerKids: "أطفال",
-          footerNew: "الوافدون الجدد",
-          footerContactTitle: "اتصل بنا",
-          footerAddress: "تونس، تونس",
-          footerPhone: "366 163 96 216+",
-          footerEmail: "contact@rosafragrances.tn",
-          footerCopyright: "© 2026 روزا للعطور. جميع الحقوق محفوظة.",
-          footerLegal: "إشعار قانوني",
-          footerPrivacy: "خصوصية",
-          footerTerms: "الشروط والأحكام"
+          footerPerfumesTitle: "العطور", footerMen: "رجالي", footerWomen: "نسائي", footerUnisex: "للجنسين", footerKids: "أطفال",
+          footerNew: "الوافدون الجدد", footerContactTitle: "اتصل بنا", footerAddress: "تونس، تونس", footerPhone: "366 163 96 216+",
+          footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 روزا للعطور. جميع الحقوق محفوظة."
         }
       };
 
@@ -1751,11 +1755,10 @@
             else el.textContent = translations[lang][key];
           }
         });
-        if (typeof renderProducts === 'function' && products.length > 0) renderProducts();
+        if (typeof renderProducts === 'function' && allProductsData.length > 0) renderProducts();
         if (typeof renderCart === 'function') renderCart();
       }
 
-      let products = [];
       let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
       const productGrid = document.getElementById('productGrid');
       const loadingEl = document.getElementById('loadingProducts');
@@ -1771,6 +1774,7 @@
       const menuToggle = document.getElementById('menuToggle');
       const navLinks = document.getElementById('navLinks');
       const menuOverlay = document.getElementById('menuOverlay');
+      const searchInput = document.getElementById('searchInput');
 
       function showToast(msgKey, productName = '') {
         if (!toast) return;
@@ -1781,24 +1785,11 @@
         setTimeout(() => toast.classList.remove('show'), 2000);
       }
 
-      function formatPrice(p) {
-        return parseFloat(p).toFixed(3).replace('.', ',') + ' TND';
-      }
-
-      function calculateTotal() {
-        return cart.reduce((s, i) => s + (i.price * i.quantity), 0);
-      }
-
-      function updateCartCount() {
-        const total = cart.reduce((a, i) => a + (i.quantity || 1), 0);
-        if (cartCountSpan) cartCountSpan.textContent = total;
-      }
-
-      function saveCart() {
-        localStorage.setItem('RosaFragrances_cart', JSON.stringify(cart));
-        updateCartCount();
-        renderCart();
-      }
+      function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
+      function calculateTotal() { return cart.reduce((s, i) => s + (i.price * i.quantity), 0); }
+      function updateCartCount() { const total = cart.reduce((a, i) => a + (i.quantity || 1), 0); if (cartCountSpan) cartCountSpan.textContent = total; }
+      function saveCart() { localStorage.setItem('RosaFragrances_cart', JSON.stringify(cart)); updateCartCount(); renderCart(); }
+      function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
 
       function renderCart() {
         if (!cartItemsContainer) return;
@@ -1837,12 +1828,7 @@
         showToast('addedToCart', name);
       }
 
-      function removeFromCart(id) {
-        cart = cart.filter(i => i.id !== id);
-        saveCart();
-        showToast('removed');
-      }
-
+      function removeFromCart(id) { cart = cart.filter(i => i.id !== id); saveCart(); showToast('removed'); }
       function updateQuantity(id, action) {
         const item = cart.find(i => i.id === id);
         if (!item) return;
@@ -1856,27 +1842,19 @@
 
       function openCart() { cartSidebar?.classList.add('open'); cartOverlay?.classList.add('active'); }
       function closeCart() { cartSidebar?.classList.remove('open'); cartOverlay?.classList.remove('active'); }
-      function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
 
-      function shuffleArray(array) {
-        const copy = array.slice();
-        for (let i = copy.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [copy[i], copy[j]] = [copy[j], copy[i]];
-        }
-        return copy;
-      }
+      window.filterProducts = function (category) {
+        currentFilter = category;
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        const activeIndex = { all: 0, man: 1, women: 2, unisexe: 3, kids: 4 }[category];
+        if (tabs[activeIndex]) tabs[activeIndex].classList.add('active');
+        renderProducts();
+      };
 
-      function selectRandomProductsByCategory(items, maxCount = 12) {
-        const categories = [...new Set(items.map(p => (p.category || 'inconnu').toString().toLowerCase()))];
-        const selected = [];
-        categories.forEach(cat => {
-          const group = items.filter(p => (p.category || 'inconnu').toString().toLowerCase() === cat);
-          if (group.length) selected.push(group[Math.floor(Math.random() * group.length)]);
-        });
-        const remaining = shuffleArray(items.filter(p => !selected.some(s => s.id === p.id)));
-        while (selected.length < maxCount && remaining.length > 0) selected.push(remaining.shift());
-        return selected.slice(0, maxCount);
+      function handleSearch() {
+        currentSearchTerm = searchInput?.value.toLowerCase() || '';
+        renderProducts();
       }
 
       async function loadProducts() {
@@ -1884,7 +1862,7 @@
         try {
           const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: true });
           if (error) throw error;
-          products = (data || []).map(p => {
+          allProductsData = (data || []).map(p => {
             let firstImage = '';
             if (p.images) {
               try {
@@ -1906,13 +1884,27 @@
 
       function renderProducts() {
         if (!productGrid) return;
-        if (!products || products.length === 0) {
+        let filteredProducts = allProductsData;
+
+        // Apply category filter
+        if (currentFilter !== 'all') {
+          filteredProducts = filteredProducts.filter(p => p.category === currentFilter);
+        }
+
+        // Apply search filter
+        if (currentSearchTerm) {
+          filteredProducts = filteredProducts.filter(p =>
+            p.name.toLowerCase().includes(currentSearchTerm) ||
+            p.brand.toLowerCase().includes(currentSearchTerm)
+          );
+        }
+
+        if (!filteredProducts || filteredProducts.length === 0) {
           productGrid.innerHTML = `<div class="empty-cart-message">${translations[currentLanguage].noProducts}</div>`;
           return;
         }
-        const displayProducts = selectRandomProductsByCategory(products, 12);
         let html = '';
-        displayProducts.forEach(p => {
+        filteredProducts.forEach(p => {
           const imgHtml = p.image ? `<img src="${p.image}" alt="${escapeHtml(p.name)}">` : `<i class="fas fa-crown"></i>`;
           html += `<div class="product-card" data-product-id="${p.id}">
             <div class="product-clickable" data-product-id="${p.id}">
@@ -1937,6 +1929,11 @@
             addToCart(btn.dataset.id, btn.dataset.name, parseFloat(btn.dataset.price), 'fa-crown', btn.dataset.image);
           });
         });
+      }
+
+      // Add search input event listener
+      if (searchInput) {
+        searchInput.addEventListener('input', handleSearch);
       }
 
       if (cartItemsContainer) {
@@ -1978,50 +1975,27 @@
         try {
           const { data: { user } } = await supabase.auth.getUser();
           const email = user ? user.email : document.getElementById('customerEmail').value;
-
           const orderData = {
-            items: cart.map(item => ({
-              name: item.name,
-              quantity: item.quantity,
-              price: item.price,
-              id: item.id
-            })),
+            items: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.id })),
             total: calculateTotal(),
             customer_name: document.getElementById('customerName').value,
             customer_phone: document.getElementById('customerPhone').value,
             customer_email: email,
             shipping_address: document.getElementById('shippingAddress').value,
             status: 'pending',
-            user_id: user ? user.id : null  // ✅ ADD THIS LINE - link order to user
+            user_id: user ? user.id : null
           };
-
-          // Save to database
-          const { data: orderResult, error: orderError } = await supabase
-            .from('orders')
-            .insert([orderData])
-            .select();
-
+          const { data: orderResult, error: orderError } = await supabase.from('orders').insert([orderData]).select();
           if (orderError) throw orderError;
-
           const orderId = orderResult?.[0]?.id;
-
-          // Send email via edge function
-          const { error: emailError } = await supabase.functions.invoke('send-order-email', {
-            body: { order: { ...orderData, id: orderId } }
-          });
-
-          if (emailError) {
-            console.error('Email sending error:', emailError);
-          }
-
-          // Clear cart
+          const { error: emailError } = await supabase.functions.invoke('send-order-email', { body: { order: { ...orderData, id: orderId } } });
+          if (emailError) console.error('Email sending error:', emailError);
           cart = [];
           localStorage.removeItem('RosaFragrances_cart');
           saveCart();
           closeCheckoutModal();
           closeCart();
           showToast('orderConfirmed');
-
         } catch (error) {
           console.error('Order error:', error);
           showToast('error');
