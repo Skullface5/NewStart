@@ -313,9 +313,10 @@
       color: var(--gold-dark);
     }
 
-    /* ===== SEARCH BAR STYLES ===== */
+    /* ===== SEARCH BAR WITH DROPDOWN STYLES ===== */
     .search-section {
       margin-bottom: 2rem;
+      position: relative;
     }
 
     .search-wrapper {
@@ -333,6 +334,7 @@
       color: var(--gold);
       font-size: 1rem;
       pointer-events: none;
+      z-index: 2;
     }
 
     .search-wrapper input {
@@ -358,6 +360,117 @@
       font-size: 0.85rem;
     }
 
+    /* Search Dropdown */
+    .search-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--card-warm);
+      border-radius: 20px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-light);
+      max-height: 400px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+      margin-top: 8px;
+    }
+
+    .search-dropdown.show {
+      display: block;
+      animation: fadeInDropdown 0.2s ease;
+    }
+
+    @keyframes fadeInDropdown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .search-result-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .search-result-item:last-child {
+      border-bottom: none;
+    }
+
+    .search-result-item:hover {
+      background: var(--hover-subtle);
+    }
+
+    .search-result-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--cream-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .search-result-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .search-result-img i {
+      font-size: 1.5rem;
+      color: var(--gold);
+    }
+
+    .search-result-info {
+      flex: 1;
+    }
+
+    .search-result-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: var(--charcoal);
+    }
+
+    .search-result-brand {
+      font-size: 0.65rem;
+      color: var(--gold-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .search-result-price {
+      font-size: 0.85rem;
+      color: var(--gold-dark);
+      font-weight: 500;
+    }
+
+    .search-result-category {
+      font-size: 0.6rem;
+      color: var(--text-mid);
+      margin-top: 2px;
+    }
+
+    .search-no-results {
+      padding: 20px;
+      text-align: center;
+      color: var(--text-mid);
+      font-size: 0.85rem;
+    }
+
     @media (max-width: 768px) {
       .search-wrapper {
         max-width: 100%;
@@ -371,6 +484,15 @@
       .search-wrapper i {
         left: 1rem;
         font-size: 0.9rem;
+      }
+
+      .search-result-img {
+        width: 40px;
+        height: 40px;
+      }
+
+      .search-result-name {
+        font-size: 0.85rem;
       }
     }
 
@@ -1562,12 +1684,13 @@
   </header>
 
   <main class="container">
-    <!-- SEARCH BAR - Added on top of promo card -->
+    <!-- SEARCH BAR WITH DROPDOWN -->
     <div class="search-section reveal-on-scroll">
       <div class="search-wrapper">
         <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Rechercher un parfum par nom ou marque..."
-          data-translate="searchPlaceholder">
+        <input type="text" id="searchInput" placeholder="Rechercher un parfum..." data-translate="searchPlaceholder"
+          autocomplete="off">
+        <div id="searchDropdown" class="search-dropdown"></div>
       </div>
     </div>
 
@@ -1598,7 +1721,7 @@
       </div>
     </div>
 
-    <!-- 2. HERO SECTION (image in the middle) -->
+    <!-- 2. HERO SECTION -->
     <div class="hero-tt reveal-on-scroll">
       <img class="hero-logo-tt" src="is.png" alt="Rosa Fragrances Logo">
       <h1>L'Art du <em>Parfum</em><br>Oriental</h1>
@@ -1612,7 +1735,7 @@
       </div>
     </div>
 
-    <!-- 3. PRODUCTS SECTION WITH TABS (right on top of products) -->
+    <!-- 3. PRODUCTS SECTION WITH TABS -->
     <div class="products-section reveal-on-scroll">
       <div class="products-header">
         <div>
@@ -1681,7 +1804,7 @@
   </footer>
 
   <script>
-    // All the JavaScript remains the same as your original index.html with added search functionality
+    // Main application
     (function () {
       const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co',
         SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
@@ -1690,7 +1813,6 @@
       let currentLanguage = localStorage.getItem('language') || 'fr';
       let allProductsData = [];
       let currentFilter = 'all';
-      let currentSearchTerm = '';
 
       const translations = {
         fr: {
@@ -1702,7 +1824,7 @@
           close: 'Fermer', loading: 'Chargement...', noProducts: 'Aucun parfum trouvé', errorLoading: '❌ Erreur',
           reload: 'Recharger', removed: '🗑️ Retiré', collectionLabel: 'Notre Collection', collectionTitle: 'Parfums',
           exclusive: 'Exclusifs', allTab: 'Tous', menTab: 'Homme', womenTab: 'Femme', unisexTab: 'Unisexe', kidsTab: 'Enfants',
-          searchPlaceholder: 'Rechercher un parfum par nom ou marque...',
+          searchPlaceholder: 'Rechercher un parfum...',
           footerDescription: "Nous vous proposons un univers de parfums luxueux, aux senteurs élégantes et spontanées, qui touchent les émotions et laissent une impression durable.",
           footerPerfumesTitle: "Parfums", footerMen: "Homme", footerWomen: "Femme", footerUnisex: "Unisexe", footerKids: "Enfants",
           footerNew: "Nouveautés", footerContactTitle: "Contact", footerAddress: "Tunis, Tunisie", footerPhone: "+216 96 163 366",
@@ -1717,7 +1839,7 @@
           close: 'Close', loading: 'Loading...', noProducts: 'No perfumes found', errorLoading: '❌ Error',
           reload: 'Reload', removed: '🗑️ Removed', collectionLabel: 'Our Collection', collectionTitle: 'Perfumes',
           exclusive: 'Exclusive', allTab: 'All', menTab: 'Men', womenTab: 'Women', unisexTab: 'Unisex', kidsTab: 'Kids',
-          searchPlaceholder: 'Search perfume by name or brand...',
+          searchPlaceholder: 'Search perfume...',
           footerDescription: "We offer you a world of luxurious perfumes, with elegant and spontaneous scents, that touch the emotions and leave a lasting impression.",
           footerPerfumesTitle: "Perfumes", footerMen: "Men", footerWomen: "Women", footerUnisex: "Unisex", footerKids: "Kids",
           footerNew: "New Arrivals", footerContactTitle: "Contact", footerAddress: "Tunis, Tunisia", footerPhone: "+216 96 163 366",
@@ -1732,7 +1854,7 @@
           close: 'إغلاق', loading: 'جاري التحميل...', noProducts: 'لا توجد عطور', errorLoading: '❌ خطأ',
           reload: 'إعادة تحميل', removed: '🗑️ تمت الإزالة', collectionLabel: 'مجموعتنا', collectionTitle: 'العطور',
           exclusive: 'الحصرية', allTab: 'الكل', menTab: 'رجالي', womenTab: 'نسائي', unisexTab: 'للجنسين', kidsTab: 'أطفال',
-          searchPlaceholder: 'البحث عن عطر بالاسم أو العلامة...',
+          searchPlaceholder: 'البحث عن عطر...',
           footerDescription: "نقدم لكم عالماً من العطور الفاخرة، بروائح أنيقة وعفوية، تلامس المشاعر وتترك انطباعاً دائماً.",
           footerPerfumesTitle: "العطور", footerMen: "رجالي", footerWomen: "نسائي", footerUnisex: "للجنسين", footerKids: "أطفال",
           footerNew: "الوافدون الجدد", footerContactTitle: "اتصل بنا", footerAddress: "تونس، تونس", footerPhone: "366 163 96 216+",
@@ -1775,6 +1897,7 @@
       const navLinks = document.getElementById('navLinks');
       const menuOverlay = document.getElementById('menuOverlay');
       const searchInput = document.getElementById('searchInput');
+      const searchDropdown = document.getElementById('searchDropdown');
 
       function showToast(msgKey, productName = '') {
         if (!toast) return;
@@ -1852,9 +1975,64 @@
         renderProducts();
       };
 
-      function handleSearch() {
-        currentSearchTerm = searchInput?.value.toLowerCase() || '';
-        renderProducts();
+      // Search dropdown functionality
+      function updateSearchDropdown() {
+        const searchTerm = searchInput?.value.toLowerCase().trim() || '';
+
+        if (!searchTerm || searchTerm.length < 2) {
+          searchDropdown.classList.remove('show');
+          searchDropdown.innerHTML = '';
+          return;
+        }
+
+        const matchingProducts = allProductsData.filter(product =>
+          product.name.toLowerCase().includes(searchTerm) ||
+          product.brand.toLowerCase().includes(searchTerm)
+        ).slice(0, 8); // Limit to 8 results
+
+        if (matchingProducts.length === 0) {
+          searchDropdown.innerHTML = `<div class="search-no-results">Aucun parfum trouvé pour "${escapeHtml(searchTerm)}"</div>`;
+          searchDropdown.classList.add('show');
+          return;
+        }
+
+        const categoryNames = { man: 'Homme', women: 'Femme', unisexe: 'Unisexe', kids: 'Enfants' };
+
+        let html = '';
+        matchingProducts.forEach(product => {
+          let firstImage = '';
+          if (product.images) {
+            try {
+              const imgArr = typeof product.images === 'string' ? JSON.parse(product.images) : product.images;
+              firstImage = Array.isArray(imgArr) ? imgArr[0] || '' : '';
+            } catch (e) { firstImage = ''; }
+          }
+          if (!firstImage && product.image) firstImage = product.image;
+
+          const imgHtml = firstImage ? `<img src="${firstImage}" alt="${escapeHtml(product.name)}">` : `<i class="fas fa-crown"></i>`;
+          const categoryName = categoryNames[product.category] || product.category;
+
+          html += `
+            <div class="search-result-item" onclick="window.location.href='product.html?id=${product.id}'">
+              <div class="search-result-img">${imgHtml}</div>
+              <div class="search-result-info">
+                <div class="search-result-name">${escapeHtml(product.name)}</div>
+                <div class="search-result-brand">${escapeHtml(product.brand)}</div>
+                <div class="search-result-category"><i class="fas fa-tag"></i> ${categoryName}</div>
+              </div>
+              <div class="search-result-price">${formatPrice(product.price)}</div>
+            </div>
+          `;
+        });
+
+        searchDropdown.innerHTML = html;
+        searchDropdown.classList.add('show');
+      }
+
+      function hideSearchDropdown() {
+        setTimeout(() => {
+          searchDropdown.classList.remove('show');
+        }, 200);
       }
 
       async function loadProducts() {
@@ -1886,17 +2064,9 @@
         if (!productGrid) return;
         let filteredProducts = allProductsData;
 
-        // Apply category filter
+        // Apply category filter only (search doesn't affect main grid)
         if (currentFilter !== 'all') {
           filteredProducts = filteredProducts.filter(p => p.category === currentFilter);
-        }
-
-        // Apply search filter
-        if (currentSearchTerm) {
-          filteredProducts = filteredProducts.filter(p =>
-            p.name.toLowerCase().includes(currentSearchTerm) ||
-            p.brand.toLowerCase().includes(currentSearchTerm)
-          );
         }
 
         if (!filteredProducts || filteredProducts.length === 0) {
@@ -1931,10 +2101,18 @@
         });
       }
 
-      // Add search input event listener
+      // Search input event listeners
       if (searchInput) {
-        searchInput.addEventListener('input', handleSearch);
+        searchInput.addEventListener('input', updateSearchDropdown);
+        searchInput.addEventListener('focus', updateSearchDropdown);
+        document.addEventListener('click', (e) => {
+          if (!searchWrapper.contains(e.target)) {
+            hideSearchDropdown();
+          }
+        });
       }
+
+      const searchWrapper = document.querySelector('.search-wrapper');
 
       if (cartItemsContainer) {
         cartItemsContainer.addEventListener('click', (e) => {
