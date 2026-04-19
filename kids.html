@@ -641,7 +641,7 @@
         /* Product Grid */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(240px, 2fr));
             gap: 1.5rem;
         }
 
@@ -674,12 +674,6 @@
             }
         }
 
-        @media (max-width: 480px) {
-            .product-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-        }
 
         .product-card {
             background: var(--card-warm);
