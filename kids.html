@@ -641,9 +641,15 @@
         /* Product Grid */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 1.5rem;
-            margin: 1.5rem 0;
+        }
+
+        /* Force minimum 2 columns on all screen sizes */
+        @media (max-width: 540px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 1200px) {

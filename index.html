@@ -317,7 +317,7 @@
     .search-section {
       margin-bottom: 2rem;
       position: relative;
-        z-index: 9999;
+      z-index: 9999;
     }
 
     .search-wrapper {
@@ -939,9 +939,15 @@
     /* Product Grid */
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.8rem 1.2rem;
-      margin: 2rem 0;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Force minimum 2 columns on all screen sizes */
+    @media (max-width: 540px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
     @media (max-width: 1024px) {
