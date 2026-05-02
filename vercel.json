@@ -1,9 +1,0 @@
-{
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "https://new-start-hdr1.vercel.app/?v=2",
-      "statusCode": 302
-    }
-  ]
-}
