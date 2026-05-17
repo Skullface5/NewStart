@@ -2038,22 +2038,64 @@
         }, 200);
       }
 
+      const PRODUCTS_CACHE_KEY = 'RosaFragrances_products_cache';
+      const PRODUCTS_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+      function getCachedProducts() {
+        try {
+          const raw = localStorage.getItem(PRODUCTS_CACHE_KEY);
+          if (!raw) return null;
+          const { timestamp, data } = JSON.parse(raw);
+          if (Date.now() - timestamp > PRODUCTS_CACHE_TTL) return null;
+          return data;
+        } catch (e) { return null; }
+      }
+
+      function setCachedProducts(data) {
+        try {
+          localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data }));
+        } catch (e) {}
+      }
+
+      function processProducts(data) {
+        return (data || []).map(p => {
+          let firstImage = '';
+          if (p.images) {
+            try {
+              const imgArr = typeof p.images === 'string' ? JSON.parse(p.images) : p.images;
+              firstImage = Array.isArray(imgArr) ? imgArr[0] || '' : '';
+            } catch (e) { firstImage = ''; }
+          }
+          if (!firstImage && p.image) firstImage = p.image;
+          return { ...p, image: firstImage };
+        });
+      }
+
       async function loadProducts() {
+        // Show from cache instantly if available
+        const cached = getCachedProducts();
+        if (cached) {
+          allProductsData = cached;
+          renderProducts();
+          if (loadingEl) loadingEl.style.display = 'none';
+          // Refresh in background silently
+          supabase.from('products').select('*').order('created_at', { ascending: true }).then(({ data, error }) => {
+            if (!error && data) {
+              const fresh = processProducts(data);
+              setCachedProducts(fresh);
+              allProductsData = fresh;
+              renderProducts();
+            }
+          });
+          return;
+        }
+        // No cache — fetch and show
         if (loadingEl) loadingEl.style.display = 'block';
         try {
           const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: true });
           if (error) throw error;
-          allProductsData = (data || []).map(p => {
-            let firstImage = '';
-            if (p.images) {
-              try {
-                const imgArr = typeof p.images === 'string' ? JSON.parse(p.images) : p.images;
-                firstImage = Array.isArray(imgArr) ? imgArr[0] || '' : '';
-              } catch (e) { firstImage = ''; }
-            }
-            if (!firstImage && p.image) firstImage = p.image;
-            return { ...p, image: firstImage };
-          });
+          allProductsData = processProducts(data);
+          setCachedProducts(allProductsData);
           renderProducts();
         } catch (err) {
           console.error(err);
@@ -2236,7 +2278,9 @@
       document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
 
       translatePage(currentLanguage);
-      supabase.auth.refreshSession().then(() => { loadProducts(); saveCart(); });
+      loadProducts(); // start immediately — no need to wait for auth
+      saveCart();
+      supabase.auth.refreshSession(); // refresh auth in background
 
       const revealElements = document.querySelectorAll('.reveal-on-scroll');
       const observer = new IntersectionObserver((entries) => {
