@@ -1717,6 +1717,29 @@
 
             const activeFiltersContainer = document.getElementById('activeFilters');
 
+            // --- CACHE HELPERS ---
+            const CACHE_KEY = 'RosaFragrances_products_cache';
+            const CACHE_EXPIRY = 5 * 60 * 1000; // 5 minutes
+
+            function getCachedProducts() {
+                try {
+                    const cached = localStorage.getItem(CACHE_KEY);
+                    if (!cached) return null;
+                    const data = JSON.parse(cached);
+                    if (Date.now() - data.timestamp > CACHE_EXPIRY) return null;
+                    return data.products;
+                } catch (e) { return null; }
+            }
+
+            function setCachedProducts(products) {
+                try {
+                    localStorage.setItem(CACHE_KEY, JSON.stringify({
+                        products: products,
+                        timestamp: Date.now()
+                    }));
+                } catch (e) { console.warn('Cache set failed', e); }
+            }
+
             function openDrawer() {
                 filterDrawer.classList.add('open');
                 filterDrawerOverlay.classList.add('active');
@@ -1969,15 +1992,13 @@
             function closeCart() { cartSidebar?.classList.remove('open'); cartOverlay?.classList.remove('active'); document.body.style.overflow = ''; }
 
             async function loadProducts() {
+                // 1. Show loading
                 if (loadingEl) loadingEl.style.display = 'block';
-                try {
-                    const { data, error } = await supabase
-                        .from('products')
-                        .select('*')
-                        .eq('category', 'man')
-                        .order('created_at', { ascending: true });
-                    if (error) throw error;
-                    products = (data || []).map(p => {
+
+                // 2. Try cached data first (INSTANT display)
+                const cached = getCachedProducts();
+                if (cached && cached.length > 0) {
+                    products = cached.map(p => {
                         let firstImage = '';
                         if (p.images) {
                             try {
@@ -1990,11 +2011,42 @@
                     });
                     populateBrandFilter();
                     applyFiltersAndSort();
+                    if (loadingEl) loadingEl.style.display = 'none';
+                }
+
+                // 3. Fetch fresh data in background (no auth delay)
+                try {
+                    const { data, error } = await supabase
+                        .from('products')
+                        .select('*')
+                        .eq('category', 'man')
+                        .order('created_at', { ascending: true });
+                    if (error) throw error;
+                    const freshProducts = (data || []).map(p => {
+                        let firstImage = '';
+                        if (p.images) {
+                            try {
+                                const imgArr = typeof p.images === 'string' ? JSON.parse(p.images) : p.images;
+                                firstImage = Array.isArray(imgArr) ? imgArr[0] || '' : '';
+                            } catch (e) { firstImage = ''; }
+                        }
+                        if (!firstImage && p.image) firstImage = p.image;
+                        return { ...p, image: firstImage };
+                    });
+                    // Update global products
+                    products = freshProducts;
+                    // Update cache
+                    setCachedProducts(products);
+                    // Refresh UI
+                    populateBrandFilter();
+                    applyFiltersAndSort();
                 } catch (err) {
                     console.error(err);
-                    if (productGrid) productGrid.innerHTML = `<div class="empty-cart-message">${translations[currentLanguage].errorLoading}<br><button onclick="location.reload()" style="margin-top:0.8rem;padding:0.4rem 0.8rem;background:var(--gold);color:white;border:none;border-radius:50px;font-size:0.7rem;">${translations[currentLanguage].reload}</button></div>`;
+                    if (!cached) {
+                        productGrid.innerHTML = `<div class="empty-cart-message">${translations[currentLanguage].errorLoading}<br><button onclick="location.reload()" style="margin-top:0.8rem;padding:0.4rem 0.8rem;background:var(--gold);color:white;border:none;border-radius:50px;font-size:0.7rem;">${translations[currentLanguage].reload}</button></div>`;
+                    }
                 } finally {
-                    if (loadingEl) loadingEl.style.display = 'none';
+                    if (loadingEl && !cached) loadingEl.style.display = 'none';
                 }
             }
 
@@ -2178,7 +2230,9 @@
             document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
 
             translatePage(currentLanguage);
-            supabase.auth.refreshSession().then(() => { loadProducts(); saveCart(); });
+            // Load products immediately — no waiting for auth session
+            loadProducts();
+            saveCart();
 
             const revealElements = document.querySelectorAll('.reveal-on-scroll');
             const observer = new IntersectionObserver((entries) => {
