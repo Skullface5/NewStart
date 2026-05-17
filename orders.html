@@ -380,7 +380,7 @@
       letter-spacing: 0.1em;
     }
 
-    /* Controls bar */
+    /* Controls bar - responsive */
     .controls-bar {
       display: flex;
       flex-wrap: wrap;
@@ -421,7 +421,7 @@
       align-items: center;
     }
 
-    select, .btn-filter {
+    select, .btn-filter, input[type="date"] {
       background: var(--input-bg);
       border: 1px solid var(--input-border);
       padding: 0.5rem 1rem;
@@ -430,6 +430,17 @@
       color: var(--charcoal);
       cursor: pointer;
       font-family: 'Jost', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    input[type="date"] {
+      cursor: pointer;
+    }
+
+    input[type="date"]:focus, select:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(180, 154, 106, 0.1);
     }
 
     .btn-filter {
@@ -437,7 +448,6 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.3s ease;
     }
 
     .btn-filter:hover {
@@ -446,7 +456,7 @@
       border-color: var(--gold-dark);
     }
 
-    /* Orders table */
+    /* Orders table - mobile friendly with horizontal scroll */
     .orders-table-container {
       background: var(--card-warm);
       border-radius: 24px;
@@ -454,12 +464,28 @@
       border: 1px solid var(--border-light);
       overflow-x: auto;
       box-shadow: var(--shadow-md);
+      -webkit-overflow-scrolling: touch;
     }
 
     .orders-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.85rem;
+      min-width: 800px;
+    }
+
+    /* On small screens, reduce font and padding */
+    @media (max-width: 640px) {
+      .orders-table {
+        font-size: 0.7rem;
+        min-width: 700px;
+      }
+      .orders-table th, .orders-table td {
+        padding: 0.5rem 0.4rem;
+      }
+      .action-btn {
+        font-size: 0.8rem;
+      }
     }
 
     .orders-table th, .orders-table td {
@@ -508,7 +534,7 @@
       color: var(--gold);
     }
 
-    /* Pagination */
+    /* Pagination - responsive */
     .pagination {
       display: flex;
       justify-content: center;
@@ -815,6 +841,16 @@
       body {
         padding-top: 70px;
       }
+      .controls-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .filter-group {
+        justify-content: space-between;
+      }
+      .search-box {
+        width: 100%;
+      }
     }
 
     @media (max-width: 768px) {
@@ -827,16 +863,19 @@
       .logo img {
         width: 36px;
       }
-      .controls-bar {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .filter-group {
-        justify-content: space-between;
-      }
-      .orders-table th, .orders-table td {
-        padding: 0.5rem;
-        font-size: 0.75rem;
+    }
+
+    /* Scroll hint for mobile */
+    .scroll-hint {
+      text-align: center;
+      font-size: 0.65rem;
+      color: var(--text-mid);
+      margin-top: 0.5rem;
+      display: none;
+    }
+    @media (max-width: 640px) {
+      .scroll-hint {
+        display: block;
       }
     }
   </style>
@@ -936,6 +975,7 @@
         <div class="orders-table-container">
           <div id="loadingOrders" style="text-align:center; padding:2rem; display:none;"><i class="fas fa-spinner fa-spin"></i> <span data-translate="loading">Chargement...</span></div>
           <div id="ordersTableContent"></div>
+          <div class="scroll-hint"><i class="fas fa-arrows-alt-h"></i> <span data-translate="scrollHint">Faire glisser pour voir plus de colonnes</span></div>
         </div>
 
         <!-- Pagination -->
@@ -1042,7 +1082,6 @@
       let currentDateTo = '';
       let pendingOrderId = null;
 
-      // ---------- TRANSLATIONS (complete, matching other pages) ----------
       const translations = {
         fr: {
           home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS', existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil',
@@ -1051,7 +1090,7 @@
           confirm: 'Confirmer', cancel: 'Annuler', notAuthorized: 'Accès non autorisé', adminOnly: 'Cette page est réservée aux administrateurs.',
           orderId: 'ID', customer: 'Client', phone: 'Téléphone', email: 'Email', address: 'Adresse', total: 'Total', status: 'Statut', date: 'Date', actions: 'Actions',
           view: 'Voir', edit: 'Modifier', noOrders: 'Aucune commande trouvée', loading: 'Chargement...', errorLoading: 'Erreur de chargement', orderUpdated: '✅ Statut mis à jour',
-          items: 'Produits', quantity: 'Qté', price: 'Prix', searchPlaceholder: 'Rechercher par ID, nom, téléphone, email...', dateFrom: 'Du', dateTo: 'Au',
+          items: 'Produits', quantity: 'Qté', price: 'Prix', searchPlaceholder: 'Rechercher par ID, nom, téléphone, email...', dateFrom: 'Du', dateTo: 'Au', scrollHint: 'Faire glisser pour voir plus de colonnes',
           footerDescription: "Parfumerie d'exception depuis 1985. L'art de la parfumerie orientale réinventé pour les connaisseurs exigeants.",
           footerPerfumesTitle: "Parfums", footerMen: "Homme", footerWomen: "Femme", footerUnisex: "Unisexe", footerKids: "Enfants",
           footerContactTitle: "Contact", footerAddress: "Tunis, Tunisie", footerPhone: "+216 96 163 366", footerEmail: "contact@rosafragrances.tn",
@@ -1064,7 +1103,7 @@
           confirm: 'Confirm', cancel: 'Cancel', notAuthorized: 'Access denied', adminOnly: 'This page is for administrators only.',
           orderId: 'ID', customer: 'Customer', phone: 'Phone', email: 'Email', address: 'Address', total: 'Total', status: 'Status', date: 'Date', actions: 'Actions',
           view: 'View', edit: 'Edit', noOrders: 'No orders found', loading: 'Loading...', errorLoading: 'Error loading', orderUpdated: '✅ Status updated',
-          items: 'Items', quantity: 'Qty', price: 'Price', searchPlaceholder: 'Search by ID, name, phone, email...', dateFrom: 'From', dateTo: 'To',
+          items: 'Items', quantity: 'Qty', price: 'Price', searchPlaceholder: 'Search by ID, name, phone, email...', dateFrom: 'From', dateTo: 'To', scrollHint: 'Swipe to see more columns',
           footerDescription: "Exceptional perfumery since 1985. The art of oriental perfumery reinvented for discerning connoisseurs.",
           footerPerfumesTitle: "Perfumes", footerMen: "Men", footerWomen: "Women", footerUnisex: "Unisex", footerKids: "Kids",
           footerContactTitle: "Contact", footerAddress: "Tunis, Tunisia", footerPhone: "+216 96 163 366", footerEmail: "contact@rosafragrances.tn",
@@ -1077,7 +1116,7 @@
           confirm: 'تأكيد', cancel: 'إلغاء', notAuthorized: 'وصول غير مصرح به', adminOnly: 'هذه الصفحة مخصصة للمشرفين فقط.',
           orderId: 'رقم الطلب', customer: 'العميل', phone: 'الهاتف', email: 'البريد', address: 'العنوان', total: 'المجموع', status: 'الحالة', date: 'التاريخ', actions: 'إجراءات',
           view: 'عرض', edit: 'تعديل', noOrders: 'لا توجد طلبات', loading: 'جاري التحميل...', errorLoading: 'خطأ في التحميل', orderUpdated: '✅ تم تحديث الحالة',
-          items: 'المنتجات', quantity: 'الكمية', price: 'السعر', searchPlaceholder: 'البحث بالرقم أو الاسم أو الهاتف أو البريد...', dateFrom: 'من', dateTo: 'إلى',
+          items: 'المنتجات', quantity: 'الكمية', price: 'السعر', searchPlaceholder: 'البحث بالرقم أو الاسم أو الهاتف أو البريد...', dateFrom: 'من', dateTo: 'إلى', scrollHint: 'اسحب لرؤية المزيد من الأعمدة',
           footerDescription: "عطور استثنائية منذ 1985. فن العطور الشرقية المعاد ابتكاره للخبراء المميزين.",
           footerPerfumesTitle: "العطور", footerMen: "رجالي", footerWomen: "نسائي", footerUnisex: "للجنسين", footerKids: "أطفال",
           footerContactTitle: "اتصل بنا", footerAddress: "تونس، تونس", footerPhone: "366 163 96 216+", footerEmail: "contact@rosafragrances.tn",
@@ -1205,7 +1244,6 @@
         html += `</tbody></table>`;
         tableDiv.innerHTML = html;
 
-        // Pagination
         let pagHtml = '';
         if (totalPages > 1) {
           for (let i = 1; i <= totalPages; i++) {
@@ -1220,7 +1258,6 @@
         }
       }
 
-      // ---------- MODALS ----------
       window.viewOrderDetails = function(orderId) {
         const order = allOrders.find(o => o.id === orderId);
         if (!order) return;
@@ -1269,7 +1306,6 @@
         } catch(err) { showToast('errorLoading'); }
       });
 
-      // ---------- EXPORT CSV ----------
       function exportToCSV() {
         const filtered = filterOrders();
         if (!filtered.length) { showToast('noOrders'); return; }
@@ -1291,7 +1327,6 @@
       }
       document.getElementById('exportBtn').addEventListener('click', exportToCSV);
 
-      // ---------- FILTER EVENT HANDLERS (debounced search) ----------
       let searchTimeout;
       const searchInput = document.getElementById('searchInput');
       searchInput.addEventListener('input', () => {
@@ -1307,7 +1342,6 @@
       document.getElementById('dateTo').addEventListener('change', (e) => { currentDateTo = e.target.value; currentPage = 1; renderOrdersTable(); });
       document.getElementById('refreshBtn').addEventListener('click', () => loadOrders());
 
-      // ---------- AUTH & NAV LINK CONTROL (same as existed.html) ----------
       let updateUserTimeout, isUpdatingUser = false;
       async function updateUserDisplay() {
         if (isUpdatingUser) return;
@@ -1365,7 +1399,6 @@
       }
       checkAdminAccess();
 
-      // Theme, menu, language (same as existed)
       function initTheme() { const saved = localStorage.getItem('theme') || 'light'; if (saved === 'dark') { document.body.classList.add('dark'); document.querySelector('#themeToggle .fa-sun').style.display = 'none'; document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block'; } }
       function toggleTheme() {
         if (document.body.classList.contains('dark')) {
