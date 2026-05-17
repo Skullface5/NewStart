@@ -2,167 +2,865 @@
 <html lang="fr">
 
 <head>
+  <meta property="og:image" content="https://new-start-hdr1.vercel.app/tt.jpg" />
+  <meta name="twitter:image" content="https://new-start-hdr1.vercel.app/tt.jpg" />
+  <meta property="og:image:secure_url" content="https://new-start-hdr1.vercel.app/tt.jpg" />
   <meta charset="UTF-8">
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Rosa Fragrances | Admin - Commandes</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+
   <style>
-    /* ===== SAME VARIABLES AND RESETS AS OTHER PAGES ===== */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --cream: #F7F0E6; --cream-dark: #EDE4D6; --cream-deep: #E0D4C0;
-      --gold: #B49A6A; --gold-light: #D4B98A; --gold-dark: #8A7150;
-      --charcoal: #3A3228; --text-mid: #6B5E4E; --white: #FEFCF8;
-      --border-light: rgba(180, 155, 120, 0.12); --border-medium: rgba(180, 155, 120, 0.2);
-      --shadow-sm: 0 2px 8px rgba(0,0,0,0.02); --shadow-md: 0 4px 16px rgba(0,0,0,0.03); --shadow-lg: 0 8px 24px rgba(0,0,0,0.04);
-      --input-bg: #F9F6F2; --input-border: #E2D9CF; --hover-subtle: rgba(180, 155, 120, 0.05);
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
+
+    :root {
+      --cream: #F7F0E6;
+      --cream-dark: #EDE4D6;
+      --cream-deep: #E0D4C0;
+      --gold: #B49A6A;
+      --gold-light: #D4B98A;
+      --gold-dark: #8A7150;
+      --charcoal: #3A3228;
+      --text-mid: #6B5E4E;
+      --white: #FEFCF8;
+      --shadow: 0 8px 40px rgba(90, 70, 50, 0.10);
+      --card-base: #F5F0EA;
+      --card-warm: #F2EDE6;
+      --card-elevated: #F7F2EC;
+      --card-shadow: rgba(100, 80, 60, 0.06);
+      --border-light: rgba(180, 155, 120, 0.12);
+      --border-medium: rgba(180, 155, 120, 0.2);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.04);
+      --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.06);
+      --input-bg: #F9F6F2;
+      --input-border: #E2D9CF;
+      --input-focus: #C4AF7D;
+      --hover-subtle: rgba(180, 155, 120, 0.05);
+      --hover-medium: rgba(180, 155, 120, 0.1);
+    }
+
     body {
       font-family: 'Jost', sans-serif;
       background: var(--cream);
       color: var(--charcoal);
+      overflow-x: hidden;
+      transition: background 0.4s ease, color 0.3s ease;
       line-height: 1.5;
       padding-top: 80px;
     }
+
     body.dark {
-      --cream: #1A1814; --cream-dark: #24201A; --cream-deep: #2E2820;
-      --charcoal: #F5EFE6; --text-mid: #D4C5B0; --gold: #B89B5E; --gold-dark: #B89B5E;
-      --white: #1A1814; --border-light: rgba(184, 155, 94, 0.15);
-      --input-bg: #3A352C; --input-border: #4A4438;
+      --cream: #1A1814;
+      --cream-dark: #24201A;
+      --cream-deep: #2E2820;
+      --card-base: #2E2820;
+      --card-warm: #362F26;
+      --card-elevated: #40382D;
+      --charcoal: #F5EFE6;
+      --text-mid: #D4C5B0;
+      --gold: #B89B5E;
+      --gold-dark: #B89B5E;
+      --white: #1A1814;
+      --border-light: rgba(184, 155, 94, 0.15);
+      --input-bg: #3A352C;
+      --input-border: #4A4438;
     }
-    .container { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; }
-    /* header identical to adminadd.html */
+
+    .particle {
+      position: fixed;
+      background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+      animation: floatParticle 18s infinite;
+      z-index: 0;
+    }
+
+    @keyframes floatParticle {
+      0% { opacity: 0; transform: translateY(100vh) rotate(0deg) scale(0); }
+      20% { opacity: 0.1; }
+      80% { opacity: 0.1; }
+      100% { opacity: 0; transform: translateY(-20vh) rotate(360deg) scale(1.2); }
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+      position: relative;
+      z-index: 10;
+    }
+
     header {
       background: rgba(247, 240, 230, 0.92);
       backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-sm);
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       z-index: 100;
       border-bottom: 1px solid rgba(180, 154, 106, 0.2);
+      transition: all 0.3s ease;
     }
-    body.dark header { background: rgba(26, 24, 20, 0.92); }
-    .header-flex { display: flex; align-items: center; justify-content: space-between; max-width: 1400px; margin: 0 auto; padding: 0.8rem 2rem; }
-    .logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
-    .logo img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
-    .logo h1 { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 400; color: var(--gold-dark); letter-spacing: 0.15em; }
-    .theme-toggle, .menu-toggle { background: transparent; border: none; cursor: pointer; font-size: 1.1rem; color: var(--gold-dark); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    .right-group { display: flex; align-items: center; gap: 8px; }
+
+    body.dark header {
+      background: rgba(26, 24, 20, 0.92);
+    }
+
+    .header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0.8rem 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 102;
+      text-decoration: none;
+    }
+
+    .logo img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    .logo h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--gold-dark);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .theme-toggle,
+    .menu-toggle {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: var(--gold-dark);
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover,
+    .menu-toggle:hover {
+      background: var(--hover-subtle);
+      color: var(--gold);
+    }
+
+    .right-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     .nav-links {
-      display: flex; flex-direction: column; position: absolute; top: 100%; right: 0;
-      width: 250px; background: var(--cream-dark); backdrop-filter: blur(16px);
-      max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.4s, opacity 0.3s;
-      border-radius: 20px; border: 1px solid var(--border-light); z-index: 101;
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      width: 250px;
+      background: var(--cream-dark);
+      backdrop-filter: blur(16px);
+      gap: 0;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-light);
+      z-index: 101;
+      border-radius: 20px;
     }
-    .nav-links.active { max-height: 550px; opacity: 1; padding: 0.5rem 0; }
+
+    .nav-links.active {
+      max-height: 550px;
+      opacity: 1;
+      padding: 0.5rem 0;
+    }
+
     .nav-links a {
-      padding: 0.9rem 1.5rem; text-decoration: none; color: var(--charcoal);
-      display: block; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 0.9rem 1.5rem;
+      text-decoration: none;
+      color: var(--charcoal);
+      transition: all 0.2s;
+      border-bottom: 1px solid var(--border-light);
+      display: block;
+      font-weight: 400;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .nav-links a:hover {
+      background: var(--hover-subtle);
+      color: var(--gold-dark);
+      padding-left: 2rem;
+    }
+
+    .admin-nav-link {
+      background: rgba(180, 154, 106, 0.08);
+      color: var(--gold-dark) !important;
+      font-weight: 600;
+      border-bottom: 2px solid var(--gold) !important;
+    }
+
+    .lang-menu {
       border-bottom: 1px solid var(--border-light);
     }
-    .nav-links a:hover { background: var(--hover-subtle); color: var(--gold-dark); padding-left: 2rem; }
-    .admin-nav-link { background: rgba(180, 154, 106, 0.08); color: var(--gold-dark) !important; font-weight: 600; border-bottom: 2px solid var(--gold) !important; }
-    .lang-menu { border-bottom: 1px solid var(--border-light); }
-    .lang-current { display: flex; justify-content: space-between; width: 100%; background: none; border: none; padding: 0.9rem 1.5rem; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--charcoal); cursor: pointer; }
-    .lang-options { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: var(--cream-dark); }
-    .lang-menu.active .lang-options { max-height: 130px; }
-    .lang-option { display: block; width: 100%; text-align: left; padding: 0.7rem 1.5rem 0.7rem 2.5rem; background: none; border: none; font-size: 0.7rem; cursor: pointer; color: var(--text-mid); }
-    .lang-option:hover { background: var(--hover-subtle); color: var(--gold-dark); }
-    .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(6px); z-index: 99; visibility: hidden; opacity: 0; transition: 0.3s; }
-    .menu-overlay.active { visibility: visible; opacity: 1; }
+
+    .lang-current {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 0.9rem 1.5rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .lang-current:hover {
+      background: var(--hover-subtle);
+      color: var(--gold-dark);
+    }
+
+    .lang-options {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      background: var(--cream-dark);
+    }
+
+    .lang-menu.active .lang-options {
+      max-height: 130px;
+    }
+
+    .lang-option {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.7rem 1.5rem 0.7rem 2.5rem;
+      background: none;
+      border: none;
+      font-size: 0.7rem;
+      cursor: pointer;
+      color: var(--text-mid);
+      transition: all 0.2s;
+    }
+
+    .lang-option:hover {
+      background: var(--hover-subtle);
+      color: var(--gold-dark);
+    }
+
+    .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(6px);
+      z-index: 99;
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.3s;
+    }
+
+    .menu-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
 
     /* Admin specific */
-    .admin-wrapper { max-width: 1300px; margin: 0 auto; }
-    .admin-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
-    .admin-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; display: flex; align-items: center; gap: 10px; }
-    .stats-grid { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-    .stat-card { background: var(--cream-deep); border-radius: 20px; padding: 0.8rem 1.2rem; min-width: 100px; text-align: center; border: 1px solid var(--border-light); }
-    .stat-card h3 { font-size: 1.4rem; font-weight: 500; }
-    .stat-card p { font-size: 0.7rem; color: var(--text-mid); text-transform: uppercase; }
-    .controls-bar { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; align-items: flex-end; }
-    .search-box { display: flex; align-items: center; gap: 8px; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 50px; padding: 0.5rem 1rem; flex: 2; min-width: 200px; }
-    .search-box i { color: var(--gold); }
-    .search-box input { background: none; border: none; outline: none; width: 100%; color: var(--charcoal); }
-    .filter-group { display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center; }
-    select, .btn-filter { background: var(--input-bg); border: 1px solid var(--input-border); padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.8rem; color: var(--charcoal); cursor: pointer; }
-    .btn-filter { background: var(--cream-deep); display: inline-flex; align-items: center; gap: 6px; }
-    .btn-filter.active { background: var(--gold-dark); color: white; border-color: var(--gold-dark); }
-    .orders-table-container { background: var(--cream-deep); border-radius: 24px; padding: 1rem; overflow-x: auto; }
-    .orders-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    .orders-table th, .orders-table td { padding: 0.8rem; text-align: left; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
-    .orders-table th { background: var(--cream-dark); font-weight: 500; }
-    .orders-table tr:hover { background: var(--hover-subtle); }
-    .status-badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.7rem; font-weight: 500; }
+    .admin-wrapper {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .admin-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: var(--charcoal);
+    }
+
+    .admin-header img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .logged-in-as {
+      margin-left: auto;
+      font-size: 0.7rem;
+      color: var(--text-mid);
+      background: var(--cream-deep);
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+    }
+
+    /* Stats grid */
+    .stats-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--card-warm);
+      border-radius: 20px;
+      padding: 1rem 1.2rem;
+      text-align: center;
+      border: 1px solid var(--border-light);
+      flex: 1;
+      min-width: 100px;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--gold-light);
+    }
+
+    .stat-card h3 {
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--charcoal);
+    }
+
+    .stat-card p {
+      font-size: 0.7rem;
+      color: var(--text-mid);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Controls bar */
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      align-items: flex-end;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 50px;
+      padding: 0.5rem 1rem;
+      flex: 2;
+      min-width: 200px;
+    }
+
+    .search-box i {
+      color: var(--gold);
+    }
+
+    .search-box input {
+      background: none;
+      border: none;
+      outline: none;
+      width: 100%;
+      color: var(--charcoal);
+      font-size: 0.85rem;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    select, .btn-filter {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      color: var(--charcoal);
+      cursor: pointer;
+      font-family: 'Jost', sans-serif;
+    }
+
+    .btn-filter {
+      background: var(--cream-deep);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-filter:hover {
+      background: var(--gold-dark);
+      color: white;
+      border-color: var(--gold-dark);
+    }
+
+    /* Orders table */
+    .orders-table-container {
+      background: var(--card-warm);
+      border-radius: 24px;
+      padding: 1rem;
+      border: 1px solid var(--border-light);
+      overflow-x: auto;
+      box-shadow: var(--shadow-md);
+    }
+
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .orders-table th, .orders-table td {
+      padding: 0.8rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-light);
+      vertical-align: middle;
+    }
+
+    .orders-table th {
+      background: var(--cream-deep);
+      font-weight: 500;
+      color: var(--charcoal);
+    }
+
+    .orders-table tr:hover {
+      background: var(--hover-subtle);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+
     .status-pending { background: rgba(180, 154, 106, 0.2); color: var(--gold-dark); }
     .status-review { background: rgba(180, 154, 106, 0.2); color: var(--gold-dark); }
     .status-shipped { background: rgba(180, 154, 106, 0.2); color: var(--gold-dark); }
     .status-delivered { background: rgba(50, 150, 80, 0.2); color: #2c682c; }
     .status-cancelled { background: rgba(200, 80, 80, 0.2); color: #b34545; }
-    .action-btn { background: none; border: none; cursor: pointer; color: var(--gold-dark); font-size: 1rem; margin: 0 4px; transition: 0.2s; }
-    .action-btn:hover { transform: scale(1.1); }
-    .pagination { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
-    .page-btn { background: var(--cream-deep); border: 1px solid var(--border-light); padding: 0.4rem 0.8rem; border-radius: 50px; cursor: pointer; font-size: 0.8rem; }
-    .page-btn.active { background: var(--gold-dark); color: white; border-color: var(--gold-dark); }
-    .toast { position: fixed; bottom: 25px; left: 25px; background: var(--gold-dark); color: white; padding: 0.7rem 1.2rem; border-radius: 50px; transform: translateY(100px); opacity: 0; transition: 0.3s; z-index: 300; }
-    .toast.show { transform: translateY(0); opacity: 1; }
-    /* Modal styles (reused from index) */
-    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(6px); z-index: 1000; display: none; align-items: center; justify-content: center; }
-    .modal-content { background: var(--cream-deep); border-radius: 28px; max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto; border: 1px solid var(--border-light); box-shadow: var(--shadow-lg); }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.2rem; border-bottom: 1px solid var(--border-light); }
-    .close-modal { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-mid); }
-    .modal-body { padding: 1.2rem; }
-    .form-group { margin-bottom: 1rem; }
-    .form-group label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; color: var(--text-mid); }
-    .form-group select, .form-group input { width: 100%; padding: 0.7rem; border: 1px solid var(--input-border); border-radius: 14px; background: var(--input-bg); color: var(--charcoal); font-size: 0.85rem; }
-    .btn-primary { background: var(--gold-dark); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 50px; cursor: pointer; }
-    .btn-secondary { background: transparent; border: 1px solid var(--border-medium); color: var(--charcoal); padding: 0.6rem 1.2rem; border-radius: 50px; cursor: pointer; }
-    footer { background: var(--charcoal); color: rgba(247, 240, 230, 0.65); padding: 40px 20px 20px; margin-top: 2rem; text-align: center; font-size: 0.7rem; }
-    .loading-spinner { text-align: center; padding: 2rem; color: var(--gold); }
-    @media (max-width: 768px) { .container { padding: 1rem; } .header-flex { padding: 0.6rem 1rem; } .logo h1 { font-size: 0.9rem; } .logo img { width: 36px; } .controls-bar { flex-direction: column; align-items: stretch; } .stats-grid { justify-content: center; } }
+
+    .action-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--gold-dark);
+      font-size: 1rem;
+      margin: 0 4px;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      transform: scale(1.1);
+      color: var(--gold);
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .page-btn {
+      background: var(--cream-deep);
+      border: 1px solid var(--border-light);
+      padding: 0.4rem 0.8rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      color: var(--charcoal);
+      transition: all 0.3s ease;
+    }
+
+    .page-btn.active {
+      background: var(--gold-dark);
+      color: white;
+      border-color: var(--gold-dark);
+    }
+
+    .page-btn:hover {
+      background: var(--gold-light);
+    }
+
+    /* Modals (same style as index) */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: var(--card-warm);
+      border-radius: 28px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.2rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--text-mid);
+    }
+
+    .modal-body {
+      padding: 1.2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.3rem;
+      color: var(--text-mid);
+    }
+
+    .form-group select, .form-group input {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border: 1px solid var(--input-border);
+      border-radius: 14px;
+      background: var(--input-bg);
+      color: var(--charcoal);
+      font-size: 0.85rem;
+    }
+
+    .btn-primary-modal {
+      background: var(--gold-dark);
+      color: var(--white);
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .btn-secondary-modal {
+      background: transparent;
+      border: 1px solid var(--border-medium);
+      color: var(--charcoal);
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+    }
+
+    /* Toast */
+    .admin-toast {
+      position: fixed;
+      bottom: 25px;
+      left: 25px;
+      background: var(--gold-dark);
+      color: var(--white);
+      padding: 0.7rem 1.2rem;
+      border-radius: 50px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: 0.3s ease;
+      z-index: 300;
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+
+    .admin-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--charcoal);
+      color: rgba(247, 240, 230, 0.65);
+      padding: 60px 40px 28px;
+      margin-top: 2rem;
+    }
+
+    body.dark footer {
+      background: #0F0E0C;
+    }
+
+    .footer-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 56px;
+      margin-bottom: 44px;
+    }
+
+    .footer-brand h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.55rem;
+      font-weight: 300;
+      color: var(--gold-light);
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+    }
+
+    .footer-brand p {
+      font-size: 0.8rem;
+      line-height: 1.8;
+      font-weight: 200;
+      max-width: 250px;
+    }
+
+    .footer-col h4 {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .footer-col a {
+      color: rgba(247, 240, 230, 0.55);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 200;
+      transition: color 0.3s;
+    }
+
+    .footer-col a:hover {
+      color: var(--gold-light);
+    }
+
+    .contact-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .contact-list li {
+      font-size: 0.8rem;
+      font-weight: 200;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .contact-list .ic {
+      color: var(--gold);
+      font-size: 0.9rem;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(180, 154, 106, 0.15);
+      padding-top: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-bottom p {
+      font-size: 0.7rem;
+      font-weight: 200;
+    }
+
+    .socials {
+      display: flex;
+      gap: 10px;
+    }
+
+    .social {
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(180, 154, 106, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-light);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+      border-radius: 50%;
+    }
+
+    .social:hover {
+      background: var(--gold-dark);
+      border-color: var(--gold-dark);
+      color: var(--white);
+    }
+
+    .footer-logo-img {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+      margin-bottom: 10px;
+      filter: brightness(0.9);
+      border-radius: 50%;
+    }
+
+    @media (max-width: 900px) {
+      .footer-top {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+      }
+      .footer-brand {
+        grid-column: 1/-1;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .footer-top {
+        grid-template-columns: 1fr;
+      }
+      footer {
+        padding: 40px 18px 22px;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+      .admin-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      .logged-in-as {
+        margin-left: 0;
+      }
+      .stats-grid {
+        justify-content: center;
+      }
+      body {
+        padding-top: 70px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-flex {
+        padding: 0.6rem 1rem;
+      }
+      .logo h1 {
+        font-size: 0.9rem;
+      }
+      .logo img {
+        width: 36px;
+      }
+      .controls-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .filter-group {
+        justify-content: space-between;
+      }
+      .orders-table th, .orders-table td {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+      }
+    }
   </style>
 </head>
 
 <body>
+  <script>
+    // Floating particles
+    for (let i = 0; i < 25; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const s = Math.random() * 4 + 2;
+      p.style.width = s + 'px';
+      p.style.height = s + 'px';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDelay = Math.random() * 20 + 's';
+      p.style.animationDuration = Math.random() * 15 + 12 + 's';
+      p.style.opacity = Math.random() * 0.2 + 0.05;
+      document.body.appendChild(p);
+    }
+  </script>
+
   <div id="menuOverlay" class="menu-overlay"></div>
-  <div id="toast" class="toast">✅ Action effectuée</div>
-
-  <!-- Modal: Order Details -->
-  <div id="orderDetailModal" class="modal-overlay">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3><i class="fas fa-receipt"></i> <span data-translate="orderDetails">Détails de la commande</span></h3>
-        <button class="close-modal" onclick="closeOrderDetailModal()"><i class="fas fa-times"></i></button>
-      </div>
-      <div class="modal-body" id="orderDetailBody"></div>
-    </div>
-  </div>
-
-  <!-- Modal: Update Status -->
-  <div id="statusModal" class="modal-overlay">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3><i class="fas fa-edit"></i> <span data-translate="updateStatus">Modifier le statut</span></h3>
-        <button class="close-modal" onclick="closeStatusModal()"><i class="fas fa-times"></i></button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label data-translate="newStatus">Nouveau statut</label>
-          <select id="newStatusSelect" class="status-select">
-            <option value="pending" data-translate="pendingStatus">En attente</option>
-            <option value="review" data-translate="review">En révision</option>
-            <option value="shipped" data-translate="shipped">Expédiée</option>
-            <option value="delivered" data-translate="deliveredStatus">Livrée</option>
-            <option value="cancelled" data-translate="cancelled">Annulée</option>
-          </select>
-        </div>
-        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-          <button id="confirmStatusBtn" class="btn-primary"><span data-translate="confirm">Confirmer</span></button>
-          <button onclick="closeStatusModal()" class="btn-secondary"><span data-translate="cancel">Annuler</span></button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div id="adminToast" class="admin-toast">✨ Action effectuée</div>
 
   <header>
     <div class="header-flex">
@@ -194,45 +892,139 @@
     </div>
   </header>
 
-  <main class="container">
+  <main>
     <div id="adminContent" style="display: none;">
       <div class="admin-wrapper">
         <div class="admin-header">
-          <h1><i class="fas fa-truck"></i> <span data-translate="ordersManagement">Gestion des commandes</span></h1>
+          <img src="is.png" alt="Rosa">
+          <h1 data-translate="ordersManagement">Gestion des commandes</h1>
+          <span class="logged-in-as" id="loggedInAs"></span>
         </div>
 
         <!-- Stats Cards -->
         <div class="stats-grid" id="statsGrid">
           <div class="stat-card"><h3 id="totalOrders">0</h3><p data-translate="totalOrders">Total</p></div>
-          <div class="stat-card"><h3 id="pendingOrdersCount">0</h3><p data-translate="pendingStatus">En attente</p></div>
-          <div class="stat-card"><h3 id="shippedOrdersCount">0</h3><p data-translate="shipped">Expédiées</p></div>
-          <div class="stat-card"><h3 id="deliveredOrdersCount">0</h3><p data-translate="deliveredStatus">Livrées</p></div>
-          <div class="stat-card"><h3 id="cancelledOrdersCount">0</h3><p data-translate="cancelled">Annulées</p></div>
+          <div class="stat-card"><h3 id="pendingCount">0</h3><p data-translate="pendingStatus">En attente</p></div>
+          <div class="stat-card"><h3 id="shippedCount">0</h3><p data-translate="shipped">Expédiées</p></div>
+          <div class="stat-card"><h3 id="deliveredCount">0</h3><p data-translate="deliveredStatus">Livrées</p></div>
+          <div class="stat-card"><h3 id="cancelledCount">0</h3><p data-translate="cancelled">Annulées</p></div>
         </div>
 
         <!-- Filters -->
         <div class="controls-bar">
-          <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Rechercher..."></div>
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Rechercher par ID, nom, téléphone, email..." data-translate="searchPlaceholder">
+          </div>
           <div class="filter-group">
-            <select id="statusFilter"><option value="all" data-translate="allStatus">Tous statuts</option><option value="pending" data-translate="pendingStatus">En attente</option><option value="review" data-translate="review">En révision</option><option value="shipped" data-translate="shipped">Expédiée</option><option value="delivered" data-translate="deliveredStatus">Livrée</option><option value="cancelled" data-translate="cancelled">Annulée</option></select>
-            <input type="date" id="dateFrom" placeholder="Du">
-            <input type="date" id="dateTo" placeholder="Au">
+            <select id="statusFilter">
+              <option value="all" data-translate="allStatus">Tous statuts</option>
+              <option value="pending" data-translate="pendingStatus">En attente</option>
+              <option value="review" data-translate="review">En révision</option>
+              <option value="shipped" data-translate="shipped">Expédiée</option>
+              <option value="delivered" data-translate="deliveredStatus">Livrée</option>
+              <option value="cancelled" data-translate="cancelled">Annulée</option>
+            </select>
+            <input type="date" id="dateFrom" placeholder="Du" data-translate="dateFrom">
+            <input type="date" id="dateTo" placeholder="Au" data-translate="dateTo">
             <button id="exportBtn" class="btn-filter"><i class="fas fa-download"></i> <span data-translate="export">Exporter CSV</span></button>
             <button id="refreshBtn" class="btn-filter"><i class="fas fa-sync-alt"></i> <span data-translate="refresh">Rafraîchir</span></button>
           </div>
         </div>
 
-        <!-- Table Container -->
-        <div id="ordersContainer" class="orders-table-container"></div>
+        <!-- Orders Table -->
+        <div class="orders-table-container">
+          <div id="loadingOrders" style="text-align:center; padding:2rem; display:none;"><i class="fas fa-spinner fa-spin"></i> <span data-translate="loading">Chargement...</span></div>
+          <div id="ordersTableContent"></div>
+        </div>
 
         <!-- Pagination -->
         <div id="pagination" class="pagination"></div>
       </div>
     </div>
-    <div id="notAuthorized" style="display: none; text-align:center; padding:3rem;"><i class="fas fa-lock" style="font-size:3rem; color:var(--gold);"></i><h2 data-translate="notAuthorized">Accès non autorisé</h2><p data-translate="adminOnly">Cette page est réservée aux administrateurs.</p><a href="login146.html" class="btn-primary" style="display:inline-block; margin-top:1rem;">Se connecter</a></div>
+
+    <div id="notAuthorized" style="display: none;">
+      <div class="not-authorized" style="text-align: center; padding: 3rem; background: var(--card-warm); border-radius: 28px; max-width: 500px; margin: 3rem auto;">
+        <i class="fas fa-lock" style="font-size: 3rem; color: var(--gold);"></i>
+        <h2 data-translate="notAuthorized">Accès non autorisé</h2>
+        <p data-translate="adminOnly">Cette page est réservée aux administrateurs. Veuillez vous connecter avec un compte administrateur.</p>
+        <a href="login146.html" class="login-redirect" style="display: inline-block; background: var(--gold-dark); color: white; padding: 0.7rem 1.5rem; border-radius: 50px; text-decoration: none; margin-top: 1rem;">Se connecter</a>
+      </div>
+    </div>
   </main>
 
-  <footer><p><span data-translate="footerCopyright">© 2026 Rosa Fragrances. Tous droits réservés.</span></p></footer>
+  <!-- Modal: Order Details -->
+  <div id="orderDetailModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-receipt"></i> <span data-translate="orderDetails">Détails de la commande</span></h3>
+        <button class="close-modal" onclick="closeOrderDetailModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body" id="orderDetailBody"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Update Status -->
+  <div id="statusModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-edit"></i> <span data-translate="updateStatus">Modifier le statut</span></h3>
+        <button class="close-modal" onclick="closeStatusModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label data-translate="newStatus">Nouveau statut</label>
+          <select id="newStatusSelect">
+            <option value="pending" data-translate="pendingStatus">En attente</option>
+            <option value="review" data-translate="review">En révision</option>
+            <option value="shipped" data-translate="shipped">Expédiée</option>
+            <option value="delivered" data-translate="deliveredStatus">Livrée</option>
+            <option value="cancelled" data-translate="cancelled">Annulée</option>
+          </select>
+        </div>
+        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+          <button id="confirmStatusBtn" class="btn-primary-modal"><span data-translate="confirm">Confirmer</span></button>
+          <button onclick="closeStatusModal()" class="btn-secondary-modal"><span data-translate="cancel">Annuler</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="footer-logo-img" src="is.png" alt="Rosa">
+          <h3>ROSA FRAGRANCES</h3>
+          <p data-translate="footerDescription">Parfumerie d'exception depuis 1985. L'art de la parfumerie orientale réinventé pour les connaisseurs exigeants.</p>
+        </div>
+        <div class="footer-col">
+          <h4 data-translate="footerPerfumesTitle">Parfums</h4>
+          <ul>
+            <li><a href="man.html" data-translate="footerMen">Homme</a></li>
+            <li><a href="women.html" data-translate="footerWomen">Femme</a></li>
+            <li><a href="unisexe.html" data-translate="footerUnisex">Unisexe</a></li>
+            <li><a href="kids.html" data-translate="footerKids">Enfants</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 data-translate="footerContactTitle">Contact</h4>
+          <ul class="contact-list">
+            <li><span class="ic">📍</span> <span data-translate="footerAddress">Tunis, Tunisie</span></li>
+            <li><span class="ic">📞</span> <span data-translate="footerPhone">+216 96 163 366</span></li>
+            <li><span class="ic">✉️</span> <span data-translate="footerEmail">contact@rosafragrances.tn</span></li>
+            <div class="socials">
+              <a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/" class="social" target="_blank"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://wa.me/21696163366" class="social" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p><span data-translate="footerCopyright">© 2026 Rosa Fragrances. Tous droits réservés.</span></p>
+      </div>
+    </div>
+  </footer>
 
   <script>
     (function() {
@@ -240,8 +1032,17 @@
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      // ---------- TRANSLATIONS (complete) ----------
       let currentLanguage = localStorage.getItem('language') || 'fr';
+      let allOrders = [];
+      let currentPage = 1;
+      const rowsPerPage = 15;
+      let currentSearch = '';
+      let currentStatus = 'all';
+      let currentDateFrom = '';
+      let currentDateTo = '';
+      let pendingOrderId = null;
+
+      // ---------- TRANSLATIONS (complete, matching other pages) ----------
       const translations = {
         fr: {
           home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS', existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil',
@@ -249,9 +1050,12 @@
           allStatus: 'Tous statuts', export: 'Exporter CSV', refresh: 'Rafraîchir', orderDetails: 'Détails de la commande', updateStatus: 'Modifier le statut', newStatus: 'Nouveau statut',
           confirm: 'Confirmer', cancel: 'Annuler', notAuthorized: 'Accès non autorisé', adminOnly: 'Cette page est réservée aux administrateurs.',
           orderId: 'ID', customer: 'Client', phone: 'Téléphone', email: 'Email', address: 'Adresse', total: 'Total', status: 'Statut', date: 'Date', actions: 'Actions',
-          view: 'Voir', edit: 'Modifier', noOrders: 'Aucune commande trouvée', loading: 'Chargement...', errorLoading: 'Erreur de chargement', orderUpdated: 'Statut mis à jour',
-          orderLoaded: 'Commande chargée', items: 'Produits', quantity: 'Qté', price: 'Prix', subtotal: 'Sous-total', grandTotal: 'Total général',
-          footerCopyright: '© 2026 Rosa Fragrances. Tous droits réservés.'
+          view: 'Voir', edit: 'Modifier', noOrders: 'Aucune commande trouvée', loading: 'Chargement...', errorLoading: 'Erreur de chargement', orderUpdated: '✅ Statut mis à jour',
+          items: 'Produits', quantity: 'Qté', price: 'Prix', searchPlaceholder: 'Rechercher par ID, nom, téléphone, email...', dateFrom: 'Du', dateTo: 'Au',
+          footerDescription: "Parfumerie d'exception depuis 1985. L'art de la parfumerie orientale réinventé pour les connaisseurs exigeants.",
+          footerPerfumesTitle: "Parfums", footerMen: "Homme", footerWomen: "Femme", footerUnisex: "Unisexe", footerKids: "Enfants",
+          footerContactTitle: "Contact", footerAddress: "Tunis, Tunisie", footerPhone: "+216 96 163 366", footerEmail: "contact@rosafragrances.tn",
+          footerCopyright: "© 2026 Rosa Fragrances. Tous droits réservés."
         },
         en: {
           home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS', existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
@@ -259,9 +1063,12 @@
           allStatus: 'All statuses', export: 'Export CSV', refresh: 'Refresh', orderDetails: 'Order details', updateStatus: 'Update status', newStatus: 'New status',
           confirm: 'Confirm', cancel: 'Cancel', notAuthorized: 'Access denied', adminOnly: 'This page is for administrators only.',
           orderId: 'ID', customer: 'Customer', phone: 'Phone', email: 'Email', address: 'Address', total: 'Total', status: 'Status', date: 'Date', actions: 'Actions',
-          view: 'View', edit: 'Edit', noOrders: 'No orders found', loading: 'Loading...', errorLoading: 'Error loading', orderUpdated: 'Status updated',
-          orderLoaded: 'Order loaded', items: 'Items', quantity: 'Qty', price: 'Price', subtotal: 'Subtotal', grandTotal: 'Grand total',
-          footerCopyright: '© 2026 Rosa Fragrances. All rights reserved.'
+          view: 'View', edit: 'Edit', noOrders: 'No orders found', loading: 'Loading...', errorLoading: 'Error loading', orderUpdated: '✅ Status updated',
+          items: 'Items', quantity: 'Qty', price: 'Price', searchPlaceholder: 'Search by ID, name, phone, email...', dateFrom: 'From', dateTo: 'To',
+          footerDescription: "Exceptional perfumery since 1985. The art of oriental perfumery reinvented for discerning connoisseurs.",
+          footerPerfumesTitle: "Perfumes", footerMen: "Men", footerWomen: "Women", footerUnisex: "Unisex", footerKids: "Kids",
+          footerContactTitle: "Contact", footerAddress: "Tunis, Tunisia", footerPhone: "+216 96 163 366", footerEmail: "contact@rosafragrances.tn",
+          footerCopyright: "© 2026 Rosa Fragrances. All rights reserved."
         },
         ar: {
           home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال', existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
@@ -269,9 +1076,12 @@
           allStatus: 'جميع الحالات', export: 'تصدير CSV', refresh: 'تحديث', orderDetails: 'تفاصيل الطلب', updateStatus: 'تحديث الحالة', newStatus: 'الحالة الجديدة',
           confirm: 'تأكيد', cancel: 'إلغاء', notAuthorized: 'وصول غير مصرح به', adminOnly: 'هذه الصفحة مخصصة للمشرفين فقط.',
           orderId: 'رقم الطلب', customer: 'العميل', phone: 'الهاتف', email: 'البريد', address: 'العنوان', total: 'المجموع', status: 'الحالة', date: 'التاريخ', actions: 'إجراءات',
-          view: 'عرض', edit: 'تعديل', noOrders: 'لا توجد طلبات', loading: 'جاري التحميل...', errorLoading: 'خطأ في التحميل', orderUpdated: 'تم تحديث الحالة',
-          orderLoaded: 'تم تحميل الطلب', items: 'المنتجات', quantity: 'الكمية', price: 'السعر', subtotal: 'المجموع الفرعي', grandTotal: 'المجموع الكلي',
-          footerCopyright: '© 2026 روزا للعطور. جميع الحقوق محفوظة.'
+          view: 'عرض', edit: 'تعديل', noOrders: 'لا توجد طلبات', loading: 'جاري التحميل...', errorLoading: 'خطأ في التحميل', orderUpdated: '✅ تم تحديث الحالة',
+          items: 'المنتجات', quantity: 'الكمية', price: 'السعر', searchPlaceholder: 'البحث بالرقم أو الاسم أو الهاتف أو البريد...', dateFrom: 'من', dateTo: 'إلى',
+          footerDescription: "عطور استثنائية منذ 1985. فن العطور الشرقية المعاد ابتكاره للخبراء المميزين.",
+          footerPerfumesTitle: "العطور", footerMen: "رجالي", footerWomen: "نسائي", footerUnisex: "للجنسين", footerKids: "أطفال",
+          footerContactTitle: "اتصل بنا", footerAddress: "تونس، تونس", footerPhone: "366 163 96 216+", footerEmail: "contact@rosafragrances.tn",
+          footerCopyright: "© 2026 روزا للعطور. جميع الحقوق محفوظة."
         }
       };
 
@@ -291,79 +1101,47 @@
             else el.textContent = translations[lang][key];
           }
         });
-        if (typeof renderOrders === 'function') renderOrders();
+        if (typeof renderOrdersTable === 'function') renderOrdersTable();
         if (typeof updateStats === 'function') updateStats();
       }
 
       function showToast(msgKey) {
-        const toast = document.getElementById('toast');
+        const toast = document.getElementById('adminToast');
         toast.textContent = translations[currentLanguage][msgKey] || msgKey;
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 2500);
       }
 
-      // ---------- DATA & STATE ----------
-      let allOrders = [];
-      let currentPage = 1;
-      const rowsPerPage = 15;
-      let currentSearch = '';
-      let currentStatus = 'all';
-      let currentDateFrom = '';
-      let currentDateTo = '';
-      let pendingOrderId = null;
-
-      // DOM elements
-      const adminContent = document.getElementById('adminContent');
-      const notAuthorized = document.getElementById('notAuthorized');
-      const ordersContainer = document.getElementById('ordersContainer');
-      const searchInput = document.getElementById('searchInput');
-      const statusFilter = document.getElementById('statusFilter');
-      const dateFrom = document.getElementById('dateFrom');
-      const dateTo = document.getElementById('dateTo');
-      const refreshBtn = document.getElementById('refreshBtn');
-      const exportBtn = document.getElementById('exportBtn');
-      const paginationDiv = document.getElementById('pagination');
-
-      // ---------- HELPER FUNCTIONS ----------
-      function formatDate(d) { return new Date(d).toLocaleString(currentLanguage === 'fr' ? 'fr-FR' : currentLanguage === 'ar' ? 'ar-TN' : 'en-US', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }); }
+      function formatDate(d) { return new Date(d).toLocaleString(currentLanguage === 'ar' ? 'ar-TN' : currentLanguage === 'fr' ? 'fr-FR' : 'en-US', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }); }
       function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.',',') + ' TND'; }
-      function getStatusLabel(s) { return translations[currentLanguage][s] || s; }
-
-      // Simple city extraction: looks for known Tunisian cities or last token longer than 3 letters
-      function extractCity(address) {
-        if (!address) return '—';
-        const commonCities = ['Tunis', 'Ariana', 'Ben Arous', 'Manouba', 'Nabeul', 'Sousse', 'Sfax', 'Monastir', 'Mahdia', 'Kairouan', 'Bizerte', 'Gabès', 'Gafsa', 'Kasserine', 'Tozeur', 'Zaghouan', 'Siliana', 'Jendouba', 'Béja', 'Kef', 'Tataouine', 'Médnine'];
-        for (let city of commonCities) {
-          if (address.toLowerCase().includes(city.toLowerCase())) return city;
-        }
-        const parts = address.split(/[ ,]+/);
-        for (let i = parts.length-1; i >=0; i--) {
-          if (parts[i].length > 3 && isNaN(parts[i])) return parts[i];
-        }
-        return address.substring(0,15);
-      }
+      function getStatusLabel(s) { const labels = { pending: translations[currentLanguage].pendingStatus, review: translations[currentLanguage].review, shipped: translations[currentLanguage].shipped, delivered: translations[currentLanguage].deliveredStatus, cancelled: translations[currentLanguage].cancelled }; return labels[s] || s; }
+      function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
 
       async function loadOrders() {
+        const loadingDiv = document.getElementById('loadingOrders');
+        const tableDiv = document.getElementById('ordersTableContent');
+        if (loadingDiv) loadingDiv.style.display = 'block';
+        if (tableDiv) tableDiv.innerHTML = '';
         try {
-          ordersContainer.innerHTML = `<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> ${translations[currentLanguage].loading}</div>`;
-          let query = supabase.from('orders').select('*').order('created_at', { ascending: false });
-          const { data, error } = await query;
+          const { data, error } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
           if (error) throw error;
           allOrders = data || [];
           updateStats();
-          renderOrders();
-        } catch(err) {
+          renderOrdersTable();
+        } catch (err) {
           console.error(err);
-          ordersContainer.innerHTML = `<div class="loading-spinner">${translations[currentLanguage].errorLoading}</div>`;
+          if (tableDiv) tableDiv.innerHTML = `<div style="text-align:center; padding:2rem;">${translations[currentLanguage].errorLoading}</div>`;
+        } finally {
+          if (loadingDiv) loadingDiv.style.display = 'none';
         }
       }
 
       function updateStats() {
         document.getElementById('totalOrders').innerText = allOrders.length;
-        document.getElementById('pendingOrdersCount').innerText = allOrders.filter(o => o.status === 'pending').length;
-        document.getElementById('shippedOrdersCount').innerText = allOrders.filter(o => o.status === 'shipped').length;
-        document.getElementById('deliveredOrdersCount').innerText = allOrders.filter(o => o.status === 'delivered').length;
-        document.getElementById('cancelledOrdersCount').innerText = allOrders.filter(o => o.status === 'cancelled').length;
+        document.getElementById('pendingCount').innerText = allOrders.filter(o => o.status === 'pending').length;
+        document.getElementById('shippedCount').innerText = allOrders.filter(o => o.status === 'shipped').length;
+        document.getElementById('deliveredCount').innerText = allOrders.filter(o => o.status === 'delivered').length;
+        document.getElementById('cancelledCount').innerText = allOrders.filter(o => o.status === 'cancelled').length;
       }
 
       function filterOrders() {
@@ -374,8 +1152,7 @@
             (o.customer_name && o.customer_name.toLowerCase().includes(term)) ||
             (o.customer_phone && o.customer_phone.includes(term)) ||
             (o.customer_email && o.customer_email.toLowerCase().includes(term)) ||
-            (o.shipping_address && o.shipping_address.toLowerCase().includes(term))
-          );
+            (o.shipping_address && o.shipping_address.toLowerCase().includes(term)));
         }
         if (currentStatus !== 'all') filtered = filtered.filter(o => o.status === currentStatus);
         if (currentDateFrom) filtered = filtered.filter(o => new Date(o.created_at) >= new Date(currentDateFrom));
@@ -383,7 +1160,9 @@
         return filtered;
       }
 
-      function renderOrders() {
+      function renderOrdersTable() {
+        const tableDiv = document.getElementById('ordersTableContent');
+        if (!tableDiv) return;
         const filtered = filterOrders();
         const totalPages = Math.ceil(filtered.length / rowsPerPage);
         if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
@@ -391,8 +1170,8 @@
         const pageOrders = filtered.slice(start, start + rowsPerPage);
 
         if (pageOrders.length === 0) {
-          ordersContainer.innerHTML = `<div style="text-align:center; padding:2rem;">${translations[currentLanguage].noOrders}</div>`;
-          paginationDiv.innerHTML = '';
+          tableDiv.innerHTML = `<div style="text-align:center; padding:2rem;">${translations[currentLanguage].noOrders}</div>`;
+          document.getElementById('pagination').innerHTML = '';
           return;
         }
 
@@ -413,36 +1192,39 @@
             <td>${escapeHtml(order.customer_name || '-')}</td>
             <td>${escapeHtml(order.customer_phone || '-')}</td>
             <td>${escapeHtml(order.customer_email || '-')}</td>
-            <td title="${escapeHtml(order.shipping_address || '-')}">${escapeHtml(extractCity(order.shipping_address))}</td>
+            <td>${escapeHtml(order.shipping_address ? order.shipping_address.substring(0,30) : '-')}</td>
             <td>${formatPrice(order.total)}</td>
             <td><span class="status-badge status-${order.status}">${getStatusLabel(order.status)}</span></td>
             <td>${formatDate(order.created_at)}</td>
-            <td><button class="action-btn" onclick="viewOrderDetails('${order.id}')" title="${translations[currentLanguage].view}"><i class="fas fa-eye"></i></button> <button class="action-btn" onclick="openStatusModal('${order.id}')" title="${translations[currentLanguage].edit}"><i class="fas fa-edit"></i></button></td>
+            <td>
+              <button class="action-btn" onclick="viewOrderDetails('${order.id}')" title="${translations[currentLanguage].view}"><i class="fas fa-eye"></i></button>
+              <button class="action-btn" onclick="openStatusModal('${order.id}')" title="${translations[currentLanguage].edit}"><i class="fas fa-edit"></i></button>
+            </td>
           </tr>`;
         });
         html += `</tbody></table>`;
-        ordersContainer.innerHTML = html;
+        tableDiv.innerHTML = html;
 
-        // Pagination controls
+        // Pagination
         let pagHtml = '';
         if (totalPages > 1) {
           for (let i = 1; i <= totalPages; i++) {
             pagHtml += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
           }
-          paginationDiv.innerHTML = pagHtml;
+          document.getElementById('pagination').innerHTML = pagHtml;
           document.querySelectorAll('.page-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => { currentPage = parseInt(e.target.dataset.page); renderOrders(); });
+            btn.addEventListener('click', (e) => { currentPage = parseInt(e.target.dataset.page); renderOrdersTable(); });
           });
         } else {
-          paginationDiv.innerHTML = '';
+          document.getElementById('pagination').innerHTML = '';
         }
       }
 
-      // ---------- MODAL: ORDER DETAILS ----------
-      window.viewOrderDetails = async function(orderId) {
+      // ---------- MODALS ----------
+      window.viewOrderDetails = function(orderId) {
         const order = allOrders.find(o => o.id === orderId);
         if (!order) return;
-        let itemsHtml = '<ul style="margin:0; padding-left:1rem;">';
+        let itemsHtml = '<ul style="margin:0; padding-left:1.2rem;">';
         if (order.items && order.items.length) {
           order.items.forEach(item => {
             itemsHtml += `<li><strong>${escapeHtml(item.name)}</strong> x${item.quantity} — ${formatPrice(item.price * item.quantity)}</li>`;
@@ -467,7 +1249,6 @@
       };
       window.closeOrderDetailModal = () => document.getElementById('orderDetailModal').style.display = 'none';
 
-      // ---------- MODAL: UPDATE STATUS ----------
       window.openStatusModal = function(orderId) {
         pendingOrderId = orderId;
         const order = allOrders.find(o => o.id === orderId);
@@ -484,7 +1265,7 @@
           if (error) throw error;
           showToast('orderUpdated');
           closeStatusModal();
-          loadOrders(); // refresh
+          loadOrders();
         } catch(err) { showToast('errorLoading'); }
       });
 
@@ -508,62 +1289,113 @@
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
       }
-      exportBtn.addEventListener('click', exportToCSV);
+      document.getElementById('exportBtn').addEventListener('click', exportToCSV);
 
       // ---------- FILTER EVENT HANDLERS (debounced search) ----------
       let searchTimeout;
+      const searchInput = document.getElementById('searchInput');
       searchInput.addEventListener('input', () => {
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
           currentSearch = searchInput.value;
           currentPage = 1;
-          renderOrders();
+          renderOrdersTable();
         }, 300);
       });
-      statusFilter.addEventListener('change', () => { currentStatus = statusFilter.value; currentPage = 1; renderOrders(); });
-      dateFrom.addEventListener('change', () => { currentDateFrom = dateFrom.value; currentPage = 1; renderOrders(); });
-      dateTo.addEventListener('change', () => { currentDateTo = dateTo.value; currentPage = 1; renderOrders(); });
-      refreshBtn.addEventListener('click', () => { loadOrders(); });
+      document.getElementById('statusFilter').addEventListener('change', (e) => { currentStatus = e.target.value; currentPage = 1; renderOrdersTable(); });
+      document.getElementById('dateFrom').addEventListener('change', (e) => { currentDateFrom = e.target.value; currentPage = 1; renderOrdersTable(); });
+      document.getElementById('dateTo').addEventListener('change', (e) => { currentDateTo = e.target.value; currentPage = 1; renderOrdersTable(); });
+      document.getElementById('refreshBtn').addEventListener('click', () => loadOrders());
 
-      // ---------- AUTH & NAV LINK CONTROL ----------
-      async function checkAdmin() {
-        const { data: { user } } = await supabase.auth.getUser();
-        const authLink = document.getElementById('authLink'), profileLink = document.getElementById('profileLink'), adminLink = document.getElementById('adminLink'), ordersLink = document.getElementById('ordersLink');
-        if (!user) {
-          adminContent.style.display = 'none'; notAuthorized.style.display = 'block';
-          if(authLink) authLink.style.display = 'block'; if(profileLink) profileLink.style.display = 'none'; if(adminLink) adminLink.style.display = 'none'; if(ordersLink) ordersLink.style.display = 'none';
-          return;
-        }
-        if (user.email !== 'azmmeli146@gmail.com') {
-          adminContent.style.display = 'none'; notAuthorized.style.display = 'block';
-          if(authLink) authLink.style.display = 'none'; if(profileLink) profileLink.style.display = 'block'; if(adminLink) adminLink.style.display = 'none'; if(ordersLink) ordersLink.style.display = 'none';
-          return;
-        }
-        adminContent.style.display = 'block'; notAuthorized.style.display = 'none';
-        if(authLink) authLink.style.display = 'none'; if(profileLink) profileLink.style.display = 'block'; if(adminLink) adminLink.style.display = 'block'; if(ordersLink) ordersLink.style.display = 'block';
-        loadOrders();
+      // ---------- AUTH & NAV LINK CONTROL (same as existed.html) ----------
+      let updateUserTimeout, isUpdatingUser = false;
+      async function updateUserDisplay() {
+        if (isUpdatingUser) return;
+        isUpdatingUser = true;
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          const authLink = document.getElementById('authLink'), profileLink = document.getElementById('profileLink'), adminLink = document.getElementById('adminLink'), ordersLink = document.getElementById('ordersLink');
+          const loggedInAs = document.getElementById('loggedInAs');
+          if (user) {
+            if (authLink) authLink.style.display = 'none';
+            if (profileLink) profileLink.style.display = 'block';
+            if (loggedInAs) loggedInAs.textContent = `⚡ ${user.email} · ${new Date().toLocaleDateString('fr-FR')}`;
+            if (user.email === 'azmmeli146@gmail.com') {
+              if (adminLink) adminLink.style.display = 'block';
+              if (ordersLink) ordersLink.style.display = 'block';
+            } else {
+              if (adminLink) adminLink.style.display = 'none';
+              if (ordersLink) ordersLink.style.display = 'none';
+            }
+          } else {
+            if (authLink) authLink.style.display = 'block';
+            if (profileLink) profileLink.style.display = 'none';
+            if (adminLink) adminLink.style.display = 'none';
+            if (ordersLink) ordersLink.style.display = 'none';
+            if (loggedInAs) loggedInAs.textContent = '';
+          }
+        } catch (error) { console.error(error); }
+        finally { isUpdatingUser = false; }
       }
-      checkAdmin();
-      supabase.auth.onAuthStateChange(() => checkAdmin());
+      updateUserDisplay();
+      supabase.auth.onAuthStateChange((event, session) => {
+        if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
+          if (updateUserTimeout) clearTimeout(updateUserTimeout);
+          updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
+        }
+      });
 
-      // ---------- THEME, MENU, LANGUAGE ----------
-      function initTheme() { const saved = localStorage.getItem('theme')||'light'; if(saved==='dark') document.body.classList.add('dark'); }
-      function toggleTheme() { document.body.classList.toggle('dark'); localStorage.setItem('theme', document.body.classList.contains('dark')?'dark':'light'); }
-      document.getElementById('themeToggle')?.addEventListener('click', toggleTheme); initTheme();
+      async function checkAdminAccess() {
+        const adminContent = document.getElementById('adminContent');
+        const notAuthorizedDiv = document.getElementById('notAuthorized');
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (!user || user.email !== 'azmmeli146@gmail.com') {
+            adminContent.style.display = 'none';
+            notAuthorizedDiv.style.display = 'block';
+            return;
+          }
+          adminContent.style.display = 'block';
+          notAuthorizedDiv.style.display = 'none';
+          loadOrders();
+        } catch (error) {
+          adminContent.style.display = 'none';
+          notAuthorizedDiv.style.display = 'block';
+        }
+      }
+      checkAdminAccess();
+
+      // Theme, menu, language (same as existed)
+      function initTheme() { const saved = localStorage.getItem('theme') || 'light'; if (saved === 'dark') { document.body.classList.add('dark'); document.querySelector('#themeToggle .fa-sun').style.display = 'none'; document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block'; } }
+      function toggleTheme() {
+        if (document.body.classList.contains('dark')) {
+          document.body.classList.remove('dark');
+          localStorage.setItem('theme', 'light');
+          document.querySelector('#themeToggle .fa-sun').style.display = 'inline-block';
+          document.querySelector('#themeToggle .fa-moon').style.display = 'none';
+        } else {
+          document.body.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+          document.querySelector('#themeToggle .fa-sun').style.display = 'none';
+          document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
+        }
+      }
+      document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
+      initTheme();
 
       const menuToggle = document.getElementById('menuToggle'), navLinks = document.getElementById('navLinks'), menuOverlay = document.getElementById('menuOverlay');
-      function toggleMenu() { navLinks.classList.toggle('active'); menuOverlay.classList.toggle('active'); }
-      menuToggle?.addEventListener('click', toggleMenu); menuOverlay?.addEventListener('click', toggleMenu);
+      function toggleMenu() { navLinks.classList.toggle('active'); menuOverlay.classList.toggle('active'); document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : ''; }
+      menuToggle?.addEventListener('click', toggleMenu);
+      menuOverlay?.addEventListener('click', toggleMenu);
 
       const langMenu = document.getElementById('langMenu'), langCurrentBtn = document.getElementById('langCurrentBtn');
       if (langCurrentBtn) langCurrentBtn.addEventListener('click', (e) => { e.stopPropagation(); langMenu.classList.toggle('active'); });
       document.querySelectorAll('.lang-option').forEach(opt => { opt.addEventListener('click', () => { translatePage(opt.dataset.lang); langMenu.classList.remove('active'); }); });
       document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
 
-      function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
-
       translatePage(currentLanguage);
     })();
   </script>
 </body>
+
 </html>
