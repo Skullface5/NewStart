@@ -9,18 +9,21 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
   <style>
+    /* ===== SAME VARIABLES AND RESETS AS OTHER PAGES ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --cream: #F7F0E6; --cream-dark: #EDE4D6; --cream-deep: #E0D4C0;
       --gold: #B49A6A; --gold-light: #D4B98A; --gold-dark: #8A7150;
       --charcoal: #3A3228; --text-mid: #6B5E4E; --white: #FEFCF8;
       --border-light: rgba(180, 155, 120, 0.12); --border-medium: rgba(180, 155, 120, 0.2);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.02); --shadow-md: 0 4px 16px rgba(0,0,0,0.03); --shadow-lg: 0 8px 24px rgba(0,0,0,0.04);
       --input-bg: #F9F6F2; --input-border: #E2D9CF; --hover-subtle: rgba(180, 155, 120, 0.05);
     }
     body {
       font-family: 'Jost', sans-serif;
       background: var(--cream);
       color: var(--charcoal);
+      line-height: 1.5;
       padding-top: 80px;
     }
     body.dark {
@@ -30,9 +33,13 @@
       --input-bg: #3A352C; --input-border: #4A4438;
     }
     .container { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; }
+    /* header identical to adminadd.html */
     header {
-      background: rgba(247, 240, 230, 0.92); backdrop-filter: blur(12px);
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(247, 240, 230, 0.92);
+      backdrop-filter: blur(12px);
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
       border-bottom: 1px solid rgba(180, 154, 106, 0.2);
     }
     body.dark header { background: rgba(26, 24, 20, 0.92); }
@@ -40,7 +47,7 @@
     .logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
     .logo img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
     .logo h1 { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 400; color: var(--gold-dark); letter-spacing: 0.15em; }
-    .theme-toggle, .menu-toggle { background: transparent; border: none; cursor: pointer; font-size: 1.1rem; color: var(--gold-dark); width: 34px; height: 34px; border-radius: 50%; }
+    .theme-toggle, .menu-toggle { background: transparent; border: none; cursor: pointer; font-size: 1.1rem; color: var(--gold-dark); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
     .right-group { display: flex; align-items: center; gap: 8px; }
     .nav-links {
       display: flex; flex-direction: column; position: absolute; top: 100%; right: 0;
@@ -48,7 +55,7 @@
       max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.4s, opacity 0.3s;
       border-radius: 20px; border: 1px solid var(--border-light); z-index: 101;
     }
-    .nav-links.active { max-height: 500px; opacity: 1; padding: 0.5rem 0; }
+    .nav-links.active { max-height: 550px; opacity: 1; padding: 0.5rem 0; }
     .nav-links a {
       padding: 0.9rem 1.5rem; text-decoration: none; color: var(--charcoal);
       display: block; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
@@ -56,23 +63,34 @@
     }
     .nav-links a:hover { background: var(--hover-subtle); color: var(--gold-dark); padding-left: 2rem; }
     .admin-nav-link { background: rgba(180, 154, 106, 0.08); color: var(--gold-dark) !important; font-weight: 600; border-bottom: 2px solid var(--gold) !important; }
+    .lang-menu { border-bottom: 1px solid var(--border-light); }
+    .lang-current { display: flex; justify-content: space-between; width: 100%; background: none; border: none; padding: 0.9rem 1.5rem; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--charcoal); cursor: pointer; }
+    .lang-options { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: var(--cream-dark); }
+    .lang-menu.active .lang-options { max-height: 130px; }
+    .lang-option { display: block; width: 100%; text-align: left; padding: 0.7rem 1.5rem 0.7rem 2.5rem; background: none; border: none; font-size: 0.7rem; cursor: pointer; color: var(--text-mid); }
+    .lang-option:hover { background: var(--hover-subtle); color: var(--gold-dark); }
     .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(6px); z-index: 99; visibility: hidden; opacity: 0; transition: 0.3s; }
     .menu-overlay.active { visibility: visible; opacity: 1; }
+
+    /* Admin specific */
     .admin-wrapper { max-width: 1300px; margin: 0 auto; }
-    .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .admin-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
     .admin-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; display: flex; align-items: center; gap: 10px; }
-    .stats-badge { background: var(--cream-deep); padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.8rem; }
-    .controls-bar { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; align-items: center; }
-    .search-box { display: flex; align-items: center; gap: 8px; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 50px; padding: 0.5rem 1rem; flex: 1; min-width: 200px; }
+    .stats-grid { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .stat-card { background: var(--cream-deep); border-radius: 20px; padding: 0.8rem 1.2rem; min-width: 100px; text-align: center; border: 1px solid var(--border-light); }
+    .stat-card h3 { font-size: 1.4rem; font-weight: 500; }
+    .stat-card p { font-size: 0.7rem; color: var(--text-mid); text-transform: uppercase; }
+    .controls-bar { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; align-items: flex-end; }
+    .search-box { display: flex; align-items: center; gap: 8px; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 50px; padding: 0.5rem 1rem; flex: 2; min-width: 200px; }
     .search-box i { color: var(--gold); }
     .search-box input { background: none; border: none; outline: none; width: 100%; color: var(--charcoal); }
-    .filter-group { display: flex; gap: 0.8rem; flex-wrap: wrap; }
-    select, .group-btn { background: var(--input-bg); border: 1px solid var(--input-border); padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.8rem; color: var(--charcoal); cursor: pointer; }
-    .group-btn { background: var(--cream-deep); }
-    .group-btn.active { background: var(--gold-dark); color: white; border-color: var(--gold-dark); }
+    .filter-group { display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center; }
+    select, .btn-filter { background: var(--input-bg); border: 1px solid var(--input-border); padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.8rem; color: var(--charcoal); cursor: pointer; }
+    .btn-filter { background: var(--cream-deep); display: inline-flex; align-items: center; gap: 6px; }
+    .btn-filter.active { background: var(--gold-dark); color: white; border-color: var(--gold-dark); }
     .orders-table-container { background: var(--cream-deep); border-radius: 24px; padding: 1rem; overflow-x: auto; }
     .orders-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    .orders-table th, .orders-table td { padding: 0.8rem; text-align: left; border-bottom: 1px solid var(--border-light); }
+    .orders-table th, .orders-table td { padding: 0.8rem; text-align: left; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
     .orders-table th { background: var(--cream-dark); font-weight: 500; }
     .orders-table tr:hover { background: var(--hover-subtle); }
     .status-badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.7rem; font-weight: 500; }
@@ -81,15 +99,27 @@
     .status-shipped { background: rgba(180, 154, 106, 0.2); color: var(--gold-dark); }
     .status-delivered { background: rgba(50, 150, 80, 0.2); color: #2c682c; }
     .status-cancelled { background: rgba(200, 80, 80, 0.2); color: #b34545; }
-    .action-btn { background: none; border: none; cursor: pointer; color: var(--gold-dark); font-size: 1rem; margin: 0 4px; }
-    .group-card { background: var(--cream-deep); border-radius: 20px; padding: 1rem; margin-bottom: 1rem; }
-    .group-title { font-weight: 600; margin-bottom: 0.8rem; font-size: 1rem; border-left: 3px solid var(--gold); padding-left: 10px; }
+    .action-btn { background: none; border: none; cursor: pointer; color: var(--gold-dark); font-size: 1rem; margin: 0 4px; transition: 0.2s; }
+    .action-btn:hover { transform: scale(1.1); }
+    .pagination { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .page-btn { background: var(--cream-deep); border: 1px solid var(--border-light); padding: 0.4rem 0.8rem; border-radius: 50px; cursor: pointer; font-size: 0.8rem; }
+    .page-btn.active { background: var(--gold-dark); color: white; border-color: var(--gold-dark); }
     .toast { position: fixed; bottom: 25px; left: 25px; background: var(--gold-dark); color: white; padding: 0.7rem 1.2rem; border-radius: 50px; transform: translateY(100px); opacity: 0; transition: 0.3s; z-index: 300; }
     .toast.show { transform: translateY(0); opacity: 1; }
+    /* Modal styles (reused from index) */
     .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(6px); z-index: 1000; display: none; align-items: center; justify-content: center; }
-    .modal-content { background: var(--cream-deep); border-radius: 24px; max-width: 400px; width: 90%; padding: 1.5rem; }
+    .modal-content { background: var(--cream-deep); border-radius: 28px; max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto; border: 1px solid var(--border-light); box-shadow: var(--shadow-lg); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.2rem; border-bottom: 1px solid var(--border-light); }
+    .close-modal { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-mid); }
+    .modal-body { padding: 1.2rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; color: var(--text-mid); }
+    .form-group select, .form-group input { width: 100%; padding: 0.7rem; border: 1px solid var(--input-border); border-radius: 14px; background: var(--input-bg); color: var(--charcoal); font-size: 0.85rem; }
+    .btn-primary { background: var(--gold-dark); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 50px; cursor: pointer; }
+    .btn-secondary { background: transparent; border: 1px solid var(--border-medium); color: var(--charcoal); padding: 0.6rem 1.2rem; border-radius: 50px; cursor: pointer; }
     footer { background: var(--charcoal); color: rgba(247, 240, 230, 0.65); padding: 40px 20px 20px; margin-top: 2rem; text-align: center; font-size: 0.7rem; }
-    @media (max-width: 768px) { .container { padding: 1rem; } .header-flex { padding: 0.6rem 1rem; } .logo h1 { font-size: 0.9rem; } .logo img { width: 36px; } .controls-bar { flex-direction: column; align-items: stretch; } }
+    .loading-spinner { text-align: center; padding: 2rem; color: var(--gold); }
+    @media (max-width: 768px) { .container { padding: 1rem; } .header-flex { padding: 0.6rem 1rem; } .logo h1 { font-size: 0.9rem; } .logo img { width: 36px; } .controls-bar { flex-direction: column; align-items: stretch; } .stats-grid { justify-content: center; } }
   </style>
 </head>
 
@@ -97,20 +127,39 @@
   <div id="menuOverlay" class="menu-overlay"></div>
   <div id="toast" class="toast">✅ Action effectuée</div>
 
-  <!-- Status Update Modal -->
+  <!-- Modal: Order Details -->
+  <div id="orderDetailModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-receipt"></i> <span data-translate="orderDetails">Détails de la commande</span></h3>
+        <button class="close-modal" onclick="closeOrderDetailModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body" id="orderDetailBody"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Update Status -->
   <div id="statusModal" class="modal-overlay">
     <div class="modal-content">
-      <h3 style="margin-bottom: 1rem;">Modifier le statut</h3>
-      <select id="newStatusSelect" style="width:100%; padding:0.5rem; margin-bottom:1rem; border-radius:50px;">
-        <option value="pending">En attente</option>
-        <option value="review">En révision</option>
-        <option value="shipped">Expédiée</option>
-        <option value="delivered">Livrée</option>
-        <option value="cancelled">Annulée</option>
-      </select>
-      <div style="display:flex; gap:1rem;">
-        <button id="confirmStatusBtn" class="group-btn" style="flex:1;">Confirmer</button>
-        <button id="cancelStatusBtn" class="group-btn" style="flex:1; background:transparent;">Annuler</button>
+      <div class="modal-header">
+        <h3><i class="fas fa-edit"></i> <span data-translate="updateStatus">Modifier le statut</span></h3>
+        <button class="close-modal" onclick="closeStatusModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label data-translate="newStatus">Nouveau statut</label>
+          <select id="newStatusSelect" class="status-select">
+            <option value="pending" data-translate="pendingStatus">En attente</option>
+            <option value="review" data-translate="review">En révision</option>
+            <option value="shipped" data-translate="shipped">Expédiée</option>
+            <option value="delivered" data-translate="deliveredStatus">Livrée</option>
+            <option value="cancelled" data-translate="cancelled">Annulée</option>
+          </select>
+        </div>
+        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+          <button id="confirmStatusBtn" class="btn-primary"><span data-translate="confirm">Confirmer</span></button>
+          <button onclick="closeStatusModal()" class="btn-secondary"><span data-translate="cancel">Annuler</span></button>
+        </div>
       </div>
     </div>
   </div>
@@ -123,14 +172,22 @@
         <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
       </div>
       <div class="nav-links" id="navLinks">
-        <a href="index.html">ACCUEIL</a>
-        <a href="man.html">HOMME</a>
-        <a href="women.html">FEMME</a>
-        <a href="unisexe.html">UNISEXE</a>
-        <a href="kids.html">ENFANTS</a>
-        <a href="existed.html">PARFUMS EXISTANTS</a>
-        <a href="login146.html" id="authLink">Se connecter</a>
-        <a href="profile.html" id="profileLink" style="display:none;">Mon Profil</a>
+        <a href="index.html" data-translate="home">ACCUEIL</a>
+        <a href="man.html" data-translate="men">HOMME</a>
+        <a href="women.html" data-translate="women">FEMME</a>
+        <a href="unisexe.html" data-translate="unisex">UNISEXE</a>
+        <a href="kids.html" data-translate="kids">ENFANTS</a>
+        <a href="existed.html" data-translate="existing">PARFUMS EXISTANTS</a>
+        <div class="lang-menu" id="langMenu">
+          <button class="lang-current" id="langCurrentBtn"><span id="currentLangText">FRANÇAIS</span><i class="fas fa-chevron-down"></i></button>
+          <div class="lang-options">
+            <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
+            <button class="lang-option" data-lang="en">🇬🇧 English</button>
+            <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
+          </div>
+        </div>
+        <a href="login146.html" id="authLink" data-translate="login">Se connecter</a>
+        <a href="profile.html" id="profileLink" style="display:none;" data-translate="profile">Mon Profil</a>
         <a href="adminadd.html" id="adminLink" style="display:none;" class="admin-nav-link"><i class="fas fa-crown"></i> Admin</a>
         <a href="orders.html" id="ordersLink" style="display:none;" class="admin-nav-link"><i class="fas fa-truck"></i> Commandes</a>
       </div>
@@ -141,30 +198,41 @@
     <div id="adminContent" style="display: none;">
       <div class="admin-wrapper">
         <div class="admin-header">
-          <h1><i class="fas fa-truck"></i> Gestion des commandes</h1>
-          <div class="stats-badge" id="statsBadge">📦 0 commandes</div>
+          <h1><i class="fas fa-truck"></i> <span data-translate="ordersManagement">Gestion des commandes</span></h1>
         </div>
 
+        <!-- Stats Cards -->
+        <div class="stats-grid" id="statsGrid">
+          <div class="stat-card"><h3 id="totalOrders">0</h3><p data-translate="totalOrders">Total</p></div>
+          <div class="stat-card"><h3 id="pendingOrdersCount">0</h3><p data-translate="pendingStatus">En attente</p></div>
+          <div class="stat-card"><h3 id="shippedOrdersCount">0</h3><p data-translate="shipped">Expédiées</p></div>
+          <div class="stat-card"><h3 id="deliveredOrdersCount">0</h3><p data-translate="deliveredStatus">Livrées</p></div>
+          <div class="stat-card"><h3 id="cancelledOrdersCount">0</h3><p data-translate="cancelled">Annulées</p></div>
+        </div>
+
+        <!-- Filters -->
         <div class="controls-bar">
-          <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Rechercher par ID, nom, téléphone, email..."></div>
+          <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Rechercher..."></div>
           <div class="filter-group">
-            <select id="statusFilter"><option value="all">Tous statuts</option><option value="pending">En attente</option><option value="review">En révision</option><option value="shipped">Expédiée</option><option value="delivered">Livrée</option><option value="cancelled">Annulée</option></select>
-            <button class="group-btn" data-group="none">📋 Aucun</button>
-            <button class="group-btn" data-group="status">🏷️ Par statut</button>
-            <button class="group-btn" data-group="city">📍 Par ville</button>
-            <button class="group-btn" data-group="product">🧴 Par produit</button>
-            <button class="group-btn" data-group="date">📅 Par date</button>
-            <button id="refreshBtn" class="group-btn"><i class="fas fa-sync-alt"></i> Rafraîchir</button>
+            <select id="statusFilter"><option value="all" data-translate="allStatus">Tous statuts</option><option value="pending" data-translate="pendingStatus">En attente</option><option value="review" data-translate="review">En révision</option><option value="shipped" data-translate="shipped">Expédiée</option><option value="delivered" data-translate="deliveredStatus">Livrée</option><option value="cancelled" data-translate="cancelled">Annulée</option></select>
+            <input type="date" id="dateFrom" placeholder="Du">
+            <input type="date" id="dateTo" placeholder="Au">
+            <button id="exportBtn" class="btn-filter"><i class="fas fa-download"></i> <span data-translate="export">Exporter CSV</span></button>
+            <button id="refreshBtn" class="btn-filter"><i class="fas fa-sync-alt"></i> <span data-translate="refresh">Rafraîchir</span></button>
           </div>
         </div>
 
-        <div id="ordersContainer" class="orders-table-container"><div class="loading-spinner" style="text-align:center; padding:2rem;"><i class="fas fa-spinner fa-spin"></i> Chargement...</div></div>
+        <!-- Table Container -->
+        <div id="ordersContainer" class="orders-table-container"></div>
+
+        <!-- Pagination -->
+        <div id="pagination" class="pagination"></div>
       </div>
     </div>
-    <div id="notAuthorized" style="display: none; text-align:center; padding:3rem;"><i class="fas fa-lock" style="font-size:3rem; color:var(--gold);"></i><h2>Accès non autorisé</h2><p>Cette page est réservée aux administrateurs.</p><a href="login146.html" style="display:inline-block; margin-top:1rem; background:var(--gold-dark); color:white; padding:0.7rem 1.5rem; border-radius:50px; text-decoration:none;">Se connecter</a></div>
+    <div id="notAuthorized" style="display: none; text-align:center; padding:3rem;"><i class="fas fa-lock" style="font-size:3rem; color:var(--gold);"></i><h2 data-translate="notAuthorized">Accès non autorisé</h2><p data-translate="adminOnly">Cette page est réservée aux administrateurs.</p><a href="login146.html" class="btn-primary" style="display:inline-block; margin-top:1rem;">Se connecter</a></div>
   </main>
 
-  <footer><p>© 2026 Rosa Fragrances. Tous droits réservés.</p></footer>
+  <footer><p><span data-translate="footerCopyright">© 2026 Rosa Fragrances. Tous droits réservés.</span></p></footer>
 
   <script>
     (function() {
@@ -172,102 +240,305 @@
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      let orders = [], currentGroup = 'none', searchTerm = '', statusFilter = 'all';
+      // ---------- TRANSLATIONS (complete) ----------
+      let currentLanguage = localStorage.getItem('language') || 'fr';
+      const translations = {
+        fr: {
+          home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS', existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil',
+          ordersManagement: 'Gestion des commandes', totalOrders: 'Total', pendingStatus: 'En attente', review: 'En révision', shipped: 'Expédiée', deliveredStatus: 'Livrée', cancelled: 'Annulée',
+          allStatus: 'Tous statuts', export: 'Exporter CSV', refresh: 'Rafraîchir', orderDetails: 'Détails de la commande', updateStatus: 'Modifier le statut', newStatus: 'Nouveau statut',
+          confirm: 'Confirmer', cancel: 'Annuler', notAuthorized: 'Accès non autorisé', adminOnly: 'Cette page est réservée aux administrateurs.',
+          orderId: 'ID', customer: 'Client', phone: 'Téléphone', email: 'Email', address: 'Adresse', total: 'Total', status: 'Statut', date: 'Date', actions: 'Actions',
+          view: 'Voir', edit: 'Modifier', noOrders: 'Aucune commande trouvée', loading: 'Chargement...', errorLoading: 'Erreur de chargement', orderUpdated: 'Statut mis à jour',
+          orderLoaded: 'Commande chargée', items: 'Produits', quantity: 'Qté', price: 'Prix', subtotal: 'Sous-total', grandTotal: 'Total général',
+          footerCopyright: '© 2026 Rosa Fragrances. Tous droits réservés.'
+        },
+        en: {
+          home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS', existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
+          ordersManagement: 'Order Management', totalOrders: 'Total', pendingStatus: 'Pending', review: 'Under review', shipped: 'Shipped', deliveredStatus: 'Delivered', cancelled: 'Cancelled',
+          allStatus: 'All statuses', export: 'Export CSV', refresh: 'Refresh', orderDetails: 'Order details', updateStatus: 'Update status', newStatus: 'New status',
+          confirm: 'Confirm', cancel: 'Cancel', notAuthorized: 'Access denied', adminOnly: 'This page is for administrators only.',
+          orderId: 'ID', customer: 'Customer', phone: 'Phone', email: 'Email', address: 'Address', total: 'Total', status: 'Status', date: 'Date', actions: 'Actions',
+          view: 'View', edit: 'Edit', noOrders: 'No orders found', loading: 'Loading...', errorLoading: 'Error loading', orderUpdated: 'Status updated',
+          orderLoaded: 'Order loaded', items: 'Items', quantity: 'Qty', price: 'Price', subtotal: 'Subtotal', grandTotal: 'Grand total',
+          footerCopyright: '© 2026 Rosa Fragrances. All rights reserved.'
+        },
+        ar: {
+          home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال', existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
+          ordersManagement: 'إدارة الطلبات', totalOrders: 'الإجمالي', pendingStatus: 'قيد الانتظار', review: 'قيد المراجعة', shipped: 'تم الشحن', deliveredStatus: 'تم التوصيل', cancelled: 'ملغية',
+          allStatus: 'جميع الحالات', export: 'تصدير CSV', refresh: 'تحديث', orderDetails: 'تفاصيل الطلب', updateStatus: 'تحديث الحالة', newStatus: 'الحالة الجديدة',
+          confirm: 'تأكيد', cancel: 'إلغاء', notAuthorized: 'وصول غير مصرح به', adminOnly: 'هذه الصفحة مخصصة للمشرفين فقط.',
+          orderId: 'رقم الطلب', customer: 'العميل', phone: 'الهاتف', email: 'البريد', address: 'العنوان', total: 'المجموع', status: 'الحالة', date: 'التاريخ', actions: 'إجراءات',
+          view: 'عرض', edit: 'تعديل', noOrders: 'لا توجد طلبات', loading: 'جاري التحميل...', errorLoading: 'خطأ في التحميل', orderUpdated: 'تم تحديث الحالة',
+          orderLoaded: 'تم تحميل الطلب', items: 'المنتجات', quantity: 'الكمية', price: 'السعر', subtotal: 'المجموع الفرعي', grandTotal: 'المجموع الكلي',
+          footerCopyright: '© 2026 روزا للعطور. جميع الحقوق محفوظة.'
+        }
+      };
+
+      function translatePage(lang) {
+        currentLanguage = lang;
+        localStorage.setItem('language', lang);
+        document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
+        document.body.style.textAlign = lang === 'ar' ? 'right' : 'left';
+        const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+        const langSpan = document.getElementById('currentLangText');
+        if (langSpan) langSpan.textContent = names[lang];
+        document.querySelectorAll('[data-translate]').forEach(el => {
+          const key = el.getAttribute('data-translate');
+          if (translations[lang] && translations[lang][key]) {
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = translations[lang][key];
+            else if (el.tagName === 'OPTION') el.textContent = translations[lang][key];
+            else el.textContent = translations[lang][key];
+          }
+        });
+        if (typeof renderOrders === 'function') renderOrders();
+        if (typeof updateStats === 'function') updateStats();
+      }
+
+      function showToast(msgKey) {
+        const toast = document.getElementById('toast');
+        toast.textContent = translations[currentLanguage][msgKey] || msgKey;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+      }
+
+      // ---------- DATA & STATE ----------
+      let allOrders = [];
+      let currentPage = 1;
+      const rowsPerPage = 15;
+      let currentSearch = '';
+      let currentStatus = 'all';
+      let currentDateFrom = '';
+      let currentDateTo = '';
       let pendingOrderId = null;
 
+      // DOM elements
       const adminContent = document.getElementById('adminContent');
       const notAuthorized = document.getElementById('notAuthorized');
       const ordersContainer = document.getElementById('ordersContainer');
       const searchInput = document.getElementById('searchInput');
-      const statusFilterEl = document.getElementById('statusFilter');
+      const statusFilter = document.getElementById('statusFilter');
+      const dateFrom = document.getElementById('dateFrom');
+      const dateTo = document.getElementById('dateTo');
       const refreshBtn = document.getElementById('refreshBtn');
-      const statsBadge = document.getElementById('statsBadge');
-      const statusModal = document.getElementById('statusModal');
-      const newStatusSelect = document.getElementById('newStatusSelect');
-      const confirmStatusBtn = document.getElementById('confirmStatusBtn');
-      const cancelStatusBtn = document.getElementById('cancelStatusBtn');
+      const exportBtn = document.getElementById('exportBtn');
+      const paginationDiv = document.getElementById('pagination');
 
-      function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
-      function formatDate(d) { return new Date(d).toLocaleString('fr-FR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+      // ---------- HELPER FUNCTIONS ----------
+      function formatDate(d) { return new Date(d).toLocaleString(currentLanguage === 'fr' ? 'fr-FR' : currentLanguage === 'ar' ? 'ar-TN' : 'en-US', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }); }
       function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.',',') + ' TND'; }
-      function getCityFromAddress(addr) { if (!addr) return 'Adresse non précisée'; const parts = addr.split(/[ ,]+/); const last = parts[parts.length-1]; return last && last.length>2 ? last : 'Ville inconnue'; }
-      function getStatusLabel(s) { return { pending:'En attente', review:'En révision', shipped:'Expédiée', delivered:'Livrée', cancelled:'Annulée' }[s] || s; }
+      function getStatusLabel(s) { return translations[currentLanguage][s] || s; }
+
+      // Simple city extraction: looks for known Tunisian cities or last token longer than 3 letters
+      function extractCity(address) {
+        if (!address) return '—';
+        const commonCities = ['Tunis', 'Ariana', 'Ben Arous', 'Manouba', 'Nabeul', 'Sousse', 'Sfax', 'Monastir', 'Mahdia', 'Kairouan', 'Bizerte', 'Gabès', 'Gafsa', 'Kasserine', 'Tozeur', 'Zaghouan', 'Siliana', 'Jendouba', 'Béja', 'Kef', 'Tataouine', 'Médnine'];
+        for (let city of commonCities) {
+          if (address.toLowerCase().includes(city.toLowerCase())) return city;
+        }
+        const parts = address.split(/[ ,]+/);
+        for (let i = parts.length-1; i >=0; i--) {
+          if (parts[i].length > 3 && isNaN(parts[i])) return parts[i];
+        }
+        return address.substring(0,15);
+      }
 
       async function loadOrders() {
         try {
-          const { data, error } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
+          ordersContainer.innerHTML = `<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> ${translations[currentLanguage].loading}</div>`;
+          let query = supabase.from('orders').select('*').order('created_at', { ascending: false });
+          const { data, error } = await query;
           if (error) throw error;
-          orders = data || [];
-          statsBadge.innerHTML = `📦 ${orders.length} commandes`;
+          allOrders = data || [];
+          updateStats();
           renderOrders();
-        } catch(err) { ordersContainer.innerHTML = '<div style="text-align:center; padding:2rem;">❌ Erreur de chargement</div>'; }
+        } catch(err) {
+          console.error(err);
+          ordersContainer.innerHTML = `<div class="loading-spinner">${translations[currentLanguage].errorLoading}</div>`;
+        }
+      }
+
+      function updateStats() {
+        document.getElementById('totalOrders').innerText = allOrders.length;
+        document.getElementById('pendingOrdersCount').innerText = allOrders.filter(o => o.status === 'pending').length;
+        document.getElementById('shippedOrdersCount').innerText = allOrders.filter(o => o.status === 'shipped').length;
+        document.getElementById('deliveredOrdersCount').innerText = allOrders.filter(o => o.status === 'delivered').length;
+        document.getElementById('cancelledOrdersCount').innerText = allOrders.filter(o => o.status === 'cancelled').length;
       }
 
       function filterOrders() {
-        let filtered = [...orders];
-        if (searchTerm) { const term = searchTerm.toLowerCase(); filtered = filtered.filter(o => o.id.toLowerCase().includes(term) || (o.customer_name && o.customer_name.toLowerCase().includes(term)) || (o.customer_phone && o.customer_phone.includes(term)) || (o.customer_email && o.customer_email.toLowerCase().includes(term)) || (o.shipping_address && o.shipping_address.toLowerCase().includes(term))); }
-        if (statusFilter !== 'all') filtered = filtered.filter(o => o.status === statusFilter);
+        let filtered = [...allOrders];
+        if (currentSearch) {
+          const term = currentSearch.toLowerCase();
+          filtered = filtered.filter(o => o.id.toLowerCase().includes(term) ||
+            (o.customer_name && o.customer_name.toLowerCase().includes(term)) ||
+            (o.customer_phone && o.customer_phone.includes(term)) ||
+            (o.customer_email && o.customer_email.toLowerCase().includes(term)) ||
+            (o.shipping_address && o.shipping_address.toLowerCase().includes(term))
+          );
+        }
+        if (currentStatus !== 'all') filtered = filtered.filter(o => o.status === currentStatus);
+        if (currentDateFrom) filtered = filtered.filter(o => new Date(o.created_at) >= new Date(currentDateFrom));
+        if (currentDateTo) filtered = filtered.filter(o => new Date(o.created_at) <= new Date(currentDateTo + 'T23:59:59'));
         return filtered;
-      }
-
-      function groupOrders(list, groupBy) {
-        if (groupBy === 'none') return { type: 'table', data: list };
-        const groups = {};
-        if (groupBy === 'status') { list.forEach(o => { groups[o.status] = groups[o.status] || []; groups[o.status].push(o); }); return { type: 'groups', groups, groupKey: 'status', labels: { pending:'En attente', review:'En révision', shipped:'Expédiée', delivered:'Livrée', cancelled:'Annulée' } }; }
-        if (groupBy === 'city') { list.forEach(o => { const city = getCityFromAddress(o.shipping_address); groups[city] = groups[city] || []; groups[city].push(o); }); return { type: 'groups', groups, groupKey: 'city' }; }
-        if (groupBy === 'product') { list.forEach(o => { if (o.items && Array.isArray(o.items)) o.items.forEach(item => { const pname = item.name; groups[pname] = groups[pname] || []; groups[pname].push({ ...o, itemQty: item.quantity }); }); else groups['Sans produit'] = groups['Sans produit'] || []; }); return { type: 'groups', groups, groupKey: 'product' }; }
-        if (groupBy === 'date') { list.forEach(o => { const dateKey = new Date(o.created_at).toLocaleDateString('fr-FR'); groups[dateKey] = groups[dateKey] || []; groups[dateKey].push(o); }); return { type: 'groups', groups, groupKey: 'date' }; }
-        return { type: 'table', data: list };
       }
 
       function renderOrders() {
         const filtered = filterOrders();
-        const grouped = groupOrders(filtered, currentGroup);
-        if (filtered.length === 0) { ordersContainer.innerHTML = '<div style="text-align:center; padding:2rem;">📭 Aucune commande trouvée</div>'; return; }
-        if (grouped.type === 'table') {
-          let html = `<table class="orders-table"><thead><tr><th>ID</th><th>Client</th><th>Téléphone</th><th>Email</th><th>Adresse</th><th>Total</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead><tbody>`;
-          grouped.data.forEach(order => { html += `<tr><td>${order.id.slice(0,8)}...</td><td>${escapeHtml(order.customer_name || '-')}</td><td>${escapeHtml(order.customer_phone || '-')}</td><td>${escapeHtml(order.customer_email || '-')}</td><td>${escapeHtml(order.shipping_address?.substring(0,30) || '-')}</td><td>${formatPrice(order.total)}</td><td><span class="status-badge status-${order.status}">${getStatusLabel(order.status)}</span></td><td>${formatDate(order.created_at)}</td><td><button class="action-btn" onclick="viewOrder('${order.id}')"><i class="fas fa-eye"></i></button> <button class="action-btn" onclick="openStatusModal('${order.id}')"><i class="fas fa-edit"></i></button></td></tr>`; });
-          html += `</tbody></table>`;
-          ordersContainer.innerHTML = html;
-        } else {
-          let html = '<div class="group-view">';
-          for (let [key, groupOrders] of Object.entries(grouped.groups)) {
-            let displayKey = key; if (grouped.groupKey === 'status') displayKey = grouped.labels?.[key] || key;
-            html += `<div class="group-card"><div class="group-title">📌 ${displayKey} (${groupOrders.length})</div><table class="orders-table"><thead><tr><th>ID</th><th>Client</th><th>Total</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead><tbody>`;
-            groupOrders.forEach(order => { let extra = (grouped.groupKey === 'product' && order.itemQty) ? ` x${order.itemQty}` : ''; html += `<tr><td>${order.id.slice(0,8)}...</td><td>${escapeHtml(order.customer_name || '-')}${extra}</td><td>${formatPrice(order.total)}</td><td><span class="status-badge status-${order.status}">${getStatusLabel(order.status)}</span></td><td>${formatDate(order.created_at)}</td><td><button class="action-btn" onclick="viewOrder('${order.id}')"><i class="fas fa-eye"></i></button> <button class="action-btn" onclick="openStatusModal('${order.id}')"><i class="fas fa-edit"></i></button></td></tr>`; });
-            html += `</tbody></table></div>`;
+        const totalPages = Math.ceil(filtered.length / rowsPerPage);
+        if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
+        const start = (currentPage - 1) * rowsPerPage;
+        const pageOrders = filtered.slice(start, start + rowsPerPage);
+
+        if (pageOrders.length === 0) {
+          ordersContainer.innerHTML = `<div style="text-align:center; padding:2rem;">${translations[currentLanguage].noOrders}</div>`;
+          paginationDiv.innerHTML = '';
+          return;
+        }
+
+        let html = `<table class="orders-table"><thead><tr>
+          <th>${translations[currentLanguage].orderId}</th>
+          <th>${translations[currentLanguage].customer}</th>
+          <th>${translations[currentLanguage].phone}</th>
+          <th>${translations[currentLanguage].email}</th>
+          <th>${translations[currentLanguage].address}</th>
+          <th>${translations[currentLanguage].total}</th>
+          <th>${translations[currentLanguage].status}</th>
+          <th>${translations[currentLanguage].date}</th>
+          <th>${translations[currentLanguage].actions}</th>
+        </tr></thead><tbody>`;
+        pageOrders.forEach(order => {
+          html += `<tr>
+            <td>${order.id.slice(0,8)}...</td>
+            <td>${escapeHtml(order.customer_name || '-')}</td>
+            <td>${escapeHtml(order.customer_phone || '-')}</td>
+            <td>${escapeHtml(order.customer_email || '-')}</td>
+            <td title="${escapeHtml(order.shipping_address || '-')}">${escapeHtml(extractCity(order.shipping_address))}</td>
+            <td>${formatPrice(order.total)}</td>
+            <td><span class="status-badge status-${order.status}">${getStatusLabel(order.status)}</span></td>
+            <td>${formatDate(order.created_at)}</td>
+            <td><button class="action-btn" onclick="viewOrderDetails('${order.id}')" title="${translations[currentLanguage].view}"><i class="fas fa-eye"></i></button> <button class="action-btn" onclick="openStatusModal('${order.id}')" title="${translations[currentLanguage].edit}"><i class="fas fa-edit"></i></button></td>
+          </tr>`;
+        });
+        html += `</tbody></table>`;
+        ordersContainer.innerHTML = html;
+
+        // Pagination controls
+        let pagHtml = '';
+        if (totalPages > 1) {
+          for (let i = 1; i <= totalPages; i++) {
+            pagHtml += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
           }
-          html += `</div>`;
-          ordersContainer.innerHTML = html;
+          paginationDiv.innerHTML = pagHtml;
+          document.querySelectorAll('.page-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => { currentPage = parseInt(e.target.dataset.page); renderOrders(); });
+          });
+        } else {
+          paginationDiv.innerHTML = '';
         }
       }
 
-      window.viewOrder = function(orderId) {
-        const order = orders.find(o => o.id === orderId);
+      // ---------- MODAL: ORDER DETAILS ----------
+      window.viewOrderDetails = async function(orderId) {
+        const order = allOrders.find(o => o.id === orderId);
         if (!order) return;
-        let itemsHtml = ''; if (order.items && order.items.length) itemsHtml = order.items.map(i => `• ${escapeHtml(i.name)} x${i.quantity} - ${formatPrice(i.price * i.quantity)}`).join('\n');
-        alert(`Commande ${orderId.slice(0,8)}...\nClient: ${order.customer_name}\nTél: ${order.customer_phone}\nEmail: ${order.customer_email}\nAdresse: ${order.shipping_address}\nTotal: ${formatPrice(order.total)}\nStatut: ${getStatusLabel(order.status)}\nProduits:\n${itemsHtml}`);
+        let itemsHtml = '<ul style="margin:0; padding-left:1rem;">';
+        if (order.items && order.items.length) {
+          order.items.forEach(item => {
+            itemsHtml += `<li><strong>${escapeHtml(item.name)}</strong> x${item.quantity} — ${formatPrice(item.price * item.quantity)}</li>`;
+          });
+        } else {
+          itemsHtml += `<li>${translations[currentLanguage].noOrders}</li>`;
+        }
+        itemsHtml += '</ul>';
+        const body = `
+          <p><strong>${translations[currentLanguage].orderId}:</strong> ${order.id}</p>
+          <p><strong>${translations[currentLanguage].customer}:</strong> ${escapeHtml(order.customer_name || '-')}</p>
+          <p><strong>${translations[currentLanguage].phone}:</strong> ${escapeHtml(order.customer_phone || '-')}</p>
+          <p><strong>${translations[currentLanguage].email}:</strong> ${escapeHtml(order.customer_email || '-')}</p>
+          <p><strong>${translations[currentLanguage].address}:</strong> ${escapeHtml(order.shipping_address || '-')}</p>
+          <p><strong>${translations[currentLanguage].total}:</strong> ${formatPrice(order.total)}</p>
+          <p><strong>${translations[currentLanguage].status}:</strong> <span class="status-badge status-${order.status}">${getStatusLabel(order.status)}</span></p>
+          <p><strong>${translations[currentLanguage].date}:</strong> ${formatDate(order.created_at)}</p>
+          <p><strong>${translations[currentLanguage].items}:</strong></p>${itemsHtml}
+        `;
+        document.getElementById('orderDetailBody').innerHTML = body;
+        document.getElementById('orderDetailModal').style.display = 'flex';
       };
+      window.closeOrderDetailModal = () => document.getElementById('orderDetailModal').style.display = 'none';
 
-      window.openStatusModal = function(orderId) { pendingOrderId = orderId; statusModal.style.display = 'flex'; };
-      function closeStatusModal() { statusModal.style.display = 'none'; pendingOrderId = null; }
-      confirmStatusBtn.onclick = async () => { if (!pendingOrderId) return; const newStatus = newStatusSelect.value; try { const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', pendingOrderId); if (error) throw error; showToast('✅ Statut mis à jour'); closeStatusModal(); loadOrders(); } catch(err) { showToast('❌ Erreur'); } };
-      cancelStatusBtn.onclick = closeStatusModal;
+      // ---------- MODAL: UPDATE STATUS ----------
+      window.openStatusModal = function(orderId) {
+        pendingOrderId = orderId;
+        const order = allOrders.find(o => o.id === orderId);
+        const select = document.getElementById('newStatusSelect');
+        if (order) select.value = order.status;
+        document.getElementById('statusModal').style.display = 'flex';
+      };
+      window.closeStatusModal = () => document.getElementById('statusModal').style.display = 'none';
+      document.getElementById('confirmStatusBtn').addEventListener('click', async () => {
+        if (!pendingOrderId) return;
+        const newStatus = document.getElementById('newStatusSelect').value;
+        try {
+          const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', pendingOrderId);
+          if (error) throw error;
+          showToast('orderUpdated');
+          closeStatusModal();
+          loadOrders(); // refresh
+        } catch(err) { showToast('errorLoading'); }
+      });
 
-      function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
+      // ---------- EXPORT CSV ----------
+      function exportToCSV() {
+        const filtered = filterOrders();
+        if (!filtered.length) { showToast('noOrders'); return; }
+        const headers = ['ID', 'Client', 'Téléphone', 'Email', 'Adresse', 'Total', 'Statut', 'Date', 'Produits'];
+        const rows = filtered.map(o => {
+          const itemsStr = (o.items || []).map(i => `${i.name} (x${i.quantity})`).join('; ');
+          return [o.id, o.customer_name, o.customer_phone, o.customer_email, o.shipping_address, o.total, o.status, o.created_at, itemsStr];
+        });
+        const csvContent = [headers, ...rows].map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+        const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.setAttribute('download', `commandes_${new Date().toISOString().slice(0,10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
+      exportBtn.addEventListener('click', exportToCSV);
 
-      searchInput.addEventListener('input', () => { searchTerm = searchInput.value; renderOrders(); });
-      statusFilterEl.addEventListener('change', () => { statusFilter = statusFilterEl.value; renderOrders(); });
-      refreshBtn.addEventListener('click', () => loadOrders());
-      document.querySelectorAll('.group-btn[data-group]').forEach(btn => { btn.addEventListener('click', () => { currentGroup = btn.dataset.group; document.querySelectorAll('.group-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderOrders(); }); });
-      document.querySelector('.group-btn[data-group="none"]').classList.add('active');
+      // ---------- FILTER EVENT HANDLERS (debounced search) ----------
+      let searchTimeout;
+      searchInput.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          currentSearch = searchInput.value;
+          currentPage = 1;
+          renderOrders();
+        }, 300);
+      });
+      statusFilter.addEventListener('change', () => { currentStatus = statusFilter.value; currentPage = 1; renderOrders(); });
+      dateFrom.addEventListener('change', () => { currentDateFrom = dateFrom.value; currentPage = 1; renderOrders(); });
+      dateTo.addEventListener('change', () => { currentDateTo = dateTo.value; currentPage = 1; renderOrders(); });
+      refreshBtn.addEventListener('click', () => { loadOrders(); });
 
-      // Auth & nav link control
+      // ---------- AUTH & NAV LINK CONTROL ----------
       async function checkAdmin() {
         const { data: { user } } = await supabase.auth.getUser();
         const authLink = document.getElementById('authLink'), profileLink = document.getElementById('profileLink'), adminLink = document.getElementById('adminLink'), ordersLink = document.getElementById('ordersLink');
-        if (!user) { adminContent.style.display = 'none'; notAuthorized.style.display = 'block'; if(authLink) authLink.style.display = 'block'; if(profileLink) profileLink.style.display = 'none'; if(adminLink) adminLink.style.display = 'none'; if(ordersLink) ordersLink.style.display = 'none'; return; }
-        if (user.email !== 'azmmeli146@gmail.com') { adminContent.style.display = 'none'; notAuthorized.style.display = 'block'; if(authLink) authLink.style.display = 'none'; if(profileLink) profileLink.style.display = 'block'; if(adminLink) adminLink.style.display = 'none'; if(ordersLink) ordersLink.style.display = 'none'; return; }
+        if (!user) {
+          adminContent.style.display = 'none'; notAuthorized.style.display = 'block';
+          if(authLink) authLink.style.display = 'block'; if(profileLink) profileLink.style.display = 'none'; if(adminLink) adminLink.style.display = 'none'; if(ordersLink) ordersLink.style.display = 'none';
+          return;
+        }
+        if (user.email !== 'azmmeli146@gmail.com') {
+          adminContent.style.display = 'none'; notAuthorized.style.display = 'block';
+          if(authLink) authLink.style.display = 'none'; if(profileLink) profileLink.style.display = 'block'; if(adminLink) adminLink.style.display = 'none'; if(ordersLink) ordersLink.style.display = 'none';
+          return;
+        }
         adminContent.style.display = 'block'; notAuthorized.style.display = 'none';
         if(authLink) authLink.style.display = 'none'; if(profileLink) profileLink.style.display = 'block'; if(adminLink) adminLink.style.display = 'block'; if(ordersLink) ordersLink.style.display = 'block';
         loadOrders();
@@ -275,15 +546,23 @@
       checkAdmin();
       supabase.auth.onAuthStateChange(() => checkAdmin());
 
-      // Theme
+      // ---------- THEME, MENU, LANGUAGE ----------
       function initTheme() { const saved = localStorage.getItem('theme')||'light'; if(saved==='dark') document.body.classList.add('dark'); }
       function toggleTheme() { document.body.classList.toggle('dark'); localStorage.setItem('theme', document.body.classList.contains('dark')?'dark':'light'); }
       document.getElementById('themeToggle')?.addEventListener('click', toggleTheme); initTheme();
 
-      // Menu
       const menuToggle = document.getElementById('menuToggle'), navLinks = document.getElementById('navLinks'), menuOverlay = document.getElementById('menuOverlay');
       function toggleMenu() { navLinks.classList.toggle('active'); menuOverlay.classList.toggle('active'); }
       menuToggle?.addEventListener('click', toggleMenu); menuOverlay?.addEventListener('click', toggleMenu);
+
+      const langMenu = document.getElementById('langMenu'), langCurrentBtn = document.getElementById('langCurrentBtn');
+      if (langCurrentBtn) langCurrentBtn.addEventListener('click', (e) => { e.stopPropagation(); langMenu.classList.toggle('active'); });
+      document.querySelectorAll('.lang-option').forEach(opt => { opt.addEventListener('click', () => { translatePage(opt.dataset.lang); langMenu.classList.remove('active'); }); });
+      document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
+
+      function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
+
+      translatePage(currentLanguage);
     })();
   </script>
 </body>
