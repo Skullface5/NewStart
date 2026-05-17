@@ -93,15 +93,12 @@
         opacity: 0;
         transform: translateY(100vh) rotate(0deg) scale(0);
       }
-
       20% {
         opacity: 0.1;
       }
-
       80% {
         opacity: 0.1;
       }
-
       100% {
         opacity: 0;
         transform: translateY(-20vh) rotate(360deg) scale(1.2);
@@ -712,7 +709,6 @@
         grid-template-columns: 1fr 1fr;
         gap: 30px;
       }
-
       .footer-brand {
         grid-column: 1/-1;
       }
@@ -722,25 +718,20 @@
       .footer-top {
         grid-template-columns: 1fr;
       }
-
       footer {
         padding: 40px 18px 22px;
       }
-
       .footer-bottom {
         flex-direction: column;
         text-align: center;
       }
-
       .admin-header {
         flex-direction: column;
         text-align: center;
       }
-
       .logged-in-as {
         margin-left: 0;
       }
-
       body {
         padding-top: 70px;
       }
@@ -750,11 +741,9 @@
       .header-flex {
         padding: 0.6rem 1rem;
       }
-
       .logo h1 {
         font-size: 0.9rem;
       }
-
       .logo img {
         width: 36px;
       }
@@ -809,8 +798,8 @@
         </div>
         <a href="login146.html" id="authLink" data-translate="login">Se connecter</a>
         <a href="profile.html" id="profileLink" style="display:none;" data-translate="profile">Mon Profil</a>
-        <a href="adminadd.html" id="adminLink" style="display:none;" class="admin-nav-link"><i class="fas fa-crown"></i>
-          Admin</a>
+        <a href="adminadd.html" id="adminLink" style="display:none;" class="admin-nav-link"><i class="fas fa-crown"></i> Admin</a>
+        <a href="orders.html" id="ordersLink" style="display:none;" class="admin-nav-link"><i class="fas fa-truck"></i> Commandes</a>
       </div>
     </div>
   </header>
@@ -823,7 +812,7 @@
         <span class="logged-in-as" id="loggedInAs"></span>
       </div>
 
-      <!-- Category Grid - Same as index.html -->
+      <!-- Category Grid -->
       <div class="category-grid">
         <a href="manexisted.html" class="category-card cat-man">
           <h3 data-translate="menCat">Homme</h3>
@@ -1091,6 +1080,7 @@
           const authLink = document.getElementById('authLink');
           const profileLink = document.getElementById('profileLink');
           const adminLink = document.getElementById('adminLink');
+          const ordersLink = document.getElementById('ordersLink');
           const loggedInAs = document.getElementById('loggedInAs');
 
           if (user) {
@@ -1099,13 +1089,16 @@
             if (loggedInAs) loggedInAs.textContent = `⚡ ${user.email} · ${new Date().toLocaleDateString('fr-FR')}`;
             if (user.email === 'azmmeli146@gmail.com') {
               if (adminLink) adminLink.style.display = 'block';
+              if (ordersLink) ordersLink.style.display = 'block';
             } else {
               if (adminLink) adminLink.style.display = 'none';
+              if (ordersLink) ordersLink.style.display = 'none';
             }
           } else {
             if (authLink) authLink.style.display = 'block';
             if (profileLink) profileLink.style.display = 'none';
             if (adminLink) adminLink.style.display = 'none';
+            if (ordersLink) ordersLink.style.display = 'none';
             if (loggedInAs) loggedInAs.textContent = '';
           }
         } catch (error) {
