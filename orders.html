@@ -2,727 +2,289 @@
 <html lang="fr">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Rosa Fragrances | Admin - Commandes</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap"
-        rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --cream: #F7F0E6;
-            --cream-dark: #EDE4D6;
-            --cream-deep: #E0D4C0;
-            --gold: #B49A6A;
-            --gold-light: #D4B98A;
-            --gold-dark: #8A7150;
-            --charcoal: #3A3228;
-            --text-mid: #6B5E4E;
-            --white: #FEFCF8;
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.03);
-            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.04);
-            --border-light: rgba(180, 155, 120, 0.12);
-            --border-medium: rgba(180, 155, 120, 0.2);
-            --input-bg: #F9F6F2;
-            --input-border: #E2D9CF;
-            --input-focus: #C4AF7D;
-            --hover-subtle: rgba(180, 155, 120, 0.05);
-        }
-
-        body {
-            font-family: 'Jost', sans-serif;
-            background: var(--cream);
-            color: var(--charcoal);
-            line-height: 1.5;
-            padding-top: 80px;
-        }
-
-        body.dark {
-            --cream: #1A1814;
-            --cream-dark: #24201A;
-            --cream-deep: #2E2820;
-            --charcoal: #F5EFE6;
-            --text-mid: #D4C5B0;
-            --gold: #B89B5E;
-            --gold-dark: #B89B5E;
-            --white: #1A1814;
-            --border-light: rgba(184, 155, 94, 0.15);
-            --input-bg: #3A352C;
-            --input-border: #4A4438;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 1.5rem 2rem;
-        }
-
-        header {
-            background: rgba(247, 240, 230, 0.92);
-            backdrop-filter: blur(12px);
-            box-shadow: var(--shadow-sm);
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(180, 154, 106, 0.2);
-        }
-
-        body.dark header {
-            background: rgba(26, 24, 20, 0.92);
-        }
-
-        .header-flex {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0.8rem 2rem;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
-        }
-
-        .logo img {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .logo h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.15rem;
-            font-weight: 400;
-            color: var(--gold-dark);
-            letter-spacing: 0.15em;
-        }
-
-        .theme-toggle, .menu-toggle {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            font-size: 1.1rem;
-            color: var(--gold-dark);
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .right-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-links {
-            display: flex;
-            flex-direction: column;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            width: 250px;
-            background: var(--cream-dark);
-            backdrop-filter: blur(16px);
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transition: max-height 0.4s, opacity 0.3s;
-            border-radius: 20px;
-            border: 1px solid var(--border-light);
-            z-index: 101;
-        }
-
-        .nav-links.active {
-            max-height: 500px;
-            opacity: 1;
-            padding: 0.5rem 0;
-        }
-
-        .nav-links a {
-            padding: 0.9rem 1.5rem;
-            text-decoration: none;
-            color: var(--charcoal);
-            display: block;
-            font-size: 0.72rem;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            border-bottom: 1px solid var(--border-light);
-        }
-
-        .nav-links a:hover {
-            background: var(--hover-subtle);
-            color: var(--gold-dark);
-            padding-left: 2rem;
-        }
-
-        .admin-nav-link {
-            background: rgba(180, 154, 106, 0.08);
-            color: var(--gold-dark) !important;
-            font-weight: 600;
-            border-bottom: 2px solid var(--gold) !important;
-        }
-
-        .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(6px);
-            z-index: 99;
-            visibility: hidden;
-            opacity: 0;
-            transition: 0.3s;
-        }
-
-        .menu-overlay.active {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        /* Admin specific */
-        .admin-wrapper {
-            max-width: 1300px;
-            margin: 0 auto;
-        }
-
-        .admin-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .admin-header h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2rem;
-            font-weight: 300;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .stats-badge {
-            background: var(--cream-deep);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-        }
-
-        /* Controls */
-        .controls-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            align-items: center;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--input-bg);
-            border: 1px solid var(--input-border);
-            border-radius: 50px;
-            padding: 0.5rem 1rem;
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .search-box i {
-            color: var(--gold);
-        }
-
-        .search-box input {
-            background: none;
-            border: none;
-            outline: none;
-            width: 100%;
-            color: var(--charcoal);
-        }
-
-        .filter-group {
-            display: flex;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-        }
-
-        select, .group-btn {
-            background: var(--input-bg);
-            border: 1px solid var(--input-border);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            color: var(--charcoal);
-            cursor: pointer;
-        }
-
-        .group-btn {
-            background: var(--cream-deep);
-        }
-
-        .group-btn.active {
-            background: var(--gold-dark);
-            color: white;
-            border-color: var(--gold-dark);
-        }
-
-        /* Orders table */
-        .orders-table-container {
-            background: var(--cream-deep);
-            border-radius: 24px;
-            padding: 1rem;
-            overflow-x: auto;
-        }
-
-        .orders-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-        }
-
-        .orders-table th, .orders-table td {
-            padding: 0.8rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border-light);
-        }
-
-        .orders-table th {
-            background: var(--cream-dark);
-            font-weight: 500;
-        }
-
-        .orders-table tr:hover {
-            background: var(--hover-subtle);
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 0.2rem 0.6rem;
-            border-radius: 50px;
-            font-size: 0.7rem;
-            font-weight: 500;
-        }
-
-        .status-pending { background: rgba(180, 154, 106, 0.2); color: var(--gold-dark); }
-        .status-review { background: rgba(180, 154, 106, 0.2); color: var(--gold-dark); }
-        .status-shipped { background: rgba(180, 154, 106, 0.2); color: var(--gold-dark); }
-        .status-delivered { background: rgba(50, 150, 80, 0.2); color: #2c682c; }
-        .status-cancelled { background: rgba(200, 80, 80, 0.2); color: #b34545; }
-
-        .action-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--gold-dark);
-            font-size: 1rem;
-            margin: 0 4px;
-        }
-
-        .group-view {
-            margin-top: 1.5rem;
-        }
-
-        .group-card {
-            background: var(--cream-deep);
-            border-radius: 20px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .group-title {
-            font-weight: 600;
-            margin-bottom: 0.8rem;
-            font-size: 1rem;
-            border-left: 3px solid var(--gold);
-            padding-left: 10px;
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 25px;
-            left: 25px;
-            background: var(--gold-dark);
-            color: white;
-            padding: 0.7rem 1.2rem;
-            border-radius: 50px;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: 0.3s;
-            z-index: 300;
-        }
-
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        footer {
-            background: var(--charcoal);
-            color: rgba(247, 240, 230, 0.65);
-            padding: 40px 20px 20px;
-            margin-top: 2rem;
-            text-align: center;
-            font-size: 0.7rem;
-        }
-
-        @media (max-width: 768px) {
-            .container { padding: 1rem; }
-            .header-flex { padding: 0.6rem 1rem; }
-            .logo h1 { font-size: 0.9rem; }
-            .logo img { width: 36px; }
-            .controls-bar { flex-direction: column; align-items: stretch; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Rosa Fragrances | Admin - Commandes</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --cream: #F7F0E6; --cream-dark: #EDE4D6; --cream-deep: #E0D4C0;
+      --gold: #B49A6A; --gold-light: #D4B98A; --gold-dark: #8A7150;
+      --charcoal: #3A3228; --text-mid: #6B5E4E; --white: #FEFCF8;
+      --border-light: rgba(180, 155, 120, 0.12); --border-medium: rgba(180, 155, 120, 0.2);
+      --input-bg: #F9F6F2; --input-border: #E2D9CF; --hover-subtle: rgba(180, 155, 120, 0.05);
+    }
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      padding-top: 80px;
+    }
+    body.dark {
+      --cream: #1A1814; --cream-dark: #24201A; --cream-deep: #2E2820;
+      --charcoal: #F5EFE6; --text-mid: #D4C5B0; --gold: #B89B5E; --gold-dark: #B89B5E;
+      --white: #1A1814; --border-light: rgba(184, 155, 94, 0.15);
+      --input-bg: #3A352C; --input-border: #4A4438;
+    }
+    .container { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; }
+    header {
+      background: rgba(247, 240, 230, 0.92); backdrop-filter: blur(12px);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      border-bottom: 1px solid rgba(180, 154, 106, 0.2);
+    }
+    body.dark header { background: rgba(26, 24, 20, 0.92); }
+    .header-flex { display: flex; align-items: center; justify-content: space-between; max-width: 1400px; margin: 0 auto; padding: 0.8rem 2rem; }
+    .logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
+    .logo img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
+    .logo h1 { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 400; color: var(--gold-dark); letter-spacing: 0.15em; }
+    .theme-toggle, .menu-toggle { background: transparent; border: none; cursor: pointer; font-size: 1.1rem; color: var(--gold-dark); width: 34px; height: 34px; border-radius: 50%; }
+    .right-group { display: flex; align-items: center; gap: 8px; }
+    .nav-links {
+      display: flex; flex-direction: column; position: absolute; top: 100%; right: 0;
+      width: 250px; background: var(--cream-dark); backdrop-filter: blur(16px);
+      max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.4s, opacity 0.3s;
+      border-radius: 20px; border: 1px solid var(--border-light); z-index: 101;
+    }
+    .nav-links.active { max-height: 500px; opacity: 1; padding: 0.5rem 0; }
+    .nav-links a {
+      padding: 0.9rem 1.5rem; text-decoration: none; color: var(--charcoal);
+      display: block; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .nav-links a:hover { background: var(--hover-subtle); color: var(--gold-dark); padding-left: 2rem; }
+    .admin-nav-link { background: rgba(180, 154, 106, 0.08); color: var(--gold-dark) !important; font-weight: 600; border-bottom: 2px solid var(--gold) !important; }
+    .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(6px); z-index: 99; visibility: hidden; opacity: 0; transition: 0.3s; }
+    .menu-overlay.active { visibility: visible; opacity: 1; }
+    .admin-wrapper { max-width: 1300px; margin: 0 auto; }
+    .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .admin-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; display: flex; align-items: center; gap: 10px; }
+    .stats-badge { background: var(--cream-deep); padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.8rem; }
+    .controls-bar { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; align-items: center; }
+    .search-box { display: flex; align-items: center; gap: 8px; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 50px; padding: 0.5rem 1rem; flex: 1; min-width: 200px; }
+    .search-box i { color: var(--gold); }
+    .search-box input { background: none; border: none; outline: none; width: 100%; color: var(--charcoal); }
+    .filter-group { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    select, .group-btn { background: var(--input-bg); border: 1px solid var(--input-border); padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.8rem; color: var(--charcoal); cursor: pointer; }
+    .group-btn { background: var(--cream-deep); }
+    .group-btn.active { background: var(--gold-dark); color: white; border-color: var(--gold-dark); }
+    .orders-table-container { background: var(--cream-deep); border-radius: 24px; padding: 1rem; overflow-x: auto; }
+    .orders-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .orders-table th, .orders-table td { padding: 0.8rem; text-align: left; border-bottom: 1px solid var(--border-light); }
+    .orders-table th { background: var(--cream-dark); font-weight: 500; }
+    .orders-table tr:hover { background: var(--hover-subtle); }
+    .status-badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.7rem; font-weight: 500; }
+    .status-pending { background: rgba(180, 154, 106, 0.2); color: var(--gold-dark); }
+    .status-review { background: rgba(180, 154, 106, 0.2); color: var(--gold-dark); }
+    .status-shipped { background: rgba(180, 154, 106, 0.2); color: var(--gold-dark); }
+    .status-delivered { background: rgba(50, 150, 80, 0.2); color: #2c682c; }
+    .status-cancelled { background: rgba(200, 80, 80, 0.2); color: #b34545; }
+    .action-btn { background: none; border: none; cursor: pointer; color: var(--gold-dark); font-size: 1rem; margin: 0 4px; }
+    .group-card { background: var(--cream-deep); border-radius: 20px; padding: 1rem; margin-bottom: 1rem; }
+    .group-title { font-weight: 600; margin-bottom: 0.8rem; font-size: 1rem; border-left: 3px solid var(--gold); padding-left: 10px; }
+    .toast { position: fixed; bottom: 25px; left: 25px; background: var(--gold-dark); color: white; padding: 0.7rem 1.2rem; border-radius: 50px; transform: translateY(100px); opacity: 0; transition: 0.3s; z-index: 300; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(6px); z-index: 1000; display: none; align-items: center; justify-content: center; }
+    .modal-content { background: var(--cream-deep); border-radius: 24px; max-width: 400px; width: 90%; padding: 1.5rem; }
+    footer { background: var(--charcoal); color: rgba(247, 240, 230, 0.65); padding: 40px 20px 20px; margin-top: 2rem; text-align: center; font-size: 0.7rem; }
+    @media (max-width: 768px) { .container { padding: 1rem; } .header-flex { padding: 0.6rem 1rem; } .logo h1 { font-size: 0.9rem; } .logo img { width: 36px; } .controls-bar { flex-direction: column; align-items: stretch; } }
+  </style>
 </head>
 
 <body>
-    <div id="menuOverlay" class="menu-overlay"></div>
-    <div id="toast" class="toast">✅ Action effectuée</div>
+  <div id="menuOverlay" class="menu-overlay"></div>
+  <div id="toast" class="toast">✅ Action effectuée</div>
 
-    <header>
-        <div class="header-flex">
-            <a href="index.html" class="logo"><img src="is.png" alt="Rosa"><h1>Rosa Fragrances</h1></a>
-            <div class="right-group">
-                <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon" style="display:none;"></i></div>
-                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
-            </div>
-            <div class="nav-links" id="navLinks">
-                <a href="index.html">ACCUEIL</a>
-                <a href="man.html">HOMME</a>
-                <a href="women.html">FEMME</a>
-                <a href="unisexe.html">UNISEXE</a>
-                <a href="kids.html">ENFANTS</a>
-                <a href="existed.html">PARFUMS EXISTANTS</a>
-                <a href="adminadd.html" class="admin-nav-link"><i class="fas fa-crown"></i> Admin</a>
-                <a href="orders.html" class="admin-nav-link"><i class="fas fa-truck"></i> Commandes</a>
-                <a href="login146.html" id="authLink">Se connecter</a>
-                <a href="profile.html" id="profileLink" style="display:none;">Mon Profil</a>
-            </div>
-        </div>
-    </header>
+  <!-- Status Update Modal -->
+  <div id="statusModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3 style="margin-bottom: 1rem;">Modifier le statut</h3>
+      <select id="newStatusSelect" style="width:100%; padding:0.5rem; margin-bottom:1rem; border-radius:50px;">
+        <option value="pending">En attente</option>
+        <option value="review">En révision</option>
+        <option value="shipped">Expédiée</option>
+        <option value="delivered">Livrée</option>
+        <option value="cancelled">Annulée</option>
+      </select>
+      <div style="display:flex; gap:1rem;">
+        <button id="confirmStatusBtn" class="group-btn" style="flex:1;">Confirmer</button>
+        <button id="cancelStatusBtn" class="group-btn" style="flex:1; background:transparent;">Annuler</button>
+      </div>
+    </div>
+  </div>
 
-    <main class="container">
-        <div id="adminContent" style="display: none;">
-            <div class="admin-wrapper">
-                <div class="admin-header">
-                    <h1><i class="fas fa-truck"></i> Gestion des commandes</h1>
-                    <div class="stats-badge" id="statsBadge">📦 0 commandes</div>
-                </div>
+  <header>
+    <div class="header-flex">
+      <a href="index.html" class="logo"><img src="is.png" alt="Rosa"><h1>Rosa Fragrances</h1></a>
+      <div class="right-group">
+        <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon" style="display:none;"></i></div>
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+      </div>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html">ACCUEIL</a>
+        <a href="man.html">HOMME</a>
+        <a href="women.html">FEMME</a>
+        <a href="unisexe.html">UNISEXE</a>
+        <a href="kids.html">ENFANTS</a>
+        <a href="existed.html">PARFUMS EXISTANTS</a>
+        <a href="login146.html" id="authLink">Se connecter</a>
+        <a href="profile.html" id="profileLink" style="display:none;">Mon Profil</a>
+        <a href="adminadd.html" id="adminLink" style="display:none;" class="admin-nav-link"><i class="fas fa-crown"></i> Admin</a>
+        <a href="orders.html" id="ordersLink" style="display:none;" class="admin-nav-link"><i class="fas fa-truck"></i> Commandes</a>
+      </div>
+    </div>
+  </header>
 
-                <div class="controls-bar">
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="searchInput" placeholder="Rechercher par ID, nom, téléphone, email...">
-                    </div>
-                    <div class="filter-group">
-                        <select id="statusFilter">
-                            <option value="all">Tous statuts</option>
-                            <option value="pending">En attente</option>
-                            <option value="review">En révision</option>
-                            <option value="shipped">Expédiée</option>
-                            <option value="delivered">Livrée</option>
-                            <option value="cancelled">Annulée</option>
-                        </select>
-                        <div class="filter-group" id="groupByButtons">
-                            <button class="group-btn" data-group="none">📋 Aucun regroupement</button>
-                            <button class="group-btn" data-group="status">🏷️ Par statut</button>
-                            <button class="group-btn" data-group="city">📍 Par ville</button>
-                            <button class="group-btn" data-group="product">🧴 Par produit</button>
-                            <button class="group-btn" data-group="date">📅 Par date</button>
-                        </div>
-                        <button id="refreshBtn" class="group-btn"><i class="fas fa-sync-alt"></i> Rafraîchir</button>
-                    </div>
-                </div>
-
-                <div id="ordersContainer" class="orders-table-container">
-                    <div class="loading-spinner" style="text-align:center; padding:2rem;"><i class="fas fa-spinner fa-spin"></i> Chargement...</div>
-                </div>
-            </div>
+  <main class="container">
+    <div id="adminContent" style="display: none;">
+      <div class="admin-wrapper">
+        <div class="admin-header">
+          <h1><i class="fas fa-truck"></i> Gestion des commandes</h1>
+          <div class="stats-badge" id="statsBadge">📦 0 commandes</div>
         </div>
 
-        <div id="notAuthorized" style="display: none; text-align:center; padding:3rem;">
-            <i class="fas fa-lock" style="font-size:3rem; color:var(--gold);"></i>
-            <h2>Accès non autorisé</h2>
-            <p>Cette page est réservée aux administrateurs.</p>
-            <a href="login146.html" class="login-redirect" style="display:inline-block; margin-top:1rem; background:var(--gold-dark); color:white; padding:0.7rem 1.5rem; border-radius:50px; text-decoration:none;">Se connecter</a>
+        <div class="controls-bar">
+          <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Rechercher par ID, nom, téléphone, email..."></div>
+          <div class="filter-group">
+            <select id="statusFilter"><option value="all">Tous statuts</option><option value="pending">En attente</option><option value="review">En révision</option><option value="shipped">Expédiée</option><option value="delivered">Livrée</option><option value="cancelled">Annulée</option></select>
+            <button class="group-btn" data-group="none">📋 Aucun</button>
+            <button class="group-btn" data-group="status">🏷️ Par statut</button>
+            <button class="group-btn" data-group="city">📍 Par ville</button>
+            <button class="group-btn" data-group="product">🧴 Par produit</button>
+            <button class="group-btn" data-group="date">📅 Par date</button>
+            <button id="refreshBtn" class="group-btn"><i class="fas fa-sync-alt"></i> Rafraîchir</button>
+          </div>
         </div>
-    </main>
 
-    <footer>
-        <p>© 2026 Rosa Fragrances. Tous droits réservés.</p>
-    </footer>
+        <div id="ordersContainer" class="orders-table-container"><div class="loading-spinner" style="text-align:center; padding:2rem;"><i class="fas fa-spinner fa-spin"></i> Chargement...</div></div>
+      </div>
+    </div>
+    <div id="notAuthorized" style="display: none; text-align:center; padding:3rem;"><i class="fas fa-lock" style="font-size:3rem; color:var(--gold);"></i><h2>Accès non autorisé</h2><p>Cette page est réservée aux administrateurs.</p><a href="login146.html" style="display:inline-block; margin-top:1rem; background:var(--gold-dark); color:white; padding:0.7rem 1.5rem; border-radius:50px; text-decoration:none;">Se connecter</a></div>
+  </main>
 
-    <script>
-        (function() {
-            const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
-            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
-            const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  <footer><p>© 2026 Rosa Fragrances. Tous droits réservés.</p></footer>
 
-            let orders = [];
-            let currentGroup = 'none';
-            let searchTerm = '';
-            let statusFilter = 'all';
+  <script>
+    (function() {
+      const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
+      const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            const adminContent = document.getElementById('adminContent');
-            const notAuthorized = document.getElementById('notAuthorized');
-            const ordersContainer = document.getElementById('ordersContainer');
-            const searchInput = document.getElementById('searchInput');
-            const statusFilterEl = document.getElementById('statusFilter');
-            const refreshBtn = document.getElementById('refreshBtn');
-            const statsBadge = document.getElementById('statsBadge');
+      let orders = [], currentGroup = 'none', searchTerm = '', statusFilter = 'all';
+      let pendingOrderId = null;
 
-            function showToast(msg) {
-                const toast = document.getElementById('toast');
-                toast.textContent = msg;
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2500);
-            }
+      const adminContent = document.getElementById('adminContent');
+      const notAuthorized = document.getElementById('notAuthorized');
+      const ordersContainer = document.getElementById('ordersContainer');
+      const searchInput = document.getElementById('searchInput');
+      const statusFilterEl = document.getElementById('statusFilter');
+      const refreshBtn = document.getElementById('refreshBtn');
+      const statsBadge = document.getElementById('statsBadge');
+      const statusModal = document.getElementById('statusModal');
+      const newStatusSelect = document.getElementById('newStatusSelect');
+      const confirmStatusBtn = document.getElementById('confirmStatusBtn');
+      const cancelStatusBtn = document.getElementById('cancelStatusBtn');
 
-            function formatDate(dateStr) {
-                const d = new Date(dateStr);
-                return d.toLocaleDateString('fr-FR') + ' ' + d.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
-            }
+      function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
+      function formatDate(d) { return new Date(d).toLocaleString('fr-FR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+      function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.',',') + ' TND'; }
+      function getCityFromAddress(addr) { if (!addr) return 'Adresse non précisée'; const parts = addr.split(/[ ,]+/); const last = parts[parts.length-1]; return last && last.length>2 ? last : 'Ville inconnue'; }
+      function getStatusLabel(s) { return { pending:'En attente', review:'En révision', shipped:'Expédiée', delivered:'Livrée', cancelled:'Annulée' }[s] || s; }
 
-            function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.',',') + ' TND'; }
+      async function loadOrders() {
+        try {
+          const { data, error } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
+          if (error) throw error;
+          orders = data || [];
+          statsBadge.innerHTML = `📦 ${orders.length} commandes`;
+          renderOrders();
+        } catch(err) { ordersContainer.innerHTML = '<div style="text-align:center; padding:2rem;">❌ Erreur de chargement</div>'; }
+      }
 
-            function getCityFromAddress(address) {
-                if (!address) return 'Adresse non précisée';
-                const parts = address.split(',');
-                const last = parts[parts.length-1].trim();
-                return last || 'Ville inconnue';
-            }
+      function filterOrders() {
+        let filtered = [...orders];
+        if (searchTerm) { const term = searchTerm.toLowerCase(); filtered = filtered.filter(o => o.id.toLowerCase().includes(term) || (o.customer_name && o.customer_name.toLowerCase().includes(term)) || (o.customer_phone && o.customer_phone.includes(term)) || (o.customer_email && o.customer_email.toLowerCase().includes(term)) || (o.shipping_address && o.shipping_address.toLowerCase().includes(term))); }
+        if (statusFilter !== 'all') filtered = filtered.filter(o => o.status === statusFilter);
+        return filtered;
+      }
 
-            async function loadOrders() {
-                try {
-                    const { data, error } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
-                    if (error) throw error;
-                    orders = data || [];
-                    statsBadge.innerHTML = `📦 ${orders.length} commandes`;
-                    renderOrders();
-                } catch (err) {
-                    console.error(err);
-                    ordersContainer.innerHTML = '<div style="text-align:center; padding:2rem;">❌ Erreur de chargement</div>';
-                }
-            }
+      function groupOrders(list, groupBy) {
+        if (groupBy === 'none') return { type: 'table', data: list };
+        const groups = {};
+        if (groupBy === 'status') { list.forEach(o => { groups[o.status] = groups[o.status] || []; groups[o.status].push(o); }); return { type: 'groups', groups, groupKey: 'status', labels: { pending:'En attente', review:'En révision', shipped:'Expédiée', delivered:'Livrée', cancelled:'Annulée' } }; }
+        if (groupBy === 'city') { list.forEach(o => { const city = getCityFromAddress(o.shipping_address); groups[city] = groups[city] || []; groups[city].push(o); }); return { type: 'groups', groups, groupKey: 'city' }; }
+        if (groupBy === 'product') { list.forEach(o => { if (o.items && Array.isArray(o.items)) o.items.forEach(item => { const pname = item.name; groups[pname] = groups[pname] || []; groups[pname].push({ ...o, itemQty: item.quantity }); }); else groups['Sans produit'] = groups['Sans produit'] || []; }); return { type: 'groups', groups, groupKey: 'product' }; }
+        if (groupBy === 'date') { list.forEach(o => { const dateKey = new Date(o.created_at).toLocaleDateString('fr-FR'); groups[dateKey] = groups[dateKey] || []; groups[dateKey].push(o); }); return { type: 'groups', groups, groupKey: 'date' }; }
+        return { type: 'table', data: list };
+      }
 
-            function filterOrders() {
-                let filtered = [...orders];
-                if (searchTerm) {
-                    const term = searchTerm.toLowerCase();
-                    filtered = filtered.filter(o => 
-                        o.id.toLowerCase().includes(term) ||
-                        (o.customer_name && o.customer_name.toLowerCase().includes(term)) ||
-                        (o.customer_phone && o.customer_phone.includes(term)) ||
-                        (o.customer_email && o.customer_email.toLowerCase().includes(term)) ||
-                        (o.shipping_address && o.shipping_address.toLowerCase().includes(term))
-                    );
-                }
-                if (statusFilter !== 'all') {
-                    filtered = filtered.filter(o => o.status === statusFilter);
-                }
-                return filtered;
-            }
+      function renderOrders() {
+        const filtered = filterOrders();
+        const grouped = groupOrders(filtered, currentGroup);
+        if (filtered.length === 0) { ordersContainer.innerHTML = '<div style="text-align:center; padding:2rem;">📭 Aucune commande trouvée</div>'; return; }
+        if (grouped.type === 'table') {
+          let html = `<table class="orders-table"><thead><tr><th>ID</th><th>Client</th><th>Téléphone</th><th>Email</th><th>Adresse</th><th>Total</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead><tbody>`;
+          grouped.data.forEach(order => { html += `<tr><td>${order.id.slice(0,8)}...</td><td>${escapeHtml(order.customer_name || '-')}</td><td>${escapeHtml(order.customer_phone || '-')}</td><td>${escapeHtml(order.customer_email || '-')}</td><td>${escapeHtml(order.shipping_address?.substring(0,30) || '-')}</td><td>${formatPrice(order.total)}</td><td><span class="status-badge status-${order.status}">${getStatusLabel(order.status)}</span></td><td>${formatDate(order.created_at)}</td><td><button class="action-btn" onclick="viewOrder('${order.id}')"><i class="fas fa-eye"></i></button> <button class="action-btn" onclick="openStatusModal('${order.id}')"><i class="fas fa-edit"></i></button></td></tr>`; });
+          html += `</tbody></table>`;
+          ordersContainer.innerHTML = html;
+        } else {
+          let html = '<div class="group-view">';
+          for (let [key, groupOrders] of Object.entries(grouped.groups)) {
+            let displayKey = key; if (grouped.groupKey === 'status') displayKey = grouped.labels?.[key] || key;
+            html += `<div class="group-card"><div class="group-title">📌 ${displayKey} (${groupOrders.length})</div><table class="orders-table"><thead><tr><th>ID</th><th>Client</th><th>Total</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead><tbody>`;
+            groupOrders.forEach(order => { let extra = (grouped.groupKey === 'product' && order.itemQty) ? ` x${order.itemQty}` : ''; html += `<tr><td>${order.id.slice(0,8)}...</td><td>${escapeHtml(order.customer_name || '-')}${extra}</td><td>${formatPrice(order.total)}</td><td><span class="status-badge status-${order.status}">${getStatusLabel(order.status)}</span></td><td>${formatDate(order.created_at)}</td><td><button class="action-btn" onclick="viewOrder('${order.id}')"><i class="fas fa-eye"></i></button> <button class="action-btn" onclick="openStatusModal('${order.id}')"><i class="fas fa-edit"></i></button></td></tr>`; });
+            html += `</tbody></table></div>`;
+          }
+          html += `</div>`;
+          ordersContainer.innerHTML = html;
+        }
+      }
 
-            function groupOrders(ordersList, groupBy) {
-                if (groupBy === 'none') return { type: 'table', data: ordersList };
-                if (groupBy === 'status') {
-                    const groups = {};
-                    ordersList.forEach(o => { groups[o.status] = groups[o.status] || []; groups[o.status].push(o); });
-                    return { type: 'groups', groups, groupKey: 'status', labels: { pending:'En attente', review:'En révision', shipped:'Expédiée', delivered:'Livrée', cancelled:'Annulée' } };
-                }
-                if (groupBy === 'city') {
-                    const groups = {};
-                    ordersList.forEach(o => { const city = getCityFromAddress(o.shipping_address); groups[city] = groups[city] || []; groups[city].push(o); });
-                    return { type: 'groups', groups, groupKey: 'city' };
-                }
-                if (groupBy === 'product') {
-                    const groups = {};
-                    ordersList.forEach(o => {
-                        if (o.items && Array.isArray(o.items)) {
-                            o.items.forEach(item => {
-                                const pname = item.name;
-                                groups[pname] = groups[pname] || [];
-                                groups[pname].push({ ...o, itemQty: item.quantity, itemPrice: item.price });
-                            });
-                        } else {
-                            groups['Sans produit'] = groups['Sans produit'] || [];
-                            groups['Sans produit'].push(o);
-                        }
-                    });
-                    return { type: 'groups', groups, groupKey: 'product' };
-                }
-                if (groupBy === 'date') {
-                    const groups = {};
-                    ordersList.forEach(o => {
-                        const dateKey = new Date(o.created_at).toLocaleDateString('fr-FR');
-                        groups[dateKey] = groups[dateKey] || [];
-                        groups[dateKey].push(o);
-                    });
-                    return { type: 'groups', groups, groupKey: 'date' };
-                }
-                return { type: 'table', data: ordersList };
-            }
+      window.viewOrder = function(orderId) {
+        const order = orders.find(o => o.id === orderId);
+        if (!order) return;
+        let itemsHtml = ''; if (order.items && order.items.length) itemsHtml = order.items.map(i => `• ${escapeHtml(i.name)} x${i.quantity} - ${formatPrice(i.price * i.quantity)}`).join('\n');
+        alert(`Commande ${orderId.slice(0,8)}...\nClient: ${order.customer_name}\nTél: ${order.customer_phone}\nEmail: ${order.customer_email}\nAdresse: ${order.shipping_address}\nTotal: ${formatPrice(order.total)}\nStatut: ${getStatusLabel(order.status)}\nProduits:\n${itemsHtml}`);
+      };
 
-            function renderOrders() {
-                const filtered = filterOrders();
-                const grouped = groupOrders(filtered, currentGroup);
+      window.openStatusModal = function(orderId) { pendingOrderId = orderId; statusModal.style.display = 'flex'; };
+      function closeStatusModal() { statusModal.style.display = 'none'; pendingOrderId = null; }
+      confirmStatusBtn.onclick = async () => { if (!pendingOrderId) return; const newStatus = newStatusSelect.value; try { const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', pendingOrderId); if (error) throw error; showToast('✅ Statut mis à jour'); closeStatusModal(); loadOrders(); } catch(err) { showToast('❌ Erreur'); } };
+      cancelStatusBtn.onclick = closeStatusModal;
 
-                if (filtered.length === 0) {
-                    ordersContainer.innerHTML = '<div style="text-align:center; padding:2rem;">📭 Aucune commande trouvée</div>';
-                    return;
-                }
+      function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
 
-                if (grouped.type === 'table') {
-                    let html = `<table class="orders-table"><thead><tr>
-                        <th>ID</th><th>Client</th><th>Téléphone</th><th>Email</th><th>Adresse</th><th>Total</th><th>Statut</th><th>Date</th><th>Actions</th>
-                    </tr></thead><tbody>`;
-                    grouped.data.forEach(order => {
-                        html += `<tr>
-                            <td>${order.id.slice(0,8)}...</td>
-                            <td>${escapeHtml(order.customer_name || '-')}</td>
-                            <td>${escapeHtml(order.customer_phone || '-')}</td>
-                            <td>${escapeHtml(order.customer_email || '-')}</td>
-                            <td>${escapeHtml(order.shipping_address?.substring(0,30) || '-')}</td>
-                            <td>${formatPrice(order.total)}</td>
-                            <td><span class="status-badge status-${order.status}">${getStatusLabel(order.status)}</span></td>
-                            <td>${formatDate(order.created_at)}</td>
-                            <td><button class="action-btn" onclick="viewOrder('${order.id}')"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn" onclick="updateStatus('${order.id}')"><i class="fas fa-edit"></i></button></td>
-                        </tr>`;
-                    });
-                    html += `</tbody></table>`;
-                    ordersContainer.innerHTML = html;
-                } else {
-                    // Groups display
-                    let html = '<div class="group-view">';
-                    for (let [key, groupOrders] of Object.entries(grouped.groups)) {
-                        let displayKey = key;
-                        if (grouped.groupKey === 'status') displayKey = grouped.labels?.[key] || key;
-                        if (grouped.groupKey === 'product') displayKey = key;
-                        html += `<div class="group-card"><div class="group-title">📌 ${displayKey} (${groupOrders.length})</div>`;
-                        html += `<table class="orders-table"><thead><tr><th>ID</th><th>Client</th><th>Total</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead><tbody>`;
-                        groupOrders.forEach(order => {
-                            let extra = '';
-                            if (grouped.groupKey === 'product' && order.itemQty) extra = ` x${order.itemQty}`;
-                            html += `<tr>
-                                <td>${order.id.slice(0,8)}...</td>
-                                <td>${escapeHtml(order.customer_name || '-')}${extra}</td>
-                                <td>${formatPrice(order.total)}</td>
-                                <td><span class="status-badge status-${order.status}">${getStatusLabel(order.status)}</span></td>
-                                <td>${formatDate(order.created_at)}</td>
-                                <td><button class="action-btn" onclick="viewOrder('${order.id}')"><i class="fas fa-eye"></i></button>
-                                <button class="action-btn" onclick="updateStatus('${order.id}')"><i class="fas fa-edit"></i></button></td>
-                            </tr>`;
-                        });
-                        html += `</tbody></table></div>`;
-                    }
-                    html += `</div>`;
-                    ordersContainer.innerHTML = html;
-                }
-            }
+      searchInput.addEventListener('input', () => { searchTerm = searchInput.value; renderOrders(); });
+      statusFilterEl.addEventListener('change', () => { statusFilter = statusFilterEl.value; renderOrders(); });
+      refreshBtn.addEventListener('click', () => loadOrders());
+      document.querySelectorAll('.group-btn[data-group]').forEach(btn => { btn.addEventListener('click', () => { currentGroup = btn.dataset.group; document.querySelectorAll('.group-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderOrders(); }); });
+      document.querySelector('.group-btn[data-group="none"]').classList.add('active');
 
-            function getStatusLabel(status) {
-                const labels = { pending:'En attente', review:'En révision', shipped:'Expédiée', delivered:'Livrée', cancelled:'Annulée' };
-                return labels[status] || status;
-            }
+      // Auth & nav link control
+      async function checkAdmin() {
+        const { data: { user } } = await supabase.auth.getUser();
+        const authLink = document.getElementById('authLink'), profileLink = document.getElementById('profileLink'), adminLink = document.getElementById('adminLink'), ordersLink = document.getElementById('ordersLink');
+        if (!user) { adminContent.style.display = 'none'; notAuthorized.style.display = 'block'; if(authLink) authLink.style.display = 'block'; if(profileLink) profileLink.style.display = 'none'; if(adminLink) adminLink.style.display = 'none'; if(ordersLink) ordersLink.style.display = 'none'; return; }
+        if (user.email !== 'azmmeli146@gmail.com') { adminContent.style.display = 'none'; notAuthorized.style.display = 'block'; if(authLink) authLink.style.display = 'none'; if(profileLink) profileLink.style.display = 'block'; if(adminLink) adminLink.style.display = 'none'; if(ordersLink) ordersLink.style.display = 'none'; return; }
+        adminContent.style.display = 'block'; notAuthorized.style.display = 'none';
+        if(authLink) authLink.style.display = 'none'; if(profileLink) profileLink.style.display = 'block'; if(adminLink) adminLink.style.display = 'block'; if(ordersLink) ordersLink.style.display = 'block';
+        loadOrders();
+      }
+      checkAdmin();
+      supabase.auth.onAuthStateChange(() => checkAdmin());
 
-            window.viewOrder = function(orderId) {
-                const order = orders.find(o => o.id === orderId);
-                if (!order) return;
-                let itemsHtml = '';
-                if (order.items && order.items.length) {
-                    itemsHtml = '<ul style="margin-top:5px;">' + order.items.map(i => `<li>${escapeHtml(i.name)} x${i.quantity} - ${formatPrice(i.price * i.quantity)}</li>`).join('') + '</ul>';
-                }
-                alert(`Commande ${orderId.slice(0,8)}...\nClient: ${order.customer_name}\nTél: ${order.customer_phone}\nEmail: ${order.customer_email}\nAdresse: ${order.shipping_address}\nTotal: ${formatPrice(order.total)}\nStatut: ${getStatusLabel(order.status)}\nProduits: ${itemsHtml}`);
-            };
+      // Theme
+      function initTheme() { const saved = localStorage.getItem('theme')||'light'; if(saved==='dark') document.body.classList.add('dark'); }
+      function toggleTheme() { document.body.classList.toggle('dark'); localStorage.setItem('theme', document.body.classList.contains('dark')?'dark':'light'); }
+      document.getElementById('themeToggle')?.addEventListener('click', toggleTheme); initTheme();
 
-            window.updateStatus = async function(orderId) {
-                const newStatus = prompt('Nouveau statut (pending, review, shipped, delivered, cancelled):', 'shipped');
-                if (!newStatus || !['pending','review','shipped','delivered','cancelled'].includes(newStatus)) return;
-                try {
-                    const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
-                    if (error) throw error;
-                    showToast('✅ Statut mis à jour');
-                    loadOrders();
-                } catch(err) { showToast('❌ Erreur'); }
-            };
-
-            function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
-
-            searchInput.addEventListener('input', () => { searchTerm = searchInput.value; renderOrders(); });
-            statusFilterEl.addEventListener('change', () => { statusFilter = statusFilterEl.value; renderOrders(); });
-            refreshBtn.addEventListener('click', () => loadOrders());
-
-            document.querySelectorAll('.group-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const group = btn.dataset.group;
-                    if (group) currentGroup = group;
-                    document.querySelectorAll('.group-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    renderOrders();
-                });
-            });
-            document.querySelector('.group-btn[data-group="none"]').classList.add('active');
-
-            // Auth check
-            async function checkAdmin() {
-                const { data: { user } } = await supabase.auth.getUser();
-                if (!user || user.email !== 'azmmeli146@gmail.com') {
-                    adminContent.style.display = 'none';
-                    notAuthorized.style.display = 'block';
-                    return;
-                }
-                adminContent.style.display = 'block';
-                notAuthorized.style.display = 'none';
-                loadOrders();
-            }
-            checkAdmin();
-
-            // Theme, menu, etc.
-            function initTheme() { const saved = localStorage.getItem('theme')||'light'; if(saved==='dark') document.body.classList.add('dark'); }
-            function toggleTheme() { document.body.classList.toggle('dark'); localStorage.setItem('theme', document.body.classList.contains('dark')?'dark':'light'); }
-            document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
-            initTheme();
-
-            const menuToggle = document.getElementById('menuToggle'), navLinks = document.getElementById('navLinks'), menuOverlay = document.getElementById('menuOverlay');
-            function toggleMenu() { navLinks.classList.toggle('active'); menuOverlay.classList.toggle('active'); }
-            menuToggle?.addEventListener('click', toggleMenu);
-            menuOverlay?.addEventListener('click', toggleMenu);
-
-            // Update user display in nav
-            async function updateNav() {
-                const { data: { user } } = await supabase.auth.getUser();
-                const authLink = document.getElementById('authLink'), profileLink = document.getElementById('profileLink');
-                if (user) { authLink.style.display = 'none'; profileLink.style.display = 'block'; }
-                else { authLink.style.display = 'block'; profileLink.style.display = 'none'; }
-            }
-            updateNav();
-            supabase.auth.onAuthStateChange(() => updateNav());
-        })();
-    </script>
+      // Menu
+      const menuToggle = document.getElementById('menuToggle'), navLinks = document.getElementById('navLinks'), menuOverlay = document.getElementById('menuOverlay');
+      function toggleMenu() { navLinks.classList.toggle('active'); menuOverlay.classList.toggle('active'); }
+      menuToggle?.addEventListener('click', toggleMenu); menuOverlay?.addEventListener('click', toggleMenu);
+    })();
+  </script>
 </body>
 </html>
