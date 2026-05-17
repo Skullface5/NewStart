@@ -1100,6 +1100,80 @@
             background: var(--gold);
             border-radius: 3px;
         }
+
+        /* ===== CHECKOUT MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: var(--card-warm);
+            border-radius: 32px;
+            max-width: 480px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-lg);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-mid);
+        }
+        .form-group { margin-bottom: 0.8rem; }
+        .form-group label {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.3rem;
+            color: var(--text-mid);
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 1px solid var(--input-border);
+            border-radius: 14px;
+            background: var(--input-bg);
+            color: var(--charcoal);
+            font-size: 0.85rem;
+        }
+        .form-group input:focus { outline: none; border-color: var(--input-focus); }
+        .btn-primary-modal {
+            background: var(--gold-dark);
+            color: var(--white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            flex: 1;
+        }
+        .btn-secondary-modal {
+            background: none;
+            border: 1px solid var(--border-medium);
+            color: var(--charcoal);
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            flex: 1;
+        }
     </style>
 </head>
 
@@ -1233,6 +1307,38 @@
         </div>
     </footer>
 
+    <!-- ===== CHECKOUT MODAL ===== -->
+    <div id="checkoutModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="font-weight:400;font-size:1.1rem;"><i class="fas fa-truck"></i> <span data-translate="delivery">Livraison</span></h3>
+                <button class="close-modal" onclick="closeCheckoutModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div style="padding:1.2rem;">
+                <form id="checkoutForm">
+                    <div class="form-group"><label data-translate="fullName">Nom complet *</label><input type="text" id="customerName" required></div>
+                    <div class="form-group"><label data-translate="phone">Téléphone *</label><input type="tel" id="customerPhone" required></div>
+                    <div id="emailFieldGroup" class="form-group"><label data-translate="email">Email *</label><input type="email" id="customerEmail"></div>
+                    <div id="loggedInEmailDisplay" style="display:none;" class="form-group"><label data-translate="email">Email</label>
+                        <div style="padding:0.7rem;background:var(--cream-deep);border-radius:14px;"><i class="fas fa-check-circle"></i> <span id="displayEmail"></span></div>
+                    </div>
+                    <div class="form-group"><label data-translate="address">Adresse *</label><input type="text" id="shippingAddress" required></div>
+                    <div style="background:var(--cream-deep);padding:0.8rem;border-radius:18px;margin:0.8rem 0;">
+                        <h4 style="margin-bottom:0.5rem;font-weight:400;font-size:0.9rem;" data-translate="yourOrder">Votre commande</h4>
+                        <div id="modalCartItems" style="font-size:0.8rem;"></div>
+                        <div style="display:flex;justify-content:space-between;margin-top:0.6rem;padding-top:0.6rem;border-top:1px solid var(--border-light);">
+                            <span data-translate="total">Total</span><span id="modalTotal">0 TND</span>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:10px;margin-top:0.8rem;">
+                        <button type="button" class="btn-secondary-modal" onclick="closeCheckoutModal()" style="font-size:0.8rem;" data-translate="cancel">Annuler</button>
+                        <button type="submit" class="btn-primary-modal" id="submitOrderBtn" style="font-size:0.8rem;" data-translate="confirm">Confirmer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
         (function () {
             const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
@@ -1254,7 +1360,11 @@
                     footerDescription: "Nous vous proposons un univers de parfums luxueux, aux senteurs élégantes et spontanées, qui touchent les émotions et laissent une impression durable.",
                     footerPerfumesTitle: "Parfums", footerMen: "Homme", footerWomen: "Femme", footerUnisex: "Unisexe", footerKids: "Enfants",
                     footerContactTitle: "Contact", footerAddress: "Tunis, Tunisie", footerPhone: "+216 96 163 366",
-                    footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. Tous droits réservés."
+                    footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. Tous droits réservés.",
+                    orderConfirmed: '✅ Commande confirmée!', cartEmptyWarning: '🛒 Panier vide', error: '❌ Erreur',
+                    confirm: 'Confirmer', cancel: 'Annuler', yourOrder: 'Votre commande',
+                    fullName: 'Nom complet *', phone: 'Téléphone *', email: 'Email *',
+                    address: 'Adresse *', delivery: 'Livraison'
                 },
                 en: {
                     home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
@@ -1268,7 +1378,11 @@
                     footerDescription: "We offer you a world of luxurious perfumes, with elegant and spontaneous scents, that touch the emotions and leave a lasting impression.",
                     footerPerfumesTitle: "Perfumes", footerMen: "Men", footerWomen: "Women", footerUnisex: "Unisex", footerKids: "Kids",
                     footerContactTitle: "Contact", footerAddress: "Tunis, Tunisia", footerPhone: "+216 96 163 366",
-                    footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. All rights reserved."
+                    footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. All rights reserved.",
+                    orderConfirmed: '✅ Order confirmed!', cartEmptyWarning: '🛒 Cart is empty', error: '❌ Error',
+                    confirm: 'Confirm', cancel: 'Cancel', yourOrder: 'Your order',
+                    fullName: 'Full name *', phone: 'Phone *', email: 'Email *',
+                    address: 'Address *', delivery: 'Delivery'
                 },
                 ar: {
                     home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
@@ -1282,7 +1396,11 @@
                     footerDescription: "نقدم لكم عالماً من العطور الفاخرة، بروائح أنيقة وعفوية، تلامس المشاعر وتترك انطباعاً دائماً.",
                     footerPerfumesTitle: "العطور", footerMen: "رجالي", footerWomen: "نسائي", footerUnisex: "للجنسين", footerKids: "أطفال",
                     footerContactTitle: "اتصل بنا", footerAddress: "تونس، تونس", footerPhone: "366 163 96 216+",
-                    footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 روزا للعطور. جميع الحقوق محفوظة."
+                    footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 روزا للعطور. جميع الحقوق محفوظة.",
+                    orderConfirmed: '✅ تم تأكيد الطلب!', cartEmptyWarning: '🛒 السلة فارغة', error: '❌ خطأ',
+                    confirm: 'تأكيد', cancel: 'إلغاء', yourOrder: 'طلبك',
+                    fullName: 'الاسم الكامل *', phone: 'الهاتف *', email: 'البريد الإلكتروني *',
+                    address: 'العنوان *', delivery: 'التوصيل'
                 }
             };
 
@@ -1700,6 +1818,76 @@
             if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
             if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
             if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
+
+            // ===== CHECKOUT BUTTON =====
+            if (checkoutBtn) {
+                checkoutBtn.addEventListener('click', async () => {
+                    if (cart.length === 0) { showToast('cartEmptyWarning'); return; }
+                    const { data: { user } } = await supabase.auth.getUser();
+                    const emailField = document.getElementById('emailFieldGroup');
+                    const loggedDiv = document.getElementById('loggedInEmailDisplay');
+                    const emailInp = document.getElementById('customerEmail');
+                    if (user) {
+                        emailField.style.display = 'none';
+                        loggedDiv.style.display = 'block';
+                        document.getElementById('displayEmail').textContent = user.email;
+                        emailInp.required = false;
+                    } else {
+                        emailField.style.display = 'block';
+                        loggedDiv.style.display = 'none';
+                        emailInp.required = true;
+                    }
+                    document.getElementById('modalCartItems').innerHTML = cart.map(i =>
+                        `<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>${escapeHtml(i.name)} x${i.quantity}</span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`
+                    ).join('');
+                    document.getElementById('modalTotal').textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND';
+                    document.getElementById('checkoutModal').style.display = 'flex';
+                });
+            }
+
+            window.closeCheckoutModal = () => {
+                document.getElementById('checkoutModal').style.display = 'none';
+            };
+
+            window.processOrder = async (event) => {
+                event.preventDefault();
+                const btn = document.getElementById('submitOrderBtn');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                try {
+                    const { data: { user } } = await supabase.auth.getUser();
+                    const email = user ? user.email : document.getElementById('customerEmail').value;
+                    const orderData = {
+                        items: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.id })),
+                        total: calculateTotal(),
+                        customer_name: document.getElementById('customerName').value,
+                        customer_phone: document.getElementById('customerPhone').value,
+                        customer_email: email,
+                        shipping_address: document.getElementById('shippingAddress').value,
+                        status: 'pending',
+                        user_id: user ? user.id : null
+                    };
+                    const { data: orderResult, error: orderError } = await supabase.from('orders').insert([orderData]).select();
+                    if (orderError) throw orderError;
+                    const orderId = orderResult?.[0]?.id;
+                    const { error: emailError } = await supabase.functions.invoke('send-order-email', { body: { order: { ...orderData, id: orderId } } });
+                    if (emailError) console.error('Email sending error:', emailError);
+                    cart = [];
+                    localStorage.removeItem('RosaFragrances_cart');
+                    saveCart();
+                    closeCheckoutModal();
+                    closeCart();
+                    showToast('orderConfirmed');
+                } catch (error) {
+                    console.error('Order error:', error);
+                    showToast('error');
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = translations[currentLanguage].confirm;
+                }
+            };
+
+            document.getElementById('checkoutForm')?.addEventListener('submit', window.processOrder);
 
             document.querySelectorAll('.nav-links a').forEach(link => {
                 link.addEventListener('click', () => {
