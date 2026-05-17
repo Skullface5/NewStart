@@ -8,7 +8,7 @@
   <meta charset="UTF-8">
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
   <title>Rosa Fragrances | Admin - Commandes</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -31,22 +31,14 @@
       --charcoal: #3A3228;
       --text-mid: #6B5E4E;
       --white: #FEFCF8;
-      --shadow: 0 8px 40px rgba(90, 70, 50, 0.10);
-      --card-base: #F5F0EA;
-      --card-warm: #F2EDE6;
-      --card-elevated: #F7F2EC;
-      --card-shadow: rgba(100, 80, 60, 0.06);
       --border-light: rgba(180, 155, 120, 0.12);
       --border-medium: rgba(180, 155, 120, 0.2);
       --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
       --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.03);
       --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.04);
-      --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.06);
       --input-bg: #F9F6F2;
       --input-border: #E2D9CF;
-      --input-focus: #C4AF7D;
       --hover-subtle: rgba(180, 155, 120, 0.05);
-      --hover-medium: rgba(180, 155, 120, 0.1);
     }
 
     body {
@@ -63,9 +55,6 @@
       --cream: #1A1814;
       --cream-dark: #24201A;
       --cream-deep: #2E2820;
-      --card-base: #2E2820;
-      --card-warm: #362F26;
-      --card-elevated: #40382D;
       --charcoal: #F5EFE6;
       --text-mid: #D4C5B0;
       --gold: #B89B5E;
@@ -96,11 +85,12 @@
     .container {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 1.5rem 2rem;
+      padding: 1.5rem 1rem;
       position: relative;
       z-index: 10;
     }
 
+    /* Header – same as other admin pages */
     header {
       background: rgba(247, 240, 230, 0.92);
       backdrop-filter: blur(12px);
@@ -111,284 +101,100 @@
       right: 0;
       z-index: 100;
       border-bottom: 1px solid rgba(180, 154, 106, 0.2);
-      transition: all 0.3s ease;
     }
-
-    body.dark header {
-      background: rgba(26, 24, 20, 0.92);
-    }
-
+    body.dark header { background: rgba(26, 24, 20, 0.92); }
     .header-flex {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      position: relative;
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0.8rem 2rem;
+      padding: 0.8rem 1rem;
     }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      z-index: 102;
-      text-decoration: none;
-    }
-
-    .logo img {
-      width: 48px;
-      height: 48px;
-      object-fit: contain;
+    .logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
+    .logo img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+    .logo h1 { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 400; color: var(--gold-dark); letter-spacing: 0.15em; }
+    .theme-toggle, .menu-toggle {
+      background: transparent; border: none; cursor: pointer;
+      font-size: 1.1rem; color: var(--gold-dark);
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
       border-radius: 50%;
     }
-
-    .logo h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.15rem;
-      font-weight: 400;
-      color: var(--gold-dark);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-    }
-
-    .theme-toggle,
-    .menu-toggle {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      font-size: 1.1rem;
-      color: var(--gold-dark);
-      width: 34px;
-      height: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      transition: all 0.3s ease;
-    }
-
-    .theme-toggle:hover,
-    .menu-toggle:hover {
-      background: var(--hover-subtle);
-      color: var(--gold);
-    }
-
-    .right-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .right-group { display: flex; align-items: center; gap: 4px; }
     .nav-links {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      top: 100%;
-      right: 0;
-      width: 250px;
-      background: var(--cream-dark);
-      backdrop-filter: blur(16px);
-      gap: 0;
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-      box-shadow: var(--shadow-lg);
-      border: 1px solid var(--border-light);
-      z-index: 101;
-      border-radius: 20px;
+      display: flex; flex-direction: column; position: absolute; top: 100%; right: 0;
+      width: 250px; background: var(--cream-dark); backdrop-filter: blur(16px);
+      max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.4s, opacity 0.3s;
+      border-radius: 20px; border: 1px solid var(--border-light); z-index: 101;
     }
-
-    .nav-links.active {
-      max-height: 550px;
-      opacity: 1;
-      padding: 0.5rem 0;
-    }
-
+    .nav-links.active { max-height: 550px; opacity: 1; padding: 0.5rem 0; }
     .nav-links a {
-      padding: 0.9rem 1.5rem;
-      text-decoration: none;
-      color: var(--charcoal);
-      transition: all 0.2s;
-      border-bottom: 1px solid var(--border-light);
-      display: block;
-      font-weight: 400;
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-
-    .nav-links a:hover {
-      background: var(--hover-subtle);
-      color: var(--gold-dark);
-      padding-left: 2rem;
-    }
-
-    .admin-nav-link {
-      background: rgba(180, 154, 106, 0.08);
-      color: var(--gold-dark) !important;
-      font-weight: 600;
-      border-bottom: 2px solid var(--gold) !important;
-    }
-
-    .lang-menu {
+      padding: 0.9rem 1.5rem; text-decoration: none; color: var(--charcoal);
+      display: block; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
       border-bottom: 1px solid var(--border-light);
     }
+    .nav-links a:hover { background: var(--hover-subtle); color: var(--gold-dark); padding-left: 2rem; }
+    .admin-nav-link { background: rgba(180, 154, 106, 0.08); color: var(--gold-dark) !important; font-weight: 600; border-bottom: 2px solid var(--gold) !important; }
+    .lang-menu { border-bottom: 1px solid var(--border-light); }
+    .lang-current { display: flex; justify-content: space-between; width: 100%; background: none; border: none; padding: 0.9rem 1.5rem; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--charcoal); cursor: pointer; }
+    .lang-options { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: var(--cream-dark); }
+    .lang-menu.active .lang-options { max-height: 130px; }
+    .lang-option { display: block; width: 100%; text-align: left; padding: 0.7rem 1.5rem 0.7rem 2.5rem; background: none; border: none; font-size: 0.7rem; cursor: pointer; color: var(--text-mid); }
+    .lang-option:hover { background: var(--hover-subtle); color: var(--gold-dark); }
+    .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(6px); z-index: 99; visibility: hidden; opacity: 0; transition: 0.3s; }
+    .menu-overlay.active { visibility: visible; opacity: 1; }
 
-    .lang-current {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      background: none;
-      border: none;
-      padding: 0.9rem 1.5rem;
-      font-size: 0.7rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .lang-current:hover {
-      background: var(--hover-subtle);
-      color: var(--gold-dark);
-    }
-
-    .lang-options {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease-out;
-      background: var(--cream-dark);
-    }
-
-    .lang-menu.active .lang-options {
-      max-height: 130px;
-    }
-
-    .lang-option {
-      display: block;
-      width: 100%;
-      text-align: left;
-      padding: 0.7rem 1.5rem 0.7rem 2.5rem;
-      background: none;
-      border: none;
-      font-size: 0.7rem;
-      cursor: pointer;
-      color: var(--text-mid);
-      transition: all 0.2s;
-    }
-
-    .lang-option:hover {
-      background: var(--hover-subtle);
-      color: var(--gold-dark);
-    }
-
-    .menu-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(6px);
-      z-index: 99;
-      visibility: hidden;
-      opacity: 0;
-      transition: 0.3s;
-    }
-
-    .menu-overlay.active {
-      visibility: visible;
-      opacity: 1;
-    }
-
-    /* Admin specific */
-    .admin-wrapper {
-      max-width: 1300px;
-      margin: 0 auto;
-    }
-
+    /* Admin specific – mobile first */
+    .admin-wrapper { max-width: 1300px; margin: 0 auto; }
     .admin-header {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
     }
-
-    .admin-header h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem;
-      font-weight: 300;
-      letter-spacing: 0.1em;
-      color: var(--charcoal);
-    }
-
-    .admin-header img {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
+    .admin-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 300; }
+    .admin-header img { width: 50px; height: 50px; border-radius: 50%; }
     .logged-in-as {
-      margin-left: auto;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       color: var(--text-mid);
       background: var(--cream-deep);
-      padding: 0.3rem 0.8rem;
+      padding: 0.25rem 0.8rem;
       border-radius: 50px;
+      display: inline-block;
     }
 
-    /* Stats grid */
+    /* Stats cards – scrollable row on mobile */
     .stats-grid {
       display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 0.8rem;
       margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      -webkit-overflow-scrolling: touch;
     }
-
     .stat-card {
       background: var(--card-warm);
       border-radius: 20px;
-      padding: 1rem 1.2rem;
+      padding: 0.8rem 1rem;
       text-align: center;
       border: 1px solid var(--border-light);
-      flex: 1;
-      min-width: 100px;
-      transition: all 0.3s ease;
+      min-width: 90px;
+      flex-shrink: 0;
     }
+    .stat-card h3 { font-size: 1.3rem; font-weight: 500; }
+    .stat-card p { font-size: 0.6rem; color: var(--text-mid); text-transform: uppercase; }
 
-    .stat-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
-      border-color: var(--gold-light);
-    }
-
-    .stat-card h3 {
-      font-size: 1.6rem;
-      font-weight: 500;
-      color: var(--charcoal);
-    }
-
-    .stat-card p {
-      font-size: 0.7rem;
-      color: var(--text-mid);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    /* Controls bar - responsive */
+    /* Filters – stacked on mobile */
     .controls-bar {
       display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
+      flex-direction: column;
+      gap: 0.8rem;
       margin-bottom: 1.5rem;
-      align-items: flex-end;
     }
-
     .search-box {
       display: flex;
       align-items: center;
@@ -396,175 +202,232 @@
       background: var(--input-bg);
       border: 1px solid var(--input-border);
       border-radius: 50px;
-      padding: 0.5rem 1rem;
-      flex: 2;
-      min-width: 200px;
+      padding: 0.7rem 1rem;
     }
-
-    .search-box i {
-      color: var(--gold);
-    }
-
+    .search-box i { color: var(--gold); }
     .search-box input {
-      background: none;
-      border: none;
-      outline: none;
-      width: 100%;
+      background: none; border: none; outline: none;
+      width: 100%; font-size: 0.9rem;
       color: var(--charcoal);
-      font-size: 0.85rem;
     }
-
     .filter-group {
       display: flex;
-      gap: 0.8rem;
       flex-wrap: wrap;
-      align-items: center;
+      gap: 0.6rem;
+      justify-content: space-between;
     }
-
     select, .btn-filter, input[type="date"] {
       background: var(--input-bg);
       border: 1px solid var(--input-border);
-      padding: 0.5rem 1rem;
+      padding: 0.6rem 0.8rem;
       border-radius: 50px;
       font-size: 0.8rem;
       color: var(--charcoal);
-      cursor: pointer;
       font-family: 'Jost', sans-serif;
-      transition: all 0.3s ease;
+      flex: 1;
+      min-width: 0;
     }
-
-    input[type="date"] {
-      cursor: pointer;
-    }
-
-    input[type="date"]:focus, select:focus {
-      outline: none;
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(180, 154, 106, 0.1);
-    }
-
     .btn-filter {
       background: var(--cream-deep);
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
+      cursor: pointer;
     }
 
-    .btn-filter:hover {
-      background: var(--gold-dark);
-      color: white;
-      border-color: var(--gold-dark);
+    /* Order cards – mobile first */
+    .orders-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
-
-    /* Orders table - mobile friendly with horizontal scroll */
-    .orders-table-container {
+    .order-card {
       background: var(--card-warm);
       border-radius: 24px;
-      padding: 1rem;
       border: 1px solid var(--border-light);
-      overflow-x: auto;
-      box-shadow: var(--shadow-md);
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .orders-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.85rem;
-      min-width: 800px;
-    }
-
-    /* On small screens, reduce font and padding */
-    @media (max-width: 640px) {
-      .orders-table {
-        font-size: 0.7rem;
-        min-width: 700px;
-      }
-      .orders-table th, .orders-table td {
-        padding: 0.5rem 0.4rem;
-      }
-      .action-btn {
-        font-size: 0.8rem;
-      }
-    }
-
-    .orders-table th, .orders-table td {
-      padding: 0.8rem;
-      text-align: left;
-      border-bottom: 1px solid var(--border-light);
-      vertical-align: middle;
-    }
-
-    .orders-table th {
-      background: var(--cream-deep);
-      font-weight: 500;
-      color: var(--charcoal);
-    }
-
-    .orders-table tr:hover {
-      background: var(--hover-subtle);
-    }
-
-    .status-badge {
-      display: inline-block;
-      padding: 0.2rem 0.6rem;
-      border-radius: 50px;
-      font-size: 0.7rem;
-      font-weight: 500;
-    }
-
-    .status-pending { background: rgba(180, 154, 106, 0.2); color: var(--gold-dark); }
-    .status-review { background: rgba(180, 154, 106, 0.2); color: var(--gold-dark); }
-    .status-shipped { background: rgba(180, 154, 106, 0.2); color: var(--gold-dark); }
-    .status-delivered { background: rgba(50, 150, 80, 0.2); color: #2c682c; }
-    .status-cancelled { background: rgba(200, 80, 80, 0.2); color: #b34545; }
-
-    .action-btn {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      color: var(--gold-dark);
-      font-size: 1rem;
-      margin: 0 4px;
+      padding: 1rem;
       transition: all 0.2s;
     }
-
-    .action-btn:hover {
-      transform: scale(1.1);
-      color: var(--gold);
+    .order-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--gold-light);
+    }
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .order-id {
+      font-weight: 600;
+      font-size: 0.85rem;
+      background: var(--cream-deep);
+      padding: 0.2rem 0.6rem;
+      border-radius: 50px;
+    }
+    .order-status {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 50px;
+      font-weight: 500;
+    }
+    .order-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+    }
+    .detail-label {
+      color: var(--text-mid);
+      font-weight: 300;
+    }
+    .detail-value {
+      font-weight: 500;
+      text-align: right;
+    }
+    .order-items {
+      background: var(--cream-deep);
+      border-radius: 16px;
+      padding: 0.6rem;
+      margin: 0.6rem 0;
+      font-size: 0.75rem;
+    }
+    .order-items summary {
+      cursor: pointer;
+      font-weight: 500;
+      padding: 0.2rem;
+    }
+    .order-items ul {
+      margin-top: 0.5rem;
+      padding-left: 1.2rem;
+      list-style: none;
+    }
+    .order-items li {
+      padding: 0.2rem 0;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed var(--border-light);
+    }
+    .order-actions {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: flex-end;
+      margin-top: 0.8rem;
+    }
+    .action-btn-card {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold-dark);
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .action-btn-card:hover {
+      background: var(--gold-dark);
+      color: white;
     }
 
-    /* Pagination - responsive */
+    /* Pagination – touch friendly */
     .pagination {
       display: flex;
       justify-content: center;
+      flex-wrap: wrap;
       gap: 0.5rem;
       margin-top: 1.5rem;
-      flex-wrap: wrap;
     }
-
     .page-btn {
       background: var(--cream-deep);
       border: 1px solid var(--border-light);
-      padding: 0.4rem 0.8rem;
+      padding: 0.5rem 0.9rem;
       border-radius: 50px;
-      cursor: pointer;
       font-size: 0.8rem;
-      color: var(--charcoal);
-      transition: all 0.3s ease;
+      cursor: pointer;
+      min-width: 40px;
+      text-align: center;
     }
-
     .page-btn.active {
       background: var(--gold-dark);
       color: white;
       border-color: var(--gold-dark);
     }
 
-    .page-btn:hover {
-      background: var(--gold-light);
+    /* Table view for larger screens */
+    @media (min-width: 768px) {
+      .orders-container {
+        display: none;
+      }
+      .orders-table-container {
+        display: block;
+        background: var(--card-warm);
+        border-radius: 24px;
+        padding: 1rem;
+        overflow-x: auto;
+      }
+      .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        min-width: 800px;
+      }
+      .orders-table th, .orders-table td {
+        padding: 0.8rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border-light);
+      }
+      .orders-table th {
+        background: var(--cream-deep);
+        font-weight: 500;
+      }
+      .orders-table tr:hover {
+        background: var(--hover-subtle);
+      }
+      .action-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--gold-dark);
+        font-size: 1rem;
+        margin: 0 4px;
+      }
+      .controls-bar {
+        flex-direction: row;
+        align-items: flex-end;
+      }
+      .filter-group {
+        flex-wrap: nowrap;
+      }
+      .stats-grid {
+        flex-wrap: wrap;
+        overflow-x: visible;
+      }
+      .admin-header {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+      }
+    }
+    @media (max-width: 767px) {
+      .orders-table-container {
+        display: none;
+      }
     }
 
-    /* Modals (same style as index) */
+    /* Modals */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -575,7 +438,6 @@
       align-items: center;
       justify-content: center;
     }
-
     .modal-content {
       background: var(--card-warm);
       border-radius: 28px;
@@ -584,306 +446,88 @@
       max-height: 85vh;
       overflow-y: auto;
       border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-lg);
     }
-
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 1.2rem;
+      padding: 1rem;
       border-bottom: 1px solid var(--border-light);
     }
-
-    .close-modal {
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-      color: var(--text-mid);
-    }
-
-    .modal-body {
-      padding: 1.2rem;
-    }
-
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 0.3rem;
-      color: var(--text-mid);
-    }
-
+    .modal-body { padding: 1rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 0.3rem; color: var(--text-mid); }
     .form-group select, .form-group input {
       width: 100%;
-      padding: 0.7rem 1rem;
+      padding: 0.7rem;
       border: 1px solid var(--input-border);
       border-radius: 14px;
       background: var(--input-bg);
-      color: var(--charcoal);
-      font-size: 0.85rem;
     }
-
-    .btn-primary-modal {
-      background: var(--gold-dark);
-      color: var(--white);
-      border: none;
+    .btn-primary-modal, .btn-secondary-modal {
       padding: 0.6rem 1.2rem;
       border-radius: 50px;
       cursor: pointer;
       font-weight: 500;
     }
-
-    .btn-secondary-modal {
-      background: transparent;
-      border: 1px solid var(--border-medium);
-      color: var(--charcoal);
-      padding: 0.6rem 1.2rem;
-      border-radius: 50px;
-      cursor: pointer;
-    }
+    .btn-primary-modal { background: var(--gold-dark); color: white; border: none; }
+    .btn-secondary-modal { background: transparent; border: 1px solid var(--border-medium); color: var(--charcoal); }
 
     /* Toast */
     .admin-toast {
       position: fixed;
-      bottom: 25px;
-      left: 25px;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
       background: var(--gold-dark);
-      color: var(--white);
-      padding: 0.7rem 1.2rem;
+      color: white;
+      padding: 0.7rem;
       border-radius: 50px;
+      text-align: center;
       transform: translateY(100px);
       opacity: 0;
-      transition: 0.3s ease;
+      transition: 0.3s;
       z-index: 300;
-      font-weight: 500;
       font-size: 0.85rem;
     }
-
-    .admin-toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
+    .admin-toast.show { transform: translateY(0); opacity: 1; }
 
     /* Footer */
     footer {
       background: var(--charcoal);
       color: rgba(247, 240, 230, 0.65);
-      padding: 60px 40px 28px;
+      padding: 40px 20px 20px;
       margin-top: 2rem;
-    }
-
-    body.dark footer {
-      background: #0F0E0C;
-    }
-
-    .footer-inner {
-      max-width: 1060px;
-      margin: 0 auto;
-    }
-
-    .footer-top {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr;
-      gap: 56px;
-      margin-bottom: 44px;
-    }
-
-    .footer-brand h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.55rem;
-      font-weight: 300;
-      color: var(--gold-light);
-      letter-spacing: 0.1em;
-      margin-bottom: 10px;
-    }
-
-    .footer-brand p {
-      font-size: 0.8rem;
-      line-height: 1.8;
-      font-weight: 200;
-      max-width: 250px;
-    }
-
-    .footer-col h4 {
-      font-size: 0.65rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 16px;
-    }
-
-    .footer-col ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-    }
-
-    .footer-col a {
-      color: rgba(247, 240, 230, 0.55);
-      text-decoration: none;
-      font-size: 0.8rem;
-      font-weight: 200;
-      transition: color 0.3s;
-    }
-
-    .footer-col a:hover {
-      color: var(--gold-light);
-    }
-
-    .contact-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .contact-list li {
-      font-size: 0.8rem;
-      font-weight: 200;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .contact-list .ic {
-      color: var(--gold);
-      font-size: 0.9rem;
-    }
-
-    .footer-bottom {
-      border-top: 1px solid rgba(180, 154, 106, 0.15);
-      padding-top: 22px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .footer-bottom p {
-      font-size: 0.7rem;
-      font-weight: 200;
-    }
-
-    .socials {
-      display: flex;
-      gap: 10px;
-    }
-
-    .social {
-      width: 34px;
-      height: 34px;
-      border: 1px solid rgba(180, 154, 106, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--gold-light);
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: all 0.3s;
-      border-radius: 50%;
-    }
-
-    .social:hover {
-      background: var(--gold-dark);
-      border-color: var(--gold-dark);
-      color: var(--white);
-    }
-
-    .footer-logo-img {
-      width: 70px;
-      height: 70px;
-      object-fit: contain;
-      margin-bottom: 10px;
-      filter: brightness(0.9);
-      border-radius: 50%;
-    }
-
-    @media (max-width: 900px) {
-      .footer-top {
-        grid-template-columns: 1fr 1fr;
-        gap: 30px;
-      }
-      .footer-brand {
-        grid-column: 1/-1;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .footer-top {
-        grid-template-columns: 1fr;
-      }
-      footer {
-        padding: 40px 18px 22px;
-      }
-      .footer-bottom {
-        flex-direction: column;
-        text-align: center;
-      }
-      .admin-header {
-        flex-direction: column;
-        text-align: center;
-      }
-      .logged-in-as {
-        margin-left: 0;
-      }
-      .stats-grid {
-        justify-content: center;
-      }
-      body {
-        padding-top: 70px;
-      }
-      .controls-bar {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .filter-group {
-        justify-content: space-between;
-      }
-      .search-box {
-        width: 100%;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .header-flex {
-        padding: 0.6rem 1rem;
-      }
-      .logo h1 {
-        font-size: 0.9rem;
-      }
-      .logo img {
-        width: 36px;
-      }
-    }
-
-    /* Scroll hint for mobile */
-    .scroll-hint {
       text-align: center;
-      font-size: 0.65rem;
-      color: var(--text-mid);
-      margin-top: 0.5rem;
-      display: none;
+      font-size: 0.7rem;
     }
-    @media (max-width: 640px) {
-      .scroll-hint {
-        display: block;
-      }
+    .footer-inner { max-width: 1060px; margin: 0 auto; }
+    .footer-top {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .footer-brand h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--gold-light); }
+    .footer-brand p { font-size: 0.75rem; max-width: 250px; margin: 0 auto; }
+    .footer-col h4 { font-size: 0.6rem; letter-spacing: 0.22em; color: var(--gold); margin-bottom: 12px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .footer-col a { color: rgba(247,240,230,0.55); text-decoration: none; font-size: 0.75rem; }
+    .contact-list li { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.75rem; }
+    .socials { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+    .social { width: 34px; height: 34px; border: 1px solid rgba(180,154,106,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold-light); }
+    @media (min-width: 768px) {
+      .footer-top { flex-direction: row; justify-content: space-between; text-align: left; }
+      .footer-brand p { margin: 0; }
+      .contact-list li { justify-content: flex-start; }
+      .socials { justify-content: flex-start; }
     }
   </style>
 </head>
 
 <body>
   <script>
-    // Floating particles
     for (let i = 0; i < 25; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
@@ -940,7 +584,7 @@
           <span class="logged-in-as" id="loggedInAs"></span>
         </div>
 
-        <!-- Stats Cards -->
+        <!-- Stats cards (scrollable on mobile) -->
         <div class="stats-grid" id="statsGrid">
           <div class="stat-card"><h3 id="totalOrders">0</h3><p data-translate="totalOrders">Total</p></div>
           <div class="stat-card"><h3 id="pendingCount">0</h3><p data-translate="pendingStatus">En attente</p></div>
@@ -949,7 +593,7 @@
           <div class="stat-card"><h3 id="cancelledCount">0</h3><p data-translate="cancelled">Annulées</p></div>
         </div>
 
-        <!-- Filters -->
+        <!-- Filters – stacked on mobile -->
         <div class="controls-bar">
           <div class="search-box">
             <i class="fas fa-search"></i>
@@ -966,16 +610,18 @@
             </select>
             <input type="date" id="dateFrom" placeholder="Du" data-translate="dateFrom">
             <input type="date" id="dateTo" placeholder="Au" data-translate="dateTo">
-            <button id="exportBtn" class="btn-filter"><i class="fas fa-download"></i> <span data-translate="export">Exporter CSV</span></button>
-            <button id="refreshBtn" class="btn-filter"><i class="fas fa-sync-alt"></i> <span data-translate="refresh">Rafraîchir</span></button>
+            <button id="exportBtn" class="btn-filter"><i class="fas fa-download"></i> <span data-translate="export">CSV</span></button>
+            <button id="refreshBtn" class="btn-filter"><i class="fas fa-sync-alt"></i> <span data-translate="refresh"></span></button>
           </div>
         </div>
 
-        <!-- Orders Table -->
+        <!-- Cards view (mobile) -->
+        <div id="ordersCardsContainer" class="orders-container"></div>
+
+        <!-- Table view (desktop) -->
         <div class="orders-table-container">
           <div id="loadingOrders" style="text-align:center; padding:2rem; display:none;"><i class="fas fa-spinner fa-spin"></i> <span data-translate="loading">Chargement...</span></div>
           <div id="ordersTableContent"></div>
-          <div class="scroll-hint"><i class="fas fa-arrows-alt-h"></i> <span data-translate="scrollHint">Faire glisser pour voir plus de colonnes</span></div>
         </div>
 
         <!-- Pagination -->
@@ -983,49 +629,27 @@
       </div>
     </div>
 
-    <div id="notAuthorized" style="display: none;">
-      <div class="not-authorized" style="text-align: center; padding: 3rem; background: var(--card-warm); border-radius: 28px; max-width: 500px; margin: 3rem auto;">
-        <i class="fas fa-lock" style="font-size: 3rem; color: var(--gold);"></i>
-        <h2 data-translate="notAuthorized">Accès non autorisé</h2>
-        <p data-translate="adminOnly">Cette page est réservée aux administrateurs. Veuillez vous connecter avec un compte administrateur.</p>
-        <a href="login146.html" class="login-redirect" style="display: inline-block; background: var(--gold-dark); color: white; padding: 0.7rem 1.5rem; border-radius: 50px; text-decoration: none; margin-top: 1rem;">Se connecter</a>
-      </div>
+    <div id="notAuthorized" style="display: none; text-align:center; padding:3rem;">
+      <i class="fas fa-lock" style="font-size:3rem; color:var(--gold);"></i>
+      <h2 data-translate="notAuthorized">Accès non autorisé</h2>
+      <p data-translate="adminOnly">Cette page est réservée aux administrateurs.</p>
+      <a href="login146.html" class="btn-primary-modal" style="display:inline-block; margin-top:1rem;">Se connecter</a>
     </div>
   </main>
 
-  <!-- Modal: Order Details -->
+  <!-- Modals (same as before) -->
   <div id="orderDetailModal" class="modal-overlay">
     <div class="modal-content">
-      <div class="modal-header">
-        <h3><i class="fas fa-receipt"></i> <span data-translate="orderDetails">Détails de la commande</span></h3>
-        <button class="close-modal" onclick="closeOrderDetailModal()"><i class="fas fa-times"></i></button>
-      </div>
+      <div class="modal-header"><h3><i class="fas fa-receipt"></i> <span data-translate="orderDetails">Détails</span></h3><button class="close-modal" onclick="closeOrderDetailModal()"><i class="fas fa-times"></i></button></div>
       <div class="modal-body" id="orderDetailBody"></div>
     </div>
   </div>
-
-  <!-- Modal: Update Status -->
   <div id="statusModal" class="modal-overlay">
     <div class="modal-content">
-      <div class="modal-header">
-        <h3><i class="fas fa-edit"></i> <span data-translate="updateStatus">Modifier le statut</span></h3>
-        <button class="close-modal" onclick="closeStatusModal()"><i class="fas fa-times"></i></button>
-      </div>
+      <div class="modal-header"><h3><i class="fas fa-edit"></i> <span data-translate="updateStatus">Modifier statut</span></h3><button class="close-modal" onclick="closeStatusModal()"><i class="fas fa-times"></i></button></div>
       <div class="modal-body">
-        <div class="form-group">
-          <label data-translate="newStatus">Nouveau statut</label>
-          <select id="newStatusSelect">
-            <option value="pending" data-translate="pendingStatus">En attente</option>
-            <option value="review" data-translate="review">En révision</option>
-            <option value="shipped" data-translate="shipped">Expédiée</option>
-            <option value="delivered" data-translate="deliveredStatus">Livrée</option>
-            <option value="cancelled" data-translate="cancelled">Annulée</option>
-          </select>
-        </div>
-        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-          <button id="confirmStatusBtn" class="btn-primary-modal"><span data-translate="confirm">Confirmer</span></button>
-          <button onclick="closeStatusModal()" class="btn-secondary-modal"><span data-translate="cancel">Annuler</span></button>
-        </div>
+        <div class="form-group"><label data-translate="newStatus">Nouveau statut</label><select id="newStatusSelect"><option value="pending">En attente</option><option value="review">En révision</option><option value="shipped">Expédiée</option><option value="delivered">Livrée</option><option value="cancelled">Annulée</option></select></div>
+        <div style="display:flex; gap:1rem; justify-content:flex-end;"><button id="confirmStatusBtn" class="btn-primary-modal"><span data-translate="confirm">Confirmer</span></button><button onclick="closeStatusModal()" class="btn-secondary-modal"><span data-translate="cancel">Annuler</span></button></div>
       </div>
     </div>
   </div>
@@ -1033,36 +657,11 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-top">
-        <div class="footer-brand">
-          <img class="footer-logo-img" src="is.png" alt="Rosa">
-          <h3>ROSA FRAGRANCES</h3>
-          <p data-translate="footerDescription">Parfumerie d'exception depuis 1985. L'art de la parfumerie orientale réinventé pour les connaisseurs exigeants.</p>
-        </div>
-        <div class="footer-col">
-          <h4 data-translate="footerPerfumesTitle">Parfums</h4>
-          <ul>
-            <li><a href="man.html" data-translate="footerMen">Homme</a></li>
-            <li><a href="women.html" data-translate="footerWomen">Femme</a></li>
-            <li><a href="unisexe.html" data-translate="footerUnisex">Unisexe</a></li>
-            <li><a href="kids.html" data-translate="footerKids">Enfants</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4 data-translate="footerContactTitle">Contact</h4>
-          <ul class="contact-list">
-            <li><span class="ic">📍</span> <span data-translate="footerAddress">Tunis, Tunisie</span></li>
-            <li><span class="ic">📞</span> <span data-translate="footerPhone">+216 96 163 366</span></li>
-            <li><span class="ic">✉️</span> <span data-translate="footerEmail">contact@rosafragrances.tn</span></li>
-            <div class="socials">
-              <a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/" class="social" target="_blank"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://wa.me/21696163366" class="social" target="_blank"><i class="fab fa-whatsapp"></i></a>
-            </div>
-          </ul>
-        </div>
+        <div class="footer-brand"><img class="footer-logo-img" src="is.png" style="width:50px; border-radius:50%; margin-bottom:10px;"><h3>ROSA FRAGRANCES</h3><p data-translate="footerDescription">Parfumerie d'exception depuis 1985.</p></div>
+        <div class="footer-col"><h4 data-translate="footerPerfumesTitle">Parfums</h4><ul><li><a href="man.html" data-translate="footerMen">Homme</a></li><li><a href="women.html" data-translate="footerWomen">Femme</a></li><li><a href="unisexe.html" data-translate="footerUnisex">Unisexe</a></li><li><a href="kids.html" data-translate="footerKids">Enfants</a></li></ul></div>
+        <div class="footer-col"><h4 data-translate="footerContactTitle">Contact</h4><ul class="contact-list"><li><span class="ic">📍</span> <span data-translate="footerAddress">Tunis, Tunisie</span></li><li><span class="ic">📞</span> <span data-translate="footerPhone">+216 96 163 366</span></li><li><span class="ic">✉️</span> <span data-translate="footerEmail">contact@rosafragrances.tn</span></li></ul><div class="socials"><a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/" class="social" target="_blank"><i class="fab fa-facebook-f"></i></a><a href="https://wa.me/21696163366" class="social" target="_blank"><i class="fab fa-whatsapp"></i></a></div></div>
       </div>
-      <div class="footer-bottom">
-        <p><span data-translate="footerCopyright">© 2026 Rosa Fragrances. Tous droits réservés.</span></p>
-      </div>
+      <div class="footer-bottom"><p><span data-translate="footerCopyright">© 2026 Rosa Fragrances. Tous droits réservés.</span></p></div>
     </div>
   </footer>
 
@@ -1073,54 +672,43 @@
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
       let currentLanguage = localStorage.getItem('language') || 'fr';
-      let allOrders = [];
-      let currentPage = 1;
-      const rowsPerPage = 15;
-      let currentSearch = '';
-      let currentStatus = 'all';
-      let currentDateFrom = '';
-      let currentDateTo = '';
+      let allOrders = [], currentPage = 1, rowsPerPage = 10;
+      let currentSearch = '', currentStatus = 'all', currentDateFrom = '', currentDateTo = '';
       let pendingOrderId = null;
 
       const translations = {
         fr: {
           home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS', existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil',
           ordersManagement: 'Gestion des commandes', totalOrders: 'Total', pendingStatus: 'En attente', review: 'En révision', shipped: 'Expédiée', deliveredStatus: 'Livrée', cancelled: 'Annulée',
-          allStatus: 'Tous statuts', export: 'Exporter CSV', refresh: 'Rafraîchir', orderDetails: 'Détails de la commande', updateStatus: 'Modifier le statut', newStatus: 'Nouveau statut',
-          confirm: 'Confirmer', cancel: 'Annuler', notAuthorized: 'Accès non autorisé', adminOnly: 'Cette page est réservée aux administrateurs.',
-          orderId: 'ID', customer: 'Client', phone: 'Téléphone', email: 'Email', address: 'Adresse', total: 'Total', status: 'Statut', date: 'Date', actions: 'Actions',
-          view: 'Voir', edit: 'Modifier', noOrders: 'Aucune commande trouvée', loading: 'Chargement...', errorLoading: 'Erreur de chargement', orderUpdated: '✅ Statut mis à jour',
-          items: 'Produits', quantity: 'Qté', price: 'Prix', searchPlaceholder: 'Rechercher par ID, nom, téléphone, email...', dateFrom: 'Du', dateTo: 'Au', scrollHint: 'Faire glisser pour voir plus de colonnes',
-          footerDescription: "Parfumerie d'exception depuis 1985. L'art de la parfumerie orientale réinventé pour les connaisseurs exigeants.",
-          footerPerfumesTitle: "Parfums", footerMen: "Homme", footerWomen: "Femme", footerUnisex: "Unisexe", footerKids: "Enfants",
-          footerContactTitle: "Contact", footerAddress: "Tunis, Tunisie", footerPhone: "+216 96 163 366", footerEmail: "contact@rosafragrances.tn",
-          footerCopyright: "© 2026 Rosa Fragrances. Tous droits réservés."
+          allStatus: 'Tous statuts', export: 'Exporter', refresh: 'Rafraîchir', orderDetails: 'Détails', updateStatus: 'Modifier statut', newStatus: 'Nouveau statut',
+          confirm: 'Confirmer', cancel: 'Annuler', notAuthorized: 'Accès non autorisé', adminOnly: 'Page réservée aux administrateurs',
+          orderId: 'N° commande', customer: 'Client', phone: 'Tél', email: 'Email', address: 'Adresse', total: 'Total', status: 'Statut', date: 'Date', actions: 'Actions',
+          view: 'Voir', edit: 'Modifier', noOrders: 'Aucune commande', loading: 'Chargement...', errorLoading: 'Erreur', orderUpdated: '✅ Statut mis à jour',
+          items: 'Produits', quantity: 'Qté', price: 'Prix', searchPlaceholder: 'Rechercher...', dateFrom: 'Du', dateTo: 'Au',
+          footerDescription: "Parfumerie d'exception depuis 1985.", footerPerfumesTitle: "Parfums", footerMen: "Homme", footerWomen: "Femme", footerUnisex: "Unisexe", footerKids: "Enfants",
+          footerContactTitle: "Contact", footerAddress: "Tunis, Tunisie", footerPhone: "+216 96 163 366", footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances"
         },
         en: {
           home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS', existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
           ordersManagement: 'Order Management', totalOrders: 'Total', pendingStatus: 'Pending', review: 'Under review', shipped: 'Shipped', deliveredStatus: 'Delivered', cancelled: 'Cancelled',
-          allStatus: 'All statuses', export: 'Export CSV', refresh: 'Refresh', orderDetails: 'Order details', updateStatus: 'Update status', newStatus: 'New status',
-          confirm: 'Confirm', cancel: 'Cancel', notAuthorized: 'Access denied', adminOnly: 'This page is for administrators only.',
-          orderId: 'ID', customer: 'Customer', phone: 'Phone', email: 'Email', address: 'Address', total: 'Total', status: 'Status', date: 'Date', actions: 'Actions',
-          view: 'View', edit: 'Edit', noOrders: 'No orders found', loading: 'Loading...', errorLoading: 'Error loading', orderUpdated: '✅ Status updated',
-          items: 'Items', quantity: 'Qty', price: 'Price', searchPlaceholder: 'Search by ID, name, phone, email...', dateFrom: 'From', dateTo: 'To', scrollHint: 'Swipe to see more columns',
-          footerDescription: "Exceptional perfumery since 1985. The art of oriental perfumery reinvented for discerning connoisseurs.",
-          footerPerfumesTitle: "Perfumes", footerMen: "Men", footerWomen: "Women", footerUnisex: "Unisex", footerKids: "Kids",
-          footerContactTitle: "Contact", footerAddress: "Tunis, Tunisia", footerPhone: "+216 96 163 366", footerEmail: "contact@rosafragrances.tn",
-          footerCopyright: "© 2026 Rosa Fragrances. All rights reserved."
+          allStatus: 'All statuses', export: 'Export', refresh: 'Refresh', orderDetails: 'Details', updateStatus: 'Update status', newStatus: 'New status',
+          confirm: 'Confirm', cancel: 'Cancel', notAuthorized: 'Access denied', adminOnly: 'Admin only',
+          orderId: 'Order ID', customer: 'Customer', phone: 'Phone', email: 'Email', address: 'Address', total: 'Total', status: 'Status', date: 'Date', actions: 'Actions',
+          view: 'View', edit: 'Edit', noOrders: 'No orders', loading: 'Loading...', errorLoading: 'Error', orderUpdated: '✅ Status updated',
+          items: 'Items', quantity: 'Qty', price: 'Price', searchPlaceholder: 'Search...', dateFrom: 'From', dateTo: 'To',
+          footerDescription: "Exceptional perfumery since 1985.", footerPerfumesTitle: "Perfumes", footerMen: "Men", footerWomen: "Women", footerUnisex: "Unisex", footerKids: "Kids",
+          footerContactTitle: "Contact", footerAddress: "Tunis, Tunisia", footerPhone: "+216 96 163 366", footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances"
         },
         ar: {
           home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال', existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
           ordersManagement: 'إدارة الطلبات', totalOrders: 'الإجمالي', pendingStatus: 'قيد الانتظار', review: 'قيد المراجعة', shipped: 'تم الشحن', deliveredStatus: 'تم التوصيل', cancelled: 'ملغية',
-          allStatus: 'جميع الحالات', export: 'تصدير CSV', refresh: 'تحديث', orderDetails: 'تفاصيل الطلب', updateStatus: 'تحديث الحالة', newStatus: 'الحالة الجديدة',
-          confirm: 'تأكيد', cancel: 'إلغاء', notAuthorized: 'وصول غير مصرح به', adminOnly: 'هذه الصفحة مخصصة للمشرفين فقط.',
+          allStatus: 'جميع الحالات', export: 'تصدير', refresh: 'تحديث', orderDetails: 'التفاصيل', updateStatus: 'تحديث الحالة', newStatus: 'الحالة الجديدة',
+          confirm: 'تأكيد', cancel: 'إلغاء', notAuthorized: 'غير مصرح', adminOnly: 'للمشرفين فقط',
           orderId: 'رقم الطلب', customer: 'العميل', phone: 'الهاتف', email: 'البريد', address: 'العنوان', total: 'المجموع', status: 'الحالة', date: 'التاريخ', actions: 'إجراءات',
-          view: 'عرض', edit: 'تعديل', noOrders: 'لا توجد طلبات', loading: 'جاري التحميل...', errorLoading: 'خطأ في التحميل', orderUpdated: '✅ تم تحديث الحالة',
-          items: 'المنتجات', quantity: 'الكمية', price: 'السعر', searchPlaceholder: 'البحث بالرقم أو الاسم أو الهاتف أو البريد...', dateFrom: 'من', dateTo: 'إلى', scrollHint: 'اسحب لرؤية المزيد من الأعمدة',
-          footerDescription: "عطور استثنائية منذ 1985. فن العطور الشرقية المعاد ابتكاره للخبراء المميزين.",
-          footerPerfumesTitle: "العطور", footerMen: "رجالي", footerWomen: "نسائي", footerUnisex: "للجنسين", footerKids: "أطفال",
-          footerContactTitle: "اتصل بنا", footerAddress: "تونس، تونس", footerPhone: "366 163 96 216+", footerEmail: "contact@rosafragrances.tn",
-          footerCopyright: "© 2026 روزا للعطور. جميع الحقوق محفوظة."
+          view: 'عرض', edit: 'تعديل', noOrders: 'لا توجد طلبات', loading: 'جاري التحميل...', errorLoading: 'خطأ', orderUpdated: '✅ تم تحديث الحالة',
+          items: 'المنتجات', quantity: 'الكمية', price: 'السعر', searchPlaceholder: 'بحث...', dateFrom: 'من', dateTo: 'إلى',
+          footerDescription: "عطور استثنائية منذ 1985.", footerPerfumesTitle: "العطور", footerMen: "رجالي", footerWomen: "نسائي", footerUnisex: "للجنسين", footerKids: "أطفال",
+          footerContactTitle: "اتصل بنا", footerAddress: "تونس، تونس", footerPhone: "366 163 96 216+", footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 روزا للعطور"
         }
       };
 
@@ -1128,7 +716,6 @@
         currentLanguage = lang;
         localStorage.setItem('language', lang);
         document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
-        document.body.style.textAlign = lang === 'ar' ? 'right' : 'left';
         const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
         const langSpan = document.getElementById('currentLangText');
         if (langSpan) langSpan.textContent = names[lang];
@@ -1140,8 +727,7 @@
             else el.textContent = translations[lang][key];
           }
         });
-        if (typeof renderOrdersTable === 'function') renderOrdersTable();
-        if (typeof updateStats === 'function') updateStats();
+        if (typeof renderAll === 'function') renderAll();
       }
 
       function showToast(msgKey) {
@@ -1157,22 +743,15 @@
       function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
 
       async function loadOrders() {
-        const loadingDiv = document.getElementById('loadingOrders');
-        const tableDiv = document.getElementById('ordersTableContent');
-        if (loadingDiv) loadingDiv.style.display = 'block';
-        if (tableDiv) tableDiv.innerHTML = '';
         try {
+          document.getElementById('loadingOrders').style.display = 'block';
           const { data, error } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
           if (error) throw error;
           allOrders = data || [];
           updateStats();
-          renderOrdersTable();
-        } catch (err) {
-          console.error(err);
-          if (tableDiv) tableDiv.innerHTML = `<div style="text-align:center; padding:2rem;">${translations[currentLanguage].errorLoading}</div>`;
-        } finally {
-          if (loadingDiv) loadingDiv.style.display = 'none';
-        }
+          renderAll();
+        } catch (err) { console.error(err); document.getElementById('ordersTableContent').innerHTML = `<div style="text-align:center; padding:2rem;">${translations[currentLanguage].errorLoading}</div>`; }
+        finally { document.getElementById('loadingOrders').style.display = 'none'; }
       }
 
       function updateStats() {
@@ -1199,76 +778,87 @@
         return filtered;
       }
 
-      function renderOrdersTable() {
-        const tableDiv = document.getElementById('ordersTableContent');
-        if (!tableDiv) return;
+      function renderAll() {
         const filtered = filterOrders();
         const totalPages = Math.ceil(filtered.length / rowsPerPage);
         if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
         const start = (currentPage - 1) * rowsPerPage;
         const pageOrders = filtered.slice(start, start + rowsPerPage);
+        renderCards(pageOrders);
+        renderTable(pageOrders);
+        renderPagination(totalPages);
+      }
 
-        if (pageOrders.length === 0) {
-          tableDiv.innerHTML = `<div style="text-align:center; padding:2rem;">${translations[currentLanguage].noOrders}</div>`;
-          document.getElementById('pagination').innerHTML = '';
-          return;
-        }
+      function renderCards(orders) {
+        const container = document.getElementById('ordersCardsContainer');
+        if (!container) return;
+        if (orders.length === 0) { container.innerHTML = `<div style="text-align:center; padding:2rem;">${translations[currentLanguage].noOrders}</div>`; return; }
+        let html = '';
+        orders.forEach(order => {
+          const itemsSummary = order.items && order.items.length ? order.items.map(i => `<li><span>${escapeHtml(i.name)} x${i.quantity}</span><span>${formatPrice(i.price * i.quantity)}</span></li>`).join('') : '<li>Aucun produit</li>';
+          html += `
+            <div class="order-card">
+              <div class="order-header">
+                <span class="order-id">${order.id.slice(0,8)}...</span>
+                <span class="order-status status-${order.status}" style="background:rgba(180,154,106,0.2); padding:0.2rem 0.6rem; border-radius:50px;">${getStatusLabel(order.status)}</span>
+              </div>
+              <div class="order-details">
+                <div class="detail-row"><span class="detail-label">${translations[currentLanguage].customer}:</span><span class="detail-value">${escapeHtml(order.customer_name || '-')}</span></div>
+                <div class="detail-row"><span class="detail-label">${translations[currentLanguage].phone}:</span><span class="detail-value">${escapeHtml(order.customer_phone || '-')}</span></div>
+                <div class="detail-row"><span class="detail-label">${translations[currentLanguage].total}:</span><span class="detail-value">${formatPrice(order.total)}</span></div>
+                <div class="detail-row"><span class="detail-label">${translations[currentLanguage].date}:</span><span class="detail-value">${formatDate(order.created_at)}</span></div>
+              </div>
+              <details class="order-items"><summary>${translations[currentLanguage].items} (${order.items?.length || 0})</summary><ul>${itemsSummary}</ul></details>
+              <div class="order-actions">
+                <button class="action-btn-card" onclick="viewOrderDetails('${order.id}')"><i class="fas fa-eye"></i> ${translations[currentLanguage].view}</button>
+                <button class="action-btn-card" onclick="openStatusModal('${order.id}')"><i class="fas fa-edit"></i> ${translations[currentLanguage].edit}</button>
+              </div>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+      }
 
-        let html = `<table class="orders-table"><thead><tr>
-          <th>${translations[currentLanguage].orderId}</th>
-          <th>${translations[currentLanguage].customer}</th>
-          <th>${translations[currentLanguage].phone}</th>
-          <th>${translations[currentLanguage].email}</th>
-          <th>${translations[currentLanguage].address}</th>
-          <th>${translations[currentLanguage].total}</th>
-          <th>${translations[currentLanguage].status}</th>
-          <th>${translations[currentLanguage].date}</th>
-          <th>${translations[currentLanguage].actions}</th>
-        </tr></thead><tbody>`;
-        pageOrders.forEach(order => {
+      function renderTable(orders) {
+        const tableDiv = document.getElementById('ordersTableContent');
+        if (!tableDiv) return;
+        if (orders.length === 0) { tableDiv.innerHTML = `<div style="text-align:center; padding:2rem;">${translations[currentLanguage].noOrders}</div>`; return; }
+        let html = `<table class="orders-table"><thead><tr><th>${translations[currentLanguage].orderId}</th><th>${translations[currentLanguage].customer}</th><th>${translations[currentLanguage].phone}</th><th>${translations[currentLanguage].total}</th><th>${translations[currentLanguage].status}</th><th>${translations[currentLanguage].date}</th><th>${translations[currentLanguage].actions}</th></tr></thead><tbody>`;
+        orders.forEach(order => {
           html += `<tr>
             <td>${order.id.slice(0,8)}...</td>
             <td>${escapeHtml(order.customer_name || '-')}</td>
             <td>${escapeHtml(order.customer_phone || '-')}</td>
-            <td>${escapeHtml(order.customer_email || '-')}</td>
-            <td>${escapeHtml(order.shipping_address ? order.shipping_address.substring(0,30) : '-')}</td>
             <td>${formatPrice(order.total)}</td>
             <td><span class="status-badge status-${order.status}">${getStatusLabel(order.status)}</span></td>
             <td>${formatDate(order.created_at)}</td>
-            <td>
-              <button class="action-btn" onclick="viewOrderDetails('${order.id}')" title="${translations[currentLanguage].view}"><i class="fas fa-eye"></i></button>
-              <button class="action-btn" onclick="openStatusModal('${order.id}')" title="${translations[currentLanguage].edit}"><i class="fas fa-edit"></i></button>
-            </td>
+            <td><button class="action-btn" onclick="viewOrderDetails('${order.id}')"><i class="fas fa-eye"></i></button> <button class="action-btn" onclick="openStatusModal('${order.id}')"><i class="fas fa-edit"></i></button></td>
           </tr>`;
         });
         html += `</tbody></table>`;
         tableDiv.innerHTML = html;
+      }
 
-        let pagHtml = '';
-        if (totalPages > 1) {
-          for (let i = 1; i <= totalPages; i++) {
-            pagHtml += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
-          }
-          document.getElementById('pagination').innerHTML = pagHtml;
-          document.querySelectorAll('.page-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => { currentPage = parseInt(e.target.dataset.page); renderOrdersTable(); });
-          });
-        } else {
-          document.getElementById('pagination').innerHTML = '';
+      function renderPagination(totalPages) {
+        const pagDiv = document.getElementById('pagination');
+        if (!pagDiv) return;
+        if (totalPages <= 1) { pagDiv.innerHTML = ''; return; }
+        let html = '';
+        for (let i = 1; i <= totalPages; i++) {
+          html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
         }
+        pagDiv.innerHTML = html;
+        document.querySelectorAll('.page-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => { currentPage = parseInt(e.target.dataset.page); renderAll(); });
+        });
       }
 
       window.viewOrderDetails = function(orderId) {
         const order = allOrders.find(o => o.id === orderId);
         if (!order) return;
-        let itemsHtml = '<ul style="margin:0; padding-left:1.2rem;">';
-        if (order.items && order.items.length) {
-          order.items.forEach(item => {
-            itemsHtml += `<li><strong>${escapeHtml(item.name)}</strong> x${item.quantity} — ${formatPrice(item.price * item.quantity)}</li>`;
-          });
-        } else {
-          itemsHtml += `<li>${translations[currentLanguage].noOrders}</li>`;
-        }
+        let itemsHtml = '<ul>';
+        if (order.items && order.items.length) order.items.forEach(i => itemsHtml += `<li><strong>${escapeHtml(i.name)}</strong> x${i.quantity} — ${formatPrice(i.price * i.quantity)}</li>`);
+        else itemsHtml += '<li>Aucun produit</li>';
         itemsHtml += '</ul>';
         const body = `
           <p><strong>${translations[currentLanguage].orderId}:</strong> ${order.id}</p>
@@ -1289,8 +879,7 @@
       window.openStatusModal = function(orderId) {
         pendingOrderId = orderId;
         const order = allOrders.find(o => o.id === orderId);
-        const select = document.getElementById('newStatusSelect');
-        if (order) select.value = order.status;
+        if (order) document.getElementById('newStatusSelect').value = order.status;
         document.getElementById('statusModal').style.display = 'flex';
       };
       window.closeStatusModal = () => document.getElementById('statusModal').style.display = 'none';
@@ -1310,50 +899,40 @@
         const filtered = filterOrders();
         if (!filtered.length) { showToast('noOrders'); return; }
         const headers = ['ID', 'Client', 'Téléphone', 'Email', 'Adresse', 'Total', 'Statut', 'Date', 'Produits'];
-        const rows = filtered.map(o => {
-          const itemsStr = (o.items || []).map(i => `${i.name} (x${i.quantity})`).join('; ');
-          return [o.id, o.customer_name, o.customer_phone, o.customer_email, o.shipping_address, o.total, o.status, o.created_at, itemsStr];
-        });
+        const rows = filtered.map(o => [o.id, o.customer_name, o.customer_phone, o.customer_email, o.shipping_address, o.total, o.status, o.created_at, (o.items || []).map(i => `${i.name}(x${i.quantity})`).join('; ')]);
         const csvContent = [headers, ...rows].map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
         const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.href = url;
-        link.setAttribute('download', `commandes_${new Date().toISOString().slice(0,10)}.csv`);
-        document.body.appendChild(link);
+        link.href = URL.createObjectURL(blob);
+        link.download = `commandes_${new Date().toISOString().slice(0,10)}.csv`;
         link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
+        URL.revokeObjectURL(link.href);
       }
-      document.getElementById('exportBtn').addEventListener('click', exportToCSV);
 
-      let searchTimeout;
-      const searchInput = document.getElementById('searchInput');
-      searchInput.addEventListener('input', () => {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-          currentSearch = searchInput.value;
-          currentPage = 1;
-          renderOrdersTable();
-        }, 300);
-      });
-      document.getElementById('statusFilter').addEventListener('change', (e) => { currentStatus = e.target.value; currentPage = 1; renderOrdersTable(); });
-      document.getElementById('dateFrom').addEventListener('change', (e) => { currentDateFrom = e.target.value; currentPage = 1; renderOrdersTable(); });
-      document.getElementById('dateTo').addEventListener('change', (e) => { currentDateTo = e.target.value; currentPage = 1; renderOrdersTable(); });
+      document.getElementById('exportBtn').addEventListener('click', exportToCSV);
       document.getElementById('refreshBtn').addEventListener('click', () => loadOrders());
 
+      let searchTimeout;
+      document.getElementById('searchInput').addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => { currentSearch = e.target.value; currentPage = 1; renderAll(); }, 300);
+      });
+      document.getElementById('statusFilter').addEventListener('change', (e) => { currentStatus = e.target.value; currentPage = 1; renderAll(); });
+      document.getElementById('dateFrom').addEventListener('change', (e) => { currentDateFrom = e.target.value; currentPage = 1; renderAll(); });
+      document.getElementById('dateTo').addEventListener('change', (e) => { currentDateTo = e.target.value; currentPage = 1; renderAll(); });
+
+      // Auth and UI same as before...
       let updateUserTimeout, isUpdatingUser = false;
       async function updateUserDisplay() {
         if (isUpdatingUser) return;
         isUpdatingUser = true;
         try {
           const { data: { user } } = await supabase.auth.getUser();
-          const authLink = document.getElementById('authLink'), profileLink = document.getElementById('profileLink'), adminLink = document.getElementById('adminLink'), ordersLink = document.getElementById('ordersLink');
-          const loggedInAs = document.getElementById('loggedInAs');
+          const authLink = document.getElementById('authLink'), profileLink = document.getElementById('profileLink'), adminLink = document.getElementById('adminLink'), ordersLink = document.getElementById('ordersLink'), loggedInAs = document.getElementById('loggedInAs');
           if (user) {
             if (authLink) authLink.style.display = 'none';
             if (profileLink) profileLink.style.display = 'block';
-            if (loggedInAs) loggedInAs.textContent = `⚡ ${user.email} · ${new Date().toLocaleDateString('fr-FR')}`;
+            if (loggedInAs) loggedInAs.textContent = `⚡ ${user.email}`;
             if (user.email === 'azmmeli146@gmail.com') {
               if (adminLink) adminLink.style.display = 'block';
               if (ordersLink) ordersLink.style.display = 'block';
@@ -1368,61 +947,34 @@
             if (ordersLink) ordersLink.style.display = 'none';
             if (loggedInAs) loggedInAs.textContent = '';
           }
-        } catch (error) { console.error(error); }
-        finally { isUpdatingUser = false; }
+        } finally { isUpdatingUser = false; }
       }
       updateUserDisplay();
-      supabase.auth.onAuthStateChange((event, session) => {
-        if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
-          if (updateUserTimeout) clearTimeout(updateUserTimeout);
-          updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
-        }
-      });
+      supabase.auth.onAuthStateChange(() => updateUserDisplay());
 
       async function checkAdminAccess() {
-        const adminContent = document.getElementById('adminContent');
-        const notAuthorizedDiv = document.getElementById('notAuthorized');
-        try {
-          const { data: { user } } = await supabase.auth.getUser();
-          if (!user || user.email !== 'azmmeli146@gmail.com') {
-            adminContent.style.display = 'none';
-            notAuthorizedDiv.style.display = 'block';
-            return;
-          }
-          adminContent.style.display = 'block';
-          notAuthorizedDiv.style.display = 'none';
-          loadOrders();
-        } catch (error) {
-          adminContent.style.display = 'none';
-          notAuthorizedDiv.style.display = 'block';
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user || user.email !== 'azmmeli146@gmail.com') {
+          document.getElementById('adminContent').style.display = 'none';
+          document.getElementById('notAuthorized').style.display = 'block';
+          return;
         }
+        document.getElementById('adminContent').style.display = 'block';
+        document.getElementById('notAuthorized').style.display = 'none';
+        loadOrders();
       }
       checkAdminAccess();
 
-      function initTheme() { const saved = localStorage.getItem('theme') || 'light'; if (saved === 'dark') { document.body.classList.add('dark'); document.querySelector('#themeToggle .fa-sun').style.display = 'none'; document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block'; } }
-      function toggleTheme() {
-        if (document.body.classList.contains('dark')) {
-          document.body.classList.remove('dark');
-          localStorage.setItem('theme', 'light');
-          document.querySelector('#themeToggle .fa-sun').style.display = 'inline-block';
-          document.querySelector('#themeToggle .fa-moon').style.display = 'none';
-        } else {
-          document.body.classList.add('dark');
-          localStorage.setItem('theme', 'dark');
-          document.querySelector('#themeToggle .fa-sun').style.display = 'none';
-          document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
-        }
-      }
-      document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
-      initTheme();
+      function initTheme() { const saved = localStorage.getItem('theme') || 'light'; if (saved === 'dark') document.body.classList.add('dark'); }
+      function toggleTheme() { document.body.classList.toggle('dark'); localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light'); }
+      document.getElementById('themeToggle')?.addEventListener('click', toggleTheme); initTheme();
 
       const menuToggle = document.getElementById('menuToggle'), navLinks = document.getElementById('navLinks'), menuOverlay = document.getElementById('menuOverlay');
-      function toggleMenu() { navLinks.classList.toggle('active'); menuOverlay.classList.toggle('active'); document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : ''; }
-      menuToggle?.addEventListener('click', toggleMenu);
-      menuOverlay?.addEventListener('click', toggleMenu);
+      menuToggle?.addEventListener('click', () => { navLinks.classList.toggle('active'); menuOverlay.classList.toggle('active'); });
+      menuOverlay?.addEventListener('click', () => { navLinks.classList.remove('active'); menuOverlay.classList.remove('active'); });
 
       const langMenu = document.getElementById('langMenu'), langCurrentBtn = document.getElementById('langCurrentBtn');
-      if (langCurrentBtn) langCurrentBtn.addEventListener('click', (e) => { e.stopPropagation(); langMenu.classList.toggle('active'); });
+      langCurrentBtn?.addEventListener('click', (e) => { e.stopPropagation(); langMenu.classList.toggle('active'); });
       document.querySelectorAll('.lang-option').forEach(opt => { opt.addEventListener('click', () => { translatePage(opt.dataset.lang); langMenu.classList.remove('active'); }); });
       document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
 
@@ -1430,5 +982,4 @@
     })();
   </script>
 </body>
-
 </html>
