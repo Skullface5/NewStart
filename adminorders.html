@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rosa Fragrances | Gestion des commandes</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --cream:#F7F0E6;--cream-dark:#EDE4D6;--cream-deep:#E0D4C0;
+      --gold:#B49A6A;--gold-light:#D4B98A;--gold-dark:#8A7150;
+      --charcoal:#3A3228;--text-mid:#6B5E4E;--white:#FEFCF8;
+      --card-warm:#F2EDE6;--card-elevated:#F7F2EC;
+      --border-light:rgba(180,155,120,0.12);--border-medium:rgba(180,155,120,0.2);
+      --shadow-sm:0 2px 8px rgba(0,0,0,0.02);--shadow-md:0 4px 16px rgba(0,0,0,0.05);
+      --input-bg:#F9F6F2;--input-border:#E2D9CF;--input-focus:#C4AF7D;
+      --hover-subtle:rgba(180,155,120,0.05);
+    }
+    body.dark{
+      --cream:#1A1814;--cream-dark:#24201A;--cream-deep:#2E2820;
+      --card-warm:#362F26;--card-elevated:#40382D;
+      --charcoal:#F5EFE6;--text-mid:#D4C5B0;--gold:#B89B5E;--gold-dark:#B89B5E;
+      --white:#1A1814;--border-light:rgba(184,155,94,0.15);
+      --input-bg:#3A352C;--input-border:#4A4438;
+    }
+    body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--charcoal);line-height:1.5;transition:background 0.4s,color 0.3s;}
+
+    header{background:rgba(247,240,230,0.95);backdrop-filter:blur(12px);box-shadow:var(--shadow-sm);position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(180,154,106,0.2);}
+    body.dark header{background:rgba(26,24,20,0.95);}
+    .header-flex{display:flex;align-items:center;justify-content:space-between;max-width:1400px;margin:0 auto;padding:0.8rem 2rem;}
+    .logo{display:flex;align-items:center;gap:0.5rem;text-decoration:none;}
+    .logo img{width:42px;height:42px;object-fit:contain;border-radius:50%;}
+    .logo h1{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;color:var(--gold-dark);letter-spacing:0.15em;text-transform:uppercase;}
+    .header-right{display:flex;align-items:center;gap:0.5rem;}
+    .admin-pill{background:var(--gold-dark);color:#fff;font-size:0.6rem;font-weight:600;padding:3px 10px;border-radius:50px;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;}
+    .nav-links-admin{display:flex;gap:0.4rem;}
+    .nav-links-admin a{font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;color:var(--text-mid);padding:6px 12px;border-radius:50px;border:1px solid var(--border-medium);transition:all 0.2s;white-space:nowrap;}
+    .nav-links-admin a:hover,.nav-links-admin a.active{background:var(--gold-dark);color:#fff;border-color:var(--gold-dark);}
+    .icon-btn{background:none;border:none;cursor:pointer;font-size:1rem;color:var(--gold-dark);width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background 0.2s;}
+    .icon-btn:hover{background:var(--hover-subtle);}
+
+    .access-denied{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;gap:1rem;padding:2rem;}
+    .access-denied i{font-size:3rem;color:var(--gold);}
+    .access-denied h2{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:400;}
+    .access-denied p{color:var(--text-mid);font-size:0.85rem;}
+    .access-denied a{display:inline-block;margin-top:0.5rem;padding:10px 24px;background:var(--gold-dark);color:#fff;border-radius:50px;text-decoration:none;font-size:0.8rem;}
+    .auth-loading{text-align:center;padding:5rem 2rem;color:var(--text-mid);}
+    .auth-loading i{font-size:1.5rem;color:var(--gold);display:block;margin-bottom:0.5rem;}
+
+    .main-wrap{max-width:1400px;margin:0 auto;padding:2rem;}
+
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.8rem;margin-bottom:2rem;}
+    .stat-card{background:var(--card-warm);border-radius:18px;padding:1.1rem 1.3rem;border:1px solid var(--border-light);display:flex;flex-direction:column;gap:0.3rem;}
+    .stat-card.highlight{background:linear-gradient(135deg,var(--gold-dark) 0%,var(--gold) 100%);}
+    .stat-label{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-mid);}
+    .stat-card.highlight .stat-label{color:rgba(255,255,255,0.8);}
+    .stat-value{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:400;color:var(--gold-dark);line-height:1;}
+    .stat-card.highlight .stat-value{color:#fff;}
+    .stat-sub{font-size:0.65rem;color:var(--text-mid);}
+    .stat-card.highlight .stat-sub{color:rgba(255,255,255,0.7);}
+
+    .toolbar{display:flex;flex-wrap:wrap;gap:0.7rem;align-items:center;margin-bottom:1.2rem;}
+    .search-box{display:flex;align-items:center;gap:0.5rem;background:var(--card-warm);border:1px solid var(--border-medium);border-radius:50px;padding:0.5rem 1.2rem;flex:1;min-width:200px;max-width:450px;}
+    .search-box i{color:var(--gold);font-size:0.85rem;flex-shrink:0;}
+    .search-box input{background:none;border:none;outline:none;font-family:'Jost',sans-serif;font-size:0.82rem;color:var(--charcoal);width:100%;}
+    .search-box input::placeholder{color:var(--text-mid);}
+    .group-toggle{display:flex;gap:0.35rem;flex-wrap:wrap;}
+    .g-btn{background:var(--card-warm);border:1px solid var(--border-medium);color:var(--text-mid);font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;padding:6px 12px;border-radius:50px;cursor:pointer;transition:all 0.2s;font-family:'Jost',sans-serif;white-space:nowrap;}
+    .g-btn.active,.g-btn:hover{background:var(--gold-dark);color:#fff;border-color:var(--gold-dark);}
+    .refresh-btn{background:none;border:1px solid var(--border-medium);color:var(--text-mid);font-size:0.72rem;padding:6px 13px;border-radius:50px;cursor:pointer;display:flex;align-items:center;gap:5px;font-family:'Jost',sans-serif;transition:all 0.2s;white-space:nowrap;}
+    .refresh-btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+
+    .status-tabs{display:flex;flex-wrap:wrap;gap:0.35rem;margin-bottom:1.5rem;}
+    .s-tab{background:var(--card-warm);border:1px solid var(--border-light);color:var(--text-mid);font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;padding:6px 14px;border-radius:50px;cursor:pointer;font-family:'Jost',sans-serif;display:flex;align-items:center;gap:4px;transition:all 0.2s;white-space:nowrap;}
+    .s-tab .cnt{background:var(--border-medium);color:var(--text-mid);font-size:0.58rem;padding:1px 5px;border-radius:50px;transition:inherit;}
+    .s-tab.active{border-color:currentColor;}
+    .s-tab.s-all.active{background:var(--charcoal);color:#fff;border-color:var(--charcoal);}
+    .s-tab.s-all.active .cnt{background:rgba(255,255,255,0.2);color:#fff;}
+    .s-tab.s-pending.active{background:#f59e0b;color:#fff;border-color:#f59e0b;}
+    .s-tab.s-review.active{background:#6366f1;color:#fff;border-color:#6366f1;}
+    .s-tab.s-shipped.active{background:#0ea5e9;color:#fff;border-color:#0ea5e9;}
+    .s-tab.s-delivered.active{background:#10b981;color:#fff;border-color:#10b981;}
+    .s-tab.s-cancelled.active{background:#ef4444;color:#fff;border-color:#ef4444;}
+    .s-tab.active .cnt{background:rgba(255,255,255,0.25);color:#fff;}
+
+    .group-section{margin-bottom:2rem;}
+    .group-header{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.8rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border-light);}
+    .group-header h3{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:400;color:var(--gold-dark);}
+    .group-badge{background:var(--cream-deep);color:var(--text-mid);font-size:0.58rem;padding:2px 8px;border-radius:50px;text-transform:uppercase;letter-spacing:0.08em;}
+
+    .orders-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:0.9rem;}
+    .order-card{background:var(--card-warm);border-radius:18px;border:1px solid var(--border-light);overflow:hidden;transition:box-shadow 0.2s,border-color 0.2s;}
+    .order-card:hover{box-shadow:var(--shadow-md);border-color:var(--border-medium);}
+
+    .oc-header{display:flex;justify-content:space-between;align-items:flex-start;padding:0.9rem 1.1rem 0.7rem;border-bottom:1px solid var(--border-light);gap:0.5rem;}
+    .oc-id{font-size:0.68rem;font-weight:600;color:var(--charcoal);display:flex;align-items:center;gap:4px;cursor:pointer;user-select:none;}
+    .oc-id:hover .ci{opacity:1;}
+    .ci{opacity:0;transition:opacity 0.2s;color:var(--gold);font-size:0.65rem;}
+    .oc-date{font-size:0.62rem;color:var(--text-mid);margin-top:2px;}
+    .sbadge{display:inline-flex;align-items:center;gap:3px;font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;padding:3px 9px;border-radius:50px;flex-shrink:0;}
+    .sbadge.pending{background:rgba(245,158,11,0.13);color:#b45309;}
+    .sbadge.review{background:rgba(99,102,241,0.13);color:#4338ca;}
+    .sbadge.shipped{background:rgba(14,165,233,0.13);color:#0369a1;}
+    .sbadge.delivered{background:rgba(16,185,129,0.13);color:#047857;}
+    .sbadge.cancelled{background:rgba(239,68,68,0.13);color:#b91c1c;}
+
+    .oc-customer{padding:0.7rem 1.1rem;border-bottom:1px solid var(--border-light);display:grid;grid-template-columns:1fr 1fr;gap:0.5rem 1rem;}
+    .cf{display:flex;flex-direction:column;gap:1px;}
+    .cl{font-size:0.56rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-mid);}
+    .cv{font-size:0.75rem;color:var(--charcoal);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .cv a{color:var(--gold-dark);text-decoration:none;}
+    .cv a:hover{text-decoration:underline;}
+
+    .oc-address{padding:0.5rem 1.1rem;border-bottom:1px solid var(--border-light);font-size:0.72rem;color:var(--text-mid);display:flex;align-items:flex-start;gap:0.4rem;}
+    .oc-items{padding:0.6rem 1.1rem;border-bottom:1px solid var(--border-light);}
+    .item-row{display:flex;justify-content:space-between;align-items:center;font-size:0.72rem;padding:2px 0;}
+    .item-n{color:var(--charcoal);display:flex;align-items:center;gap:4px;}
+    .item-q{color:var(--text-mid);font-size:0.64rem;}
+    .item-p{color:var(--gold-dark);font-weight:500;font-size:0.72rem;}
+
+    .oc-footer{padding:0.7rem 1.1rem;display:flex;align-items:center;justify-content:space-between;gap:0.6rem;}
+    .oc-total{font-size:0.75rem;font-weight:600;color:var(--charcoal);}
+    .oc-total span{color:var(--gold-dark);}
+    .status-sel{background:var(--card-elevated);border:1px solid var(--border-medium);color:var(--charcoal);font-size:0.68rem;padding:5px 9px;border-radius:10px;cursor:pointer;font-family:'Jost',sans-serif;outline:none;transition:border-color 0.2s;}
+    .status-sel:focus{border-color:var(--gold);}
+
+    .orders-empty{text-align:center;padding:3rem;color:var(--text-mid);}
+    .orders-empty i{font-size:2.5rem;color:var(--border-medium);display:block;margin-bottom:0.8rem;}
+    .orders-empty p{font-size:0.82rem;}
+
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--gold-dark);color:#fff;padding:0.65rem 1.4rem;border-radius:50px;font-size:0.78rem;opacity:0;transition:all 0.3s;z-index:9999;white-space:nowrap;pointer-events:none;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+    @media(max-width:720px){
+      .header-flex{padding:0.7rem 1rem;}
+      .main-wrap{padding:1.2rem 1rem;}
+      .nav-links-admin{display:none;}
+      .orders-grid{grid-template-columns:1fr;}
+      .stats-grid{grid-template-columns:repeat(2,1fr);}
+      .oc-customer{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<header>
+  <div class="header-flex">
+    <a href="index.html" class="logo">
+      <img src="is.png" alt="Rosa">
+      <h1>Rosa Fragrances</h1>
+    </a>
+    <div class="header-right">
+      <nav class="nav-links-admin">
+        <a href="adminadd.html">Ajouter produit</a>
+        <a href="existed.html">Produits existants</a>
+        <a href="adminorders.html" class="active">Commandes</a>
+      </nav>
+      <span class="admin-pill"><i class="fas fa-crown"></i> Admin</span>
+      <button class="icon-btn" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon" style="display:none;"></i></button>
+    </div>
+  </div>
+</header>
+
+<div id="accessDenied" class="access-denied">
+  <i class="fas fa-lock"></i>
+  <h2>Accès réservé</h2>
+  <p>Cette page est réservée aux administrateurs Rosa Fragrances.</p>
+  <a href="index.html"><i class="fas fa-arrow-left"></i> Retour à l'accueil</a>
+</div>
+
+<div id="authLoading" class="auth-loading">
+  <i class="fas fa-spinner fa-spin"></i>
+  <p style="font-size:0.8rem;">Vérification des accès...</p>
+</div>
+
+<div id="mainContent" class="main-wrap" style="display:none;">
+
+  <div class="stats-grid">
+    <div class="stat-card highlight">
+      <div class="stat-label">Chiffre d'affaires</div>
+      <div class="stat-value" id="sRevenue">—</div>
+      <div class="stat-sub">TND · expédiées + livrées</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total commandes</div>
+      <div class="stat-value" id="sTotal">—</div>
+      <div class="stat-sub">tous statuts confondus</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">En attente</div>
+      <div class="stat-value" id="sPending" style="color:#b45309;">—</div>
+      <div class="stat-sub">à traiter en priorité</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">En révision</div>
+      <div class="stat-value" id="sReview" style="color:#4338ca;">—</div>
+      <div class="stat-sub">en cours de vérification</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Expédiées</div>
+      <div class="stat-value" id="sShipped" style="color:#0369a1;">—</div>
+      <div class="stat-sub">en transit</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Livrées</div>
+      <div class="stat-value" id="sDelivered" style="color:#047857;">—</div>
+      <div class="stat-sub">avec succès</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Annulées</div>
+      <div class="stat-value" id="sCancelled" style="color:#b91c1c;">—</div>
+      <div class="stat-sub">au total</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="ID, nom, téléphone, email, adresse, produit...">
+    </div>
+    <div class="group-toggle">
+      <button class="g-btn active" onclick="setGroup('date',this)"><i class="fas fa-calendar-alt"></i> Par date</button>
+      <button class="g-btn" onclick="setGroup('city',this)"><i class="fas fa-map-marker-alt"></i> Par ville</button>
+      <button class="g-btn" onclick="setGroup('product',this)"><i class="fas fa-box"></i> Par produit</button>
+      <button class="g-btn" onclick="setGroup('none',this)"><i class="fas fa-list"></i> Liste simple</button>
+    </div>
+    <button class="refresh-btn" onclick="loadOrders(true)">
+      <i class="fas fa-sync-alt" id="refreshIcon"></i> Actualiser
+    </button>
+  </div>
+
+  <div class="status-tabs">
+    <button class="s-tab s-all active" onclick="setStatus('all',this)"><i class="fas fa-layer-group"></i> Toutes <span class="cnt" id="c-all">0</span></button>
+    <button class="s-tab s-pending" onclick="setStatus('pending',this)"><i class="fas fa-clock"></i> En attente <span class="cnt" id="c-pending">0</span></button>
+    <button class="s-tab s-review" onclick="setStatus('review',this)"><i class="fas fa-search"></i> En révision <span class="cnt" id="c-review">0</span></button>
+    <button class="s-tab s-shipped" onclick="setStatus('shipped',this)"><i class="fas fa-truck"></i> Expédiées <span class="cnt" id="c-shipped">0</span></button>
+    <button class="s-tab s-delivered" onclick="setStatus('delivered',this)"><i class="fas fa-check-circle"></i> Livrées <span class="cnt" id="c-delivered">0</span></button>
+    <button class="s-tab s-cancelled" onclick="setStatus('cancelled',this)"><i class="fas fa-times-circle"></i> Annulées <span class="cnt" id="c-cancelled">0</span></button>
+  </div>
+
+  <div id="ordersOut"></div>
+
+</div>
+
+<script>
+(function(){
+  const SB_URL  = 'https://dtwciuhwwanwlwpydeko.supabase.co';
+  const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
+  const ADMIN   = 'azmmeli146@gmail.com';
+  const sb      = window.supabase.createClient(SB_URL, SB_KEY);
+
+  let allOrders    = [];
+  let curStatus    = 'all';
+  let curGroup     = 'date';
+  let searchQ      = '';
+
+  const SL = { pending:'En attente', review:'En révision', shipped:'Expédiée', delivered:'Livrée', cancelled:'Annulée' };
+  const SI = { pending:'fa-clock', review:'fa-search', shipped:'fa-truck', delivered:'fa-check-circle', cancelled:'fa-times-circle' };
+
+  // ─── Auth guard ───────────────────────────────────────────────
+  async function boot(){
+    try{
+      const { data:{ user } } = await sb.auth.getUser();
+      hide('authLoading');
+      if(!user || user.email !== ADMIN){ show('accessDenied'); return; }
+      show('mainContent');
+      await loadOrders();
+    } catch(e){ hide('authLoading'); show('accessDenied'); }
+  }
+
+  // ─── Load orders ──────────────────────────────────────────────
+  async function loadOrders(manual=false){
+    const ico = document.getElementById('refreshIcon');
+    ico.classList.add('fa-spin');
+    try{
+      const { data, error } = await sb.from('orders').select('*').order('created_at',{ ascending:false });
+      if(error) throw error;
+      allOrders = data || [];
+      refreshStats();
+      refreshCounts();
+      render();
+      if(manual) toast('✅ Commandes actualisées');
+    } catch(e){ console.error(e); toast('❌ Erreur de chargement'); }
+    finally{ ico.classList.remove('fa-spin'); }
+  }
+  window.loadOrders = loadOrders;
+
+  // ─── Stats ────────────────────────────────────────────────────
+  function refreshStats(){
+    const rev = allOrders.filter(o=>['shipped','delivered'].includes(o.status)).reduce((s,o)=>s+(parseFloat(o.total)||0),0);
+    setText('sRevenue',  rev.toFixed(3).replace('.',','));
+    setText('sTotal',    allOrders.length);
+    setText('sPending',  allOrders.filter(o=>o.status==='pending').length);
+    setText('sReview',   allOrders.filter(o=>o.status==='review').length);
+    setText('sShipped',  allOrders.filter(o=>o.status==='shipped').length);
+    setText('sDelivered',allOrders.filter(o=>o.status==='delivered').length);
+    setText('sCancelled',allOrders.filter(o=>o.status==='cancelled').length);
+  }
+
+  // ─── Tab counts ───────────────────────────────────────────────
+  function refreshCounts(){
+    ['all','pending','review','shipped','delivered','cancelled'].forEach(s=>{
+      const el = document.getElementById('c-'+s);
+      if(el) el.textContent = s==='all' ? allOrders.length : allOrders.filter(o=>o.status===s).length;
+    });
+  }
+
+  // ─── Filter + search ──────────────────────────────────────────
+  function filtered(){
+    let list = curStatus==='all' ? allOrders : allOrders.filter(o=>o.status===curStatus);
+    if(searchQ.trim()){
+      const q = searchQ.toLowerCase();
+      list = list.filter(o=>[
+        o.id, o.customer_name, o.customer_phone, o.customer_email, o.shipping_address,
+        ...(o.items||[]).map(i=>i.name)
+      ].some(v=>(v||'').toLowerCase().includes(q)));
+    }
+    return list;
+  }
+
+  // ─── Grouping ─────────────────────────────────────────────────
+  function groupDate(orders){
+    const now=new Date(), td=now.toDateString(), yd=new Date(now-864e5).toDateString(), wa=new Date(now-7*864e5), ma=new Date(now-30*864e5);
+    const G={"Aujourd'hui":[],"Hier":[],"Cette semaine":[],"Ce mois":[],"Plus ancien":[]};
+    orders.forEach(o=>{ const d=new Date(o.created_at),ds=d.toDateString();
+      if(ds===td) G["Aujourd'hui"].push(o);
+      else if(ds===yd) G["Hier"].push(o);
+      else if(d>=wa) G["Cette semaine"].push(o);
+      else if(d>=ma) G["Ce mois"].push(o);
+      else G["Plus ancien"].push(o);
+    });
+    return Object.entries(G).filter(([,v])=>v.length);
+  }
+
+  function groupCity(orders){
+    const M={};
+    orders.forEach(o=>{
+      const addr = o.shipping_address || '';
+      // Try last comma-separated part, fallback to last word
+      const parts = addr.split(',').map(s=>s.trim()).filter(Boolean);
+      const city  = parts.length>1 ? parts[parts.length-1] : (parts[0]||'Ville inconnue');
+      if(!M[city]) M[city]=[];
+      M[city].push(o);
+    });
+    return Object.entries(M).sort((a,b)=>b[1].length-a[1].length);
+  }
+
+  function groupProduct(orders){
+    const M={};
+    orders.forEach(o=>{
+      const names=[...new Set((o.items||[]).map(i=>i.name).filter(Boolean))];
+      names.forEach(name=>{ if(!M[name]) M[name]=[]; if(!M[name].find(x=>x.id===o.id)) M[name].push(o); });
+    });
+    return Object.entries(M).sort((a,b)=>b[1].length-a[1].length);
+  }
+
+  // ─── Render ───────────────────────────────────────────────────
+  function render(){
+    const out = document.getElementById('ordersOut');
+    const list = filtered();
+    if(!list.length){
+      out.innerHTML=`<div class="orders-empty"><i class="fas fa-box-open"></i><p>Aucune commande trouvée pour cette recherche.</p></div>`;
+      return;
+    }
+    if(curGroup==='none'){
+      out.innerHTML=`<div class="orders-grid">${list.map(card).join('')}</div>`;
+    } else {
+      const groups = curGroup==='date' ? groupDate(list) : curGroup==='city' ? groupCity(list) : groupProduct(list);
+      out.innerHTML = groups.map(([label,orders])=>`
+        <div class="group-section">
+          <div class="group-header">
+            <h3>${esc(label)}</h3>
+            <span class="group-badge">${orders.length} commande${orders.length>1?'s':''}</span>
+          </div>
+          <div class="orders-grid">${orders.map(card).join('')}</div>
+        </div>`).join('');
+    }
+  }
+
+  // ─── Order card ───────────────────────────────────────────────
+  function card(o){
+    const date = new Date(o.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    const shortId = (o.id||'').slice(0,8).toUpperCase();
+    const items = (o.items||[]).map(i=>`
+      <div class="item-row">
+        <span class="item-n"><i class="fas fa-crown" style="color:var(--gold);font-size:0.6rem;"></i>${esc(i.name)} <span class="item-q">×${i.quantity}</span></span>
+        <span class="item-p">${(i.price*i.quantity).toFixed(3).replace('.',',')} TND</span>
+      </div>`).join('') || `<div class="item-row"><span style="color:var(--text-mid);font-size:0.72rem;">Aucun article</span></div>`;
+    return `
+    <div class="order-card">
+      <div class="oc-header">
+        <div>
+          <div class="oc-id" onclick="copyId('${o.id}')" title="Copier l'ID complet">
+            <i class="fas fa-receipt" style="color:var(--gold);font-size:0.7rem;"></i>
+            #${shortId}…<i class="fas fa-copy ci"></i>
+          </div>
+          <div class="oc-date"><i class="fas fa-calendar-alt" style="font-size:0.58rem;"></i> ${date}</div>
+        </div>
+        <span class="sbadge ${o.status}"><i class="fas ${SI[o.status]||'fa-circle'}"></i> ${SL[o.status]||o.status}</span>
+      </div>
+      <div class="oc-customer">
+        <div class="cf"><span class="cl"><i class="fas fa-user"></i> Client</span><span class="cv">${esc(o.customer_name||'—')}</span></div>
+        <div class="cf"><span class="cl"><i class="fas fa-phone"></i> Tél</span><span class="cv"><a href="tel:${esc(o.customer_phone||'')}">${esc(o.customer_phone||'—')}</a></span></div>
+        <div class="cf"><span class="cl"><i class="fas fa-envelope"></i> Email</span><span class="cv"><a href="mailto:${esc(o.customer_email||'')}" title="${esc(o.customer_email||'')}">${esc((o.customer_email||'—').split('@')[0])}@…</a></span></div>
+        <div class="cf"><span class="cl"><i class="fas fa-box"></i> Articles</span><span class="cv">${(o.items||[]).length} art.</span></div>
+      </div>
+      <div class="oc-address"><i class="fas fa-map-marker-alt" style="color:var(--gold);margin-top:1px;flex-shrink:0;"></i><span>${esc(o.shipping_address||'—')}</span></div>
+      <div class="oc-items">${items}</div>
+      <div class="oc-footer">
+        <div class="oc-total">Total : <span>${parseFloat(o.total||0).toFixed(3).replace('.',',')} TND</span></div>
+        <select class="status-sel" onchange="updateStatus('${o.id}',this.value)">
+          <option value="pending"   ${o.status==='pending'   ?'selected':''}>⏳ En attente</option>
+          <option value="review"    ${o.status==='review'    ?'selected':''}>🔍 En révision</option>
+          <option value="shipped"   ${o.status==='shipped'   ?'selected':''}>🚚 Expédiée</option>
+          <option value="delivered" ${o.status==='delivered' ?'selected':''}>✅ Livrée</option>
+          <option value="cancelled" ${o.status==='cancelled' ?'selected':''}>❌ Annulée</option>
+        </select>
+      </div>
+    </div>`;
+  }
+
+  // ─── Update status ────────────────────────────────────────────
+  window.updateStatus = async function(id, newStatus){
+    try{
+      const { error } = await sb.from('orders').update({ status:newStatus }).eq('id',id);
+      if(error) throw error;
+      const o = allOrders.find(x=>x.id===id);
+      if(o) o.status = newStatus;
+      refreshStats(); refreshCounts(); render();
+      toast('✅ Statut → '+SL[newStatus]);
+    } catch(e){ console.error(e); toast('❌ Erreur de mise à jour'); }
+  };
+
+  // ─── Copy ID ──────────────────────────────────────────────────
+  window.copyId = function(id){
+    navigator.clipboard.writeText(id).then(()=>toast('📋 ID copié'));
+  };
+
+  // ─── Controls ─────────────────────────────────────────────────
+  window.setStatus = function(s,btn){
+    curStatus = s;
+    document.querySelectorAll('.s-tab').forEach(b=>b.classList.remove('active'));
+    if(btn) btn.classList.add('active');
+    render();
+  };
+  window.setGroup = function(g,btn){
+    curGroup = g;
+    document.querySelectorAll('.g-btn').forEach(b=>b.classList.remove('active'));
+    if(btn) btn.classList.add('active');
+    render();
+  };
+
+  let searchT;
+  document.getElementById('searchInput').addEventListener('input', e=>{
+    clearTimeout(searchT);
+    searchT = setTimeout(()=>{ searchQ=e.target.value; render(); }, 220);
+  });
+
+  // ─── Helpers ──────────────────────────────────────────────────
+  function esc(s){ return (s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  function setText(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
+  function show(id){ const el=document.getElementById(id); if(el) el.style.display=''; }
+  function hide(id){ const el=document.getElementById(id); if(el) el.style.display='none'; }
+
+  function toast(msg){
+    const t=document.getElementById('toast');
+    t.textContent=msg; t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),2500);
+  }
+
+  // ─── Theme ────────────────────────────────────────────────────
+  (function initTheme(){
+    if(localStorage.getItem('theme')==='dark'){
+      document.body.classList.add('dark');
+      document.querySelector('#themeToggle .fa-sun').style.display='none';
+      document.querySelector('#themeToggle .fa-moon').style.display='inline-block';
+    }
+  })();
+  document.getElementById('themeToggle').addEventListener('click',()=>{
+    const dark = document.body.classList.toggle('dark');
+    localStorage.setItem('theme', dark?'dark':'light');
+    document.querySelector('#themeToggle .fa-sun').style.display  = dark?'none':'inline-block';
+    document.querySelector('#themeToggle .fa-moon').style.display = dark?'inline-block':'none';
+  });
+
+  boot();
+})();
+</script>
+</body>
+</html>
