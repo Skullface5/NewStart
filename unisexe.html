@@ -1967,41 +1967,34 @@
             function openCart() { cartSidebar?.classList.add('open'); cartOverlay?.classList.add('active'); document.body.style.overflow = 'hidden'; }
             function closeCart() { cartSidebar?.classList.remove('open'); cartOverlay?.classList.remove('active'); document.body.style.overflow = ''; }
 
-            const PRODUCTS_CACHE_KEY = 'RosaFragrances_products_unisexe';
-            const PRODUCTS_CACHE_TTL = 5 * 60 * 1000;
-            function getCachedProducts() {
-                try { const r = localStorage.getItem(PRODUCTS_CACHE_KEY); if (!r) return null; const { timestamp, data } = JSON.parse(r); return Date.now() - timestamp > PRODUCTS_CACHE_TTL ? null : data; } catch (e) { return null; }
-            }
-            function setCachedProducts(data) {
-                try { localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data })); } catch (e) {}
-            }
-            function processProducts(data) {
-                return (data || []).map(p => {
-                    let firstImage = '';
-                    if (p.images) { try { const a = typeof p.images === 'string' ? JSON.parse(p.images) : p.images; firstImage = Array.isArray(a) ? a[0] || '' : ''; } catch (e) {} }
-                    if (!firstImage && p.image) firstImage = p.image;
-                    return { ...p, image: firstImage };
-                });
-            }
             async function loadProducts() {
-                const cached = getCachedProducts();
-                if (cached) {
-                    products = cached; populateBrandFilter(); applyFiltersAndSort();
-                    if (loadingEl) loadingEl.style.display = 'none';
-                    supabase.from('products').select('*').eq('category', 'unisexe').order('created_at', { ascending: true }).then(({ data, error }) => {
-                        if (!error && data) { const fresh = processProducts(data); setCachedProducts(fresh); products = fresh; populateBrandFilter(); applyFiltersAndSort(); }
-                    });
-                    return;
-                }
                 if (loadingEl) loadingEl.style.display = 'block';
                 try {
-                    const { data, error } = await supabase.from('products').select('*').eq('category', 'unisexe').order('created_at', { ascending: true });
+                    const { data, error } = await supabase
+                        .from('products')
+                        .select('*')
+                        .eq('category', 'unisexe')
+                        .order('created_at', { ascending: true });
                     if (error) throw error;
-                    products = processProducts(data); setCachedProducts(products); populateBrandFilter(); applyFiltersAndSort();
+                    products = (data || []).map(p => {
+                        let firstImage = '';
+                        if (p.images) {
+                            try {
+                                const imgArr = typeof p.images === 'string' ? JSON.parse(p.images) : p.images;
+                                firstImage = Array.isArray(imgArr) ? imgArr[0] || '' : '';
+                            } catch (e) { firstImage = ''; }
+                        }
+                        if (!firstImage && p.image) firstImage = p.image;
+                        return { ...p, image: firstImage };
+                    });
+                    populateBrandFilter();
+                    applyFiltersAndSort();
                 } catch (err) {
                     console.error(err);
                     if (productGrid) productGrid.innerHTML = `<div class="empty-cart-message">${translations[currentLanguage].errorLoading}<br><button onclick="location.reload()" style="margin-top:0.8rem;padding:0.4rem 0.8rem;background:var(--gold);color:white;border:none;border-radius:50px;font-size:0.7rem;">${translations[currentLanguage].reload}</button></div>`;
-                } finally { if (loadingEl) loadingEl.style.display = 'none'; }
+                } finally {
+                    if (loadingEl) loadingEl.style.display = 'none';
+                }
             }
 
             function renderProducts() {
@@ -2184,7 +2177,7 @@
             document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
 
             translatePage(currentLanguage);
-            loadProducts(); saveCart(); supabase.auth.refreshSession();
+            supabase.auth.refreshSession().then(() => { loadProducts(); saveCart(); });
 
             const revealElements = document.querySelectorAll('.reveal-on-scroll');
             const observer = new IntersectionObserver((entries) => {
@@ -2219,6 +2212,15 @@
             initTheme();
         });
     </script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then(reg => {
+      console.log('Service Worker registered', reg);
+    }).catch(err => {
+      console.warn('Service Worker registration failed', err);
+    });
+  }
+</script>
 </body>
 
 </html>
