@@ -63,7 +63,6 @@
       line-height: 1.5;
     }
 
-    /* Dark mode overrides */
     body.dark {
       --cream: #1A1814;
       --cream-dark: #24201A;
@@ -96,15 +95,12 @@
         opacity: 0;
         transform: translateY(100vh) rotate(0deg) scale(0);
       }
-
       20% {
         opacity: 0.1;
       }
-
       80% {
         opacity: 0.1;
       }
-
       100% {
         opacity: 0;
         transform: translateY(-20vh) rotate(360deg) scale(1.2);
@@ -119,7 +115,6 @@
       z-index: 10;
     }
 
-    /* Header */
     header {
       background: rgba(247, 240, 230, 0.92);
       backdrop-filter: blur(12px);
@@ -315,7 +310,6 @@
       color: var(--gold-dark);
     }
 
-    /* ===== SEARCH BAR WITH DROPDOWN STYLES ===== */
     .search-section {
       margin-bottom: 2rem;
       position: relative;
@@ -363,7 +357,6 @@
       font-size: 0.85rem;
     }
 
-    /* Search Dropdown */
     .search-dropdown {
       position: absolute;
       top: 100%;
@@ -390,7 +383,6 @@
         opacity: 0;
         transform: translateY(-10px);
       }
-
       to {
         opacity: 1;
         transform: translateY(0);
@@ -478,28 +470,23 @@
       .search-wrapper {
         max-width: 100%;
       }
-
       .search-wrapper input {
         padding: 0.7rem 1rem 0.7rem 2.8rem;
         font-size: 0.85rem;
       }
-
       .search-wrapper i {
         left: 1rem;
         font-size: 0.9rem;
       }
-
       .search-result-img {
         width: 40px;
         height: 40px;
       }
-
       .search-result-name {
         font-size: 0.85rem;
       }
     }
 
-    /* ===== PROMO CARD STYLES ===== */
     .promo-card-section {
       margin-bottom: 2rem;
       position: relative;
@@ -676,7 +663,6 @@
         opacity: 0;
         transform: translateY(30px);
       }
-
       to {
         opacity: 1;
         transform: translateY(0);
@@ -689,7 +675,6 @@
         transform: scaleX(0);
         transform-origin: left;
       }
-
       to {
         opacity: 1;
         transform: scaleX(1);
@@ -701,21 +686,17 @@
       .promo-content-left {
         padding: 1.5rem 2rem;
       }
-
       .promo-title-main,
       .promo-title-secondary {
         font-size: 2rem;
       }
-
       .ampersand-symbol {
         font-size: 1.4rem;
       }
-
       .btn-promo {
         padding: 0.6rem 1.5rem;
         font-size: 0.75rem;
       }
-
       .promo-divider-left {
         margin: 0.8rem 0 1.2rem 0;
       }
@@ -725,28 +706,23 @@
       .promo-content-left {
         padding: 1rem 1.5rem;
       }
-
       .promo-title-main,
       .promo-title-secondary {
         font-size: 1.5rem;
       }
-
       .ampersand-symbol {
         font-size: 1.2rem;
       }
-
       .promo-divider-left {
         width: 60px;
         margin: 0.6rem 0 1rem 0;
       }
-
       .btn-promo {
         padding: 0.5rem 1.2rem;
         font-size: 0.65rem;
       }
     }
 
-    /* ===== TT HERO SECTION ===== */
     .hero-tt {
       min-height: 70vh;
       display: flex;
@@ -868,14 +844,12 @@
         opacity: 0;
         transform: translateY(22px);
       }
-
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
 
-    /* ===== PRODUCTS SECTION WITH TABS ===== */
     .products-section {
       margin: 0 0 2rem 0;
     }
@@ -910,7 +884,6 @@
       color: var(--gold-dark);
     }
 
-    /* Tabs / Onglets */
     .tabs {
       display: flex;
       gap: 4px;
@@ -938,14 +911,12 @@
       border-color: var(--gold-dark);
     }
 
-    /* Product Grid */
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 2fr));
       gap: 1.5rem;
     }
 
-    /* Force minimum 2 columns on all screen sizes */
     @media (max-width: 540px) {
       .product-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -1064,7 +1035,6 @@
       border-color: var(--gold-dark);
     }
 
-    /* Cart Sidebar */
     .cart-overlay {
       position: fixed;
       top: 0;
@@ -1209,7 +1179,6 @@
       transform: translateY(-2px);
     }
 
-    /* Modals */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -1334,7 +1303,6 @@
       color: var(--gold);
     }
 
-    /* Footer */
     footer {
       background: var(--charcoal);
       color: rgba(247, 240, 230, 0.65);
@@ -1475,7 +1443,6 @@
         grid-template-columns: 1fr 1fr;
         gap: 30px;
       }
-
       .footer-brand {
         grid-column: 1/-1;
       }
@@ -1485,11 +1452,9 @@
       .footer-top {
         grid-template-columns: 1fr;
       }
-
       footer {
         padding: 40px 18px 22px;
       }
-
       .footer-bottom {
         flex-direction: column;
         text-align: center;
@@ -1525,24 +1490,19 @@
         padding: 60px 20px 40px;
         margin: 1rem 0;
       }
-
       .hero-logo-tt {
         width: 100px;
         height: 100px;
       }
-
       .container {
         padding: 1rem;
       }
-
       .logo h1 {
         font-size: 0.9rem;
       }
-
       .logo img {
         width: 36px;
       }
-
       .products-header {
         flex-direction: column;
         align-items: flex-start;
@@ -1575,39 +1535,28 @@
   <div id="checkoutModal" class="modal-overlay">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 style="font-weight:400;font-size:1.1rem;"><i class="fas fa-truck"></i> <span
-            data-translate="delivery">Livraison</span></h3>
+        <h3 style="font-weight:400;font-size:1.1rem;"><i class="fas fa-truck"></i> <span data-translate="delivery">Livraison</span></h3>
         <button class="close-modal" onclick="closeCheckoutModal()"><i class="fas fa-times"></i></button>
       </div>
       <div style="padding:1.2rem;">
         <form id="checkoutForm">
-          <div class="form-group"><label data-translate="fullName">Nom complet *</label><input type="text"
-              id="customerName" required></div>
-          <div class="form-group"><label data-translate="phone">Téléphone *</label><input type="tel" id="customerPhone"
-              required></div>
-          <div id="emailFieldGroup" class="form-group"><label data-translate="email">Email *</label><input type="email"
-              id="customerEmail"></div>
-          <div id="loggedInEmailDisplay" style="display:none;" class="form-group"><label
-              data-translate="email">Email</label>
-            <div style="padding:0.7rem;background:var(--cream-deep);border-radius:14px;"><i
-                class="fas fa-check-circle"></i> <span id="displayEmail"></span></div>
+          <div class="form-group"><label data-translate="fullName">Nom complet *</label><input type="text" id="customerName" required></div>
+          <div class="form-group"><label data-translate="phone">Téléphone *</label><input type="tel" id="customerPhone" required></div>
+          <div id="emailFieldGroup" class="form-group"><label data-translate="email">Email *</label><input type="email" id="customerEmail"></div>
+          <div id="loggedInEmailDisplay" style="display:none;" class="form-group"><label data-translate="email">Email</label>
+            <div style="padding:0.7rem;background:var(--cream-deep);border-radius:14px;"><i class="fas fa-check-circle"></i> <span id="displayEmail"></span></div>
           </div>
-          <div class="form-group"><label data-translate="address">Adresse *</label><input type="text"
-              id="shippingAddress" required></div>
+          <div class="form-group"><label data-translate="address">Adresse *</label><input type="text" id="shippingAddress" required></div>
           <div style="background:var(--cream-deep);padding:0.8rem;border-radius:18px;margin:0.8rem 0;">
-            <h4 style="margin-bottom:0.5rem;font-weight:400;font-size:0.9rem;" data-translate="yourOrder">
-              Votre commande</h4>
+            <h4 style="margin-bottom:0.5rem;font-weight:400;font-size:0.9rem;" data-translate="yourOrder">Votre commande</h4>
             <div id="modalCartItems" style="font-size:0.8rem;"></div>
-            <div
-              style="display:flex;justify-content:space-between;margin-top:0.6rem;padding-top:0.6rem;border-top:1px solid var(--border-light);">
+            <div style="display:flex;justify-content:space-between;margin-top:0.6rem;padding-top:0.6rem;border-top:1px solid var(--border-light);">
               <span data-translate="total">Total</span><span id="modalTotal">0 TND</span>
             </div>
           </div>
           <div style="display:flex;gap:10px;margin-top:0.8rem;">
-            <button type="button" class="btn-secondary-modal" onclick="closeCheckoutModal()" style="font-size:0.8rem;"
-              data-translate="cancel">Annuler</button>
-            <button type="submit" class="btn-primary-modal" id="submitOrderBtn" style="font-size:0.8rem;"
-              data-translate="confirm">Confirmer</button>
+            <button type="button" class="btn-secondary-modal" onclick="closeCheckoutModal()" style="font-size:0.8rem;" data-translate="cancel">Annuler</button>
+            <button type="submit" class="btn-primary-modal" id="submitOrderBtn" style="font-size:0.8rem;" data-translate="confirm">Confirmer</button>
           </div>
         </form>
       </div>
@@ -1617,17 +1566,13 @@
   <div id="productModal" class="modal-overlay">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 id="productModalTitle" style="font-weight:400;font-size:1rem;"><i class="fas fa-info-circle"></i>
-          <span data-translate="details">Détails</span>
-        </h3>
+        <h3 id="productModalTitle" style="font-weight:400;font-size:1rem;"><i class="fas fa-info-circle"></i> <span data-translate="details">Détails</span></h3>
         <button class="close-modal" onclick="closeProductModal()"><i class="fas fa-times"></i></button>
       </div>
       <div id="productModalBody" style="padding:1.2rem;text-align:center;"></div>
       <div style="display:flex;gap:10px;padding:0.8rem 1.2rem 1.2rem;border-top:1px solid var(--border-light);">
-        <button class="btn-secondary-modal" onclick="closeProductModal()" style="font-size:0.8rem;"
-          data-translate="close">Fermer</button>
-        <button class="btn-primary-modal" id="modalAddToCartBtn" style="font-size:0.8rem;"
-          data-translate="addToCart">Ajouter</button>
+        <button class="btn-secondary-modal" onclick="closeProductModal()" style="font-size:0.8rem;" data-translate="close">Fermer</button>
+        <button class="btn-primary-modal" id="modalAddToCartBtn" style="font-size:0.8rem;" data-translate="addToCart">Ajouter</button>
       </div>
     </div>
   </div>
@@ -1635,20 +1580,15 @@
   <div id="cartOverlay" class="cart-overlay"></div>
   <aside id="cartSidebar" class="cart-sidebar">
     <div class="cart-header">
-      <h3 style="font-weight:400;font-size:1rem;"><i class="fas fa-bag-shopping"></i> <span
-          data-translate="cart">Panier</span></h3>
-      <button class="close-cart" id="closeCartBtn"
-        style="background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-mid);"><i
-          class="fas fa-times"></i></button>
+      <h3 style="font-weight:400;font-size:1rem;"><i class="fas fa-bag-shopping"></i> <span data-translate="cart">Panier</span></h3>
+      <button class="close-cart" id="closeCartBtn" style="background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-mid);"><i class="fas fa-times"></i></button>
     </div>
     <div id="cartItemsContainer" class="cart-items">
       <div class="empty-cart-message" data-translate="emptyCart">Votre panier est vide.</div>
     </div>
     <div class="cart-footer">
-      <div class="cart-total"><span data-translate="total">Total</span><span id="cartTotalPrice">0,000 TND</span>
-      </div>
-      <button class="checkout-btn" id="checkoutBtn" style="font-size:0.8rem;"><span
-          data-translate="payment">PAIEMENT</span> <i class="fas fa-arrow-right"></i></button>
+      <div class="cart-total"><span data-translate="total">Total</span><span id="cartTotalPrice">0,000 TND</span></div>
+      <button class="checkout-btn" id="checkoutBtn" style="font-size:0.8rem;"><span data-translate="payment">PAIEMENT</span> <i class="fas fa-arrow-right"></i></button>
     </div>
   </aside>
 
@@ -1658,10 +1598,8 @@
         <h1>Rosa Fragrances</h1>
       </a>
       <div style="display:flex;align-items:center;gap:2px;">
-        <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon"
-            style="display:none;"></i></div>
-        <div class="cart-icon" id="cartToggle"><i class="fas fa-bag-shopping"></i><span id="cartCount"
-            class="cart-count">0</span></div>
+        <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon" style="display:none;"></i></div>
+        <div class="cart-icon" id="cartToggle"><i class="fas fa-bag-shopping"></i><span id="cartCount" class="cart-count">0</span></div>
         <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
       </div>
       <div class="nav-links" id="navLinks">
@@ -1670,8 +1608,7 @@
         <a href="unisexe.html" data-translate="unisex">UNISEXE</a>
         <a href="kids.html" data-translate="kids">ENFANTS</a>
         <div class="lang-menu" id="langMenu">
-          <button class="lang-current" id="langCurrentBtn"><span id="currentLangText">FRANÇAIS</span><i
-              class="fas fa-chevron-down"></i></button>
+          <button class="lang-current" id="langCurrentBtn"><span id="currentLangText">FRANÇAIS</span><i class="fas fa-chevron-down"></i></button>
           <div class="lang-options">
             <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
             <button class="lang-option" data-lang="en">🇬🇧 English</button>
@@ -1680,29 +1617,24 @@
         </div>
         <a href="login146.html" id="authLink" data-translate="login">Se connecter</a>
         <a href="profile.html" id="profileLink" style="display:none;" data-translate="profile">Mon Profil</a>
-        <a href="adminadd.html" id="adminLink" style="display:none;" class="admin-nav-link"><i class="fas fa-crown"></i>
-          Admin</a>
+        <a href="adminadd.html" id="adminLink" style="display:none;" class="admin-nav-link"><i class="fas fa-crown"></i> Admin</a>
       </div>
     </div>
   </header>
 
   <main class="container">
-    <!-- SEARCH BAR WITH DROPDOWN -->
     <div class="search-section reveal-on-scroll">
       <div class="search-wrapper">
         <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Rechercher un parfum..." data-translate="searchPlaceholder"
-          autocomplete="off">
+        <input type="text" id="searchInput" placeholder="Rechercher un parfum..." data-translate="searchPlaceholder" autocomplete="off">
         <div id="searchDropdown" class="search-dropdown"></div>
       </div>
     </div>
 
-    <!-- 1. PROMO CARD -->
     <div class="promo-card-section reveal-on-scroll">
       <div class="promo-card-wrapper">
         <div class="promo-card-inner">
-          <img src="https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/card.jpg"
-            alt="Gaultier Divine & Le Male Elixir" class="promo-bg-image">
+          <img src="https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/card.jpg" alt="Gaultier Divine & Le Male Elixir" class="promo-bg-image" onerror="this.onerror=null;this.src='https://via.placeholder.com/1200x675?text=Rosa+Fragrances';">
           <div class="promo-overlay-gradient"></div>
           <div class="promo-content-left">
             <h1 class="promo-title-main">
@@ -1716,35 +1648,29 @@
             </h1>
             <div class="promo-divider-left"></div>
             <div class="promo-cta-left">
-              <a href="#" class="btn-promo btn-promo-primary"
-                onclick="document.querySelector('.products-section').scrollIntoView({behavior:'smooth'}); return false;">Découvrir</a>
+              <a href="#" class="btn-promo btn-promo-primary" onclick="document.querySelector('.products-section').scrollIntoView({behavior:'smooth'}); return false;">Découvrir</a>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 2. HERO SECTION -->
     <div class="hero-tt reveal-on-scroll">
       <img class="hero-logo-tt" src="is.png" alt="Rosa Fragrances Logo">
       <h1>L'Art du <em>Parfum</em><br>Oriental</h1>
       <p class="hero-sub-tt">Collection exclusive · Tunisie</p>
       <div class="divider-tt"></div>
       <div class="hero-cta-tt">
-        <a href="#" class="btn-tt btn-primary-tt"
-          onclick="document.getElementById('foots').scrollIntoView({behavior:'smooth'}); return false;">Contactez-nous</a>
-        <a href="#" class="btn-tt btn-outline-tt"
-          onclick="document.querySelector('.products-section').scrollIntoView({behavior:'smooth'}); return false;">Collection</a>
+        <a href="#" class="btn-tt btn-primary-tt" onclick="document.getElementById('foots').scrollIntoView({behavior:'smooth'}); return false;">Contactez-nous</a>
+        <a href="#" class="btn-tt btn-outline-tt" onclick="document.querySelector('.products-section').scrollIntoView({behavior:'smooth'}); return false;">Collection</a>
       </div>
     </div>
 
-    <!-- 3. PRODUCTS SECTION WITH TABS -->
     <div class="products-section reveal-on-scroll">
       <div class="products-header">
         <div>
           <p class="section-label" data-translate="collectionLabel">Notre Collection</p>
-          <h2 class="section-title" data-translate="collectionTitle">Parfums <em
-              data-translate="exclusive">Exclusifs</em></h2>
+          <h2 class="section-title" data-translate="collectionTitle">Parfums <em data-translate="exclusive">Exclusifs</em></h2>
         </div>
         <div class="tabs">
           <button class="tab active" onclick="filterProducts('all')" data-translate="allTab">Tous</button>
@@ -1756,25 +1682,20 @@
       </div>
     </div>
 
-    <!-- Loading Spinner -->
     <div id="loadingProducts" class="loading-spinner" style="display:none;"><i class="fas fa-spinner fa-spin"></i>
       <p style="margin-top:0.3rem;font-size:0.8rem;" data-translate="loading">Chargement...</p>
     </div>
 
-    <!-- 4. PRODUCT GRID -->
     <div class="product-grid reveal-on-scroll" id="productGrid"></div>
   </main>
 
-  <!-- FOOTER -->
   <footer>
     <div class="footer-inner">
       <div class="footer-top">
         <div class="footer-brand">
           <img class="footer-logo-img" src="is.png" alt="Rosa">
           <h3>ROSA FRAGRANCES</h3>
-          <p data-translate="footerDescription">Nous vous proposons un univers de parfums luxueux, aux
-            senteurs élégantes et spontanées, qui touchent les émotions et laissent une impression durable.
-          </p>
+          <p data-translate="footerDescription">Nous vous proposons un univers de parfums luxueux, aux senteurs élégantes et spontanées, qui touchent les émotions et laissent une impression durable.</p>
         </div>
         <div class="footer-col">
           <h4 data-translate="footerPerfumesTitle">Parfums</h4>
@@ -1793,8 +1714,7 @@
             <li><span class="ic">📞</span> <span data-translate="footerPhone">+216 96 163 366</span></li>
             <li><span class="ic">✉️</span> <span data-translate="footerEmail">contact@rosafragrances.tn</span></li>
             <div class="socials">
-              <a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/" class="social"
-                target="_blank"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/" class="social" target="_blank"><i class="fab fa-facebook-f"></i></a>
               <a href="https://wa.me/21696163366" class="social" target="_blank"><i class="fab fa-whatsapp"></i></a>
             </div>
           </ul>
@@ -1807,7 +1727,6 @@
   </footer>
 
   <script>
-    // Main application
     (function () {
       const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co',
         SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
@@ -1880,7 +1799,7 @@
             else el.textContent = translations[lang][key];
           }
         });
-        if (typeof renderProducts === 'function' && allProductsData.length > 0) renderProducts();
+        if (typeof renderProducts === 'function') renderProducts();
         if (typeof renderCart === 'function') renderCart();
       }
 
@@ -1901,6 +1820,7 @@
       const menuOverlay = document.getElementById('menuOverlay');
       const searchInput = document.getElementById('searchInput');
       const searchDropdown = document.getElementById('searchDropdown');
+      const searchWrapper = document.querySelector('.search-wrapper'); // ✅ moved here
 
       function showToast(msgKey, productName = '') {
         if (!toast) return;
@@ -1978,29 +1898,23 @@
         renderProducts();
       };
 
-      // Search dropdown functionality
       function updateSearchDropdown() {
         const searchTerm = searchInput?.value.toLowerCase().trim() || '';
-
         if (!searchTerm || searchTerm.length < 2) {
-          searchDropdown.classList.remove('show');
-          searchDropdown.innerHTML = '';
+          if (searchDropdown) searchDropdown.classList.remove('show');
+          if (searchDropdown) searchDropdown.innerHTML = '';
           return;
         }
-
         const matchingProducts = allProductsData.filter(product =>
           product.name.toLowerCase().includes(searchTerm) ||
           product.brand.toLowerCase().includes(searchTerm)
-        ).slice(0, 8); // Limit to 8 results
-
+        ).slice(0, 8);
         if (matchingProducts.length === 0) {
-          searchDropdown.innerHTML = `<div class="search-no-results">Aucun parfum trouvé pour "${escapeHtml(searchTerm)}"</div>`;
-          searchDropdown.classList.add('show');
+          if (searchDropdown) searchDropdown.innerHTML = `<div class="search-no-results">Aucun parfum trouvé pour "${escapeHtml(searchTerm)}"</div>`;
+          if (searchDropdown) searchDropdown.classList.add('show');
           return;
         }
-
         const categoryNames = { man: 'Homme', women: 'Femme', unisexe: 'Unisexe', kids: 'Enfants' };
-
         let html = '';
         matchingProducts.forEach(product => {
           let firstImage = '';
@@ -2011,10 +1925,8 @@
             } catch (e) { firstImage = ''; }
           }
           if (!firstImage && product.image) firstImage = product.image;
-
           const imgHtml = firstImage ? `<img src="${firstImage}" alt="${escapeHtml(product.name)}">` : `<i class="fas fa-crown"></i>`;
           const categoryName = categoryNames[product.category] || product.category;
-
           html += `
             <div class="search-result-item" onclick="window.location.href='product.html?id=${product.id}'">
               <div class="search-result-img">${imgHtml}</div>
@@ -2027,15 +1939,14 @@
             </div>
           `;
         });
-
-        searchDropdown.innerHTML = html;
-        searchDropdown.classList.add('show');
+        if (searchDropdown) {
+          searchDropdown.innerHTML = html;
+          searchDropdown.classList.add('show');
+        }
       }
 
       function hideSearchDropdown() {
-        setTimeout(() => {
-          searchDropdown.classList.remove('show');
-        }, 200);
+        setTimeout(() => { if (searchDropdown) searchDropdown.classList.remove('show'); }, 200);
       }
 
       async function loadProducts() {
@@ -2066,12 +1977,9 @@
       function renderProducts() {
         if (!productGrid) return;
         let filteredProducts = allProductsData;
-
-        // Apply category filter only (search doesn't affect main grid)
         if (currentFilter !== 'all') {
           filteredProducts = filteredProducts.filter(p => p.category === currentFilter);
         }
-
         if (!filteredProducts || filteredProducts.length === 0) {
           productGrid.innerHTML = `<div class="empty-cart-message">${translations[currentLanguage].noProducts}</div>`;
           return;
@@ -2104,18 +2012,16 @@
         });
       }
 
-      // Search input event listeners
-      if (searchInput) {
+      // Attach search listeners only if elements exist
+      if (searchInput && searchWrapper) {
         searchInput.addEventListener('input', updateSearchDropdown);
         searchInput.addEventListener('focus', updateSearchDropdown);
         document.addEventListener('click', (e) => {
-          if (!searchWrapper.contains(e.target)) {
+          if (searchWrapper && !searchWrapper.contains(e.target)) {
             hideSearchDropdown();
           }
         });
       }
-
-      const searchWrapper = document.querySelector('.search-wrapper');
 
       if (cartItemsContainer) {
         cartItemsContainer.addEventListener('click', (e) => {
@@ -2134,25 +2040,31 @@
         const { data: { user } } = await supabase.auth.getUser();
         const emailField = document.getElementById('emailFieldGroup'), loggedDiv = document.getElementById('loggedInEmailDisplay'), emailInp = document.getElementById('customerEmail');
         if (user) {
-          emailField.style.display = 'none';
-          loggedDiv.style.display = 'block';
-          document.getElementById('displayEmail').textContent = user.email;
-          emailInp.required = false;
+          if (emailField) emailField.style.display = 'none';
+          if (loggedDiv) loggedDiv.style.display = 'block';
+          const displaySpan = document.getElementById('displayEmail');
+          if (displaySpan) displaySpan.textContent = user.email;
+          if (emailInp) emailInp.required = false;
         } else {
-          emailField.style.display = 'block';
-          loggedDiv.style.display = 'none';
-          emailInp.required = true;
+          if (emailField) emailField.style.display = 'block';
+          if (loggedDiv) loggedDiv.style.display = 'none';
+          if (emailInp) emailInp.required = true;
         }
-        document.getElementById('modalCartItems').innerHTML = cart.map(i => `<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>${escapeHtml(i.name)} x${i.quantity}</span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`).join('');
-        document.getElementById('modalTotal').textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND';
-        document.getElementById('checkoutModal').style.display = 'flex';
+        const modalCartItems = document.getElementById('modalCartItems');
+        if (modalCartItems) {
+          modalCartItems.innerHTML = cart.map(i => `<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>${escapeHtml(i.name)} x${i.quantity}</span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`).join('');
+        }
+        const modalTotalSpan = document.getElementById('modalTotal');
+        if (modalTotalSpan) modalTotalSpan.textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND';
+        const checkoutModal = document.getElementById('checkoutModal');
+        if (checkoutModal) checkoutModal.style.display = 'flex';
       });
 
       window.processOrder = async (event) => {
         event.preventDefault();
         const btn = document.getElementById('submitOrderBtn');
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        if (btn) btn.disabled = true;
+        if (btn) btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
         try {
           const { data: { user } } = await supabase.auth.getUser();
           const email = user ? user.email : document.getElementById('customerEmail').value;
@@ -2169,8 +2081,13 @@
           const { data: orderResult, error: orderError } = await supabase.from('orders').insert([orderData]).select();
           if (orderError) throw orderError;
           const orderId = orderResult?.[0]?.id;
-          const { error: emailError } = await supabase.functions.invoke('send-order-email', { body: { order: { ...orderData, id: orderId } } });
-          if (emailError) console.error('Email sending error:', emailError);
+          // Edge function may not exist – wrap in try/catch to avoid breaking order
+          try {
+            const { error: emailError } = await supabase.functions.invoke('send-order-email', { body: { order: { ...orderData, id: orderId } } });
+            if (emailError) console.error('Email sending error:', emailError);
+          } catch (emailErr) {
+            console.error('Email function not available:', emailErr);
+          }
           cart = [];
           localStorage.removeItem('RosaFragrances_cart');
           saveCart();
@@ -2181,14 +2098,14 @@
           console.error('Order error:', error);
           showToast('error');
         } finally {
-          btn.disabled = false;
-          btn.innerHTML = translations[currentLanguage].confirm;
+          if (btn) btn.disabled = false;
+          if (btn) btn.innerHTML = translations[currentLanguage].confirm;
         }
       };
 
       document.getElementById('checkoutForm')?.addEventListener('submit', window.processOrder);
-      window.closeCheckoutModal = () => document.getElementById('checkoutModal').style.display = 'none';
-      window.closeProductModal = function () { document.getElementById('productModal').style.display = 'none'; };
+      window.closeCheckoutModal = () => { const modal = document.getElementById('checkoutModal'); if (modal) modal.style.display = 'none'; };
+      window.closeProductModal = function () { const modal = document.getElementById('productModal'); if (modal) modal.style.display = 'none'; };
 
       let updateUserTimeout, isUpdatingUser = false;
       async function updateUserDisplay() {
@@ -2219,19 +2136,19 @@
       });
 
       function toggleMenu() {
-        navLinks.classList.toggle('active');
-        menuOverlay.classList.toggle('active');
-        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
-        if (navLinks.classList.contains('active')) closeCart();
+        if (navLinks) navLinks.classList.toggle('active');
+        if (menuOverlay) menuOverlay.classList.toggle('active');
+        document.body.style.overflow = (navLinks && navLinks.classList.contains('active')) ? 'hidden' : '';
+        if (navLinks && navLinks.classList.contains('active')) closeCart();
       }
       if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
       if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
 
       const langMenu = document.getElementById('langMenu');
       const langCurrentBtn = document.getElementById('langCurrentBtn');
-      if (langCurrentBtn) langCurrentBtn.addEventListener('click', (e) => { e.stopPropagation(); langMenu.classList.toggle('active'); });
+      if (langCurrentBtn) langCurrentBtn.addEventListener('click', (e) => { e.stopPropagation(); if (langMenu) langMenu.classList.toggle('active'); });
       document.querySelectorAll('.lang-option').forEach(opt => {
-        opt.addEventListener('click', () => { translatePage(opt.dataset.lang); langMenu.classList.remove('active'); });
+        opt.addEventListener('click', () => { translatePage(opt.dataset.lang); if (langMenu) langMenu.classList.remove('active'); });
       });
       document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
 
@@ -2249,25 +2166,32 @@
       const saved = localStorage.getItem('theme') || 'light';
       if (saved === 'dark') {
         document.body.classList.add('dark');
-        document.querySelector('#themeToggle .fa-sun').style.display = 'none';
-        document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
+        const sunIcon = document.querySelector('#themeToggle .fa-sun');
+        const moonIcon = document.querySelector('#themeToggle .fa-moon');
+        if (sunIcon) sunIcon.style.display = 'none';
+        if (moonIcon) moonIcon.style.display = 'inline-block';
       }
     }
     function toggleTheme() {
       if (document.body.classList.contains('dark')) {
         document.body.classList.remove('dark');
         localStorage.setItem('theme', 'light');
-        document.querySelector('#themeToggle .fa-sun').style.display = 'inline-block';
-        document.querySelector('#themeToggle .fa-moon').style.display = 'none';
+        const sunIcon = document.querySelector('#themeToggle .fa-sun');
+        const moonIcon = document.querySelector('#themeToggle .fa-moon');
+        if (sunIcon) sunIcon.style.display = 'inline-block';
+        if (moonIcon) moonIcon.style.display = 'none';
       } else {
         document.body.classList.add('dark');
         localStorage.setItem('theme', 'dark');
-        document.querySelector('#themeToggle .fa-sun').style.display = 'none';
-        document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
+        const sunIcon = document.querySelector('#themeToggle .fa-sun');
+        const moonIcon = document.querySelector('#themeToggle .fa-moon');
+        if (sunIcon) sunIcon.style.display = 'none';
+        if (moonIcon) moonIcon.style.display = 'inline-block';
       }
     }
     document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
       initTheme();
     });
   </script>
