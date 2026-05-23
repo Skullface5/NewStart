@@ -1603,41 +1603,11 @@
                 }
             }
 
-            const PRODUCTS_CACHE_KEY = 'RosaFragrances_products_cache';
-            const PRODUCTS_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
-
-            function getCachedProducts() {
-                try {
-                    const raw = localStorage.getItem(PRODUCTS_CACHE_KEY);
-                    if (!raw) return null;
-                    const { timestamp, data } = JSON.parse(raw);
-                    if (Date.now() - timestamp > PRODUCTS_CACHE_TTL) return null;
-                    return data;
-                } catch (e) { return null; }
-            }
-
-            function setCachedProducts(data) {
-                try {
-                    localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data }));
-                } catch (e) {}
-            }
-
             async function loadAllProducts() {
-                // Use cache if available
-                const cached = getCachedProducts();
-                if (cached) {
-                    allProducts = cached;
-                    // Refresh cache silently in background
-                    supabase.from('products').select('*').then(({ data, error }) => {
-                        if (!error && data) { allProducts = data; setCachedProducts(data); }
-                    });
-                    return allProducts;
-                }
                 try {
                     const { data, error } = await supabase.from('products').select('*');
                     if (error) throw error;
                     allProducts = data || [];
-                    setCachedProducts(allProducts);
                     return allProducts;
                 } catch (error) {
                     console.error('Error loading products:', error);
@@ -1826,8 +1796,8 @@
             }
 
             async function init() {
-                // Run both fetches in parallel instead of one after the other
-                const [_, success] = await Promise.all([loadAllProducts(), loadCurrentProduct()]);
+                await loadAllProducts();
+                const success = await loadCurrentProduct();
                 if (success) loadSuggestions();
                 saveCart();
             }
@@ -2009,6 +1979,15 @@
             translatePage(currentLanguage);
         })();
     </script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then(reg => {
+      console.log('Service Worker registered', reg);
+    }).catch(err => {
+      console.warn('Service Worker registration failed', err);
+    });
+  }
+</script>
 </body>
 
 </html>
