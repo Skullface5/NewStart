@@ -2,11 +2,34 @@
 <html lang="fr">
 
 <head>
+  <!-- ============================================================ -->
+  <!-- ✅ META PIXEL CODE – PLACÉ EN PREMIER DANS LE HEAD          -->
+  <!-- ============================================================ -->
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1039023089029451');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1039023089029451&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
+  <!-- Vos balises HEAD existantes (sans l'<img> qui a été déplacée) -->
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="manifest" href="/site.webmanifest">
-  <img src="https://rosafragrances.tn/tt.jpg" style="display:none;">
+
+  <!-- Balises Open Graph / Social -->
   <meta property="og:image:width" content="1080" />
   <meta property="og:image:height" content="1080" />
   <meta property="og:image" content="https://rosafragrances.tn/tt.jpg" />
@@ -16,12 +39,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Rosa Fragrances | Atelier de Parfums</title>
+
+  <!-- Feuilles de style et scripts externes -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
 
+  <!-- Vos styles CSS (intacts) -->
   <style>
     * {
       margin: 0;
@@ -1516,8 +1540,12 @@
 </head>
 
 <body>
+  <!-- ============================================================ -->
+  <!-- ✅ IMAGE DE TRACKING DÉPLACÉE ICI (dans le <body>)          -->
+  <!-- ============================================================ -->
   <img src="https://rosafragrances.tn/tt.jpg" style="display: none;">
 
+  <!-- === PARTICULES D'ARRIÈRE-PLAN === -->
   <script>
     for (let i = 0; i < 25; i++) {
       const p = document.createElement('div');
@@ -1532,6 +1560,8 @@
       document.body.appendChild(p);
     }
   </script>
+
+  <!-- (le reste de votre HTML, identique à l'original) -->
 
   <div id="menuOverlay" class="cart-overlay" style="z-index:99;"></div>
   <div id="toast" class="notification">✨ Article ajouté</div>
@@ -1824,7 +1854,7 @@
       const menuOverlay = document.getElementById('menuOverlay');
       const searchInput = document.getElementById('searchInput');
       const searchDropdown = document.getElementById('searchDropdown');
-      const searchWrapper = document.querySelector('.search-wrapper'); // ✅ moved here
+      const searchWrapper = document.querySelector('.search-wrapper');
 
       function showToast(msgKey, productName = '') {
         if (!toast) return;
@@ -2016,7 +2046,6 @@
         });
       }
 
-      // Attach search listeners only if elements exist
       if (searchInput && searchWrapper) {
         searchInput.addEventListener('input', updateSearchDropdown);
         searchInput.addEventListener('focus', updateSearchDropdown);
@@ -2085,7 +2114,6 @@
           const { data: orderResult, error: orderError } = await supabase.from('orders').insert([orderData]).select();
           if (orderError) throw orderError;
           const orderId = orderResult?.[0]?.id;
-          // Edge function may not exist – wrap in try/catch to avoid breaking order
           try {
             const { error: emailError } = await supabase.functions.invoke('send-order-email', { body: { order: { ...orderData, id: orderId } } });
             if (emailError) console.error('Email sending error:', emailError);
