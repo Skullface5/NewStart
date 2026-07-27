@@ -341,7 +341,9 @@
       color: var(--gold-dark);
     }
 
-    /* Cart Sidebar */
+    /* ============================================================ */
+    /* 🚀 CART SIDEBAR - FIXED FOR MOBILE (CHECKOUT BUTTON VISIBLE) */
+    /* ============================================================ */
     .cart-overlay {
       position: fixed;
       top: 0;
@@ -368,6 +370,8 @@
       width: 400px;
       max-width: 90vw;
       height: 100vh;
+      height: 100dvh;
+      /* ✅ Dynamic viewport height - fixes mobile issue */
       background: var(--card-warm);
       backdrop-filter: blur(20px);
       padding: 1.2rem;
@@ -395,6 +399,7 @@
     .cart-items {
       flex: 1;
       overflow-y: auto;
+      padding-bottom: 0.5rem;
     }
 
     .cart-item {
@@ -469,6 +474,11 @@
     .cart-footer {
       border-top: 1px solid var(--border-light);
       padding-top: 0.8rem;
+      /* ✅ FIX: Proper padding for mobile safe areas (notch/home indicator) */
+      padding-bottom: max(1.2rem, env(safe-area-inset-bottom, 1.2rem));
+      background: inherit;
+      margin-top: auto;
+      /* ✅ Push footer to bottom */
     }
 
     .cart-total {
@@ -488,10 +498,34 @@
       cursor: pointer;
       font-weight: 500;
       transition: all 0.3s ease;
+      min-height: 50px;
+      /* ✅ Ensure tap target size on mobile */
     }
 
     .checkout-btn:hover {
       transform: translateY(-2px);
+    }
+
+    .checkout-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* ✅ Additional iOS safe area support */
+    @supports (padding: max(0px)) {
+      .cart-footer {
+        padding-bottom: max(1.2rem, env(safe-area-inset-bottom, 1.2rem));
+      }
+    }
+
+    /* ✅ Extra padding for small phones with gesture bars */
+    @media (max-width: 480px) and (max-height: 800px) {
+      .cart-footer {
+        padding-bottom: 1.5rem;
+      }
+      .checkout-btn {
+        min-height: 55px;
+        font-size: 0.9rem;
+      }
     }
 
     .notification {
@@ -1180,6 +1214,9 @@
   <div id="menuOverlay" class="cart-overlay" style="z-index:99;"></div>
   <div id="toast" class="notification">✨ Article ajouté</div>
 
+  <!-- ============================================================ -->
+  <!-- 🚀 CART SIDEBAR - WITH FIXED CHECKOUT BUTTON                 -->
+  <!-- ============================================================ -->
   <div id="cartOverlay" class="cart-overlay"></div>
   <aside id="cartSidebar" class="cart-sidebar">
     <div class="cart-header">
@@ -1192,10 +1229,10 @@
     <div id="cartItemsContainer" class="cart-items">
       <div class="empty-cart-message" data-translate="emptyCart">Votre panier est vide.</div>
     </div>
-    <div class="cart-footer">
+    <div class="cart-footer" id="cartFooter">
       <div class="cart-total"><span data-translate="total">Total</span><span id="cartTotalPrice">0,000 TND</span>
       </div>
-      <button class="checkout-btn" id="checkoutBtn" style="font-size:0.8rem;"><span
+      <button class="checkout-btn" id="checkoutBtn"><span
           data-translate="payment">PAIEMENT</span> <i class="fas fa-arrow-right"></i></button>
     </div>
   </aside>
