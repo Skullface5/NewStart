@@ -2,1843 +2,1867 @@
 <html lang="fr">
 
 <head>
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <meta property="og:image" content="https://new-start-hdr1.vercel.app/tt.jpg" />
-    <meta name="twitter:image" content="https://new-start-hdr1.vercel.app/tt.jpg" />
-    <meta property="og:image:secure_url" content="https://new-start-hdr1.vercel.app/tt.jpg" />
-    <meta charset="UTF-8">
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Rosa Fragrances | Mon Profil</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap"
-        rel="stylesheet">
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --cream: #F7F0E6;
-            --cream-dark: #EDE4D6;
-            --cream-deep: #E0D4C0;
-            --gold: #B49A6A;
-            --gold-light: #D4B98A;
-            --gold-dark: #8A7150;
-            --charcoal: #3A3228;
-            --text-mid: #6B5E4E;
-            --white: #FEFCF8;
-            --shadow: 0 8px 40px rgba(90, 70, 50, 0.10);
-            --card-base: #F5F0EA;
-            --card-warm: #F2EDE6;
-            --card-elevated: #F7F2EC;
-            --card-shadow: rgba(100, 80, 60, 0.06);
-            --border-light: rgba(180, 155, 120, 0.12);
-            --border-medium: rgba(180, 155, 120, 0.2);
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.03);
-            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.04);
-            --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.06);
-            --input-bg: #F9F6F2;
-            --input-border: #E2D9CF;
-            --input-focus: #C4AF7D;
-            --hover-subtle: rgba(180, 155, 120, 0.05);
-            --hover-medium: rgba(180, 155, 120, 0.1);
-        }
-
-        body {
-            font-family: 'Jost', sans-serif;
-            background: var(--cream);
-            color: var(--charcoal);
-            overflow-x: hidden;
-            transition: background 0.4s ease, color 0.3s ease;
-            line-height: 1.5;
-        }
-
-        body.dark {
-            --cream: #1A1814;
-            --cream-dark: #24201A;
-            --cream-deep: #2E2820;
-            --card-base: #2E2820;
-            --card-warm: #362F26;
-            --card-elevated: #40382D;
-            --charcoal: #F5EFE6;
-            --text-mid: #D4C5B0;
-            --gold: #B89B5E;
-            --gold-dark: #B89B5E;
-            --white: #1A1814;
-            --border-light: rgba(184, 155, 94, 0.15);
-            --input-bg: #3A352C;
-            --input-border: #4A4438;
-        }
-
-        .particle {
-            position: fixed;
-            background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0;
-            animation: floatParticle 18s infinite;
-            z-index: 0;
-        }
-
-        @keyframes floatParticle {
-            0% {
-                opacity: 0;
-                transform: translateY(100vh) rotate(0deg) scale(0);
-            }
-
-            20% {
-                opacity: 0.1;
-            }
-
-            80% {
-                opacity: 0.1;
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateY(-20vh) rotate(360deg) scale(1.2);
-            }
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 1.5rem 2rem;
-            position: relative;
-            z-index: 10;
-        }
-
-        header {
-            background: rgba(247, 240, 230, 0.92);
-            backdrop-filter: blur(12px);
-            box-shadow: var(--shadow-sm);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(180, 154, 106, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        body.dark header {
-            background: rgba(26, 24, 20, 0.92);
-        }
-
-        .header-flex {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: relative;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0.8rem 2rem;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            z-index: 102;
-            text-decoration: none;
-        }
-
-        .logo img {
-            width: 48px;
-            height: 48px;
-            object-fit: contain;
-            border-radius: 50%;
-        }
-
-        .logo h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.15rem;
-            font-weight: 400;
-            color: var(--gold-dark);
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-        }
-
-        .theme-toggle,
-        .cart-icon,
-        .menu-toggle {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            font-size: 1.1rem;
-            color: var(--gold-dark);
-            width: 34px;
-            height: 34px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        .theme-toggle:hover,
-        .cart-icon:hover,
-        .menu-toggle:hover {
-            background: var(--hover-subtle);
-            color: var(--gold);
-        }
-
-        .cart-icon {
-            position: relative;
-        }
-
-        .cart-count {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            background: var(--gold-dark);
-            color: var(--white);
-            font-size: 0.6rem;
-            font-weight: 600;
-            width: 17px;
-            height: 17px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-
-        .nav-links {
-            display: flex;
-            flex-direction: column;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            width: 250px;
-            background: var(--cream-dark);
-            backdrop-filter: blur(16px);
-            gap: 0;
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border-light);
-            z-index: 101;
-            border-radius: 20px;
-        }
-
-        .nav-links.active {
-            max-height: 460px;
-            opacity: 1;
-            padding: 0.5rem 0;
-        }
-
-        .nav-links a {
-            padding: 0.9rem 1.5rem;
-            text-decoration: none;
-            color: var(--charcoal);
-            transition: all 0.2s;
-            border-bottom: 1px solid var(--border-light);
-            display: block;
-            font-weight: 400;
-            font-size: 0.72rem;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-        }
-
-        .nav-links a:hover {
-            background: var(--hover-subtle);
-            color: var(--gold-dark);
-            padding-left: 2rem;
-        }
-
-        .admin-nav-link {
-            background: rgba(180, 154, 106, 0.08);
-            color: var(--gold-dark) !important;
-            font-weight: 600;
-            border-bottom: 2px solid var(--gold) !important;
-        }
-
-        .lang-menu {
-            border-bottom: 1px solid var(--border-light);
-        }
-
-        .lang-current {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            background: none;
-            border: none;
-            padding: 0.9rem 1.5rem;
-            font-size: 0.7rem;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: var(--charcoal);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .lang-current:hover {
-            background: var(--hover-subtle);
-            color: var(--gold-dark);
-        }
-
-        .lang-options {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            background: var(--cream-dark);
-        }
-
-        .lang-menu.active .lang-options {
-            max-height: 130px;
-        }
-
-        .lang-option {
-            display: block;
-            width: 100%;
-            text-align: left;
-            padding: 0.7rem 1.5rem 0.7rem 2.5rem;
-            background: none;
-            border: none;
-            font-size: 0.7rem;
-            cursor: pointer;
-            color: var(--text-mid);
-            transition: all 0.2s;
-        }
-
-        .lang-option:hover {
-            background: var(--hover-subtle);
-            color: var(--gold-dark);
-        }
-
-        /* Cart Sidebar */
-        .cart-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(6px);
-            z-index: 200;
-            visibility: hidden;
-            opacity: 0;
-            transition: 0.3s;
-        }
-
-        .cart-overlay.active {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .cart-sidebar {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 400px;
-            max-width: 90vw;
-            height: 100vh;
-            background: var(--card-warm);
-            backdrop-filter: blur(20px);
-            padding: 1.2rem;
-            display: flex;
-            flex-direction: column;
-            transition: right 0.4s ease;
-            z-index: 250;
-            border-left: 1px solid var(--border-light);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .cart-sidebar.open {
-            right: 0;
-        }
-
-        .cart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-light);
-            padding-bottom: 0.8rem;
-            margin-bottom: 0.8rem;
-        }
-
-        .cart-items {
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .cart-item {
-            display: flex;
-            gap: 0.8rem;
-            align-items: center;
-            margin-bottom: 0.8rem;
-            border-bottom: 1px dashed var(--border-light);
-            padding-bottom: 0.8rem;
-        }
-
-        .cart-item-icon {
-            width: 50px;
-            height: 50px;
-            background: var(--cream-deep);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        .cart-item-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .cart-item-icon i {
-            font-size: 1.3rem;
-            color: var(--gold);
-        }
-
-        .cart-item-info {
-            flex: 2;
-        }
-
-        .cart-item-title {
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .cart-item-price {
-            color: var(--text-mid);
-            font-size: 0.8rem;
-        }
-
-        .cart-item-quantity {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            margin-top: 0.2rem;
-        }
-
-        .quantity-btn {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--cream-deep);
-            border: none;
-            cursor: pointer;
-        }
-
-        .cart-item-remove {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--text-mid);
-        }
-
-        .cart-footer {
-            border-top: 1px solid var(--border-light);
-            padding-top: 0.8rem;
-        }
-
-        .cart-total {
-            display: flex;
-            justify-content: space-between;
-            font-size: 1rem;
-            margin-bottom: 0.8rem;
-        }
-
-        .checkout-btn {
-            width: 100%;
-            background: var(--gold-dark);
-            color: var(--white);
-            border: none;
-            padding: 0.8rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .checkout-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .notification {
-            position: fixed;
-            bottom: 25px;
-            left: 25px;
-            background: var(--gold-dark);
-            color: var(--white);
-            padding: 0.7rem 1.2rem;
-            border-radius: 50px;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: 0.3s ease;
-            z-index: 300;
-            font-weight: 500;
-            font-size: 0.85rem;
-        }
-
-        .notification.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .empty-cart-message {
-            text-align: center;
-            color: var(--text-mid);
-            padding: 1.5rem;
-            font-style: italic;
-        }
-
-        /* Profile Styles */
-        .profile-container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        @media (max-width: 768px) {
-            .profile-container {
-                padding: 0 1rem;
-            }
-        }
-
-        .profile-header {
-            background: var(--card-warm);
-            border-radius: 28px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-md);
-        }
-
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            background: var(--cream-deep);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .profile-avatar i {
-            font-size: 2.5rem;
-            color: var(--gold);
-        }
-
-        .profile-info {
-            flex: 1;
-        }
-
-        .profile-info h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.6rem;
-            font-weight: 400;
-            margin-bottom: 0.3rem;
-            color: var(--charcoal);
-        }
-
-        .profile-info p {
-            color: var(--text-mid);
-            font-size: 0.85rem;
-        }
-
-        .profile-info p i {
-            color: var(--gold);
-            margin-right: 6px;
-        }
-
-        .logout-btn {
-            background: transparent;
-            border: 1px solid var(--border-medium);
-            color: var(--charcoal);
-            padding: 0.7rem 1.5rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logout-btn:hover {
-            background: var(--gold-dark);
-            border-color: var(--gold-dark);
-            color: var(--white);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        @media (max-width: 768px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-        }
-
-        .stat-card {
-            background: var(--card-warm);
-            border-radius: 20px;
-            padding: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            border: 1px solid var(--border-light);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
-            border-color: var(--gold-light);
-        }
-
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            background: var(--cream-deep);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .stat-icon i {
-            font-size: 1.3rem;
-            color: var(--gold);
-        }
-
-        .stat-content h3 {
-            font-size: 1.6rem;
-            font-weight: 500;
-            color: var(--charcoal);
-            line-height: 1.2;
-        }
-
-        .stat-content p {
-            font-size: 0.7rem;
-            color: var(--text-mid);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .orders-section {
-            background: var(--card-warm);
-            border-radius: 28px;
-            padding: 1.8rem;
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-md);
-        }
-
-        .section-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 1.5rem;
-        }
-
-        .section-title i {
-            font-size: 1.3rem;
-            color: var(--gold);
-        }
-
-        .section-title h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.3rem;
-            font-weight: 400;
-            letter-spacing: 0.1em;
-            color: var(--charcoal);
-        }
-
-        .order-filters {
-            display: flex;
-            gap: 0.8rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            background: transparent;
-            border: 1px solid var(--border-medium);
-            color: var(--charcoal);
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .filter-btn:hover {
-            border-color: var(--gold);
-            color: var(--gold-dark);
-        }
-
-        .filter-btn.active {
-            background: var(--gold-dark);
-            border-color: var(--gold-dark);
-            color: var(--white);
-        }
-
-        .orders-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .order-card {
-            background: var(--cream-deep);
-            border-radius: 20px;
-            padding: 1.2rem;
-            border: 1px solid var(--border-light);
-            transition: all 0.3s ease;
-        }
-
-        .order-card:hover {
-            border-color: var(--gold-light);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-bottom: 1rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 1px dashed var(--border-light);
-        }
-
-        .order-id {
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--charcoal);
-        }
-
-        .order-id i {
-            color: var(--gold);
-            margin-right: 5px;
-        }
-
-        .order-date {
-            font-size: 0.7rem;
-            color: var(--text-mid);
-        }
-
-        .order-date i {
-            color: var(--gold);
-            margin-right: 4px;
-        }
-
-        .order-status {
-            padding: 0.25rem 0.8rem;
-            border-radius: 50px;
-            font-size: 0.65rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .status-pending {
-            background: rgba(180, 154, 106, 0.15);
-            color: var(--gold-dark);
-        }
-
-        .status-review {
-            background: rgba(180, 154, 106, 0.15);
-            color: var(--gold-dark);
-        }
-
-        .status-shipped {
-            background: rgba(180, 154, 106, 0.15);
-            color: var(--gold-dark);
-        }
-
-        .status-delivered {
-            background: rgba(50, 150, 80, 0.15);
-            color: #2c682c;
-        }
-
-        .status-cancelled {
-            background: rgba(200, 80, 80, 0.15);
-            color: #b34545;
-        }
-
-        .order-items {
-            margin: 0.8rem 0;
-        }
-
-        .order-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.4rem 0;
-            font-size: 0.85rem;
-        }
-
-        .order-item-name {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .order-item-name i {
-            color: var(--gold);
-            font-size: 0.7rem;
-        }
-
-        .order-item-quantity {
-            color: var(--text-mid);
-            font-size: 0.7rem;
-            margin-left: 4px;
-        }
-
-        .order-item-price {
-            font-weight: 500;
-            color: var(--charcoal);
-        }
-
-        .order-total {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 0.8rem;
-            padding-top: 0.8rem;
-            border-top: 1px solid var(--border-light);
-            font-weight: 600;
-        }
-
-        .order-total span:last-child {
-            color: var(--gold-dark);
-            font-size: 1rem;
-        }
-
-        .cancel-btn {
-            background: transparent;
-            border: 1px solid #b34545;
-            color: #b34545;
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            margin-top: 0.5rem;
-        }
-
-        .cancel-btn:hover {
-            background: #b34545;
-            border-color: #b34545;
-            color: white;
-        }
-
-        .empty-orders {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-mid);
-        }
-
-        .empty-orders i {
-            font-size: 2.5rem;
-            color: var(--border-light);
-            margin-bottom: 1rem;
-        }
-
-        .shop-now-btn {
-            display: inline-block;
-            background: var(--gold-dark);
-            color: var(--white);
-            text-decoration: none;
-            padding: 0.6rem 1.5rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            margin-top: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .shop-now-btn:hover {
-            background: var(--charcoal);
-            transform: translateY(-2px);
-        }
-
-        .not-logged-in {
-            text-align: center;
-            padding: 3rem;
-            background: var(--card-warm);
-            border-radius: 28px;
-            border: 1px solid var(--border-light);
-            max-width: 500px;
-            margin: 3rem auto;
-        }
-
-        .not-logged-in i {
-            font-size: 3rem;
-            color: var(--gold);
-            margin-bottom: 1rem;
-        }
-
-        .not-logged-in h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.5rem;
-            font-weight: 400;
-            margin-bottom: 0.5rem;
-            color: var(--charcoal);
-        }
-
-        .not-logged-in p {
-            color: var(--text-mid);
-            margin-bottom: 1.5rem;
-            font-size: 0.85rem;
-        }
-
-        .login-btn {
-            display: inline-block;
-            background: var(--gold-dark);
-            color: var(--white);
-            text-decoration: none;
-            padding: 0.7rem 1.5rem;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-        }
-
-        .login-btn:hover {
-            background: var(--charcoal);
-        }
-
-        .loading-spinner {
-            text-align: center;
-            padding: 2rem;
-            color: var(--gold);
-        }
-
-        /* Footer */
-        footer {
-            background: var(--charcoal);
-            color: rgba(247, 240, 230, 0.65);
-            padding: 60px 40px 28px;
-            margin-top: 2rem;
-        }
-
-        body.dark footer {
-            background: #0F0E0C;
-        }
-
-        .footer-inner {
-            max-width: 1060px;
-            margin: 0 auto;
-        }
-
-        .footer-top {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr 1fr;
-            gap: 56px;
-            margin-bottom: 44px;
-        }
-
-        .footer-brand h3 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.55rem;
-            font-weight: 300;
-            color: var(--gold-light);
-            letter-spacing: 0.1em;
-            margin-bottom: 10px;
-        }
-
-        .footer-brand p {
-            font-size: 0.8rem;
-            line-height: 1.8;
-            font-weight: 200;
-            max-width: 250px;
-        }
-
-        .footer-col h4 {
-            font-size: 0.65rem;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 16px;
-        }
-
-        .footer-col ul {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 9px;
-        }
-
-        .footer-col a {
-            color: rgba(247, 240, 230, 0.55);
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: 200;
-            transition: color 0.3s;
-        }
-
-        .footer-col a:hover {
-            color: var(--gold-light);
-        }
-
-        .contact-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .contact-list li {
-            font-size: 0.8rem;
-            font-weight: 200;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .contact-list .ic {
-            color: var(--gold);
-            font-size: 0.9rem;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(180, 154, 106, 0.15);
-            padding-top: 22px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .footer-bottom p {
-            font-size: 0.7rem;
-            font-weight: 200;
-        }
-
-        .socials {
-            display: flex;
-            gap: 10px;
-        }
-
-        .social {
-            width: 34px;
-            height: 34px;
-            border: 1px solid rgba(180, 154, 106, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gold-light);
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: all 0.3s;
-            border-radius: 50%;
-        }
-
-        .social:hover {
-            background: var(--gold-dark);
-            border-color: var(--gold-dark);
-            color: var(--white);
-        }
-
-        .footer-logo-img {
-            width: 70px;
-            height: 70px;
-            object-fit: contain;
-            margin-bottom: 10px;
-            filter: brightness(0.9);
-            border-radius: 50%;
-        }
-
-        @media (max-width: 900px) {
-            .footer-top {
-                grid-template-columns: 1fr 1fr;
-                gap: 30px;
-            }
-
-            .footer-brand {
-                grid-column: 1/-1;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .footer-top {
-                grid-template-columns: 1fr;
-            }
-
-            footer {
-                padding: 40px 18px 22px;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header-flex {
-                padding: 0.6rem 1rem;
-            }
-
-            .logo h1 {
-                font-size: 0.9rem;
-            }
-
-            .logo img {
-                width: 36px;
-            }
-
-            .profile-header {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .profile-info {
-                text-align: center;
-            }
-
-            .logout-btn {
-                margin: 0 auto;
-            }
-        }
-        /* ===== CHECKOUT MODAL ===== */
-        .modal-overlay { position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center; }
-        .modal-content { background:var(--card-warm);border-radius:32px;max-width:480px;width:90%;max-height:85vh;overflow-y:auto;border:1px solid var(--border-light);box-shadow:var(--shadow-lg); }
-        .modal-header { display:flex;justify-content:space-between;align-items:center;padding:1rem 1.2rem;border-bottom:1px solid var(--border-light); }
-        .close-modal { background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-mid); }
-        .modal-form-group { margin-bottom:0.8rem; }
-        .modal-form-group label { display:block;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;color:var(--text-mid); }
-        .modal-form-group input { width:100%;padding:0.7rem 1rem;border:1px solid var(--input-border);border-radius:14px;background:var(--input-bg);color:var(--charcoal);font-size:0.85rem; }
-        .modal-form-group input:focus { outline:none;border-color:var(--input-focus); }
-        .btn-primary-modal { background:var(--gold-dark);color:var(--white);border:none;padding:10px 20px;border-radius:50px;cursor:pointer;font-weight:500;flex:1; }
-        .btn-secondary-modal { background:none;border:1px solid var(--border-medium);color:var(--charcoal);padding:10px 20px;border-radius:50px;cursor:pointer;flex:1; }
-    </style>
+  <!-- ============================================================ -->
+  <!-- ✅ META PIXEL CODE – PLACÉ EN PREMIER DANS LE HEAD          -->
+  <!-- ============================================================ -->
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1039023089029451');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1039023089029451&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
+  <!-- ============================================================ -->
+  <!-- VOS BALISES HEAD EXISTANTES (intactes)                      -->
+  <!-- ============================================================ -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta property="og:image" content="https://new-start-hdr1.vercel.app/tt.jpg" />
+  <meta name="twitter:image" content="https://new-start-hdr1.vercel.app/tt.jpg" />
+  <meta property="og:image:secure_url" content="https://new-start-hdr1.vercel.app/tt.jpg" />
+  <meta charset="UTF-8">
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Rosa Fragrances | Mon Profil</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap"
+    rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --cream: #F7F0E6;
+      --cream-dark: #EDE4D6;
+      --cream-deep: #E0D4C0;
+      --gold: #B49A6A;
+      --gold-light: #D4B98A;
+      --gold-dark: #8A7150;
+      --charcoal: #3A3228;
+      --text-mid: #6B5E4E;
+      --white: #FEFCF8;
+      --shadow: 0 8px 40px rgba(90, 70, 50, 0.10);
+      --card-base: #F5F0EA;
+      --card-warm: #F2EDE6;
+      --card-elevated: #F7F2EC;
+      --card-shadow: rgba(100, 80, 60, 0.06);
+      --border-light: rgba(180, 155, 120, 0.12);
+      --border-medium: rgba(180, 155, 120, 0.2);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.04);
+      --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.06);
+      --input-bg: #F9F6F2;
+      --input-border: #E2D9CF;
+      --input-focus: #C4AF7D;
+      --hover-subtle: rgba(180, 155, 120, 0.05);
+      --hover-medium: rgba(180, 155, 120, 0.1);
+    }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      overflow-x: hidden;
+      transition: background 0.4s ease, color 0.3s ease;
+      line-height: 1.5;
+    }
+
+    body.dark {
+      --cream: #1A1814;
+      --cream-dark: #24201A;
+      --cream-deep: #2E2820;
+      --card-base: #2E2820;
+      --card-warm: #362F26;
+      --card-elevated: #40382D;
+      --charcoal: #F5EFE6;
+      --text-mid: #D4C5B0;
+      --gold: #B89B5E;
+      --gold-dark: #B89B5E;
+      --white: #1A1814;
+      --border-light: rgba(184, 155, 94, 0.15);
+      --input-bg: #3A352C;
+      --input-border: #4A4438;
+    }
+
+    .particle {
+      position: fixed;
+      background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+      animation: floatParticle 18s infinite;
+      z-index: 0;
+    }
+
+    @keyframes floatParticle {
+      0% {
+        opacity: 0;
+        transform: translateY(100vh) rotate(0deg) scale(0);
+      }
+
+      20% {
+        opacity: 0.1;
+      }
+
+      80% {
+        opacity: 0.1;
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-20vh) rotate(360deg) scale(1.2);
+      }
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    header {
+      background: rgba(247, 240, 230, 0.92);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(180, 154, 106, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    body.dark header {
+      background: rgba(26, 24, 20, 0.92);
+    }
+
+    .header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0.8rem 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 102;
+      text-decoration: none;
+    }
+
+    .logo img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    .logo h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--gold-dark);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .theme-toggle,
+    .cart-icon,
+    .menu-toggle {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: var(--gold-dark);
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover,
+    .cart-icon:hover,
+    .menu-toggle:hover {
+      background: var(--hover-subtle);
+      color: var(--gold);
+    }
+
+    .cart-icon {
+      position: relative;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: var(--gold-dark);
+      color: var(--white);
+      font-size: 0.6rem;
+      font-weight: 600;
+      width: 17px;
+      height: 17px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      width: 250px;
+      background: var(--cream-dark);
+      backdrop-filter: blur(16px);
+      gap: 0;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-light);
+      z-index: 101;
+      border-radius: 20px;
+    }
+
+    .nav-links.active {
+      max-height: 460px;
+      opacity: 1;
+      padding: 0.5rem 0;
+    }
+
+    .nav-links a {
+      padding: 0.9rem 1.5rem;
+      text-decoration: none;
+      color: var(--charcoal);
+      transition: all 0.2s;
+      border-bottom: 1px solid var(--border-light);
+      display: block;
+      font-weight: 400;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .nav-links a:hover {
+      background: var(--hover-subtle);
+      color: var(--gold-dark);
+      padding-left: 2rem;
+    }
+
+    .admin-nav-link {
+      background: rgba(180, 154, 106, 0.08);
+      color: var(--gold-dark) !important;
+      font-weight: 600;
+      border-bottom: 2px solid var(--gold) !important;
+    }
+
+    .lang-menu {
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .lang-current {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 0.9rem 1.5rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .lang-current:hover {
+      background: var(--hover-subtle);
+      color: var(--gold-dark);
+    }
+
+    .lang-options {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      background: var(--cream-dark);
+    }
+
+    .lang-menu.active .lang-options {
+      max-height: 130px;
+    }
+
+    .lang-option {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.7rem 1.5rem 0.7rem 2.5rem;
+      background: none;
+      border: none;
+      font-size: 0.7rem;
+      cursor: pointer;
+      color: var(--text-mid);
+      transition: all 0.2s;
+    }
+
+    .lang-option:hover {
+      background: var(--hover-subtle);
+      color: var(--gold-dark);
+    }
+
+    /* Cart Sidebar */
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.3s;
+    }
+
+    .cart-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 400px;
+      max-width: 90vw;
+      height: 100vh;
+      background: var(--card-warm);
+      backdrop-filter: blur(20px);
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.4s ease;
+      z-index: 250;
+      border-left: 1px solid var(--border-light);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .cart-sidebar.open {
+      right: 0;
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      margin-bottom: 0.8rem;
+      border-bottom: 1px dashed var(--border-light);
+      padding-bottom: 0.8rem;
+    }
+
+    .cart-item-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--cream-deep);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .cart-item-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cart-item-icon i {
+      font-size: 1.3rem;
+      color: var(--gold);
+    }
+
+    .cart-item-info {
+      flex: 2;
+    }
+
+    .cart-item-title {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .cart-item-price {
+      color: var(--text-mid);
+      font-size: 0.8rem;
+    }
+
+    .cart-item-quantity {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.2rem;
+    }
+
+    .quantity-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--cream-deep);
+      border: none;
+      cursor: pointer;
+    }
+
+    .cart-item-remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-mid);
+    }
+
+    .cart-footer {
+      border-top: 1px solid var(--border-light);
+      padding-top: 0.8rem;
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      background: var(--gold-dark);
+      color: var(--white);
+      border: none;
+      padding: 0.8rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .checkout-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .notification {
+      position: fixed;
+      bottom: 25px;
+      left: 25px;
+      background: var(--gold-dark);
+      color: var(--white);
+      padding: 0.7rem 1.2rem;
+      border-radius: 50px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: 0.3s ease;
+      z-index: 300;
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+
+    .notification.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .empty-cart-message {
+      text-align: center;
+      color: var(--text-mid);
+      padding: 1.5rem;
+      font-style: italic;
+    }
+
+    /* Profile Styles */
+    .profile-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .profile-container {
+        padding: 0 1rem;
+      }
+    }
+
+    .profile-header {
+      background: var(--card-warm);
+      border-radius: 28px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-md);
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      background: var(--cream-deep);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profile-avatar i {
+      font-size: 2.5rem;
+      color: var(--gold);
+    }
+
+    .profile-info {
+      flex: 1;
+    }
+
+    .profile-info h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin-bottom: 0.3rem;
+      color: var(--charcoal);
+    }
+
+    .profile-info p {
+      color: var(--text-mid);
+      font-size: 0.85rem;
+    }
+
+    .profile-info p i {
+      color: var(--gold);
+      margin-right: 6px;
+    }
+
+    .logout-btn {
+      background: transparent;
+      border: 1px solid var(--border-medium);
+      color: var(--charcoal);
+      padding: 0.7rem 1.5rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logout-btn:hover {
+      background: var(--gold-dark);
+      border-color: var(--gold-dark);
+      color: var(--white);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    .stat-card {
+      background: var(--card-warm);
+      border-radius: 20px;
+      padding: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border: 1px solid var(--border-light);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--gold-light);
+    }
+
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--cream-deep);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stat-icon i {
+      font-size: 1.3rem;
+      color: var(--gold);
+    }
+
+    .stat-content h3 {
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--charcoal);
+      line-height: 1.2;
+    }
+
+    .stat-content p {
+      font-size: 0.7rem;
+      color: var(--text-mid);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .orders-section {
+      background: var(--card-warm);
+      border-radius: 28px;
+      padding: 1.8rem;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-md);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title i {
+      font-size: 1.3rem;
+      color: var(--gold);
+    }
+
+    .section-title h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      color: var(--charcoal);
+    }
+
+    .order-filters {
+      display: flex;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--border-medium);
+      color: var(--charcoal);
+      padding: 0.5rem 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 0.7rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold-dark);
+    }
+
+    .filter-btn.active {
+      background: var(--gold-dark);
+      border-color: var(--gold-dark);
+      color: var(--white);
+    }
+
+    .orders-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .order-card {
+      background: var(--cream-deep);
+      border-radius: 20px;
+      padding: 1.2rem;
+      border: 1px solid var(--border-light);
+      transition: all 0.3s ease;
+    }
+
+    .order-card:hover {
+      border-color: var(--gold-light);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px dashed var(--border-light);
+    }
+
+    .order-id {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--charcoal);
+    }
+
+    .order-id i {
+      color: var(--gold);
+      margin-right: 5px;
+    }
+
+    .order-date {
+      font-size: 0.7rem;
+      color: var(--text-mid);
+    }
+
+    .order-date i {
+      color: var(--gold);
+      margin-right: 4px;
+    }
+
+    .order-status {
+      padding: 0.25rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .status-pending {
+      background: rgba(180, 154, 106, 0.15);
+      color: var(--gold-dark);
+    }
+
+    .status-review {
+      background: rgba(180, 154, 106, 0.15);
+      color: var(--gold-dark);
+    }
+
+    .status-shipped {
+      background: rgba(180, 154, 106, 0.15);
+      color: var(--gold-dark);
+    }
+
+    .status-delivered {
+      background: rgba(50, 150, 80, 0.15);
+      color: #2c682c;
+    }
+
+    .status-cancelled {
+      background: rgba(200, 80, 80, 0.15);
+      color: #b34545;
+    }
+
+    .order-items {
+      margin: 0.8rem 0;
+    }
+
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0;
+      font-size: 0.85rem;
+    }
+
+    .order-item-name {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .order-item-name i {
+      color: var(--gold);
+      font-size: 0.7rem;
+    }
+
+    .order-item-quantity {
+      color: var(--text-mid);
+      font-size: 0.7rem;
+      margin-left: 4px;
+    }
+
+    .order-item-price {
+      font-weight: 500;
+      color: var(--charcoal);
+    }
+
+    .order-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.8rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid var(--border-light);
+      font-weight: 600;
+    }
+
+    .order-total span:last-child {
+      color: var(--gold-dark);
+      font-size: 1rem;
+    }
+
+    .cancel-btn {
+      background: transparent;
+      border: 1px solid #b34545;
+      color: #b34545;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 0.7rem;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 0.5rem;
+    }
+
+    .cancel-btn:hover {
+      background: #b34545;
+      border-color: #b34545;
+      color: white;
+    }
+
+    .empty-orders {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-mid);
+    }
+
+    .empty-orders i {
+      font-size: 2.5rem;
+      color: var(--border-light);
+      margin-bottom: 1rem;
+    }
+
+    .shop-now-btn {
+      display: inline-block;
+      background: var(--gold-dark);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      margin-top: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .shop-now-btn:hover {
+      background: var(--charcoal);
+      transform: translateY(-2px);
+    }
+
+    .not-logged-in {
+      text-align: center;
+      padding: 3rem;
+      background: var(--card-warm);
+      border-radius: 28px;
+      border: 1px solid var(--border-light);
+      max-width: 500px;
+      margin: 3rem auto;
+    }
+
+    .not-logged-in i {
+      font-size: 3rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .not-logged-in h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+      color: var(--charcoal);
+    }
+
+    .not-logged-in p {
+      color: var(--text-mid);
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+    }
+
+    .login-btn {
+      display: inline-block;
+      background: var(--gold-dark);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+    }
+
+    .login-btn:hover {
+      background: var(--charcoal);
+    }
+
+    .loading-spinner {
+      text-align: center;
+      padding: 2rem;
+      color: var(--gold);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--charcoal);
+      color: rgba(247, 240, 230, 0.65);
+      padding: 60px 40px 28px;
+      margin-top: 2rem;
+    }
+
+    body.dark footer {
+      background: #0F0E0C;
+    }
+
+    .footer-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 56px;
+      margin-bottom: 44px;
+    }
+
+    .footer-brand h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.55rem;
+      font-weight: 300;
+      color: var(--gold-light);
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+    }
+
+    .footer-brand p {
+      font-size: 0.8rem;
+      line-height: 1.8;
+      font-weight: 200;
+      max-width: 250px;
+    }
+
+    .footer-col h4 {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .footer-col a {
+      color: rgba(247, 240, 230, 0.55);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 200;
+      transition: color 0.3s;
+    }
+
+    .footer-col a:hover {
+      color: var(--gold-light);
+    }
+
+    .contact-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .contact-list li {
+      font-size: 0.8rem;
+      font-weight: 200;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .contact-list .ic {
+      color: var(--gold);
+      font-size: 0.9rem;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(180, 154, 106, 0.15);
+      padding-top: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-bottom p {
+      font-size: 0.7rem;
+      font-weight: 200;
+    }
+
+    .socials {
+      display: flex;
+      gap: 10px;
+    }
+
+    .social {
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(180, 154, 106, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-light);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+      border-radius: 50%;
+    }
+
+    .social:hover {
+      background: var(--gold-dark);
+      border-color: var(--gold-dark);
+      color: var(--white);
+    }
+
+    .footer-logo-img {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+      margin-bottom: 10px;
+      filter: brightness(0.9);
+      border-radius: 50%;
+    }
+
+    @media (max-width: 900px) {
+      .footer-top {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+      }
+
+      .footer-brand {
+        grid-column: 1/-1;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .footer-top {
+        grid-template-columns: 1fr;
+      }
+
+      footer {
+        padding: 40px 18px 22px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-flex {
+        padding: 0.6rem 1rem;
+      }
+
+      .logo h1 {
+        font-size: 0.9rem;
+      }
+
+      .logo img {
+        width: 36px;
+      }
+
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .profile-info {
+        text-align: center;
+      }
+
+      .logout-btn {
+        margin: 0 auto;
+      }
+    }
+    /* ===== CHECKOUT MODAL ===== */
+    .modal-overlay { position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center; }
+    .modal-content { background:var(--card-warm);border-radius:32px;max-width:480px;width:90%;max-height:85vh;overflow-y:auto;border:1px solid var(--border-light);box-shadow:var(--shadow-lg); }
+    .modal-header { display:flex;justify-content:space-between;align-items:center;padding:1rem 1.2rem;border-bottom:1px solid var(--border-light); }
+    .close-modal { background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-mid); }
+    .modal-form-group { margin-bottom:0.8rem; }
+    .modal-form-group label { display:block;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;color:var(--text-mid); }
+    .modal-form-group input { width:100%;padding:0.7rem 1rem;border:1px solid var(--input-border);border-radius:14px;background:var(--input-bg);color:var(--charcoal);font-size:0.85rem; }
+    .modal-form-group input:focus { outline:none;border-color:var(--input-focus); }
+    .btn-primary-modal { background:var(--gold-dark);color:var(--white);border:none;padding:10px 20px;border-radius:50px;cursor:pointer;font-weight:500;flex:1; }
+    .btn-secondary-modal { background:none;border:1px solid var(--border-medium);color:var(--charcoal);padding:10px 20px;border-radius:50px;cursor:pointer;flex:1; }
+  </style>
 </head>
 
 <body>
-    <script>
-        for (let i = 0; i < 25; i++) {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            const s = Math.random() * 4 + 2;
-            p.style.width = s + 'px';
-            p.style.height = s + 'px';
-            p.style.left = Math.random() * 100 + '%';
-            p.style.animationDelay = Math.random() * 20 + 's';
-            p.style.animationDuration = Math.random() * 15 + 12 + 's';
-            p.style.opacity = Math.random() * 0.2 + 0.05;
-            document.body.appendChild(p);
-        }
-    </script>
+  <script>
+    for (let i = 0; i < 25; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const s = Math.random() * 4 + 2;
+      p.style.width = s + 'px';
+      p.style.height = s + 'px';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDelay = Math.random() * 20 + 's';
+      p.style.animationDuration = Math.random() * 15 + 12 + 's';
+      p.style.opacity = Math.random() * 0.2 + 0.05;
+      document.body.appendChild(p);
+    }
+  </script>
 
-    <div id="menuOverlay" class="cart-overlay" style="z-index:99;"></div>
-    <div id="toast" class="notification">✨ Article ajouté</div>
+  <div id="menuOverlay" class="cart-overlay" style="z-index:99;"></div>
+  <div id="toast" class="notification">✨ Article ajouté</div>
 
-    <div id="cartOverlay" class="cart-overlay"></div>
-    <aside id="cartSidebar" class="cart-sidebar">
-        <div class="cart-header">
-            <h3 style="font-weight:400;font-size:1rem;"><i class="fas fa-bag-shopping"></i> <span
-                    data-translate="cart">Panier</span></h3>
-            <button id="closeCartBtn"
-                style="background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-mid);"><i
-                    class="fas fa-times"></i></button>
-        </div>
-        <div id="cartItemsContainer" class="cart-items">
-            <div class="empty-cart-message" data-translate="emptyCart">Votre panier est vide.</div>
-        </div>
-        <div class="cart-footer">
-            <div class="cart-total"><span data-translate="total">Total</span><span id="cartTotalPrice">0,000 TND</span>
-            </div>
-            <button class="checkout-btn" id="checkoutBtn" style="font-size:0.8rem;"><span
-                    data-translate="payment">PAIEMENT</span> <i class="fas fa-arrow-right"></i></button>
-        </div>
-    </aside>
+  <div id="cartOverlay" class="cart-overlay"></div>
+  <aside id="cartSidebar" class="cart-sidebar">
+    <div class="cart-header">
+      <h3 style="font-weight:400;font-size:1rem;"><i class="fas fa-bag-shopping"></i> <span
+          data-translate="cart">Panier</span></h3>
+      <button id="closeCartBtn"
+        style="background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-mid);"><i
+          class="fas fa-times"></i></button>
+    </div>
+    <div id="cartItemsContainer" class="cart-items">
+      <div class="empty-cart-message" data-translate="emptyCart">Votre panier est vide.</div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total"><span data-translate="total">Total</span><span id="cartTotalPrice">0,000 TND</span>
+      </div>
+      <button class="checkout-btn" id="checkoutBtn" style="font-size:0.8rem;"><span
+          data-translate="payment">PAIEMENT</span> <i class="fas fa-arrow-right"></i></button>
+    </div>
+  </aside>
 
-    <!-- ===== CHECKOUT MODAL ===== -->
-    <div id="checkoutModal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="font-weight:400;font-size:1.1rem;"><i class="fas fa-truck"></i> Livraison</h3>
-                <button class="close-modal" onclick="closeCheckoutModal()"><i class="fas fa-times"></i></button>
+  <!-- ===== CHECKOUT MODAL ===== -->
+  <div id="checkoutModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-weight:400;font-size:1.1rem;"><i class="fas fa-truck"></i> Livraison</h3>
+        <button class="close-modal" onclick="closeCheckoutModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <div style="padding:1.2rem;">
+        <form id="checkoutForm">
+          <div class="modal-form-group"><label>Nom complet *</label><input type="text" id="customerName" required></div>
+          <div class="modal-form-group"><label>Téléphone *</label><input type="tel" id="customerPhone" required></div>
+          <div id="emailFieldGroup" class="modal-form-group"><label>Email *</label><input type="email" id="customerEmail"></div>
+          <div id="loggedInEmailDisplay" style="display:none;" class="modal-form-group"><label>Email</label>
+            <div style="padding:0.7rem;background:var(--cream-deep);border-radius:14px;"><i class="fas fa-check-circle"></i> <span id="displayEmail"></span></div>
+          </div>
+          <div class="modal-form-group"><label>Adresse *</label><input type="text" id="shippingAddress" required></div>
+          <div style="background:var(--cream-deep);padding:0.8rem;border-radius:18px;margin:0.8rem 0;">
+            <h4 style="margin-bottom:0.5rem;font-weight:400;font-size:0.9rem;">Votre commande</h4>
+            <div id="modalCartItems" style="font-size:0.8rem;"></div>
+            <div style="display:flex;justify-content:space-between;margin-top:0.6rem;padding-top:0.6rem;border-top:1px solid var(--border-light);">
+              <span>Total</span><span id="modalTotal">0 TND</span>
             </div>
-            <div style="padding:1.2rem;">
-                <form id="checkoutForm">
-                    <div class="modal-form-group"><label>Nom complet *</label><input type="text" id="customerName" required></div>
-                    <div class="modal-form-group"><label>Téléphone *</label><input type="tel" id="customerPhone" required></div>
-                    <div id="emailFieldGroup" class="modal-form-group"><label>Email *</label><input type="email" id="customerEmail"></div>
-                    <div id="loggedInEmailDisplay" style="display:none;" class="modal-form-group"><label>Email</label>
-                        <div style="padding:0.7rem;background:var(--cream-deep);border-radius:14px;"><i class="fas fa-check-circle"></i> <span id="displayEmail"></span></div>
-                    </div>
-                    <div class="modal-form-group"><label>Adresse *</label><input type="text" id="shippingAddress" required></div>
-                    <div style="background:var(--cream-deep);padding:0.8rem;border-radius:18px;margin:0.8rem 0;">
-                        <h4 style="margin-bottom:0.5rem;font-weight:400;font-size:0.9rem;">Votre commande</h4>
-                        <div id="modalCartItems" style="font-size:0.8rem;"></div>
-                        <div style="display:flex;justify-content:space-between;margin-top:0.6rem;padding-top:0.6rem;border-top:1px solid var(--border-light);">
-                            <span>Total</span><span id="modalTotal">0 TND</span>
-                        </div>
-                    </div>
-                    <div style="display:flex;gap:10px;margin-top:0.8rem;">
-                        <button type="button" class="btn-secondary-modal" onclick="closeCheckoutModal()" style="font-size:0.8rem;">Annuler</button>
-                        <button type="submit" class="btn-primary-modal" id="submitOrderBtn" style="font-size:0.8rem;">Confirmer</button>
-                    </div>
-                </form>
-            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:0.8rem;">
+            <button type="button" class="btn-secondary-modal" onclick="closeCheckoutModal()" style="font-size:0.8rem;">Annuler</button>
+            <button type="submit" class="btn-primary-modal" id="submitOrderBtn" style="font-size:0.8rem;">Confirmer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <div class="header-flex">
+      <a href="index.html" class="logo"><img src="is.png" alt="Rosa">
+        <h1>Rosa Fragrances</h1>
+      </a>
+      <div style="display:flex;align-items:center;gap:2px;">
+        <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon"
+            style="display:none;"></i></div>
+        <div class="cart-icon" id="cartToggle"><i class="fas fa-bag-shopping"></i><span id="cartCount"
+            class="cart-count">0</span></div>
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+      </div>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" data-translate="home">ACCUEIL</a>
+        <a href="man.html" data-translate="men">HOMME</a>
+        <a href="women.html" data-translate="women">FEMME</a>
+        <a href="unisexe.html" data-translate="unisex">UNISEXE</a>
+        <a href="kids.html" data-translate="kids">ENFANTS</a>
+        <div class="lang-menu" id="langMenu">
+          <button class="lang-current" id="langCurrentBtn"><span id="currentLangText">FRANÇAIS</span><i
+              class="fas fa-chevron-down"></i></button>
+          <div class="lang-options">
+            <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
+            <button class="lang-option" data-lang="en">🇬🇧 English</button>
+            <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
+          </div>
         </div>
+        <a href="login146.html" id="authLink" data-translate="login">Se connecter</a>
+        <a href="profile.html" id="profileLink" style="display:none;" data-translate="profile">Mon Profil</a>
+        <a href="adminadd.html" id="adminLink" style="display:none;" class="admin-nav-link"><i
+            class="fas fa-crown"></i> Admin</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="profile-container" id="profileContainer" style="display: none;">
+      <div class="profile-header">
+        <div class="profile-avatar"><i class="fas fa-user-circle"></i></div>
+        <div class="profile-info">
+          <h2 id="userName">Chargement...</h2>
+          <p><i class="fas fa-envelope"></i> <span id="userEmail"></span></p>
+        </div>
+        <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> <span
+            data-translate="logout">Déconnexion</span></button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
+          <div class="stat-content">
+            <h3 id="totalOrders">0</h3>
+            <p data-translate="totalOrders">Commandes totales</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-clock"></i></div>
+          <div class="stat-content">
+            <h3 id="pendingOrders">0</h3>
+            <p data-translate="pending">En cours</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+          <div class="stat-content">
+            <h3 id="deliveredOrders">0</h3>
+            <p data-translate="delivered">Livrées</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="orders-section">
+        <div class="section-title">
+          <i class="fas fa-history"></i>
+          <h2 data-translate="orderHistory">Historique des commandes</h2>
+        </div>
+
+        <div class="order-filters">
+          <button class="filter-btn active" onclick="filterOrders('all', this)" data-translate="all">Toutes</button>
+          <button class="filter-btn" onclick="filterOrders('pending', this)" data-translate="pendingStatus">En attente</button>
+          <button class="filter-btn" onclick="filterOrders('review', this)" data-translate="review">En révision</button>
+          <button class="filter-btn" onclick="filterOrders('shipped', this)" data-translate="shipped">Expédiées</button>
+          <button class="filter-btn" onclick="filterOrders('delivered', this)" data-translate="deliveredStatus">Livrées</button>
+        </div>
+
+        <div id="ordersList" class="orders-list"></div>
+      </div>
     </div>
 
-    <header>
-        <div class="header-flex">
-            <a href="index.html" class="logo"><img src="is.png" alt="Rosa">
-                <h1>Rosa Fragrances</h1>
-            </a>
-            <div style="display:flex;align-items:center;gap:2px;">
-                <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon"
-                        style="display:none;"></i></div>
-                <div class="cart-icon" id="cartToggle"><i class="fas fa-bag-shopping"></i><span id="cartCount"
-                        class="cart-count">0</span></div>
-                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
-            </div>
-            <div class="nav-links" id="navLinks">
-                <a href="index.html" data-translate="home">ACCUEIL</a>
-                <a href="man.html" data-translate="men">HOMME</a>
-                <a href="women.html" data-translate="women">FEMME</a>
-                <a href="unisexe.html" data-translate="unisex">UNISEXE</a>
-                <a href="kids.html" data-translate="kids">ENFANTS</a>
-                <div class="lang-menu" id="langMenu">
-                    <button class="lang-current" id="langCurrentBtn"><span id="currentLangText">FRANÇAIS</span><i
-                            class="fas fa-chevron-down"></i></button>
-                    <div class="lang-options">
-                        <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
-                        <button class="lang-option" data-lang="en">🇬🇧 English</button>
-                        <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
-                    </div>
-                </div>
-                <a href="login146.html" id="authLink" data-translate="login">Se connecter</a>
-                <a href="profile.html" id="profileLink" style="display:none;" data-translate="profile">Mon Profil</a>
-                <a href="adminadd.html" id="adminLink" style="display:none;" class="admin-nav-link"><i
-                        class="fas fa-crown"></i> Admin</a>
-            </div>
+    <div id="notLoggedIn" class="profile-container" style="display: none;">
+      <div class="not-logged-in">
+        <i class="fas fa-user-lock"></i>
+        <h2 data-translate="notLoggedIn">Non connecté</h2>
+        <p data-translate="pleaseLogin">Veuillez vous connecter pour voir votre profil et vos commandes.</p>
+        <a href="login146.html" class="login-btn" data-translate="login">Se connecter</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="footer-logo-img" src="is.png" alt="Rosa">
+          <h3>ROSA FRAGRANCES</h3>
+          <p data-translate="footerDescription">Nous vous proposons un univers de parfums luxueux, aux
+            senteurs élégantes et spontanées, qui touchent les émotions et laissent une impression durable.
+          </p>
         </div>
-    </header>
-
-    <main>
-        <div class="profile-container" id="profileContainer" style="display: none;">
-            <div class="profile-header">
-                <div class="profile-avatar"><i class="fas fa-user-circle"></i></div>
-                <div class="profile-info">
-                    <h2 id="userName">Chargement...</h2>
-                    <p><i class="fas fa-envelope"></i> <span id="userEmail"></span></p>
-                </div>
-                <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> <span
-                        data-translate="logout">Déconnexion</span></button>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
-                    <div class="stat-content">
-                        <h3 id="totalOrders">0</h3>
-                        <p data-translate="totalOrders">Commandes totales</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                    <div class="stat-content">
-                        <h3 id="pendingOrders">0</h3>
-                        <p data-translate="pending">En cours</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-                    <div class="stat-content">
-                        <h3 id="deliveredOrders">0</h3>
-                        <p data-translate="delivered">Livrées</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="orders-section">
-                <div class="section-title">
-                    <i class="fas fa-history"></i>
-                    <h2 data-translate="orderHistory">Historique des commandes</h2>
-                </div>
-
-                <div class="order-filters">
-                    <button class="filter-btn active" onclick="filterOrders('all', this)" data-translate="all">Toutes</button>
-                    <button class="filter-btn" onclick="filterOrders('pending', this)" data-translate="pendingStatus">En attente</button>
-                    <button class="filter-btn" onclick="filterOrders('review', this)" data-translate="review">En révision</button>
-                    <button class="filter-btn" onclick="filterOrders('shipped', this)" data-translate="shipped">Expédiées</button>
-                    <button class="filter-btn" onclick="filterOrders('delivered', this)" data-translate="deliveredStatus">Livrées</button>
-                </div>
-
-                <div id="ordersList" class="orders-list"></div>
-            </div>
+        <div class="footer-col">
+          <h4 data-translate="footerPerfumesTitle">Parfums</h4>
+          <ul>
+            <li><a href="man.html" data-translate="footerMen">Homme</a></li>
+            <li><a href="women.html" data-translate="footerWomen">Femme</a></li>
+            <li><a href="unisexe.html" data-translate="footerUnisex">Unisexe</a></li>
+            <li><a href="kids.html" data-translate="footerKids">Enfants</a></li>
+          </ul>
         </div>
-
-        <div id="notLoggedIn" class="profile-container" style="display: none;">
-            <div class="not-logged-in">
-                <i class="fas fa-user-lock"></i>
-                <h2 data-translate="notLoggedIn">Non connecté</h2>
-                <p data-translate="pleaseLogin">Veuillez vous connecter pour voir votre profil et vos commandes.</p>
-                <a href="login146.html" class="login-btn" data-translate="login">Se connecter</a>
+        <div class="footer-col">
+          <h4 data-translate="footerContactTitle">Contact</h4>
+          <ul class="contact-list">
+            <li><span class="ic">📍</span> <span data-translate="footerAddress">Tunis, Tunisie</span></li>
+            <li><span class="ic">📞</span> <span data-translate="footerPhone">+216 96 163 366</span></li>
+            <li><span class="ic">✉️</span> <span
+                data-translate="footerEmail">contact@rosafragrances.tn</span></li>
+            <div class="socials">
+              <a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/" class="social"
+                target="_blank"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://wa.me/21696163366" class="social" target="_blank"><i
+                  class="fab fa-whatsapp"></i></a>
             </div>
+          </ul>
         </div>
-    </main>
+      </div>
+      <div class="footer-bottom">
+        <p><span data-translate="footerCopyright">© 2026 Rosa Fragrances. Tous droits réservés.</span></p>
+      </div>
+    </div>
+  </footer>
 
-    <footer>
-        <div class="footer-inner">
-            <div class="footer-top">
-                <div class="footer-brand">
-                    <img class="footer-logo-img" src="is.png" alt="Rosa">
-                    <h3>ROSA FRAGRANCES</h3>
-                    <p data-translate="footerDescription">Nous vous proposons un univers de parfums luxueux, aux
-                        senteurs élégantes et spontanées, qui touchent les émotions et laissent une impression durable.
-                    </p>
-                </div>
-                <div class="footer-col">
-                    <h4 data-translate="footerPerfumesTitle">Parfums</h4>
-                    <ul>
-                        <li><a href="man.html" data-translate="footerMen">Homme</a></li>
-                        <li><a href="women.html" data-translate="footerWomen">Femme</a></li>
-                        <li><a href="unisexe.html" data-translate="footerUnisex">Unisexe</a></li>
-                        <li><a href="kids.html" data-translate="footerKids">Enfants</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4 data-translate="footerContactTitle">Contact</h4>
-                    <ul class="contact-list">
-                        <li><span class="ic">📍</span> <span data-translate="footerAddress">Tunis, Tunisie</span></li>
-                        <li><span class="ic">📞</span> <span data-translate="footerPhone">+216 96 163 366</span></li>
-                        <li><span class="ic">✉️</span> <span
-                                data-translate="footerEmail">contact@rosafragrances.tn</span></li>
-                        <div class="socials">
-                            <a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/" class="social"
-                                target="_blank"><i class="fab fa-facebook-f"></i></a>
-                            <a href="https://wa.me/21696163366" class="social" target="_blank"><i
-                                    class="fab fa-whatsapp"></i></a>
-                        </div>
-                    </ul>
-                </div>
+  <script>
+    (function () {
+      const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
+      const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      let currentLanguage = localStorage.getItem('language') || 'fr';
+
+      const translations = {
+        fr: {
+          home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
+          login: 'Se connecter', profile: 'Mon Profil', logout: 'Déconnexion',
+          cart: 'Panier', emptyCart: 'Votre panier est vide.', total: 'Total', payment: 'PAIEMENT',
+          addedToCart: '✨ Article ajouté', removed: '🗑️ Retiré',
+          totalOrders: 'Commandes totales', pending: 'En cours', delivered: 'Livrées',
+          orderHistory: 'Historique des commandes', all: 'Toutes', pendingStatus: 'En attente',
+          review: 'En révision', shipped: 'Expédiées', deliveredStatus: 'Livrées',
+          cancelOrder: 'Annuler', shopNow: 'Découvrir nos parfums',
+          notLoggedIn: 'Non connecté', pleaseLogin: 'Veuillez vous connecter pour voir votre profil et vos commandes.',
+          noOrders: 'Aucune commande trouvée', errorLoading: 'Erreur lors du chargement',
+          orderCancelled: '✅ Commande annulée', cancelConfirm: 'Annuler cette commande ?',
+          orderConfirmed: '✅ Commande confirmée!', cartEmptyWarning: '🛒 Panier vide', error: '❌ Erreur',
+          footerDescription: "Nous vous proposons un univers de parfums luxueux, aux senteurs élégantes et spontanées, qui touchent les émotions et laissent une impression durable.",
+          footerPerfumesTitle: "Parfums", footerMen: "Homme", footerWomen: "Femme", footerUnisex: "Unisexe", footerKids: "Enfants",
+          footerContactTitle: "Contact", footerAddress: "Tunis, Tunisie", footerPhone: "+216 96 163 366",
+          footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. Tous droits réservés."
+        },
+        en: {
+          home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
+          login: 'Sign in', profile: 'My Profile', logout: 'Logout',
+          cart: 'Cart', emptyCart: 'Your cart is empty.', total: 'Total', payment: 'PAYMENT',
+          addedToCart: '✨ Added to cart', removed: '🗑️ Removed',
+          totalOrders: 'Total orders', pending: 'In progress', delivered: 'Delivered',
+          orderHistory: 'Order history', all: 'All', pendingStatus: 'Pending',
+          review: 'Under review', shipped: 'Shipped', deliveredStatus: 'Delivered', cancelled: 'Cancelled',
+          cancelOrder: 'Cancel', shopNow: 'Discover our perfumes',
+          notLoggedIn: 'Not logged in', pleaseLogin: 'Please log in to view your profile and orders.',
+          noOrders: 'No orders found', errorLoading: 'Error loading',
+          orderCancelled: '✅ Order cancelled', cancelConfirm: 'Cancel this order?',
+          orderConfirmed: '✅ Order confirmed!', cartEmptyWarning: '🛒 Cart is empty', error: '❌ Error',
+          footerDescription: "We offer you a world of luxurious perfumes, with elegant and spontaneous scents, that touch the emotions and leave a lasting impression.",
+          footerPerfumesTitle: "Perfumes", footerMen: "Men", footerWomen: "Women", footerUnisex: "Unisex", footerKids: "Kids",
+          footerContactTitle: "Contact", footerAddress: "Tunis, Tunisia", footerPhone: "+216 96 163 366",
+          footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. All rights reserved."
+        },
+        ar: {
+          home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
+          login: 'تسجيل الدخول', profile: 'ملفي الشخصي', logout: 'تسجيل الخروج',
+          cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.', total: 'المجموع', payment: 'الدفع',
+          addedToCart: '✨ تمت الإضافة', removed: '🗑️ تمت الإزالة',
+          totalOrders: 'إجمالي الطلبات', pending: 'قيد المعالجة', delivered: 'تم التوصيل',
+          orderHistory: 'سجل الطلبات', all: 'الكل', pendingStatus: 'قيد الانتظار',
+          review: 'قيد المراجعة', shipped: 'تم الشحن', deliveredStatus: 'تم التوصيل', cancelled: 'ملغاة',
+          cancelOrder: 'إلغاء', shopNow: 'اكتشف عطورنا',
+          notLoggedIn: 'غير مسجل الدخول', pleaseLogin: 'الرجاء تسجيل الدخول لعرض ملفك الشخصي وطلباتك.',
+          noOrders: 'لا توجد طلبات', errorLoading: 'خطأ في التحميل',
+          orderCancelled: '✅ تم إلغاء الطلب', cancelConfirm: 'إلغاء هذا الطلب؟',
+          orderConfirmed: '✅ تم تأكيد الطلب!', cartEmptyWarning: '🛒 السلة فارغة', error: '❌ خطأ',
+          footerDescription: "نقدم لكم عالماً من العطور الفاخرة، بروائح أنيقة وعفوية، تلامس المشاعر وتترك انطباعاً دائماً.",
+          footerPerfumesTitle: "العطور", footerMen: "رجالي", footerWomen: "نسائي", footerUnisex: "للجنسين", footerKids: "أطفال",
+          footerContactTitle: "اتصل بنا", footerAddress: "تونس، تونس", footerPhone: "366 163 96 216+",
+          footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 روزا للعطور. جميع الحقوق محفوظة."
+        }
+      };
+
+      function translatePage(lang) {
+        currentLanguage = lang;
+        localStorage.setItem('language', lang);
+        document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
+        document.body.style.textAlign = lang === 'ar' ? 'right' : 'left';
+        const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+        const langSpan = document.getElementById('currentLangText');
+        if (langSpan) langSpan.textContent = names[lang];
+        document.querySelectorAll('[data-translate]').forEach(el => {
+          const key = el.getAttribute('data-translate');
+          if (translations[lang] && translations[lang][key]) {
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = translations[lang][key];
+            else el.textContent = translations[lang][key];
+          }
+        });
+        if (typeof renderCart === 'function') renderCart();
+        if (allOrders && allOrders.length > 0) displayOrders(currentFilter);
+      }
+
+      let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
+      let currentUser = null;
+      let allOrders = [];
+      let currentFilter = 'all';
+
+      const profileContainer = document.getElementById('profileContainer');
+      const notLoggedInDiv = document.getElementById('notLoggedIn');
+      const userName = document.getElementById('userName');
+      const userEmail = document.getElementById('userEmail');
+      const totalOrdersEl = document.getElementById('totalOrders');
+      const pendingOrdersEl = document.getElementById('pendingOrders');
+      const deliveredOrdersEl = document.getElementById('deliveredOrders');
+      const ordersListEl = document.getElementById('ordersList');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const authLink = document.getElementById('authLink');
+      const profileLink = document.getElementById('profileLink');
+      const adminLink = document.getElementById('adminLink');
+
+      const menuToggle = document.getElementById('menuToggle');
+      const navLinks = document.getElementById('navLinks');
+      const menuOverlay = document.getElementById('menuOverlay');
+      const langMenu = document.getElementById('langMenu');
+      const langCurrentBtn = document.getElementById('langCurrentBtn');
+      const themeToggle = document.getElementById('themeToggle');
+
+      const cartToggle = document.getElementById('cartToggle');
+      const cartSidebar = document.getElementById('cartSidebar');
+      const cartOverlayEl = document.getElementById('cartOverlay');
+      const closeCartBtn = document.getElementById('closeCartBtn');
+      const cartCountSpan = document.getElementById('cartCount');
+      const cartItemsContainer = document.getElementById('cartItemsContainer');
+      const cartTotalSpan = document.getElementById('cartTotalPrice');
+      const toast = document.getElementById('toast');
+      const checkoutBtn = document.getElementById('checkoutBtn');
+
+      function showToast(msgKey, productName = '') {
+        if (!toast) return;
+        let msg = translations[currentLanguage][msgKey] || msgKey;
+        if (productName) msg = msg.replace('✨', '✨ ') + ' ' + productName;
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+      }
+
+      function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
+      function calculateTotal() { return cart.reduce((sum, i) => sum + (i.price * i.quantity), 0); }
+
+      function updateCartCount() {
+        const total = cart.reduce((acc, i) => acc + (i.quantity || 1), 0);
+        if (cartCountSpan) cartCountSpan.textContent = total;
+      }
+
+      function saveCart() {
+        localStorage.setItem('RosaFragrances_cart', JSON.stringify(cart));
+        updateCartCount();
+        renderCart();
+      }
+
+      function renderCart() {
+        if (!cartItemsContainer) return;
+        if (cart.length === 0) {
+          cartItemsContainer.innerHTML = `<div class="empty-cart-message">${translations[currentLanguage].emptyCart}</div>`;
+          if (cartTotalSpan) cartTotalSpan.textContent = '0,000 TND';
+          return;
+        }
+        let html = '', total = 0;
+        cart.forEach(item => {
+          const sub = item.price * (item.quantity || 1); total += sub;
+          const imageHtml = item.image ? `<img src="${item.image}" alt="${escapeHtml(item.name)}">` : `<i class="fas ${item.icon || 'fa-crown'}"></i>`;
+          html += `<div class="cart-item" data-id="${item.id}">
+          <div class="cart-item-icon">${imageHtml}</div>
+          <div class="cart-item-info">
+            <div class="cart-item-title">${escapeHtml(item.name)}</div>
+            <div class="cart-item-price">${formatPrice(item.price)}</div>
+            <div class="cart-item-quantity">
+              <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
+              <span>${item.quantity || 1}</span>
+              <button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button>
             </div>
-            <div class="footer-bottom">
-                <p><span data-translate="footerCopyright">© 2026 Rosa Fragrances. Tous droits réservés.</span></p>
-            </div>
-        </div>
-    </footer>
+          </div>
+          <button class="cart-item-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
+        </div>`;
+        });
+        cartItemsContainer.innerHTML = html;
+        if (cartTotalSpan) cartTotalSpan.textContent = formatPrice(total);
+      }
 
-    <script>
-        (function () {
-            const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
-            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
-            const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      function addToCart(id, name, price, icon, image) {
+        const existing = cart.find(i => i.id === id);
+        if (existing) existing.quantity = (existing.quantity || 1) + 1;
+        else cart.push({ id, name, price, icon: icon || 'fa-crown', image, quantity: 1 });
+        saveCart();
+        showToast('addedToCart', name);
+      }
 
-            let currentLanguage = localStorage.getItem('language') || 'fr';
+      function removeFromCart(id) {
+        cart = cart.filter(i => i.id !== id);
+        saveCart();
+        showToast('removed');
+      }
 
-            const translations = {
-                fr: {
-                    home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
-                    login: 'Se connecter', profile: 'Mon Profil', logout: 'Déconnexion',
-                    cart: 'Panier', emptyCart: 'Votre panier est vide.', total: 'Total', payment: 'PAIEMENT',
-                    addedToCart: '✨ Article ajouté', removed: '🗑️ Retiré',
-                    totalOrders: 'Commandes totales', pending: 'En cours', delivered: 'Livrées',
-                    orderHistory: 'Historique des commandes', all: 'Toutes', pendingStatus: 'En attente',
-                    review: 'En révision', shipped: 'Expédiées', deliveredStatus: 'Livrées',
-                    cancelOrder: 'Annuler', shopNow: 'Découvrir nos parfums',
-                    notLoggedIn: 'Non connecté', pleaseLogin: 'Veuillez vous connecter pour voir votre profil et vos commandes.',
-                    noOrders: 'Aucune commande trouvée', errorLoading: 'Erreur lors du chargement',
-                    orderCancelled: '✅ Commande annulée', cancelConfirm: 'Annuler cette commande ?',
-                    orderConfirmed: '✅ Commande confirmée!', cartEmptyWarning: '🛒 Panier vide', error: '❌ Erreur',
-                    footerDescription: "Nous vous proposons un univers de parfums luxueux, aux senteurs élégantes et spontanées, qui touchent les émotions et laissent une impression durable.",
-                    footerPerfumesTitle: "Parfums", footerMen: "Homme", footerWomen: "Femme", footerUnisex: "Unisexe", footerKids: "Enfants",
-                    footerContactTitle: "Contact", footerAddress: "Tunis, Tunisie", footerPhone: "+216 96 163 366",
-                    footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. Tous droits réservés."
-                },
-                en: {
-                    home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
-                    login: 'Sign in', profile: 'My Profile', logout: 'Logout',
-                    cart: 'Cart', emptyCart: 'Your cart is empty.', total: 'Total', payment: 'PAYMENT',
-                    addedToCart: '✨ Added to cart', removed: '🗑️ Removed',
-                    totalOrders: 'Total orders', pending: 'In progress', delivered: 'Delivered',
-                    orderHistory: 'Order history', all: 'All', pendingStatus: 'Pending',
-                    review: 'Under review', shipped: 'Shipped', deliveredStatus: 'Delivered', cancelled: 'Cancelled',
-                    cancelOrder: 'Cancel', shopNow: 'Discover our perfumes',
-                    notLoggedIn: 'Not logged in', pleaseLogin: 'Please log in to view your profile and orders.',
-                    noOrders: 'No orders found', errorLoading: 'Error loading',
-                    orderCancelled: '✅ Order cancelled', cancelConfirm: 'Cancel this order?',
-                    orderConfirmed: '✅ Order confirmed!', cartEmptyWarning: '🛒 Cart is empty', error: '❌ Error',
-                    footerDescription: "We offer you a world of luxurious perfumes, with elegant and spontaneous scents, that touch the emotions and leave a lasting impression.",
-                    footerPerfumesTitle: "Perfumes", footerMen: "Men", footerWomen: "Women", footerUnisex: "Unisex", footerKids: "Kids",
-                    footerContactTitle: "Contact", footerAddress: "Tunis, Tunisia", footerPhone: "+216 96 163 366",
-                    footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. All rights reserved."
-                },
-                ar: {
-                    home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
-                    login: 'تسجيل الدخول', profile: 'ملفي الشخصي', logout: 'تسجيل الخروج',
-                    cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.', total: 'المجموع', payment: 'الدفع',
-                    addedToCart: '✨ تمت الإضافة', removed: '🗑️ تمت الإزالة',
-                    totalOrders: 'إجمالي الطلبات', pending: 'قيد المعالجة', delivered: 'تم التوصيل',
-                    orderHistory: 'سجل الطلبات', all: 'الكل', pendingStatus: 'قيد الانتظار',
-                    review: 'قيد المراجعة', shipped: 'تم الشحن', deliveredStatus: 'تم التوصيل', cancelled: 'ملغاة',
-                    cancelOrder: 'إلغاء', shopNow: 'اكتشف عطورنا',
-                    notLoggedIn: 'غير مسجل الدخول', pleaseLogin: 'الرجاء تسجيل الدخول لعرض ملفك الشخصي وطلباتك.',
-                    noOrders: 'لا توجد طلبات', errorLoading: 'خطأ في التحميل',
-                    orderCancelled: '✅ تم إلغاء الطلب', cancelConfirm: 'إلغاء هذا الطلب؟',
-                    orderConfirmed: '✅ تم تأكيد الطلب!', cartEmptyWarning: '🛒 السلة فارغة', error: '❌ خطأ',
-                    footerDescription: "نقدم لكم عالماً من العطور الفاخرة، بروائح أنيقة وعفوية، تلامس المشاعر وتترك انطباعاً دائماً.",
-                    footerPerfumesTitle: "العطور", footerMen: "رجالي", footerWomen: "نسائي", footerUnisex: "للجنسين", footerKids: "أطفال",
-                    footerContactTitle: "اتصل بنا", footerAddress: "تونس، تونس", footerPhone: "366 163 96 216+",
-                    footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 روزا للعطور. جميع الحقوق محفوظة."
-                }
-            };
+      function updateQuantity(id, action) {
+        const item = cart.find(i => i.id === id);
+        if (!item) return;
+        if (action === 'increase') item.quantity = (item.quantity || 1) + 1;
+        else if (action === 'decrease') {
+          if (item.quantity > 1) item.quantity -= 1;
+          else { removeFromCart(id); return; }
+        }
+        saveCart();
+      }
 
-            function translatePage(lang) {
-                currentLanguage = lang;
-                localStorage.setItem('language', lang);
-                document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
-                document.body.style.textAlign = lang === 'ar' ? 'right' : 'left';
-                const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
-                const langSpan = document.getElementById('currentLangText');
-                if (langSpan) langSpan.textContent = names[lang];
-                document.querySelectorAll('[data-translate]').forEach(el => {
-                    const key = el.getAttribute('data-translate');
-                    if (translations[lang] && translations[lang][key]) {
-                        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = translations[lang][key];
-                        else el.textContent = translations[lang][key];
-                    }
-                });
-                if (typeof renderCart === 'function') renderCart();
-                if (allOrders && allOrders.length > 0) displayOrders(currentFilter);
-            }
+      function openCart() {
+        cartSidebar?.classList.add('open');
+        cartOverlayEl?.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
 
-            let cart = JSON.parse(localStorage.getItem('RosaFragrances_cart')) || [];
-            let currentUser = null;
-            let allOrders = [];
-            let currentFilter = 'all';
+      function closeCart() {
+        cartSidebar?.classList.remove('open');
+        cartOverlayEl?.classList.remove('active');
+        document.body.style.overflow = '';
+      }
 
-            const profileContainer = document.getElementById('profileContainer');
-            const notLoggedInDiv = document.getElementById('notLoggedIn');
-            const userName = document.getElementById('userName');
-            const userEmail = document.getElementById('userEmail');
-            const totalOrdersEl = document.getElementById('totalOrders');
-            const pendingOrdersEl = document.getElementById('pendingOrders');
-            const deliveredOrdersEl = document.getElementById('deliveredOrders');
-            const ordersListEl = document.getElementById('ordersList');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const authLink = document.getElementById('authLink');
-            const profileLink = document.getElementById('profileLink');
-            const adminLink = document.getElementById('adminLink');
+      function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
+      }
 
-            const menuToggle = document.getElementById('menuToggle');
-            const navLinks = document.getElementById('navLinks');
-            const menuOverlay = document.getElementById('menuOverlay');
-            const langMenu = document.getElementById('langMenu');
-            const langCurrentBtn = document.getElementById('langCurrentBtn');
-            const themeToggle = document.getElementById('themeToggle');
+      function toggleMenu() {
+        navLinks.classList.toggle('active');
+        menuOverlay.classList.toggle('active');
+        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+        if (navLinks.classList.contains('active')) closeCart();
+      }
 
-            const cartToggle = document.getElementById('cartToggle');
-            const cartSidebar = document.getElementById('cartSidebar');
-            const cartOverlayEl = document.getElementById('cartOverlay');
-            const closeCartBtn = document.getElementById('closeCartBtn');
-            const cartCountSpan = document.getElementById('cartCount');
-            const cartItemsContainer = document.getElementById('cartItemsContainer');
-            const cartTotalSpan = document.getElementById('cartTotalPrice');
-            const toast = document.getElementById('toast');
-            const checkoutBtn = document.getElementById('checkoutBtn');
+      let isUpdatingUser = false, updateUserTimeout;
 
-            function showToast(msgKey, productName = '') {
-                if (!toast) return;
-                let msg = translations[currentLanguage][msgKey] || msgKey;
-                if (productName) msg = msg.replace('✨', '✨ ') + ' ' + productName;
-                toast.textContent = msg;
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2000);
-            }
+      async function updateUserDisplay() {
+        if (isUpdatingUser) return; isUpdatingUser = true;
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            if (authLink) authLink.style.display = 'none';
+            if (profileLink) profileLink.style.display = 'block';
+            if (user.email === 'azmmeli146@gmail.com') { if (adminLink) adminLink.style.display = 'block'; }
+            else { if (adminLink) adminLink.style.display = 'none'; }
+          } else {
+            if (authLink) authLink.style.display = 'block';
+            if (profileLink) profileLink.style.display = 'none';
+            if (adminLink) adminLink.style.display = 'none';
+          }
+        } finally { isUpdatingUser = false; }
+      }
 
-            function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
-            function calculateTotal() { return cart.reduce((sum, i) => sum + (i.price * i.quantity), 0); }
+      async function checkUser() {
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (!user) {
+            if (profileContainer) profileContainer.style.display = 'none';
+            if (notLoggedInDiv) notLoggedInDiv.style.display = 'block';
+            return;
+          }
+          currentUser = user;
+          if (profileContainer) profileContainer.style.display = 'block';
+          if (notLoggedInDiv) notLoggedInDiv.style.display = 'none';
+          if (userName) userName.textContent = user.email?.split('@')[0] || 'Client';
+          if (userEmail) userEmail.textContent = user.email;
+          await loadOrders();
+        } catch (err) {
+          console.error(err);
+          if (profileContainer) profileContainer.style.display = 'none';
+          if (notLoggedInDiv) notLoggedInDiv.style.display = 'block';
+        }
+      }
 
-            function updateCartCount() {
-                const total = cart.reduce((acc, i) => acc + (i.quantity || 1), 0);
-                if (cartCountSpan) cartCountSpan.textContent = total;
-            }
+      async function loadOrders() {
+        if (!ordersListEl) return;
+        try {
+          ordersListEl.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Chargement...</div>';
+          const { data, error } = await supabase.from('orders').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+          if (error) throw error;
+          allOrders = data || [];
+          updateStats();
+          displayOrders('all');
+        } catch (error) {
+          console.error('Error loading orders:', error);
+          ordersListEl.innerHTML = `<div class="empty-orders">${translations[currentLanguage].errorLoading}</div>`;
+        }
+      }
 
-            function saveCart() {
-                localStorage.setItem('RosaFragrances_cart', JSON.stringify(cart));
-                updateCartCount();
-                renderCart();
-            }
+      function updateStats() {
+        if (totalOrdersEl) totalOrdersEl.textContent = allOrders.length;
+        const pending = allOrders.filter(o => ['pending', 'review', 'shipped'].includes(o.status)).length;
+        const delivered = allOrders.filter(o => o.status === 'delivered').length;
+        if (pendingOrdersEl) pendingOrdersEl.textContent = pending;
+        if (deliveredOrdersEl) deliveredOrdersEl.textContent = delivered;
+      }
 
-            function renderCart() {
-                if (!cartItemsContainer) return;
-                if (cart.length === 0) {
-                    cartItemsContainer.innerHTML = `<div class="empty-cart-message">${translations[currentLanguage].emptyCart}</div>`;
-                    if (cartTotalSpan) cartTotalSpan.textContent = '0,000 TND';
-                    return;
-                }
-                let html = '', total = 0;
-                cart.forEach(item => {
-                    const sub = item.price * (item.quantity || 1); total += sub;
-                    const imageHtml = item.image ? `<img src="${item.image}" alt="${escapeHtml(item.name)}">` : `<i class="fas ${item.icon || 'fa-crown'}"></i>`;
-                    html += `<div class="cart-item" data-id="${item.id}">
-            <div class="cart-item-icon">${imageHtml}</div>
-            <div class="cart-item-info">
-              <div class="cart-item-title">${escapeHtml(item.name)}</div>
-              <div class="cart-item-price">${formatPrice(item.price)}</div>
-              <div class="cart-item-quantity">
-                <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
-                <span>${item.quantity || 1}</span>
-                <button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button>
+      function displayOrders(filter) {
+        if (!ordersListEl) return;
+        currentFilter = filter;
+        let filtered = filter === 'all' ? allOrders : allOrders.filter(o => o.status === filter);
+
+        if (filtered.length === 0) {
+          ordersListEl.innerHTML = `<div class="empty-orders"><i class="fas fa-box-open"></i><p>${translations[currentLanguage].noOrders}</p><a href="index.html" class="shop-now-btn">${translations[currentLanguage].shopNow}</a></div>`;
+          return;
+        }
+
+        let html = '';
+        filtered.forEach((order) => {
+          const statusText = {
+            pending: translations[currentLanguage].pendingStatus,
+            review: translations[currentLanguage].review,
+            shipped: translations[currentLanguage].shipped,
+            delivered: translations[currentLanguage].deliveredStatus,
+            cancelled: translations[currentLanguage].cancelled || 'Annulée'
+          }[order.status];
+
+          const statusClass = `status-${order.status}`;
+          const date = new Date(order.created_at).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+          let itemsHtml = '';
+          if (order.items && order.items.length > 0) {
+            order.items.forEach(item => {
+              itemsHtml += `
+              <div class="order-item">
+                <div class="order-item-name">
+                  <i class="fas fa-crown"></i>
+                  <span>${escapeHtml(item.name)}</span>
+                  <span class="order-item-quantity">x${item.quantity}</span>
+                </div>
+                <span class="order-item-price">${(item.price * item.quantity).toFixed(3).replace('.', ',')} TND</span>
               </div>
+            `;
+            });
+          }
+
+          html += `
+          <div class="order-card">
+            <div class="order-header">
+              <div class="order-id"><i class="fas fa-receipt"></i> ${order.id.slice(0, 8)}...</div>
+              <div class="order-date"><i class="fas fa-calendar-alt"></i> ${date}</div>
+              <div class="order-status ${statusClass}"><i class="fas ${order.status === 'pending' ? 'fa-clock' : order.status === 'review' ? 'fa-search' : order.status === 'shipped' ? 'fa-truck' : order.status === 'delivered' ? 'fa-check-circle' : 'fa-times-circle'}"></i> ${statusText}</div>
             </div>
-            <button class="cart-item-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
-          </div>`;
-                });
-                cartItemsContainer.innerHTML = html;
-                if (cartTotalSpan) cartTotalSpan.textContent = formatPrice(total);
-            }
+            <div class="order-items">${itemsHtml}</div>
+            <div class="order-total"><span>${translations[currentLanguage].total}</span><span>${order.total.toFixed(3).replace('.', ',')} TND</span></div>
+            ${order.status === 'pending' ? `<div><button onclick="cancelOrder('${order.id}')" class="cancel-btn"><i class="fas fa-times"></i> ${translations[currentLanguage].cancelOrder}</button></div>` : ''}
+          </div>
+        `;
+        });
+        ordersListEl.innerHTML = html;
+      }
 
-            function addToCart(id, name, price, icon, image) {
-                const existing = cart.find(i => i.id === id);
-                if (existing) existing.quantity = (existing.quantity || 1) + 1;
-                else cart.push({ id, name, price, icon: icon || 'fa-crown', image, quantity: 1 });
-                saveCart();
-                showToast('addedToCart', name);
-            }
+      window.cancelOrder = async function (orderId) {
+        if (!confirm(translations[currentLanguage].cancelConfirm)) return;
+        try {
+          const { error } = await supabase.from('orders').update({ status: 'cancelled' }).eq('id', orderId).eq('user_id', currentUser.id);
+          if (error) throw error;
+          alert(translations[currentLanguage].orderCancelled);
+          await loadOrders();
+        } catch (err) { alert('❌ Erreur'); }
+      };
 
-            function removeFromCart(id) {
-                cart = cart.filter(i => i.id !== id);
-                saveCart();
-                showToast('removed');
-            }
+      window.filterOrders = function (filter, btn) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        displayOrders(filter);
+      };
 
-            function updateQuantity(id, action) {
-                const item = cart.find(i => i.id === id);
-                if (!item) return;
-                if (action === 'increase') item.quantity = (item.quantity || 1) + 1;
-                else if (action === 'decrease') {
-                    if (item.quantity > 1) item.quantity -= 1;
-                    else { removeFromCart(id); return; }
-                }
-                saveCart();
-            }
+      if (cartToggle) cartToggle.addEventListener('click', openCart);
+      if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
+      if (cartOverlayEl) cartOverlayEl.addEventListener('click', closeCart);
+      if (cartItemsContainer) {
+        cartItemsContainer.addEventListener('click', (e) => {
+          const rm = e.target.closest('.cart-item-remove');
+          if (rm) { removeFromCart(rm.dataset.id); return; }
+          const qtyBtn = e.target.closest('.quantity-btn');
+          if (qtyBtn) updateQuantity(qtyBtn.dataset.id, qtyBtn.dataset.action);
+        });
+      }
 
-            function openCart() {
-                cartSidebar?.classList.add('open');
-                cartOverlayEl?.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
+      checkoutBtn?.addEventListener('click', async () => {
+        if (cart.length === 0) { showToast('cartEmptyWarning'); return; }
+        const { data: { user } } = await supabase.auth.getUser();
+        const emailField = document.getElementById('emailFieldGroup');
+        const loggedDiv = document.getElementById('loggedInEmailDisplay');
+        const emailInp = document.getElementById('customerEmail');
+        if (user) {
+          emailField.style.display = 'none'; loggedDiv.style.display = 'block';
+          document.getElementById('displayEmail').textContent = user.email;
+          emailInp.required = false;
+        } else {
+          emailField.style.display = 'block'; loggedDiv.style.display = 'none';
+          emailInp.required = true;
+        }
+        document.getElementById('modalCartItems').innerHTML = cart.map(i =>
+          `<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>${escapeHtml(i.name)} x${i.quantity}</span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`
+        ).join('');
+        document.getElementById('modalTotal').textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND';
+        document.getElementById('checkoutModal').style.display = 'flex';
+      });
 
-            function closeCart() {
-                cartSidebar?.classList.remove('open');
-                cartOverlayEl?.classList.remove('active');
-                document.body.style.overflow = '';
-            }
+      window.closeCheckoutModal = () => { document.getElementById('checkoutModal').style.display = 'none'; };
 
-            function escapeHtml(str) {
-                if (!str) return '';
-                return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
-            }
+      window.processOrder = async (event) => {
+        event.preventDefault();
+        const btn = document.getElementById('submitOrderBtn');
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          const email = user ? user.email : document.getElementById('customerEmail').value;
+          const orderData = {
+            items: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.id })),
+            total: calculateTotal(),
+            customer_name: document.getElementById('customerName').value,
+            customer_phone: document.getElementById('customerPhone').value,
+            customer_email: email,
+            shipping_address: document.getElementById('shippingAddress').value,
+            status: 'pending', user_id: user ? user.id : null
+          };
+          const { data: orderResult, error: orderError } = await supabase.from('orders').insert([orderData]).select();
+          if (orderError) throw orderError;
+          const orderId = orderResult?.[0]?.id;
+          const { error: emailError } = await supabase.functions.invoke('send-order-email', { body: { order: { ...orderData, id: orderId } } });
+          if (emailError) console.error('Email error:', emailError);
+          cart = []; localStorage.removeItem('RosaFragrances_cart'); saveCart();
+          closeCheckoutModal(); closeCart();
+          showToast('orderConfirmed');
+          await loadOrders();
+        } catch (error) {
+          console.error('Order error:', error); showToast('error');
+        } finally {
+          btn.disabled = false; btn.innerHTML = 'Confirmer';
+        }
+      };
+      document.getElementById('checkoutForm')?.addEventListener('submit', window.processOrder);
 
-            function toggleMenu() {
-                navLinks.classList.toggle('active');
-                menuOverlay.classList.toggle('active');
-                document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
-                if (navLinks.classList.contains('active')) closeCart();
-            }
+      if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
+      if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
 
-            let isUpdatingUser = false, updateUserTimeout;
+      if (langCurrentBtn) {
+        langCurrentBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          langMenu.classList.toggle('active');
+        });
+      }
 
-            async function updateUserDisplay() {
-                if (isUpdatingUser) return; isUpdatingUser = true;
-                try {
-                    const { data: { user } } = await supabase.auth.getUser();
-                    if (user) {
-                        if (authLink) authLink.style.display = 'none';
-                        if (profileLink) profileLink.style.display = 'block';
-                        if (user.email === 'azmmeli146@gmail.com') { if (adminLink) adminLink.style.display = 'block'; }
-                        else { if (adminLink) adminLink.style.display = 'none'; }
-                    } else {
-                        if (authLink) authLink.style.display = 'block';
-                        if (profileLink) profileLink.style.display = 'none';
-                        if (adminLink) adminLink.style.display = 'none';
-                    }
-                } finally { isUpdatingUser = false; }
-            }
+      document.querySelectorAll('.lang-option').forEach(opt => {
+        opt.addEventListener('click', (e) => {
+          const lang = opt.dataset.lang;
+          translatePage(lang);
+          langMenu.classList.remove('active');
+        });
+      });
 
-            async function checkUser() {
-                try {
-                    const { data: { user } } = await supabase.auth.getUser();
-                    if (!user) {
-                        if (profileContainer) profileContainer.style.display = 'none';
-                        if (notLoggedInDiv) notLoggedInDiv.style.display = 'block';
-                        return;
-                    }
-                    currentUser = user;
-                    if (profileContainer) profileContainer.style.display = 'block';
-                    if (notLoggedInDiv) notLoggedInDiv.style.display = 'none';
-                    if (userName) userName.textContent = user.email?.split('@')[0] || 'Client';
-                    if (userEmail) userEmail.textContent = user.email;
-                    await loadOrders();
-                } catch (err) {
-                    console.error(err);
-                    if (profileContainer) profileContainer.style.display = 'none';
-                    if (notLoggedInDiv) notLoggedInDiv.style.display = 'block';
-                }
-            }
+      document.addEventListener('click', (e) => {
+        if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active');
+      });
 
-            async function loadOrders() {
-                if (!ordersListEl) return;
-                try {
-                    ordersListEl.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Chargement...</div>';
-                    const { data, error } = await supabase.from('orders').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
-                    if (error) throw error;
-                    allOrders = data || [];
-                    updateStats();
-                    displayOrders('all');
-                } catch (error) {
-                    console.error('Error loading orders:', error);
-                    ordersListEl.innerHTML = `<div class="empty-orders">${translations[currentLanguage].errorLoading}</div>`;
-                }
-            }
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+          await supabase.auth.signOut();
+          window.location.reload();
+        });
+      }
 
-            function updateStats() {
-                if (totalOrdersEl) totalOrdersEl.textContent = allOrders.length;
-                const pending = allOrders.filter(o => ['pending', 'review', 'shipped'].includes(o.status)).length;
-                const delivered = allOrders.filter(o => o.status === 'delivered').length;
-                if (pendingOrdersEl) pendingOrdersEl.textContent = pending;
-                if (deliveredOrdersEl) deliveredOrdersEl.textContent = delivered;
-            }
+      function initTheme() {
+        const saved = localStorage.getItem('theme') || 'light';
+        if (saved === 'dark') {
+          document.body.classList.add('dark');
+          document.querySelector('#themeToggle .fa-sun').style.display = 'none';
+          document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
+        }
+      }
 
-            function displayOrders(filter) {
-                if (!ordersListEl) return;
-                currentFilter = filter;
-                let filtered = filter === 'all' ? allOrders : allOrders.filter(o => o.status === filter);
+      function toggleTheme() {
+        if (document.body.classList.contains('dark')) {
+          document.body.classList.remove('dark');
+          localStorage.setItem('theme', 'light');
+          document.querySelector('#themeToggle .fa-sun').style.display = 'inline-block';
+          document.querySelector('#themeToggle .fa-moon').style.display = 'none';
+        } else {
+          document.body.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+          document.querySelector('#themeToggle .fa-sun').style.display = 'none';
+          document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
+        }
+      }
 
-                if (filtered.length === 0) {
-                    ordersListEl.innerHTML = `<div class="empty-orders"><i class="fas fa-box-open"></i><p>${translations[currentLanguage].noOrders}</p><a href="index.html" class="shop-now-btn">${translations[currentLanguage].shopNow}</a></div>`;
-                    return;
-                }
+      if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
 
-                let html = '';
-                filtered.forEach((order) => {
-                    const statusText = {
-                        pending: translations[currentLanguage].pendingStatus,
-                        review: translations[currentLanguage].review,
-                        shipped: translations[currentLanguage].shipped,
-                        delivered: translations[currentLanguage].deliveredStatus,
-                        cancelled: translations[currentLanguage].cancelled || 'Annulée'
-                    }[order.status];
+      initTheme();
+      translatePage(currentLanguage);
+      checkUser();
+      updateUserDisplay();
 
-                    const statusClass = `status-${order.status}`;
-                    const date = new Date(order.created_at).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+      supabase.auth.onAuthStateChange((event, session) => {
+        if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
+          if (updateUserTimeout) clearTimeout(updateUserTimeout);
+          updateUserTimeout = setTimeout(() => { checkUser(); updateUserDisplay(); }, 100);
+        }
+      });
 
-                    let itemsHtml = '';
-                    if (order.items && order.items.length > 0) {
-                        order.items.forEach(item => {
-                            itemsHtml += `
-                <div class="order-item">
-                  <div class="order-item-name">
-                    <i class="fas fa-crown"></i>
-                    <span>${escapeHtml(item.name)}</span>
-                    <span class="order-item-quantity">x${item.quantity}</span>
-                  </div>
-                  <span class="order-item-price">${(item.price * item.quantity).toFixed(3).replace('.', ',')} TND</span>
-                </div>
-              `;
-                        });
-                    }
-
-                    html += `
-            <div class="order-card">
-              <div class="order-header">
-                <div class="order-id"><i class="fas fa-receipt"></i> ${order.id.slice(0, 8)}...</div>
-                <div class="order-date"><i class="fas fa-calendar-alt"></i> ${date}</div>
-                <div class="order-status ${statusClass}"><i class="fas ${order.status === 'pending' ? 'fa-clock' : order.status === 'review' ? 'fa-search' : order.status === 'shipped' ? 'fa-truck' : order.status === 'delivered' ? 'fa-check-circle' : 'fa-times-circle'}"></i> ${statusText}</div>
-              </div>
-              <div class="order-items">${itemsHtml}</div>
-              <div class="order-total"><span>${translations[currentLanguage].total}</span><span>${order.total.toFixed(3).replace('.', ',')} TND</span></div>
-              ${order.status === 'pending' ? `<div><button onclick="cancelOrder('${order.id}')" class="cancel-btn"><i class="fas fa-times"></i> ${translations[currentLanguage].cancelOrder}</button></div>` : ''}
-            </div>
-          `;
-                });
-                ordersListEl.innerHTML = html;
-            }
-
-            window.cancelOrder = async function (orderId) {
-                if (!confirm(translations[currentLanguage].cancelConfirm)) return;
-                try {
-                    const { error } = await supabase.from('orders').update({ status: 'cancelled' }).eq('id', orderId).eq('user_id', currentUser.id);
-                    if (error) throw error;
-                    alert(translations[currentLanguage].orderCancelled);
-                    await loadOrders();
-                } catch (err) { alert('❌ Erreur'); }
-            };
-
-            window.filterOrders = function (filter, btn) {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                if (btn) btn.classList.add('active');
-                displayOrders(filter);
-            };
-
-            if (cartToggle) cartToggle.addEventListener('click', openCart);
-            if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
-            if (cartOverlayEl) cartOverlayEl.addEventListener('click', closeCart);
-            if (cartItemsContainer) {
-                cartItemsContainer.addEventListener('click', (e) => {
-                    const rm = e.target.closest('.cart-item-remove');
-                    if (rm) { removeFromCart(rm.dataset.id); return; }
-                    const qtyBtn = e.target.closest('.quantity-btn');
-                    if (qtyBtn) updateQuantity(qtyBtn.dataset.id, qtyBtn.dataset.action);
-                });
-            }
-
-            checkoutBtn?.addEventListener('click', async () => {
-                if (cart.length === 0) { showToast('cartEmptyWarning'); return; }
-                const { data: { user } } = await supabase.auth.getUser();
-                const emailField = document.getElementById('emailFieldGroup');
-                const loggedDiv = document.getElementById('loggedInEmailDisplay');
-                const emailInp = document.getElementById('customerEmail');
-                if (user) {
-                    emailField.style.display = 'none'; loggedDiv.style.display = 'block';
-                    document.getElementById('displayEmail').textContent = user.email;
-                    emailInp.required = false;
-                } else {
-                    emailField.style.display = 'block'; loggedDiv.style.display = 'none';
-                    emailInp.required = true;
-                }
-                document.getElementById('modalCartItems').innerHTML = cart.map(i =>
-                    `<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>${escapeHtml(i.name)} x${i.quantity}</span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`
-                ).join('');
-                document.getElementById('modalTotal').textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND';
-                document.getElementById('checkoutModal').style.display = 'flex';
-            });
-
-            window.closeCheckoutModal = () => { document.getElementById('checkoutModal').style.display = 'none'; };
-
-            window.processOrder = async (event) => {
-                event.preventDefault();
-                const btn = document.getElementById('submitOrderBtn');
-                btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-                try {
-                    const { data: { user } } = await supabase.auth.getUser();
-                    const email = user ? user.email : document.getElementById('customerEmail').value;
-                    const orderData = {
-                        items: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.id })),
-                        total: calculateTotal(),
-                        customer_name: document.getElementById('customerName').value,
-                        customer_phone: document.getElementById('customerPhone').value,
-                        customer_email: email,
-                        shipping_address: document.getElementById('shippingAddress').value,
-                        status: 'pending', user_id: user ? user.id : null
-                    };
-                    const { data: orderResult, error: orderError } = await supabase.from('orders').insert([orderData]).select();
-                    if (orderError) throw orderError;
-                    const orderId = orderResult?.[0]?.id;
-                    const { error: emailError } = await supabase.functions.invoke('send-order-email', { body: { order: { ...orderData, id: orderId } } });
-                    if (emailError) console.error('Email error:', emailError);
-                    cart = []; localStorage.removeItem('RosaFragrances_cart'); saveCart();
-                    closeCheckoutModal(); closeCart();
-                    showToast('orderConfirmed');
-                    await loadOrders();
-                } catch (error) {
-                    console.error('Order error:', error); showToast('error');
-                } finally {
-                    btn.disabled = false; btn.innerHTML = 'Confirmer';
-                }
-            };
-            document.getElementById('checkoutForm')?.addEventListener('submit', window.processOrder);
-
-            if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
-            if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
-
-            if (langCurrentBtn) {
-                langCurrentBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    langMenu.classList.toggle('active');
-                });
-            }
-
-            document.querySelectorAll('.lang-option').forEach(opt => {
-                opt.addEventListener('click', (e) => {
-                    const lang = opt.dataset.lang;
-                    translatePage(lang);
-                    langMenu.classList.remove('active');
-                });
-            });
-
-            document.addEventListener('click', (e) => {
-                if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active');
-            });
-
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', async () => {
-                    await supabase.auth.signOut();
-                    window.location.reload();
-                });
-            }
-
-            function initTheme() {
-                const saved = localStorage.getItem('theme') || 'light';
-                if (saved === 'dark') {
-                    document.body.classList.add('dark');
-                    document.querySelector('#themeToggle .fa-sun').style.display = 'none';
-                    document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
-                }
-            }
-
-            function toggleTheme() {
-                if (document.body.classList.contains('dark')) {
-                    document.body.classList.remove('dark');
-                    localStorage.setItem('theme', 'light');
-                    document.querySelector('#themeToggle .fa-sun').style.display = 'inline-block';
-                    document.querySelector('#themeToggle .fa-moon').style.display = 'none';
-                } else {
-                    document.body.classList.add('dark');
-                    localStorage.setItem('theme', 'dark');
-                    document.querySelector('#themeToggle .fa-sun').style.display = 'none';
-                    document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
-                }
-            }
-
-            if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
-
-            initTheme();
-            translatePage(currentLanguage);
-            checkUser();
-            updateUserDisplay();
-
-            supabase.auth.onAuthStateChange((event, session) => {
-                if (['SIGNED_IN', 'SIGNED_OUT', 'INITIAL_SESSION'].includes(event)) {
-                    if (updateUserTimeout) clearTimeout(updateUserTimeout);
-                    updateUserTimeout = setTimeout(() => { checkUser(); updateUserDisplay(); }, 100);
-                }
-            });
-
-            saveCart();
-        })();
-    </script>
+      saveCart();
+    })();
+  </script>
 </body>
 
 </html>
