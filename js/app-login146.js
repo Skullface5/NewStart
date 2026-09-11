@@ -100,7 +100,8 @@
         const { data, error } = await supabaseClient.auth.signUp({
           email: email,
           password: password,
-          options: { emailRedirectTo: window.location.origin + '/index.html' }
+          options: { emailRedirectTo: window.location.origin + '/index.html',
+          data: { full_name: (document.getElementById('signupName')?.value || '').trim() } }
         });
 
         if (error) {

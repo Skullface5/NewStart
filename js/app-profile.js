@@ -2,12 +2,13 @@
     (function () {
       const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
-      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      const supabase = window.__rosaSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
       let currentLanguage = localStorage.getItem('language') || 'fr';
 
       const translations = {
         fr: {
+ myInfo: 'Mes informations', fullName: 'Nom complet', phone: 'Téléphone', address: 'Adresse', saveInfo: 'Enregistrer', infoSaved: '✓ Enregistré', infoRequired: 'Nom et téléphone requis',
           home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
           login: 'Se connecter', profile: 'Mon Profil', logout: 'Déconnexion',
           cart: 'Panier', emptyCart: 'Votre panier est vide.', total: 'Total', payment: 'PAIEMENT',
@@ -26,6 +27,7 @@
           footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. Tous droits réservés."
         },
         en: {
+ myInfo: 'My Info', fullName: 'Full name', phone: 'Phone', address: 'Address', saveInfo: 'Save', infoSaved: '✓ Saved', infoRequired: 'Name and phone required',
           home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
           login: 'Sign in', profile: 'My Profile', logout: 'Logout',
           cart: 'Cart', emptyCart: 'Your cart is empty.', total: 'Total', payment: 'PAYMENT',
@@ -44,6 +46,7 @@
           footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. All rights reserved."
         },
         ar: {
+ myInfo: 'معلوماتي', fullName: 'الاسم الكامل', phone: 'الهاتف', address: 'العنوان', saveInfo: 'حفظ', infoSaved: '✓ تم الحفظ', infoRequired: 'الاسم والهاتف مطلوبان',
           home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
           login: 'تسجيل الدخول', profile: 'ملفي الشخصي', logout: 'تسجيل الخروج',
           cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.', total: 'المجموع', payment: 'الدفع',
@@ -246,9 +249,10 @@
             return;
           }
           currentUser = user;
+                try { const m = user.user_metadata || {}; const pN = document.getElementById('profileName'); if (pN) { pN.value = m.full_name || ''; document.getElementById('profilePhone').value = m.phone || ''; document.getElementById('profileAddress').value = m.address || ''; } } catch (e) {}
           if (profileContainer) profileContainer.style.display = 'block';
           if (notLoggedInDiv) notLoggedInDiv.style.display = 'none';
-          if (userName) userName.textContent = user.email?.split('@')[0] || 'Client';
+          if (userName) userName.textContent = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Client';
           if (userEmail) userEmail.textContent = user.email;
           await loadOrders();
         } catch (err) {
@@ -487,5 +491,29 @@
       });
 
       saveCart();
-    })();
+    
+/* ---- My Info: save profile details to auth metadata (STE parity) ---- */
+(function() {
+  const btn = document.getElementById('saveProfileBtn');
+  if (!btn) return;
+  const msg = document.getElementById('profileSaveMsg');
+  function setMsg(text, ok) { msg.textContent = text; msg.style.color = ok ? '#2e7d32' : '#c0392b'; msg.style.display = 'block'; }
+  btn.addEventListener('click', async () => {
+    const full_name = document.getElementById('profileName').value.trim();
+    const phone = document.getElementById('profilePhone').value.trim();
+    const address = document.getElementById('profileAddress').value.trim();
+    if (!full_name || !phone) { setMsg(translations[currentLanguage].infoRequired, false); return; }
+    btn.disabled = true;
+    try {
+      const { error } = await supabase.auth.updateUser({ data: { full_name, phone, address } });
+      if (error) throw error;
+      try { localStorage.setItem('rosa_profile', JSON.stringify({ full_name, phone, address })); } catch (e) {}
+      setMsg(translations[currentLanguage].infoSaved, true);
+      const un = document.getElementById('userName');
+      if (un) un.textContent = full_name;
+    } catch (err) { console.error(err); setMsg(err.message || 'Erreur', false); }
+    btn.disabled = false;
+  });
+})();
+})();
   

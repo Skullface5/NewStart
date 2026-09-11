@@ -1192,7 +1192,13 @@
     .modal-form-group input:focus { outline:none;border-color:var(--input-focus); }
     .btn-primary-modal { background:var(--gold-dark);color:var(--white);border:none;padding:10px 20px;border-radius:50px;cursor:pointer;font-weight:500;flex:1; }
     .btn-secondary-modal { background:none;border:1px solid var(--border-medium);color:var(--charcoal);padding:10px 20px;border-radius:50px;cursor:pointer;flex:1; }
-  </style><link rel="preconnect" href="https://fonts.googleapis.com">
+  
+        .pc-field { margin-bottom: 0.7rem; }
+        .pc-field label { font-size: 0.85rem; display: block; margin-bottom: 0.35rem; }
+        .pc-field input { width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--border-light); border-radius: 14px; background: var(--cream); font-size: 0.95rem; box-sizing: border-box; }
+        .pc-save { width: 100%; padding: 0.75rem; border: none; border-radius: 14px; background: #1a1a1a; color: #fff; font-size: 0.95rem; cursor: pointer; margin-top: 0.6rem; }
+        .pc-save:disabled { opacity: 0.6; }
+    </style><link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   
 </head>
@@ -1318,7 +1324,15 @@
             data-translate="logout">Déconnexion</span></button>
       </div>
 
-      <div class="stats-grid">
+      <div class="profile-card" style="background:var(--cream-deep);border-radius:20px;padding:1.2rem;margin-bottom:1.5rem;">
+                <h3 style="font-weight:500;margin-bottom:0.8rem;"><i class="fas fa-user-pen"></i> <span data-translate="myInfo">Mes informations</span></h3>
+                <div class="pc-field"><label data-translate="fullName">Nom complet</label><input type="text" id="profileName" autocomplete="name"></div>
+                <div class="pc-field"><label data-translate="phone">Téléphone</label><input type="tel" id="profilePhone" autocomplete="tel"></div>
+                <div class="pc-field"><label data-translate="address">Adresse</label><input type="text" id="profileAddress" autocomplete="street-address"></div>
+                <div id="profileSaveMsg" style="display:none;font-size:0.85rem;margin-top:0.4rem;"></div>
+                <button class="pc-save" id="saveProfileBtn"><i class="fas fa-save"></i> <span data-translate="saveInfo">Enregistrer</span></button>
+            </div>
+            <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
           <div class="stat-content">
@@ -1414,6 +1428,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/app-profile.js"></script>
+    <script src="js/rosa-prefill.js"></script>
 </body>
 
 </html>
