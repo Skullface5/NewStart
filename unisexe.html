@@ -1950,7 +1950,24 @@
       function openCart() { cartSidebar?.classList.add('open'); cartOverlay?.classList.add('active'); document.body.style.overflow = 'hidden'; }
       function closeCart() { cartSidebar?.classList.remove('open'); cartOverlay?.classList.remove('active'); document.body.style.overflow = ''; }
 
-      async function loadProducts() {
+      
+ function rosaSaveCache(key, data) { try { localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data: data })); } catch (e) {} }
+
+ function paintCachedProducts() {
+   try {
+     const raw = localStorage.getItem('rosa_cache_unisexe');
+     if (!raw) return false;
+     const obj = JSON.parse(raw);
+     const data = obj && obj.data;
+     if (!Array.isArray(data) || !data.length || Date.now() - (obj.ts || 0) > 86400000) return false;
+     products = data;
+     populateBrandFilter();
+     applyFiltersAndSort();
+     if (loadingEl) loadingEl.style.display = 'none';
+     return true;
+   } catch (e) { return false; }
+ }
+async function loadProducts() {
         if (loadingEl) loadingEl.style.display = 'block';
         try {
           const { data, error } = await supabase.from('products').select('*').eq('category', 'unisexe').order('created_at', { ascending: true });
@@ -1968,9 +1985,10 @@
           });
           populateBrandFilter();
           applyFiltersAndSort();
+ rosaSaveCache('rosa_cache_unisexe', products);
         } catch (err) {
           console.error(err);
-          if (productGrid) productGrid.innerHTML = `<div class="empty-cart-message">${translations[currentLanguage].errorLoading}<br><button onclick="location.reload()" style="margin-top:0.8rem;padding:0.4rem 0.8rem;background:var(--gold);color:white;border:none;border-radius:50px;font-size:0.7rem;">${translations[currentLanguage].reload}</button></div>`;
+          const __hasCards = productGrid && productGrid.querySelector('.product-card'); if (!__hasCards && productGrid) productGrid.innerHTML = `<div class="empty-cart-message">${translations[currentLanguage].errorLoading}<br><button onclick="location.reload()" style="margin-top:0.8rem;padding:0.4rem 0.8rem;background:var(--gold);color:white;border:none;border-radius:50px;font-size:0.7rem;">${translations[currentLanguage].reload}</button></div>`;
         } finally {
           if (loadingEl) loadingEl.style.display = 'none';
         }
@@ -2140,7 +2158,7 @@
       document.addEventListener('click', (e) => { if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active'); });
 
       translatePage(currentLanguage);
-      supabase.auth.refreshSession().then(() => { loadProducts(); saveCart(); });
+      paintCachedProducts(); supabase.auth.refreshSession().then(() => { loadProducts(); saveCart(); });
 
       const revealElements = document.querySelectorAll('.reveal-on-scroll');
       const observer = new IntersectionObserver((entries) => {

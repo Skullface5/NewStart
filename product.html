@@ -722,11 +722,26 @@
           productDetailContainer.innerHTML = `<div class="error-message">${translations[currentLanguage].productNotFound}</div>`;
           return;
         }
-        try {
-          // Load all products once
+        
+ let cachedPainted = false;
+ try {
+   const raw = localStorage.getItem('rosa_cache_all');
+   if (raw) {
+     const obj = JSON.parse(raw);
+     if (obj && Array.isArray(obj.data) && obj.data.length && Date.now() - (obj.ts || 0) < 86400000) {
+       allProducts = obj.data;
+       currentProduct = allProducts.find(p => p.id == productId);
+       if (currentProduct) { displayProduct(currentProduct); loadSuggestions(); renderCart(); updateUserDisplay(); cachedPainted = true; }
+     }
+   }
+ } catch (e) {}
+
+ try {
+ // Load all products once
           const { data: allData, error: allError } = await supabase.from('products').select('*');
           if (allError) throw allError;
           allProducts = allData || [];
+ rosaSaveCache('rosa_cache_all', allProducts);
           // Find current product
           currentProduct = allProducts.find(p => p.id == productId);
           if (!currentProduct) throw new Error('Not found');
@@ -740,7 +755,7 @@
           updateUserDisplay();
         } catch (err) {
           console.error(err);
-          productDetailContainer.innerHTML = `<div class="error-message">${translations[currentLanguage].errorLoading}</div>`;
+          if (!currentProduct) productDetailContainer.innerHTML = `<div class="error-message">${translations[currentLanguage].errorLoading}</div>`;
         }
       });
 
