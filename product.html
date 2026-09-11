@@ -342,7 +342,7 @@
 
   <header>
     <div class="header-flex">
-      <a href="index.html" class="logo"><img src="is.png" alt="Rosa"><h1>Rosa Fragrances</h1></a>
+      <a href="index.html" class="logo"><img src="is.webp" width="48" height="48" alt="Rosa"><h1>Rosa Fragrances</h1></a>
       <div style="display:flex;align-items:center;gap:2px;">
         <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon" style="display:none;"></i></div>
         <div class="cart-icon" id="cartToggle"><i class="fas fa-bag-shopping"></i><span id="cartCount" class="cart-count">0</span></div>
@@ -385,7 +385,7 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-top">
-        <div class="footer-brand"><img class="footer-logo-img" src="is.png" alt="Rosa"><h3>ROSA FRAGRANCES</h3><p data-translate="footerDescription">Nous vous proposons un univers de parfums luxueux, aux senteurs élégantes et spontanées, qui touchent les émotions et laissent une impression durable.</p></div>
+        <div class="footer-brand"><img class="footer-logo-img" src="is.webp" alt="Rosa"><h3>ROSA FRAGRANCES</h3><p data-translate="footerDescription">Nous vous proposons un univers de parfums luxueux, aux senteurs élégantes et spontanées, qui touchent les émotions et laissent une impression durable.</p></div>
         <div class="footer-col"><h4 data-translate="footerPerfumesTitle">Parfums</h4><ul><li><a href="man.html" data-translate="footerMen">Homme</a></li><li><a href="women.html" data-translate="footerWomen">Femme</a></li><li><a href="unisexe.html" data-translate="footerUnisex">Unisexe</a></li><li><a href="kids.html" data-translate="footerKids">Enfants</a></li></ul></div>
         <div class="footer-col"><h4 data-translate="footerContactTitle">Contact</h4><ul class="contact-list"><li><span class="ic">📍</span> <span data-translate="footerAddress">Tunis, Tunisie</span></li><li><span class="ic">📞</span> <span data-translate="footerPhone">+216 96 163 366</span></li><li><span class="ic">✉️</span> <span data-translate="footerEmail">contact@rosafragrances.tn</span></li><div class="socials"><a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/" class="social" target="_blank"><i class="fab fa-facebook-f"></i></a>              <a href="https://wa.me/21696163366" class="social" target="_blank"><i class="fab fa-whatsapp"></i></a>
               <a href="https://www.instagram.com/rosa_fragrances" class="social" target="_blank"><i class="fab fa-instagram"></i></a>
@@ -643,7 +643,7 @@
         let thumbnailsHtml = '', mainImageHtml = '', swipeIndicatorsHtml = '', arrowsHtml = '';
         if (productImages.length) {
           mainImageHtml = `<img src="${productImages[0]}" alt="${escapeHtml(product.name)}" id="mainImage" onerror="this.onerror=null;this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-crown\'></i>';">`;
-          thumbnailsHtml = productImages.map((img, idx) => `<div class="thumbnail ${idx === 0 ? 'active' : ''}" data-img="${img}"><img src="${img}" alt="thumbnail ${idx+1}" onerror="this.onerror=null;this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-crown\'></i>';"></div>`).join('');
+          thumbnailsHtml = productImages.map((img, idx) => `<div class="thumbnail ${idx === 0 ? 'active' : ''}" data-img="${img}"><img src="${img}" alt="thumbnail ${idx+1}" loading="lazy" decoding="async" onerror="this.onerror=null;this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-crown\'></i>';"></div>`).join('');
           swipeIndicatorsHtml = productImages.map((_, idx) => `<div class="swipe-dot ${idx === 0 ? 'active' : ''}"></div>`).join('');
           if (productImages.length > 1) arrowsHtml = `<div class="nav-arrow prev"><i class="fas fa-chevron-left"></i></div><div class="nav-arrow next"><i class="fas fa-chevron-right"></i></div>`;
         } else {

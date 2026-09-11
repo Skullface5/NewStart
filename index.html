@@ -1580,7 +1580,6 @@
   <!-- ============================================================ -->
   <!-- ✅ IMAGE DE TRACKING DÉPLACÉE ICI (dans le <body>)          -->
   <!-- ============================================================ -->
-  <img src="https://rosafragrances.tn/tt.jpg" style="display: none;">
 
   <!-- === PARTICULES D'ARRIÈRE-PLAN === -->
   <script>
@@ -1666,7 +1665,7 @@
 
   <header>
     <div class="container header-flex">
-      <a href="index.html" class="logo"><img src="is.png" alt="Rosa">
+      <a href="index.html" class="logo"><img src="is.webp" width="48" height="48" alt="Rosa">
         <h1>Rosa Fragrances</h1>
       </a>
       <div style="display:flex;align-items:center;gap:2px;">
@@ -1728,7 +1727,7 @@
     </div>
 
     <div class="hero-tt reveal-on-scroll">
-      <img class="hero-logo-tt" src="is.png" alt="Rosa Fragrances Logo">
+      <img class="hero-logo-tt" src="is.webp" alt="Rosa Fragrances Logo">
       <h1>L'Art du <em>Parfum</em><br>Oriental</h1>
       <p class="hero-sub-tt">Collection exclusive · Tunisie</p>
       <div class="divider-tt"></div>
@@ -1765,7 +1764,7 @@
     <div class="footer-inner">
       <div class="footer-top">
         <div class="footer-brand">
-          <img class="footer-logo-img" src="is.png" alt="Rosa">
+          <img class="footer-logo-img" src="is.webp" alt="Rosa">
           <h3>ROSA FRAGRANCES</h3>
           <p data-translate="footerDescription">Nous vous proposons un univers de parfums luxueux, aux senteurs élégantes et spontanées, qui touchent les émotions et laissent une impression durable.</p>
         </div>
@@ -2061,7 +2060,7 @@
         }
         let html = '';
         filteredProducts.forEach(p => {
-          const imgHtml = p.image ? `<img src="${p.image}" alt="${escapeHtml(p.name)}">` : `<i class="fas fa-crown"></i>`;
+          const imgHtml = p.image ? `<img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async">` : `<i class="fas fa-crown"></i>`;
           html += `<div class="product-card" data-product-id="${p.id}">
             <div class="product-clickable" data-product-id="${p.id}">
               <div class="product-img">${imgHtml}</div>
