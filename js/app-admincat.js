@@ -8,11 +8,22 @@
             let products = [];
             let searchTerm = '';
 
+
+            const CATS = {
+                women:   { icon: 'fa-female',    fr: 'Parfums Femme',   en: 'Women Perfumes',  ar: 'عطور نسائية' },
+                man:     { icon: 'fa-male',      fr: 'Parfums Homme',   en: 'Men Perfumes',    ar: 'عطور رجالية' },
+                unisexe: { icon: 'fa-genderless', fr: 'Parfums Unisexe', en: 'Unisex Perfumes', ar: 'عطور للجنسين' },
+                kids:    { icon: 'fa-child',     fr: 'Parfums Enfants', en: 'Kids Perfumes',   ar: 'عطور أطفال' }
+            };
+            const _params = new URLSearchParams(window.location.search);
+            let CAT = _params.get('cat') || 'women';
+            if (!CATS[CAT]) CAT = 'women';
+
             const translations = {
                 fr: {
                     home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
                     existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil',
-                    back: 'Retour aux catégories', kidsCat: 'Parfums Enfants',
+                    back: 'Retour aux catégories', catName: CATS[CAT].fr,
                     products: 'produits', searchPlaceholder: 'Rechercher un produit...',
                     addProduct: 'Ajouter un produit', loading: 'Chargement...',
                     noProducts: 'Aucun produit trouvé', image: 'Image', name: 'Nom', brand: 'Marque',
@@ -28,7 +39,7 @@
                 en: {
                     home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
                     existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
-                    back: 'Back to categories', kidsCat: 'Kids Perfumes',
+                    back: 'Back to categories', catName: CATS[CAT].en,
                     products: 'products', searchPlaceholder: 'Search product...',
                     addProduct: 'Add product', loading: 'Loading...',
                     noProducts: 'No products found', image: 'Image', name: 'Name', brand: 'Brand',
@@ -44,7 +55,7 @@
                 ar: {
                     home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
                     existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
-                    back: 'العودة للفئات', kidsCat: 'عطور أطفال',
+                    back: 'العودة للفئات', catName: CATS[CAT].ar,
                     products: 'منتجات', searchPlaceholder: 'البحث عن منتج...',
                     addProduct: 'إضافة منتج', loading: 'جاري التحميل...',
                     noProducts: 'لا توجد منتجات', image: 'الصورة', name: 'الاسم', brand: 'العلامة',
@@ -62,6 +73,9 @@
             function translatePage(lang) {
                 currentLanguage = lang;
                 localStorage.setItem('language', lang);
+                document.title = 'Rosa Fragrances | ' + translations[lang].catName + ' - Administration';
+                const _catIcon = document.getElementById('catIcon');
+                if (_catIcon) _catIcon.className = 'fas ' + CATS[CAT].icon;
                 document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
                 document.body.style.textAlign = lang === 'ar' ? 'right' : 'left';
                 const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
@@ -123,7 +137,7 @@
                     const { data, error } = await supabase
                         .from('products')
                         .select('*')
-                        .eq('category', 'kids')
+                        .eq('category', CAT)
                         .order('created_at', { ascending: false });
 
                     if (error) throw error;
@@ -202,14 +216,14 @@
                   <button class="edit-btn" onclick="editProduct('${product.id}')"><i class="fas fa-edit"></i> ${translations[currentLanguage].edit}</button>
                   <button class="delete-btn" onclick="deleteProduct('${product.id}')"><i class="fas fa-trash"></i> ${translations[currentLanguage].delete}</button>
                 </div>
-              </td>
-            </tr>
+               </td>
+             </tr>
           `;
                 });
 
                 html += `
             </tbody>
-          </table>
+           </table>
         `;
 
                 tableContent.innerHTML = html;
