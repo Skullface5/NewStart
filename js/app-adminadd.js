@@ -18,7 +18,7 @@
           category: 'Catégorie', menCat: 'Homme', womenCat: 'Femme', unisexCat: 'Unisexe', kidsCat: 'Enfants',
           season: 'Saisons (plusieurs choix possibles)', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne',
           seasonHint: 'Sélectionnez une ou plusieurs saisons (cliquez pour sélectionner/désélectionner)',
-          saveProduct: 'Enregistrer le produit', storageInfo: 'Les images sont stockées en Base64',
+          saveProduct: 'Enregistrer le produit', storageInfo: 'Les images sont optimisées (WebP) et stockées dans Supabase Storage',
           viewExisting: 'Voir les parfums existants', notAuthorized: 'Accès non autorisé',
           adminOnly: 'Cette page est réservée aux administrateurs. Veuillez vous connecter avec un compte administrateur.',
           productAdded: '✅ Produit ajouté', errorAdding: '❌ Erreur lors de l\'ajout',
@@ -39,7 +39,7 @@
           category: 'Category', menCat: 'Men', womenCat: 'Women', unisexCat: 'Unisex', kidsCat: 'Kids',
           season: 'Seasons (multiple choices possible)', summer: 'Summer', winter: 'Winter', spring: 'Spring', autumn: 'Autumn',
           seasonHint: 'Select one or more seasons (click to select/deselect)',
-          saveProduct: 'Save Product', storageInfo: 'Images are stored in Base64',
+          saveProduct: 'Save Product', storageInfo: 'Images are optimized (WebP) and stored in Supabase Storage',
           viewExisting: 'View existing perfumes', notAuthorized: 'Access Denied',
           adminOnly: 'This page is for administrators only. Please log in with an admin account.',
           productAdded: '✅ Product added', errorAdding: '❌ Error adding product',
@@ -60,7 +60,7 @@
           category: 'الفئة', menCat: 'رجالي', womenCat: 'نسائي', unisexCat: 'للجنسين', kidsCat: 'أطفال',
           season: 'المواسم (اختيارات متعددة ممكنة)', summer: 'صيف', winter: 'شتاء', spring: 'ربيع', autumn: 'خريف',
           seasonHint: 'اختر موسماً واحداً أو أكثر (انقر للتحديد/إلغاء التحديد)',
-          saveProduct: 'حفظ المنتج', storageInfo: 'يتم تخزين الصور بصيغة Base64',
+          saveProduct: 'حفظ المنتج', storageInfo: 'تتم تحسين الصور (WebP) وتخزينها في Supabase Storage',
           viewExisting: 'عرض العطور الموجودة', notAuthorized: 'وصول غير مصرح به',
           adminOnly: 'هذه الصفحة مخصصة للمشرفين فقط. الرجاء تسجيل الدخول بحساب مشرف.',
           productAdded: '✅ تمت إضافة المنتج', errorAdding: '❌ خطأ في إضافة المنتج',
@@ -158,8 +158,44 @@
         if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active');
       });
 
+
+      // Image compression -> WebP (keeps DB + Storage lean)
+      function compressToWebp(file) {
+        return new Promise((resolve) => {
+          const url = URL.createObjectURL(file);
+          const img = new Image();
+          img.onload = () => {
+            URL.revokeObjectURL(url);
+            try {
+              let { width: w, height: h } = img;
+              if (Math.max(w, h) > 1000) {
+                const k = 1000 / Math.max(w, h);
+                w = Math.round(w * k); h = Math.round(h * k);
+              }
+              const canvas = document.createElement('canvas');
+              canvas.width = w; canvas.height = h;
+              canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+              canvas.toBlob((blob) => {
+                if (blob && blob.type === 'image/webp') resolve({ blob, ext: 'webp' });
+                else resolve({ blob: file, ext: (file.name.split('.').pop() || 'jpg').toLowerCase() });
+              }, 'image/webp', 0.82);
+            } catch (e) {
+              resolve({ blob: file, ext: (file.name.split('.').pop() || 'jpg').toLowerCase() });
+            }
+          };
+          img.onerror = () => { URL.revokeObjectURL(url); resolve({ blob: file, ext: (file.name.split('.').pop() || 'jpg').toLowerCase() }); };
+          img.src = url;
+        });
+      }
+      function extOf(mime, fallback) {
+        if (mime === 'image/webp') return 'webp';
+        if (mime === 'image/png') return 'png';
+        if (mime === 'image/gif') return 'gif';
+        return fallback;
+      }
+
       // Image Upload
-      let uploadedImages = [];
+      let uploadedImages = []; // { blob, ext, preview }
       const imagePreviewGrid = document.getElementById('imagePreviewGrid');
       const imageUpload = document.getElementById('imageUpload');
       const addMoreImagesBtn = document.getElementById('addMoreImagesBtn');
@@ -173,11 +209,11 @@
           emptyDiv.innerHTML = `<i class="fas fa-images"></i> ${translations[currentLanguage].noImages}`;
           imagePreviewGrid.appendChild(emptyDiv);
         } else {
-          uploadedImages.forEach((imgBase64, index) => {
+          uploadedImages.forEach((item, index) => {
             const div = document.createElement('div');
             div.className = 'preview-item';
             div.innerHTML = `
-              <img src="${imgBase64}" alt="image ${index + 1}">
+              <img src="${item.preview}" alt="image ${index + 1}" loading="lazy">
               <button class="remove-image-btn" data-index="${index}"><i class="fas fa-times"></i></button>
             `;
             imagePreviewGrid.appendChild(div);
@@ -188,6 +224,7 @@
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
             const index = parseInt(btn.dataset.index);
+            try { URL.revokeObjectURL(uploadedImages[index].preview); } catch (e) {}
             uploadedImages.splice(index, 1);
             updateImagePreview();
           });
@@ -197,15 +234,14 @@
       addMoreImagesBtn?.addEventListener('click', () => imageUpload.click());
       imageUpload?.addEventListener('change', function (e) {
         const files = Array.from(e.target.files);
-        files.forEach(file => {
-          if (!file.type.startsWith('image/')) return;
-          const reader = new FileReader();
-          reader.onload = (ev) => {
-            uploadedImages.push(ev.target.result);
+        (async () => {
+          for (const file of files) {
+            if (!file.type.startsWith('image/')) continue;
+            const { blob, ext } = await compressToWebp(file);
+            uploadedImages.push({ blob, ext, preview: URL.createObjectURL(blob) });
             updateImagePreview();
-          };
-          reader.readAsDataURL(file);
-        });
+          }
+        })();
         imageUpload.value = '';
       });
 
@@ -253,10 +289,25 @@
         const seasonsToSave = selectedSeasons.length > 0 ? selectedSeasons : ['all'];
 
         try {
+          // Upload images to Supabase Storage -> public webp/CDN URLs
+          const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 30) || 'prod';
+          const ts = Date.now();
+          const urls = [];
+          for (let i = 0; i < uploadedImages.length; i++) {
+            const item = uploadedImages[i];
+            const path = `admin/${slug}-${ts}/${i}.${item.ext}`;
+            const { data: up, error: upErr } = await supabase.storage
+              .from('product-images')
+              .upload(path, item.blob, { contentType: `image/${item.ext}`, upsert: true });
+            if (upErr) throw upErr;
+            const { data: pub } = supabase.storage.from('product-images').getPublicUrl(path);
+            urls.push(pub.publicUrl);
+          }
+
           const newProduct = {
             name, brand, price, quantity,
             description: description || null,
-            images: JSON.stringify(uploadedImages),
+            images: JSON.stringify(urls),
             icon: 'fa-crown',
             category: selectedCategory,
             season: seasonsToSave.join(',') // Store as comma-separated string
@@ -271,6 +322,7 @@
           document.getElementById('productPrice').value = '';
           document.getElementById('productQuantity').value = '0';
           document.getElementById('productDescription').value = '';
+          uploadedImages.forEach(item => { try { URL.revokeObjectURL(item.preview); } catch (e) {} });
           uploadedImages = [];
           updateImagePreview();
 
