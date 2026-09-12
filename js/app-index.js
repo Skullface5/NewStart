@@ -71,7 +71,7 @@
             else el.textContent = translations[lang][key];
           }
         });
-        if (typeof renderProducts === 'function') renderProducts();
+        if (typeof renderProducts === 'function' && allProductsData.length > 0) renderProducts();
         if (typeof renderCart === 'function') renderCart();
       }
 
