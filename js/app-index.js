@@ -121,7 +121,7 @@
           const sub = item.price * (item.quantity || 1);
           total += sub;
           html += `<div class="cart-item" data-id="${item.id}">
-            <div class="cart-item-icon"><i class="fas fa-crown"></i></div>
+            <div class="cart-item-icon">${item.image ? `<img src="${item.image}" alt="${escapeHtml(item.name)}" loading="lazy" decoding="async">` : `<i class="fas fa-crown"></i>`}</div>
             <div class="cart-item-info">
               <div class="cart-item-title">${escapeHtml(item.name)}</div>
               <div class="cart-item-price">${formatPrice(item.price)}</div>
