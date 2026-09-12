@@ -427,19 +427,23 @@
                     const authLink = document.getElementById('authLink');
                     const profileLink = document.getElementById('profileLink');
                     const adminLink = document.getElementById('adminLink');
+                    const ordersLink = document.getElementById('ordersLink');
 
                     if (user) {
                         if (authLink) authLink.style.display = 'none';
                         if (profileLink) profileLink.style.display = 'block';
                         if (user.email === 'azmmeli146@gmail.com') {
                             if (adminLink) adminLink.style.display = 'block';
+                            if (ordersLink) ordersLink.style.display = 'block';
                         } else {
                             if (adminLink) adminLink.style.display = 'none';
+                            if (ordersLink) ordersLink.style.display = 'none';
                         }
                     } else {
                         if (authLink) authLink.style.display = 'block';
                         if (profileLink) profileLink.style.display = 'none';
                         if (adminLink) adminLink.style.display = 'none';
+                        if (ordersLink) ordersLink.style.display = 'none';
                     }
                 } catch (error) {
                     console.error('Error checking user:', error);
