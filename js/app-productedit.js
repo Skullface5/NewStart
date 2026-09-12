@@ -119,11 +119,11 @@
                     emptyDiv.innerHTML = `<i class="fas fa-images"></i> ${translations[currentLanguage].noImages || 'Aucune image'}`;
                     grid.appendChild(emptyDiv);
                 } else {
-                    uploadedImages.forEach((imgBase64, index) => {
+                    uploadedImages.forEach((item, index) => {
                         const div = document.createElement('div');
                         div.className = 'preview-item';
                         div.innerHTML = `
-              <img src="${imgBase64}" alt="image ${index + 1}">
+              <img src="${previewSrc(item)}" alt="image ${index + 1}">
               <button class="remove-image-btn" data-index="${index}"><i class="fas fa-times"></i></button>
             `;
                         grid.appendChild(div);
@@ -134,6 +134,7 @@
                     btn.addEventListener('click', (e) => {
                         e.stopPropagation();
                         const index = parseInt(btn.dataset.index);
+                        if (typeof uploadedImages[index] !== 'string') { try { URL.revokeObjectURL(uploadedImages[index].preview); } catch (e) {} }
                         uploadedImages.splice(index, 1);
                         updateImagePreview();
                     });
@@ -232,13 +233,23 @@
                 }
 
                 try {
-                    const updateData = {
+                    const finalImages = [];
+            for (let i = 0; i < uploadedImages.length; i++) {
+                const item = uploadedImages[i];
+                if (typeof item === 'string') { finalImages.push(item); continue; }
+                const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 30) || 'prod';
+                const path = `admin/${slug}-${Date.now()}/${i}.${item.ext}`;
+                const { error: upErr } = await supabase.storage.from('product-images').upload(path, item.blob, { contentType: 'image/' + item.ext, upsert: true });
+                if (upErr) throw upErr;
+                finalImages.push(supabase.storage.from('product-images').getPublicUrl(path).data.publicUrl);
+            }
+            const updateData = {
                         name,
                         brand,
                         price,
                         quantity,
                         description: description || null,
-                        images: JSON.stringify(uploadedImages),
+                        images: JSON.stringify(finalImages),
                         category: selectedCategory,
                         season: seasonValue,
                         updated_at: new Date().toISOString()
@@ -257,22 +268,74 @@
                 }
             }
 
-            // Image upload
+            // Image compression -> WebP (keeps DB + Storage lean)
+
+            function compressToWebp(file) {
+
+              return new Promise((resolve) => {
+
+                const url = URL.createObjectURL(file);
+
+                const img = new Image();
+
+                img.onload = () => {
+
+                  URL.revokeObjectURL(url);
+
+                  try {
+
+                    let { width: w, height: h } = img;
+
+                    if (Math.max(w, h) > 1000) { const k = 1000 / Math.max(w, h); w = Math.round(w * k); h = Math.round(h * k); }
+
+                    const canvas = document.createElement('canvas');
+
+                    canvas.width = w; canvas.height = h;
+
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+
+                    canvas.toBlob((blob) => {
+
+                      if (blob && blob.type === 'image/webp') resolve({ blob, ext: 'webp' });
+
+                      else resolve({ blob: file, ext: (file.name.split('.').pop() || 'jpg').toLowerCase() });
+
+                    }, 'image/webp', 0.82);
+
+                  } catch (e) {
+
+                    resolve({ blob: file, ext: (file.name.split('.').pop() || 'jpg').toLowerCase() });
+
+                  }
+
+                };
+
+                img.onerror = () => { URL.revokeObjectURL(url); resolve({ blob: file, ext: (file.name.split('.').pop() || 'jpg').toLowerCase() }); };
+
+                img.src = url;
+
+              });
+
+            }
+
+            // uploadedImages items: string (already-stored URL) | { blob, ext, preview } (new pick)
+
+            function previewSrc(item) { return typeof item === 'string' ? item : item.preview; }
+
             const imageUpload = document.getElementById('imageUpload');
             const addMoreImagesBtn = document.getElementById('addMoreImagesBtn');
 
             addMoreImagesBtn?.addEventListener('click', () => imageUpload.click());
             imageUpload?.addEventListener('change', function (e) {
                 const files = Array.from(e.target.files);
-                files.forEach(file => {
-                    if (!file.type.startsWith('image/')) return;
-                    const reader = new FileReader();
-                    reader.onload = (ev) => {
-                        uploadedImages.push(ev.target.result);
+                (async () => {
+                    for (const file of files) {
+                        if (!file.type.startsWith('image/')) continue;
+                        const { blob, ext } = await compressToWebp(file);
+                        uploadedImages.push({ blob, ext, preview: URL.createObjectURL(blob) });
                         updateImagePreview();
-                    };
-                    reader.readAsDataURL(file);
-                });
+                    }
+                })();
                 imageUpload.value = '';
             });
 
