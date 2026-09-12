@@ -3,7 +3,8 @@
   const SB_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
   const SB_KEY = 'eyJhbG...zMAQ';
   const ADMIN = 'azmmeli146@gmail.com';
-  const sb = window.supabase.createClient(SB_URL, SB_KEY);
+  let sb = null;
+  try { if (window.supabase) sb = window.supabase.createClient(SB_URL, SB_KEY); } catch (e) { console.error(e); }
 
   let allOrders = [];
   let curStatus = 'all';
@@ -159,17 +160,35 @@
   }
 
   // ─── Auth guard ───────────────────────────────────────────────
+  // Prefer the CACHED session (instant, offline-safe like the gate); getUser is
+  // only a fallback. A network hiccup must never blank the page (invisible-card bug).
   async function boot() {
-    try {
-      const { data: { user } } = await sb.auth.getUser();
+    if (!sb) { // CDN/supabase-js unavailable: show the (now visible) card instead of a blank page
       hide('authLoading');
-      if (!user || user.email !== ADMIN) { show('accessDenied'); return; }
-      show('mainContent');
-      updateUserDisplay();
-      await loadOrders();
-    } catch (e) { hide('authLoading'); show('accessDenied'); }
+      const d = document.getElementById('accessDenied');
+      if (d) d.style.display = 'flex';
+      return;
+    }
+    let user = null;
+    try {
+      const { data: { session } } = await sb.auth.getSession();
+      user = session && session.user;
+      if (!user) {
+        const r = await sb.auth.getUser();
+        user = r.data && r.data.user;
+      }
+    } catch (e) { console.error('adminorders auth check failed:', e); }
+    hide('authLoading');
+    if (!user || user.email !== ADMIN) {
+      const d = document.getElementById('accessDenied');
+      if (d) d.style.display = 'flex';
+      return;
+    }
+    show('mainContent');
+    updateUserDisplay();
+    await loadOrders();
   }
-  sb.auth.onAuthStateChange(() => updateUserDisplay());
+  if (sb) sb.auth.onAuthStateChange(() => { updateUserDisplay(); });
 
   // ─── Load orders ──────────────────────────────────────────────
   async function loadOrders(manual = false) {
