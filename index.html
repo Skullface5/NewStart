@@ -147,13 +147,11 @@
 
     header {
       background: rgba(247, 240, 230, 0.92);
-      backdrop-filter: blur(12px);
       box-shadow: var(--shadow-sm);
       position: sticky;
       top: 0;
       z-index: 100;
       border-bottom: 1px solid rgba(180, 154, 106, 0.2);
-      transition: all 0.3s ease;
     }
 
     body.dark header {
@@ -205,7 +203,7 @@
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
     }
 
     .theme-toggle:hover,
@@ -265,7 +263,7 @@
       padding: 0.9rem 1.5rem;
       text-decoration: none;
       color: var(--charcoal);
-      transition: all 0.2s;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
       border-bottom: 1px solid var(--border-light);
       display: block;
       font-weight: 400;
@@ -303,7 +301,7 @@
       text-transform: uppercase;
       color: var(--charcoal);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     }
 
     .lang-current:hover {
@@ -332,7 +330,7 @@
       font-size: 0.7rem;
       cursor: pointer;
       color: var(--text-mid);
-      transition: all 0.2s;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     }
 
     .lang-option:hover {
@@ -373,7 +371,7 @@
       font-size: 0.9rem;
       font-family: 'Jost', sans-serif;
       color: var(--charcoal);
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
       outline: none;
     }
 
@@ -425,7 +423,7 @@
       gap: 12px;
       padding: 12px 16px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
       border-bottom: 1px solid var(--border-light);
     }
 
@@ -668,7 +666,7 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       text-decoration: none;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
       cursor: pointer;
       border: none;
       font-family: 'Jost', sans-serif;
@@ -840,7 +838,7 @@
       text-transform: uppercase;
       text-decoration: none;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
       font-family: 'Jost', sans-serif;
       border: none;
       border-radius: 50px;
@@ -929,7 +927,7 @@
       text-transform: uppercase;
       color: var(--text-mid);
       cursor: pointer;
-      transition: all 0.3s;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
       font-family: 'Jost', sans-serif;
       border-radius: 50px;
     }
@@ -970,7 +968,7 @@
       border-radius: 16px;
       padding: 1.2rem 0.8rem;
       box-shadow: var(--shadow-md);
-      transition: all 0.4s ease;
+      transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1001,7 +999,7 @@
       align-items: center;
       justify-content: center;
       margin: 0 auto 0.8rem;
-      transition: all 0.4s ease;
+      transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
       overflow: hidden;
     }
 
@@ -1052,7 +1050,7 @@
       font-weight: 500;
       font-size: 0.75rem;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
       margin-top: auto;
       display: inline-flex;
       align-items: center;
@@ -1213,7 +1211,7 @@
       border-radius: 50px;
       cursor: pointer;
       font-weight: 500;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
       min-height: 50px;
       /* ✅ Ensure tap target size on mobile */
     }
@@ -1484,7 +1482,7 @@
       color: var(--gold-light);
       text-decoration: none;
       font-size: 0.85rem;
-      transition: all 0.3s;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
       border-radius: 50%;
     }
 
@@ -1573,6 +1571,10 @@
         align-items: flex-start;
       }
     }
+  
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
   </style>
 </head>
 
@@ -1583,7 +1585,7 @@
 
   <!-- === PARTICULES D'ARRIÈRE-PLAN === -->
   <script>
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0, n = (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 0 : (matchMedia('(pointer: coarse)').matches ? 6 : 25); i < n; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
       const s = Math.random() * 4 + 2;

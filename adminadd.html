@@ -148,7 +148,6 @@
 
     header {
       background: rgba(247, 240, 230, 0.92);
-      backdrop-filter: blur(12px);
       box-shadow: var(--shadow-sm);
       position: fixed;
       top: 0;
@@ -156,7 +155,6 @@
       right: 0;
       z-index: 100;
       border-bottom: 1px solid rgba(180, 154, 106, 0.2);
-      transition: all 0.3s ease;
     }
 
     body.dark header {
@@ -210,7 +208,7 @@
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
     }
 
     .theme-toggle:hover,
@@ -255,7 +253,7 @@
       padding: 0.9rem 1.5rem;
       text-decoration: none;
       color: var(--charcoal);
-      transition: all 0.2s;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
       border-bottom: 1px solid var(--border-light);
       display: block;
       font-weight: 400;
@@ -293,7 +291,7 @@
       text-transform: uppercase;
       color: var(--charcoal);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     }
 
     .lang-current:hover {
@@ -322,7 +320,7 @@
       font-size: 0.7rem;
       cursor: pointer;
       color: var(--text-mid);
-      transition: all 0.2s;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     }
 
     .lang-option:hover {
@@ -433,7 +431,7 @@
       color: var(--charcoal);
       font-size: 0.85rem;
       font-family: 'Jost', sans-serif;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
     }
 
     .input-group input:focus,
@@ -494,7 +492,7 @@
       justify-content: center;
       cursor: pointer;
       font-size: 10px;
-      transition: all 0.2s;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     }
 
     .remove-image-btn:hover {
@@ -512,7 +510,7 @@
       justify-content: center;
       gap: 5px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
       aspect-ratio: 1 / 1;
       color: var(--gold-dark);
     }
@@ -550,7 +548,7 @@
       gap: 8px;
       font-size: 0.8rem;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
       color: var(--charcoal);
     }
 
@@ -616,7 +614,7 @@
       font-size: 0.85rem;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
       width: 100%;
       display: flex;
       align-items: center;
@@ -646,7 +644,7 @@
       border-radius: 50px;
       font-size: 0.8rem;
       text-decoration: none;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
     }
 
     .btn-secondary:hover {
@@ -850,7 +848,7 @@
       color: var(--gold-light);
       text-decoration: none;
       font-size: 0.85rem;
-      transition: all 0.3s;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
       border-radius: 50%;
     }
 
@@ -936,6 +934,10 @@
         font-size: 0.7rem;
       }
     }
+  
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
   </style><link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   
@@ -943,7 +945,7 @@
 
 <body>
   <script>
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0, n = (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 0 : (matchMedia('(pointer: coarse)').matches ? 6 : 25); i < n; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
       const s = Math.random() * 4 + 2;

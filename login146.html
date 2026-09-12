@@ -104,7 +104,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
       box-shadow: var(--shadow-md);
       border: 1px solid var(--border);
     }
@@ -286,7 +286,7 @@
       text-transform: uppercase;
       letter-spacing: 0.1em;
       font-size: 0.9rem;
-      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      transition: background-color 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), color 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), border-color 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), box-shadow 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
       position: relative;
       overflow: hidden;
     }
@@ -366,7 +366,7 @@
       left: 1.2rem;
       color: var(--accent);
       font-size: 1rem;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
       z-index: 1;
       pointer-events: none;
     }
@@ -379,7 +379,7 @@
       color: var(--accent);
       font-size: 1rem;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
       z-index: 2;
       background: transparent;
     }
@@ -399,7 +399,7 @@
       font-size: 0.95rem;
       color: var(--text-primary);
       outline: none;
-      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      transition: background-color 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1), color 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1), border-color 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1), box-shadow 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
     }
 
     .password-toggle:hover {
@@ -415,7 +415,7 @@
       font-size: 0.95rem;
       color: var(--text-primary);
       outline: none;
-      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      transition: background-color 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1), color 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1), border-color 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1), box-shadow 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
     }
 
     input:focus {
@@ -442,7 +442,7 @@
       font-weight: 600;
       width: 100%;
       cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      transition: background-color 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), color 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), border-color 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), box-shadow 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
       margin-top: 0.5rem;
       position: relative;
       overflow: hidden;
@@ -561,7 +561,7 @@
       content: '';
       flex: 1;
       border-bottom: 1px solid var(--border);
-      transition: all 0.3s;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
     }
 
     .separator:hover::before,
@@ -574,7 +574,7 @@
       padding: 0 12px;
       font-size: 0.8rem;
       text-transform: uppercase;
-      transition: all 0.3s;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
     }
 
     .separator:hover span {
@@ -590,7 +590,7 @@
       color: var(--accent);
       text-decoration: none;
       font-size: 0.9rem;
-      transition: all 0.3s;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
       position: relative;
       animation: fadeIn 0.8s ease-out 0.7s both;
     }
@@ -749,6 +749,10 @@
         font-size: 1.2rem;
       }
     }
+  
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
   </style>
 </head>
 
@@ -764,7 +768,7 @@
   <!-- Floating particles -->
   <script>
     // Create floating gold particles
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0, n = (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 0 : (matchMedia('(pointer: coarse)').matches ? 6 : 30); i < n; i++) {
       const particle = document.createElement('div');
       particle.className = 'particle';
       const size = Math.random() * 6 + 2;
