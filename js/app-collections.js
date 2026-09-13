@@ -52,15 +52,6 @@
     kids: 'kids.html'
   };
 
-  // Static "Parfums" parent — ALWAYS appended after the admin-editable items.
-  const PARFUMS_ITEM = {
-    slug: 'parfums',
-    fr: 'Parfums',
-    en: 'Perfumes',
-    ar: 'عطور',
-    href: 'index.html#catalogue',
-    children: ['man', 'women', 'unisexe', 'kids']
-  };
 
   // Built-in fallback = SPEC contract (admin-editable five; Parfums appended by code).
   const DEFAULT_ADMIN_ITEMS = [
@@ -132,8 +123,6 @@
       .filter(validItem)
       .map(function (it) { return Object.assign({}, it); });
     if (!arr.length) DEFAULT_ADMIN_ITEMS.forEach(function (it) { arr.push(Object.assign({}, it)); });
-    const hasParfums = arr.some(function (it) { return it.slug === 'parfums'; });
-    if (!hasParfums) arr.push(Object.assign({}, PARFUMS_ITEM));
     return arr;
   }
 
