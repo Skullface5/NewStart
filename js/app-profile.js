@@ -10,7 +10,7 @@
         fr: {
  myInfo: 'Mes informations', fullName: 'Nom complet', phone: 'Téléphone', address: 'Adresse', saveInfo: 'Enregistrer', infoSaved: '✓ Enregistré', infoRequired: 'Nom et téléphone requis',
           home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
-          login: 'Se connecter', profile: 'Mon Profil', logout: 'Déconnexion',
+          login: 'Se connecter', profile: 'Mon Profil', notreCollection: 'Notre Collection', logout: 'Déconnexion',
           cart: 'Panier', emptyCart: 'Votre panier est vide.', total: 'Total', payment: 'PAIEMENT',
           addedToCart: '✨ Article ajouté', removed: '🗑️ Retiré',
           totalOrders: 'Commandes totales', pending: 'En cours', delivered: 'Livrées',
@@ -29,7 +29,7 @@
         en: {
  myInfo: 'My Info', fullName: 'Full name', phone: 'Phone', address: 'Address', saveInfo: 'Save', infoSaved: '✓ Saved', infoRequired: 'Name and phone required',
           home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
-          login: 'Sign in', profile: 'My Profile', logout: 'Logout',
+          login: 'Sign in', profile: 'My Profile', notreCollection: 'Our Collection', logout: 'Logout',
           cart: 'Cart', emptyCart: 'Your cart is empty.', total: 'Total', payment: 'PAYMENT',
           addedToCart: '✨ Added to cart', removed: '🗑️ Removed',
           totalOrders: 'Total orders', pending: 'In progress', delivered: 'Delivered',
@@ -48,7 +48,7 @@
         ar: {
  myInfo: 'معلوماتي', fullName: 'الاسم الكامل', phone: 'الهاتف', address: 'العنوان', saveInfo: 'حفظ', infoSaved: '✓ تم الحفظ', infoRequired: 'الاسم والهاتف مطلوبان',
           home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
-          login: 'تسجيل الدخول', profile: 'ملفي الشخصي', logout: 'تسجيل الخروج',
+          login: 'تسجيل الدخول', profile: 'ملفي الشخصي', notreCollection: 'مجموعتنا', logout: 'تسجيل الخروج',
           cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.', total: 'المجموع', payment: 'الدفع',
           addedToCart: '✨ تمت الإضافة', removed: '🗑️ تمت الإزالة',
           totalOrders: 'إجمالي الطلبات', pending: 'قيد المعالجة', delivered: 'تم التوصيل',
@@ -74,6 +74,7 @@
         const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
         const langSpan = document.getElementById('currentLangText');
         if (langSpan) langSpan.textContent = names[lang];
+        if (window.RosaCollections) window.RosaCollections.setLang(lang);
         document.querySelectorAll('[data-translate]').forEach(el => {
           const key = el.getAttribute('data-translate');
           if (translations[lang] && translations[lang][key]) {

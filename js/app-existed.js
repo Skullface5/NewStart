@@ -9,12 +9,13 @@
       const translations = {
         fr: {
           home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
-          existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil',
+          existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil', notreCollection: 'Notre Collection',
           existingPerfumes: 'Parfums Existants',
           menCat: 'Homme', menDesc: 'Boisés & épicés',
           womenCat: 'Femme', womenDesc: 'Floraux & sensuels',
           unisexCat: 'Unisexe', unisexDesc: 'Pour tous',
           kidsCat: 'Enfants', kidsDesc: 'Douceurs',
+          catVoiture: 'Parfums voiture', catAmbiance: "Parfums d'ambiance", catMusc: 'Musc', catAccessoires: 'Accessoires', catInspires: 'Parfums inspirés',
           addProduct: 'Ajouter un produit', refresh: 'Rafraîchir',
           footerDescription: "Parfumerie d'exception depuis 1985. L'art de la parfumerie orientale réinventé pour les connaisseurs exigeants.",
           footerPerfumesTitle: "Parfums", footerMen: "Homme", footerWomen: "Femme", footerUnisex: "Unisexe", footerKids: "Enfants",
@@ -23,12 +24,13 @@
         },
         en: {
           home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
-          existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
+          existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile', notreCollection: 'Our Collection',
           existingPerfumes: 'Existing Perfumes',
           menCat: 'Men', menDesc: 'Woody & spicy',
           womenCat: 'Women', womenDesc: 'Floral & sensual',
           unisexCat: 'Unisex', unisexDesc: 'For everyone',
           kidsCat: 'Kids', kidsDesc: 'Sweet scents',
+          catVoiture: 'Car perfumes', catAmbiance: 'Home fragrances', catMusc: 'Musk', catAccessoires: 'Accessories', catInspires: 'Inspired perfumes',
           addProduct: 'Add product', refresh: 'Refresh',
           footerDescription: "Exceptional perfumery since 1985. The art of oriental perfumery reinvented for discerning connoisseurs.",
           footerPerfumesTitle: "Perfumes", footerMen: "Men", footerWomen: "Women", footerUnisex: "Unisex", footerKids: "Kids",
@@ -37,12 +39,13 @@
         },
         ar: {
           home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
-          existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
+          existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي', notreCollection: 'مجموعتنا',
           existingPerfumes: 'العطور الموجودة',
           menCat: 'رجالي', menDesc: 'خشبي و حار',
           womenCat: 'نسائي', womenDesc: 'زهري و حسي',
           unisexCat: 'للجنسين', unisexDesc: 'للجميع',
           kidsCat: 'أطفال', kidsDesc: 'روائح حلوة',
+          catVoiture: 'عطور السيارات', catAmbiance: 'عطورات الجو', catMusc: 'مسك', catAccessoires: 'إكسسوارات', catInspires: 'عطور مستوحاة',
           addProduct: 'إضافة منتج', refresh: 'تحديث',
           footerDescription: "عطور استثنائية منذ 1985. فن العطور الشرقية المعاد ابتكاره للخبراء المميزين.",
           footerPerfumesTitle: "العطور", footerMen: "رجالي", footerWomen: "نسائي", footerUnisex: "للجنسين", footerKids: "أطفال",
@@ -59,6 +62,7 @@
         const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
         const langSpan = document.getElementById('currentLangText');
         if (langSpan) langSpan.textContent = names[lang];
+        if (window.RosaCollections) window.RosaCollections.setLang(lang);
         document.querySelectorAll('[data-translate]').forEach(el => {
           const key = el.getAttribute('data-translate');
           if (translations[lang] && translations[lang][key]) {

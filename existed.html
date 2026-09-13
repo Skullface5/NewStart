@@ -410,6 +410,26 @@
       background-image: url('https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/kids.jfif');
     }
 
+    .category-card.cat-voiture {
+      background-image: linear-gradient(135deg, #6b5a44 0%, #3e3226 100%);
+    }
+
+    .category-card.cat-ambiance {
+      background-image: linear-gradient(135deg, #8a6f52 0%, #4d3a28 100%);
+    }
+
+    .category-card.cat-musc {
+      background-image: linear-gradient(135deg, #a08b6b 0%, #5c4a33 100%);
+    }
+
+    .category-card.cat-accessoires {
+      background-image: linear-gradient(135deg, #7c6a52 0%, #372c20 100%);
+    }
+
+    .category-card.cat-inspires {
+      background-image: linear-gradient(135deg, #94765a 0%, #463526 100%);
+    }
+
     .category-card::before {
       content: '';
       position: absolute;
@@ -756,7 +776,6 @@
     }
   </style><link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  
 </head>
 
 <body>
@@ -838,6 +857,21 @@
           <h3 data-translate="kidsCat">Enfants</h3>
           <p data-translate="kidsDesc">Douceurs</p>
         </a>
+        <a href="admincat.html?cat=voiture" class="category-card cat-voiture">
+          <h3 data-translate="catVoiture">Parfums voiture</h3>
+        </a>
+        <a href="admincat.html?cat=ambiance" class="category-card cat-ambiance">
+          <h3 data-translate="catAmbiance">Parfums d'ambiance</h3>
+        </a>
+        <a href="admincat.html?cat=musc" class="category-card cat-musc">
+          <h3 data-translate="catMusc">Musc</h3>
+        </a>
+        <a href="admincat.html?cat=accessoires" class="category-card cat-accessoires">
+          <h3 data-translate="catAccessoires">Accessoires</h3>
+        </a>
+        <a href="admincat.html?cat=inspires" class="category-card cat-inspires">
+          <h3 data-translate="catInspires">Parfums inspirés</h3>
+        </a>
       </div>
 
       <!-- Statistics -->
@@ -916,7 +950,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/admin-gate.js?v=1"></script>
-  <script src="js/app-existed.js"></script>
+  <script src="js/app-existed.js?v=3"></script>
 </body>
 
 </html>

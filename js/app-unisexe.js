@@ -9,7 +9,7 @@
       const translations = {
         fr: {
           home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', kids: 'ENFANTS',
-          login: 'Se connecter', profile: 'Mon Profil', back: 'Retour à l\'accueil',
+          login: 'Se connecter', profile: 'Mon Profil', notreCollection: 'Notre Collection', back: 'Retour à l\'accueil',
           unisexCat: 'Parfums Unisexe', unisexDesc: 'Des fragrances universelles qui transcendent les genres et s\'adaptent à toutes les personnalités.',
           addToCart: 'Ajouter', addedToCart: '✨ Article ajouté', cart: 'Panier', emptyCart: 'Votre panier est vide.',
           total: 'Total', payment: 'PAIEMENT', delivery: 'Livraison', fullName: 'Nom complet *',
@@ -30,7 +30,7 @@
         },
         en: {
           home: 'HOME', men: 'MEN', women: 'WOMEN', kids: 'KIDS',
-          login: 'Sign in', profile: 'My Profile', back: 'Back to home',
+          login: 'Sign in', profile: 'My Profile', notreCollection: 'Our Collection', back: 'Back to home',
           unisexCat: 'Unisex Perfumes', unisexDesc: 'Universal fragrances that transcend gender and adapt to all personalities.',
           addToCart: 'Add to cart', addedToCart: '✨ Added to cart', cart: 'Cart', emptyCart: 'Your cart is empty.',
           total: 'Total', payment: 'PAYMENT', delivery: 'Delivery', fullName: 'Full name *',
@@ -51,7 +51,7 @@
         },
         ar: {
           home: 'الرئيسية', men: 'رجالي', women: 'نسائي', kids: 'أطفال',
-          login: 'تسجيل الدخول', profile: 'ملفي الشخصي', back: 'العودة للرئيسية',
+          login: 'تسجيل الدخول', profile: 'ملفي الشخصي', notreCollection: 'مجموعتنا', back: 'العودة للرئيسية',
           unisexCat: 'عطور للجنسين', unisexDesc: 'عطور عالمية تتجاوز الجنس وتتكيف مع جميع الشخصيات.',
           addToCart: 'أضف إلى السلة', addedToCart: '✨ تمت الإضافة', cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.',
           total: 'المجموع', payment: 'الدفع', delivery: 'التوصيل', fullName: 'الاسم الكامل *',
@@ -80,6 +80,7 @@
         const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
         const langSpan = document.getElementById('currentLangText');
         if (langSpan) langSpan.textContent = names[lang];
+        if (window.RosaCollections) window.RosaCollections.setLang(lang);
         document.querySelectorAll('[data-translate]').forEach(el => {
           const key = el.getAttribute('data-translate');
           if (translations[lang] && translations[lang][key]) {

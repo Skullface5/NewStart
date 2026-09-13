@@ -1,0 +1,47 @@
+/* ============================================================
+   "Notre Collection" menu editor rows (admincat.html)
+   ============================================================ */
+.coll-row {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr 1fr 150px auto auto;
+    gap: .5rem;
+    align-items: center;
+    background: var(--card-elevated, #fff);
+    border: 1px solid var(--border-light, rgba(180, 155, 120, .15));
+    border-radius: 14px;
+    padding: .65rem .8rem;
+    margin-top: .6rem;
+}
+.coll-row input, .coll-row select {
+    width: 100%;
+    font: inherit;
+    font-size: .86rem;
+    padding: .45rem .6rem;
+    border-radius: 9px;
+    border: 1px solid var(--border-light, rgba(180, 155, 120, .2));
+    background: var(--input-bg, #fff);
+    color: var(--text-dark, inherit);
+}
+.coll-row input:focus, .coll-row select:focus { outline: 2px solid rgba(184, 155, 94, .45); }
+.coll-row .coll-ord { display: flex; flex-direction: column; gap: 2px; }
+.coll-row .coll-ord button {
+    border: 1px solid var(--border-light, rgba(180, 155, 120, .25));
+    background: transparent; color: inherit; cursor: pointer;
+    border-radius: 7px; width: 26px; height: 20px; font-size: .7rem; line-height: 1;
+}
+.coll-row .coll-ord button:hover { border-color: var(--gold, #B89B5E); }
+.coll-del {
+    border: none; background: transparent; cursor: pointer; color: #b04a4a;
+    font-size: 1rem; padding: 4px 6px; border-radius: 8px;
+}
+.coll-del:hover { background: rgba(176, 74, 74, .1); }
+.coll-lang-head {
+    display: grid; grid-template-columns: auto 1fr 1fr 1fr 150px auto auto;
+    gap: .5rem; padding: 0 .8rem;
+    font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; opacity: .6;
+}
+@media (max-width: 860px) {
+    .coll-row { grid-template-columns: 1fr 1fr; }
+    .coll-row .coll-ord, .coll-del { display: none; }
+    .coll-lang-head { display: none; }
+}

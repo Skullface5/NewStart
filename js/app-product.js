@@ -16,7 +16,7 @@
       const translations = {
         fr: {
           home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
-          login: 'Se connecter', profile: 'Mon Profil', back: 'Retour',
+          login: 'Se connecter', profile: 'Mon Profil', notreCollection: 'Notre Collection', back: 'Retour',
           cart: 'Panier', emptyCart: 'Votre panier est vide.', total: 'Total', payment: 'PAIEMENT',
           addToCart: 'Ajouter au panier', addedToCart: '✨ Article ajouté', removed: '🗑️ Retiré',
           loading: 'Chargement...', errorLoading: '❌ Erreur de chargement', productNotFound: '❌ Produit non trouvé',
@@ -34,7 +34,7 @@
         },
         en: {
           home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
-          login: 'Sign in', profile: 'My Profile', back: 'Back',
+          login: 'Sign in', profile: 'My Profile', notreCollection: 'Our Collection', back: 'Back',
           cart: 'Cart', emptyCart: 'Your cart is empty.', total: 'Total', payment: 'PAYMENT',
           addToCart: 'Add to cart', addedToCart: '✨ Added to cart', removed: '🗑️ Removed',
           loading: 'Loading...', errorLoading: '❌ Error loading', productNotFound: '❌ Product not found',
@@ -52,7 +52,7 @@
         },
         ar: {
           home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
-          login: 'تسجيل الدخول', profile: 'ملفي الشخصي', back: 'رجوع',
+          login: 'تسجيل الدخول', profile: 'ملفي الشخصي', notreCollection: 'مجموعتنا', back: 'رجوع',
           cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.', total: 'المجموع', payment: 'الدفع',
           addToCart: 'أضف إلى السلة', addedToCart: '✨ تمت الإضافة', removed: '🗑️ تمت الإزالة',
           loading: 'جاري التحميل...', errorLoading: '❌ خطأ في التحميل', productNotFound: '❌ المنتج غير موجود',
@@ -454,6 +454,7 @@
         const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
         const langSpan = document.getElementById('currentLangText');
         if (langSpan) langSpan.textContent = names[lang];
+        if (window.RosaCollections) window.RosaCollections.setLang(lang);
         document.querySelectorAll('[data-translate]').forEach(el => {
           const key = el.getAttribute('data-translate');
           if (translations[lang] && translations[lang][key]) {

@@ -9,7 +9,7 @@
       const translations = {
         fr: {
           home: 'ACCUEIL', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
-          login: 'Se connecter', profile: 'Mon Profil', notreCollection: 'Notre Collection', back: 'Retour à l\'accueil',
+          login: 'Se connecter', profile: 'Mon Profil', back: 'Retour à l\'accueil',
           menCat: 'Parfums Homme', menDesc: 'Des fragrances boisées, épicées et audacieuses qui révèlent votre caractère et votre élégance.',
           addToCart: 'Ajouter', addedToCart: '✨ Article ajouté', cart: 'Panier', emptyCart: 'Votre panier est vide.',
           total: 'Total', payment: 'PAIEMENT', delivery: 'Livraison', fullName: 'Nom complet *',
@@ -30,7 +30,7 @@
         },
         en: {
           home: 'HOME', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
-          login: 'Sign in', profile: 'My Profile', notreCollection: 'Our Collection', back: 'Back to home',
+          login: 'Sign in', profile: 'My Profile', back: 'Back to home',
           menCat: 'Men Perfumes', menDesc: 'Woody, spicy and bold fragrances that reveal your character and elegance.',
           addToCart: 'Add to cart', addedToCart: '✨ Added to cart', cart: 'Cart', emptyCart: 'Your cart is empty.',
           total: 'Total', payment: 'PAYMENT', delivery: 'Delivery', fullName: 'Full name *',
@@ -51,7 +51,7 @@
         },
         ar: {
           home: 'الرئيسية', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
-          login: 'تسجيل الدخول', profile: 'ملفي الشخصي', notreCollection: 'مجموعتنا', back: 'العودة للرئيسية',
+          login: 'تسجيل الدخول', profile: 'ملفي الشخصي', back: 'العودة للرئيسية',
           menCat: 'عطور رجالية', menDesc: 'عطور خشبية وحارة وجريئة تكشف عن شخصيتك وأناقتك.',
           addToCart: 'أضف إلى السلة', addedToCart: '✨ تمت الإضافة', cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.',
           total: 'المجموع', payment: 'الدفع', delivery: 'التوصيل', fullName: 'الاسم الكامل *',
@@ -72,15 +72,73 @@
         }
       };
 
+      // ============================================================
+      // Generic category page (?cat=slug) — whitelist + labels FR/EN/AR
+      // Mirrors js/app-collections.js SPEC-hero-collections.md
+      // ============================================================
+      const CATEGORY_LABELS = {
+        inspires: {
+          fr: { name: 'Parfums inspirés', desc: 'Nos interprétations des grandes signatures de la parfumerie mondiale, recomposées avec passion.' },
+          en: { name: 'Inspired perfumes', desc: 'Our takes on the world\'s great signature fragrances, recreated with passion.' },
+          ar: { name: 'عطور مستوحاة', desc: 'تفسيراتنا لأشهر العطور العالمية، أعيد تركيبها بشغف.' }
+        },
+        voiture: {
+          fr: { name: 'Parfums pour voiture', desc: "Des parfums d'auto qui transforment chaque trajet en une expérience sensorielle élégante." },
+          en: { name: 'Car perfumes', desc: 'Car fragrances that turn every drive into an elegant sensorial experience.' },
+          ar: { name: 'عطور السيارات', desc: 'عطور للسيارة تجعل كل رحلة تجربة حسية أنيقة.' }
+        },
+        ambiance: {
+          fr: { name: "Parfums d'ambiance", desc: "Des parfums d'intérieur qui habillent votre maison de notes chaleureuses et raffinées." },
+          en: { name: 'Home fragrances', desc: 'Home fragrances that dress your space in warm and refined notes.' },
+          ar: { name: 'عطورات الجو', desc: 'عطور منزلية تضفي على فضاءاتك نفحات دافئة وراقية.' }
+        },
+        musc: {
+          fr: { name: 'Musc', desc: 'Des muscs blancs et poudrés, délicats et enveloppants, pour un sillon pur et soyeux.' },
+          en: { name: 'Musk', desc: 'Soft, powdery musks — delicate and enveloping, for a pure and silky trail.' },
+          ar: { name: 'مسك', desc: 'عطور المسك الناعمة والبودرية لأثر نقي وحريري.' }
+        },
+        accessoires: {
+          fr: { name: 'Accessoires', desc: 'Des accessoires sélectionnés pour compléter votre rituel parfumé au quotidien.' },
+          en: { name: 'Accessories', desc: 'Curated accessories to complete your daily fragrance ritual.' },
+          ar: { name: 'إكسسوارات', desc: 'إكسسوارات مختارة لتكمل طقوسك العطرية اليومية.' }
+        }
+      };
+      const DEFAULT_CATEGORY = 'voiture';
+      const WHITELIST = Object.keys(CATEGORY_LABELS);
+
+      function resolveCategorySlug() {
+        let raw = '';
+        try { raw = (new URLSearchParams(window.location.search).get('cat') || '').trim().toLowerCase(); } catch (e) { raw = ''; }
+        const slug = WHITELIST.indexOf(raw) !== -1 ? raw : DEFAULT_CATEGORY;
+        try {
+          const url = new URL(window.location.href);
+          if ((url.searchParams.get('cat') || '').toLowerCase() !== slug) {
+            url.searchParams.set('cat', slug);
+            history.replaceState(null, '', url.toString());
+          }
+        } catch (e) { /* old browser / sandboxed: keep slug, skip URL rewrite */ }
+        return slug;
+      }
+      const CATEGORY_SLUG = resolveCategorySlug();
+
+      // Inject catName/catDesc into each language dict so translatePage's
+      // data-translate pattern resolves them dynamically per active lang.
+      ['fr', 'en', 'ar'].forEach(function (lg) {
+        translations[lg].catName = CATEGORY_LABELS[CATEGORY_SLUG][lg].name;
+        translations[lg].catDesc = CATEGORY_LABELS[CATEGORY_SLUG][lg].desc;
+        translations[lg].notreCollection = (lg === 'fr') ? 'Notre Collection' : (lg === 'en') ? 'Our Collection' : 'مجموعتنا';
+      });
+
       function translatePage(lang) {
         currentLanguage = lang;
         localStorage.setItem('language', lang);
         document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
         document.body.style.textAlign = lang === 'ar' ? 'right' : 'left';
+        const dict = translations[lang] || translations.fr;
+        document.title = 'Rosa Fragrances | ' + (dict.catName || 'Parfums');
         const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
         const langSpan = document.getElementById('currentLangText');
         if (langSpan) langSpan.textContent = names[lang];
-        if (window.RosaCollections) window.RosaCollections.setLang(lang);
         document.querySelectorAll('[data-translate]').forEach(el => {
           const key = el.getAttribute('data-translate');
           if (translations[lang] && translations[lang][key]) {
@@ -315,7 +373,7 @@
 
  function paintCachedProducts() {
    try {
-     const raw = localStorage.getItem('rosa_cache_man');
+     const raw = localStorage.getItem('rosa_cache_cat_' + CATEGORY_SLUG);
      if (!raw) return false;
      const obj = JSON.parse(raw);
      const data = obj && obj.data;
@@ -330,7 +388,7 @@
 async function loadProducts() {
         if (loadingEl) loadingEl.style.display = 'block';
         try {
-          const { data, error } = await supabase.from('products').select('*').eq('category', 'man').order('created_at', { ascending: true });
+          const { data, error } = await supabase.from('products').select('*').eq('category', CATEGORY_SLUG).order('created_at', { ascending: true });
           if (error) throw error;
           products = (data || []).map(p => {
             let firstImage = '';
@@ -345,7 +403,7 @@ async function loadProducts() {
           });
           populateBrandFilter();
           applyFiltersAndSort();
- rosaSaveCache('rosa_cache_man', products);
+ rosaSaveCache('rosa_cache_cat_' + CATEGORY_SLUG, products);
         } catch (err) {
           console.error(err);
           const __hasCards = productGrid && productGrid.querySelector('.product-card'); if (!__hasCards && productGrid) productGrid.innerHTML = `<div class="empty-cart-message">${translations[currentLanguage].errorLoading}<br><button onclick="location.reload()" style="margin-top:0.8rem;padding:0.4rem 0.8rem;background:var(--gold);color:white;border:none;border-radius:50px;font-size:0.7rem;">${translations[currentLanguage].reload}</button></div>`;

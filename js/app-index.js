@@ -10,7 +10,7 @@
 
       const translations = {
         fr: {
-          collection: 'COLLECTION', exclusives: 'EXCLUSIVITÉS', gifts: 'COFFRETS', login: 'Se connecter', profile: 'Mon Profil',
+          collection: 'COLLECTION', exclusives: 'EXCLUSIVITÉS', gifts: 'COFFRETS', login: 'Se connecter', profile: 'Mon Profil', notreCollection: 'Notre Collection',
           addToCart: 'Ajouter', addedToCart: '✨ Article ajouté', cart: 'Panier', emptyCart: 'Votre panier est vide.',
           total: 'Total', payment: 'PAIEMENT', delivery: 'Livraison', fullName: 'Nom complet *', phone: 'Téléphone *',
           email: 'Email *', address: 'Adresse *', yourOrder: 'Votre commande', cancel: 'Annuler', confirm: 'Confirmer',
@@ -25,7 +25,7 @@
           footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. Tous droits réservés."
         },
         en: {
-          collection: 'COLLECTION', exclusives: 'EXCLUSIVES', gifts: 'GIFT SETS', login: 'Sign in', profile: 'My Profile',
+          collection: 'COLLECTION', exclusives: 'EXCLUSIVES', gifts: 'GIFT SETS', login: 'Sign in', profile: 'My Profile', notreCollection: 'Our Collection',
           addToCart: 'Add to cart', addedToCart: '✨ Added to cart', cart: 'Cart', emptyCart: 'Your cart is empty.',
           total: 'Total', payment: 'PAYMENT', delivery: 'Delivery', fullName: 'Full name *', phone: 'Phone *',
           email: 'Email *', address: 'Address *', yourOrder: 'Your order', cancel: 'Cancel', confirm: 'Confirm',
@@ -40,7 +40,7 @@
           footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. All rights reserved."
         },
         ar: {
-          collection: 'المجموعة', exclusives: 'الحصريات', gifts: 'الهدايا', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
+          collection: 'المجموعة', exclusives: 'الحصريات', gifts: 'الهدايا', login: 'تسجيل الدخول', profile: 'ملفي الشخصي', notreCollection: 'مجموعتنا',
           addToCart: 'أضف إلى السلة', addedToCart: '✨ تمت الإضافة', cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.',
           total: 'المجموع', payment: 'الدفع', delivery: 'التوصيل', fullName: 'الاسم الكامل *', phone: 'الهاتف *',
           email: 'البريد الإلكتروني *', address: 'العنوان *', yourOrder: 'طلبك', cancel: 'إلغاء', confirm: 'تأكيد',
@@ -64,6 +64,7 @@
         const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
         const langSpan = document.getElementById('currentLangText');
         if (langSpan) langSpan.textContent = names[lang];
+        if (window.RosaCollections) window.RosaCollections.setLang(lang);
         document.querySelectorAll('[data-translate]').forEach(el => {
           const key = el.getAttribute('data-translate');
           if (translations[lang] && translations[lang][key]) {

@@ -1,0 +1,174 @@
+/* ============================================================
+   ROSA — "Notre Collection" nav accordion menu
+   Mirrors .lang-menu patterns (max-height transition, uppercase
+   .7rem, letter-spacing .18em, gold-dark hover). Themed through
+   the shared CSS variables, so body.dark applies automatically.
+   RTL-safe: logical properties follow body's computed direction
+   (pages set document.body.style.direction = 'rtl' for Arabic).
+   ============================================================ */
+
+.collections-menu {
+  border-bottom: 1px solid var(--border-light);
+}
+
+/* Trigger button — same geometry as .lang-current */
+.collections-current {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: none;
+  border: none;
+  font-family: inherit;
+  padding: 0.9rem 1.5rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.collections-current:hover {
+  background: var(--hover-subtle);
+  color: var(--gold-dark);
+}
+
+.collections-current i {
+  font-size: 0.6rem;
+  transition: transform 0.3s ease;
+}
+
+.collections-menu.active .collections-current {
+  background: var(--hover-subtle);
+  color: var(--gold-dark);
+}
+
+.collections-menu.active .collections-current i {
+  transform: rotate(180deg);
+}
+
+/* Dropdown panel — accordion like .lang-options */
+.collections-options {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--cream-dark);
+}
+
+/* Fallback when the JS inline height is absent (JS drives the real px value) */
+.collections-menu.active .collections-options {
+  max-height: 420px;
+}
+
+/* Prefix with .collections-menu so these beat `.nav-links a` (0-1-1) on specificity */
+.collections-menu .collections-option {
+  display: block;
+  width: 100%;
+  text-align: start;
+  text-decoration: none;
+  padding-block: 0.7rem;
+  padding-inline-start: 2rem;
+  padding-inline-end: 1.5rem;
+  background: none;
+  border: none;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: var(--text-mid);
+  transition: background-color 0.2s, color 0.2s, padding-inline-start 0.2s;
+}
+
+.collections-menu .collections-option:hover {
+  background: var(--hover-subtle);
+  color: var(--gold-dark);
+  padding-inline-start: 2.4rem;
+}
+
+/* Nested sub-links (children of an item, e.g. Parfums -> Homme/Femme/…) */
+.collections-submenu {
+  padding-block: 0.1rem 0.35rem;
+}
+
+.collections-menu .collections-sublink {
+  display: block;
+  width: 100%;
+  text-align: start;
+  text-decoration: none;
+  padding-block: 0.5rem;
+  padding-inline-start: 3.2rem;
+  padding-inline-end: 1.5rem;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+  opacity: 0.85;
+  border-inline-start: 2px solid transparent;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, padding-inline-start 0.2s;
+}
+
+.collections-menu .collections-sublink:hover {
+  background: var(--hover-subtle);
+  color: var(--gold-dark);
+  border-inline-start-color: var(--gold);
+  opacity: 1;
+  padding-inline-start: 3.6rem;
+}
+
+/* The nav drawer (.nav-links) is height-capped at 460/500px per page;
+   our menu makes it taller. Raise the cap only when the menu is mounted
+   (:has() — graceful no-op on very old browsers; the inner
+   .collections-options still scrolls). */
+.nav-links:has(.collections-menu).active {
+  max-height: min(78vh, 720px);
+  overflow-y: auto;
+}
+
+/* Mobile (drawer mode) — reuse lang-menu responsive feel */
+@media (max-width: 768px) {
+  .nav-links:has(.collections-menu).active {
+    max-height: min(72vh, 560px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .collections-current {
+    padding: 0.85rem 1.25rem;
+  }
+
+  .collections-menu .collections-option {
+    padding-block: 0.7rem;
+    padding-inline-start: 1.75rem;
+    padding-inline-end: 1.25rem;
+  }
+
+  .collections-menu .collections-sublink {
+    padding-inline-start: 2.75rem;
+    padding-inline-end: 1.25rem;
+  }
+}
+
+@media (max-width: 390px) {
+  .nav-links:has(.collections-menu).active {
+    max-height: min(68vh, 500px);
+  }
+
+  .collections-current {
+    font-size: 0.66rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .collections-menu .collections-option {
+    font-size: 0.66rem;
+    padding-inline-start: 1.5rem;
+    padding-inline-end: 1rem;
+  }
+
+  .collections-menu .collections-sublink {
+    font-size: 0.62rem;
+    padding-inline-start: 2.4rem;
+    padding-inline-end: 1rem;
+  }
+}
