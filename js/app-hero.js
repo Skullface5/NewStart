@@ -66,11 +66,6 @@
     style.textContent = CSS;
     document.head.appendChild(style);
 
-    var ctl = document.createElement('div');
-    ctl.className = 'hero-bg-ctl';
-    ctl.setAttribute('aria-hidden', 'true');
-    hero.insertBefore(ctl, hero.firstChild);
-
     fetch(SUPABASE_URL + '/rest/v1/settings?select=*', {
       headers: { apikey: key, Authorization: '***' + key }
     })
@@ -80,6 +75,10 @@
         (rows || []).forEach(function (r) { map[r.key] = r.value; });
         var urls = Array.isArray(map.hero_images) ? map.hero_images.filter(Boolean).slice(0, 6) : [];
         if (!urls.length) return;
+        var ctl = document.createElement('div');
+        ctl.className = 'hero-bg-ctl';
+        ctl.setAttribute('aria-hidden', 'true');
+        hero.insertBefore(ctl, hero.firstChild);
         var pos = map.hero_position || {};
         var legacy = (pos && typeof pos.tx === 'string') ? pos : null;
         var imgs = urls.map(function (u) {
