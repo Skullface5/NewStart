@@ -40,11 +40,13 @@
                     footerPerfumesTitle: "Parfums", footerMen: "Homme", footerWomen: "Femme", footerUnisex: "Unisexe", footerKids: "Enfants",
                     footerContactTitle: "Contact", footerAddress: "Tunis, Tunisie", footerPhone: "+216 96 163 366",
                     footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. Tous droits réservés.",
+                    bannerTitle: 'Images Bannière Promo', bannerHelp: "Jusqu'à 6 images de la bannière promotion de l'accueil. Plusieurs images = diaporama.", bannerAutoplay: 'Défilement automatique', bannerSave: 'Enregistrer la bannière', bannerSavedBadge: 'Enregistré', bannerSaved: '✅ Bannière enregistrée', bannerLimit: 'Maximum 6 images.',
                     collTitle: 'Menu Notre Collection', collHelp: 'Les lignes ci-dessous composent le menu « Notre Collection » du site. Réorganisez avec ↑/↓, remplissez les 3 langues, puis Enregistrer.', collAdd: 'Ajouter une entrée', collSave: 'Enregistrer le menu', collSavedBadge: 'Enregistré', collSaved: '✅ Menu enregistré', collLimit: 'Maximum 8 entrées.', collNeedLangs: 'Chaque entrée doit avoir un nom FR, EN et AR.', collDel: 'Supprimer',
 heroTitle: 'Images Héro',
                     heroHelp: "Jusqu'à 6 images en haut de l'accueil. La première est l'image principale. Cliquez une vignette, puis déplacez et zoomez dans le cadre pour régler sa position.",
                     heroPosHint: 'Glissez pour repositionner — molette ou curseur pour zoomer.',
                     heroRecenter: 'Recentrer',
+                    heroAutoplay: 'Défilement automatique',
                     heroSave: 'Enregistrer le héro',
                     heroSavedBadge: 'Enregistré',
                     heroSaved: '✅ Héro enregistré',
@@ -69,11 +71,13 @@ heroTitle: 'Images Héro',
                     footerPerfumesTitle: "Perfumes", footerMen: "Men", footerWomen: "Women", footerUnisex: "Unisex", footerKids: "Kids",
                     footerContactTitle: "Contact", footerAddress: "Tunis, Tunisia", footerPhone: "+216 96 163 366",
                     footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. All rights reserved.",
+                    bannerTitle: 'Promo Banner Images', bannerHelp: 'Up to 6 images on the home promo banner. Several images = slideshow.', bannerAutoplay: 'Auto-play slideshow', bannerSave: 'Save banner', bannerSavedBadge: 'Saved', bannerSaved: '✅ Banner saved', bannerLimit: 'Maximum 6 images.',
                     collTitle: 'Notre Collection Menu', collHelp: 'The rows below build the site\'s « Notre Collection » menu. Reorder with ↑/↓, fill the 3 languages, then Save.', collAdd: 'Add entry', collSave: 'Save menu', collSavedBadge: 'Saved', collSaved: '✅ Menu saved', collLimit: 'Maximum 8 entries.', collNeedLangs: 'Each entry needs FR, EN and AR names.', collDel: 'Delete',
 heroTitle: 'Hero Images',
                     heroHelp: 'Up to 6 images on the home hero. The first one is the main image. Click a thumbnail, then drag and zoom inside the frame to set its position.',
                     heroPosHint: 'Drag to reposition — wheel or slider to zoom.',
                     heroRecenter: 'Recenter',
+                    heroAutoplay: 'Auto-play slideshow',
                     heroSave: 'Save hero',
                     heroSavedBadge: 'Saved',
                     heroSaved: '✅ Hero saved',
@@ -98,11 +102,13 @@ heroTitle: 'Hero Images',
                     footerPerfumesTitle: "العطور", footerMen: "رجالي", footerWomen: "نسائي", footerUnisex: "للجنسين", footerKids: "أطفال",
                     footerContactTitle: "اتصل بنا", footerAddress: "تونس، تونس", footerPhone: "366 163 96 216+",
                     footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 روزا للعطور. جميع الحقوق محفوظة.",
+                    bannerTitle: 'صور البانر الإعلاني', bannerHelp: 'حتى 6 صور في بانر الصفحة الرئيسية. عدة صور = عرض تلقائي.', bannerAutoplay: 'عرض تلقائي', bannerSave: 'حفظ البانر', bannerSavedBadge: 'تم الحفظ', bannerSaved: '✅ تم حفظ البانر', bannerLimit: 'الحد الأقصى 6 صور.',
                     collTitle: 'قائمة مجموعتنا', collHelp: 'الأسطر أدناه تُنشئ قائمة «مجموعتنا» في الموقع. رتّب بالأسهم، املأ اللغات الثلاث، ثم احفظ.', collAdd: 'إضافة عنصر', collSave: 'حفظ القائمة', collSavedBadge: 'تم الحفظ', collSaved: '✅ تم حفظ القائمة', collLimit: 'الحد الأقصى 8 عناصر.', collNeedLangs: 'كل عنصر يحتاج اسمًا بالفرنسية والإنجليزية والعربية.', collDel: 'حذف',
 heroTitle: 'صور الواجهة',
                     heroHelp: 'حتى ٦ صور في واجهة الصفحة الرئيسية. الصورة الأولى هي الرئيسية. انقر على مصغّرة ثم اسحب وكبّر داخل الإطار لضبط موضعها.',
                     heroPosHint: 'اسحب لإعادة الضبط — العجلة أو المؤشر للتكبير.',
                     heroRecenter: 'إعادة التمركز',
+                    heroAutoplay: 'عرض تلقائي',
                     heroSave: 'حفظ الواجهة',
                     heroSavedBadge: 'تم الحفظ',
                     heroSaved: '✅ تم حفظ الواجهة',
@@ -660,6 +666,8 @@ heroTitle: 'صور الواجهة',
                     heroState.posMap = hpSeedMap(settings.hero_position, list);
                     heroState.posBase = hpCloneMap(heroState.posMap);
                     heroState.dirtyPos = false;
+                    var apEl = document.getElementById('heroAutoplay');
+                    if (apEl) apEl.checked = settings.hero_autoplay !== false;
                     renderHeroGallery();
                 } catch (e) {
                     heroMsg('⚠ ' + (e && e.message ? e.message : String(e)));
@@ -692,6 +700,8 @@ heroTitle: 'صور الواجهة',
                     }
                     // 2. merge-duplicates upsert of the two settings rows
                     const rows = [{ key: 'hero_images', value: list }];
+                    var apEl = document.getElementById('heroAutoplay');
+                    rows.push({ key: 'hero_autoplay', value: !(apEl && apEl.checked === false) });
                     const willSavePos = heroState.dirtyPos || heroState.newFiles.length > 0;
                     if (willSavePos) {
                         const posMap = {};
@@ -845,6 +855,136 @@ heroTitle: 'صور الواجهة',
             }
 
 
+            // ════════════ Promo banner images manager (settings keys banner_images + banner_autoplay) ════════════
+            const BANNER_MAX = 6;
+            const bannerState = { list: [], newFiles: [], saving: false };
+
+            function bannerMsg(text, isOk) {
+                const el = document.getElementById('bannerMsg');
+                if (!el) return;
+                el.textContent = text || '';
+                el.className = 'hero-admin-msg' + (text ? (isOk ? ' ok' : ' err') : '');
+            }
+
+            function renderBannerGallery() {
+                const box = document.getElementById('bannerGallery');
+                if (!box) return;
+                let html = bannerState.list.map(u =>
+                    '<div class="g-thumb" data-gurl="' + escapeHtml(u) + '">' +
+                    '<img src="' + escapeHtml(u) + '" alt="" loading="lazy" onerror="this.parentElement.remove()">' +
+                    '<button type="button" class="g-del" data-bdel="' + escapeHtml(u) + '" aria-label="' + heroT('heroRemove') + '">&#10005;</button>' +
+                    '</div>').join('');
+                html += bannerState.newFiles.map((f, i) =>
+                    '<div class="g-thumb g-thumb--new" data-bfile="' + i + '">' +
+                    '<img src="' + escapeHtml(URL.createObjectURL(f)) + '" alt="">' +
+                    '<button type="button" class="g-del" data-bdelfile="' + i + '" aria-label="' + heroT('heroRemove') + '">&#10005;</button>' +
+                    '</div>').join('');
+                if (bannerState.list.length + bannerState.newFiles.length < BANNER_MAX) {
+                    html += '<label class="g-add" for="bannerFileInput" aria-label="' + heroT('heroAddAria') + '">+</label>';
+                }
+                box.innerHTML = html;
+                const badge = document.getElementById('bannerCountBadge');
+                if (badge) badge.textContent = (bannerState.list.length + bannerState.newFiles.length) + '/' + BANNER_MAX;
+            }
+
+            async function loadBannerSettings() {
+                try {
+                    const { data, error } = await supabase.from('settings').select('*');
+                    if (error) throw error;
+                    const settings = {};
+                    (data || []).forEach(row => { settings[row.key] = row.value; });
+                    let list = Array.isArray(settings.banner_images) ? settings.banner_images
+                        .filter(u => typeof u === 'string' && u).slice(0, BANNER_MAX) : [];
+                    bannerState.list = list;
+                    bannerState.newFiles = [];
+                    const apEl = document.getElementById('bannerAutoplay');
+                    if (apEl) apEl.checked = settings.banner_autoplay !== false;
+                    renderBannerGallery();
+                } catch (e) {
+                    bannerMsg('⚠ ' + (e && e.message ? e.message : String(e)));
+                }
+            }
+
+            async function saveBannerSettings() {
+                if (bannerState.saving) return;
+                bannerState.saving = true;
+                const btn = document.getElementById('btnSaveBanner');
+                if (btn) btn.disabled = true;
+                try {
+                    const list = bannerState.list.slice();
+                    for (let i = 0; i < bannerState.newFiles.length; i++) {
+                        bannerMsg(heroT('heroUploading') + ' ' + (i + 1) + '/' + bannerState.newFiles.length + '…', true);
+                        const { blob, ext } = await heroCompress(bannerState.newFiles[i]);
+                        const path = 'hero/banner-' + Date.now() + '-' + i + '.' + ext;
+                        const { error: upErr } = await supabase.storage
+                            .from('product-images')
+                            .upload(path, blob, { contentType: 'image/' + ext, upsert: true });
+                        if (upErr) throw upErr;
+                        const { data: pub } = supabase.storage.from('product-images').getPublicUrl(path);
+                        list.push(pub.publicUrl);
+                    }
+                    const apEl = document.getElementById('bannerAutoplay');
+                    const rows = [
+                        { key: 'banner_images', value: list },
+                        { key: 'banner_autoplay', value: !(apEl && apEl.checked === false) }
+                    ];
+                    const { error: sbErr } = await supabase
+                        .from('settings')
+                        .upsert(rows, { onConflict: 'key' });
+                    if (sbErr) throw sbErr;
+                    bannerState.list = list;
+                    bannerState.newFiles = [];
+                    renderBannerGallery();
+                    bannerMsg('');
+                    const saved = document.getElementById('bannerSavedBadge');
+                    if (saved) {
+                        saved.hidden = false;
+                        clearTimeout(saveBannerSettings._t);
+                        saveBannerSettings._t = setTimeout(() => { saved.hidden = true; }, 3500);
+                    }
+                    showToast(heroT('bannerSaved'));
+                } catch (e) {
+                    bannerMsg('⚠ ' + (e && e.message ? e.message : heroT('heroError')));
+                } finally {
+                    bannerState.saving = false;
+                    if (btn) btn.disabled = false;
+                }
+            }
+
+            function bindBannerEditor() {
+                const box = document.getElementById('bannerGallery');
+                if (box) box.addEventListener('click', ev => {
+                    const delUrl = ev.target.closest('[data-bdel]');
+                    if (delUrl) {
+                        const u = delUrl.getAttribute('data-bdel');
+                        bannerState.list = bannerState.list.filter(x => x !== u);
+                        renderBannerGallery();
+                        return;
+                    }
+                    const delFile = ev.target.closest('[data-bdelfile]');
+                    if (delFile) {
+                        bannerState.newFiles.splice(parseInt(delFile.getAttribute('data-bdelfile'), 10), 1);
+                        renderBannerGallery();
+                    }
+                });
+                const input = document.getElementById('bannerFileInput');
+                if (input) input.addEventListener('change', () => {
+                    const files = Array.prototype.slice.call(input.files || []);
+                    input.value = '';
+                    for (const file of files) {
+                        if (bannerState.list.length + bannerState.newFiles.length >= BANNER_MAX) {
+                            bannerMsg('⚠ ' + heroT('bannerLimit'));
+                            break;
+                        }
+                        bannerState.newFiles.push(file);
+                    }
+                    renderBannerGallery();
+                });
+                const saveBtn = document.getElementById('btnSaveBanner');
+                if (saveBtn) saveBtn.addEventListener('click', saveBannerSettings);
+            }
+            bindBannerEditor();
+
             // ════════════ Notre Collection menu editor ════════════
             const COLL_MAX = 8;
             const COLL_SLUGS = ['inspires', 'voiture', 'ambiance', 'musc', 'accessoires', 'custom'];
@@ -984,6 +1124,7 @@ heroTitle: 'صور الواجهة',
             loadProducts();
             bindHeroEditor();
             loadHeroSettings();
+            loadBannerSettings();
             collBind();
             loadCollSettings();
         })();
