@@ -878,44 +878,7 @@
                 <div id="productsTableContent"></div>
             </div>
 
-            <!-- Hero images manager (shared site settings: hero_images + hero_position) -->
-            <section class="hero-admin-card" id="heroAdminCard">
-                <div class="hero-admin-head">
-                    <h2 class="hero-admin-title"><i class="fas fa-image"></i> <span
-                            data-translate="heroTitle">Images Héro</span></h2>
-                    <span class="hero-admin-count"><span id="heroCountBadge">0/6</span></span>
-                </div>
-                <p class="hero-admin-help" data-translate="heroHelp">Jusqu'à 6 images en haut de l'accueil. La
-                    première est l'image principale. Cliquez une vignette puis déplacez / zoomez dans le cadre.</p>
-                <div id="heroGallery" class="g-strip"></div>
-                <div class="hp-wrap" id="hpWrap" hidden>
-                    <p class="hp-hint" data-translate="heroPosHint">Glissez pour repositionner — molette ou curseur
-                        pour zoomer.</p>
-                    <div class="hp-frame" id="hpFrame">
-                        <img id="hpImg" alt="" draggable="false">
-                        <div class="hp-guides" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-                        <div class="hp-badge" id="hpBadge">0 / -8 · ×1.0</div>
-                    </div>
-                    <div class="hp-controls">
-                        <input type="range" id="hpZoom" min="1" max="3" step="0.02" value="1" aria-label="Zoom">
-                        <button type="button" class="hp-btn hp-btn--ghost" id="hpReset"
-                            data-translate="heroRecenter">Recentrer</button>
-                    </div>
-                </div>
-                <label class="toggle hero-autoplay-toggle"><input type="checkbox" id="heroAutoplay" checked><span
-                        class="toggle-track"></span><span class="toggle-label"
-                    data-translate="heroAutoplay">Défilement automatique</span></label>
-                <input type="file" id="heroFileInput" accept="image/jpeg,image/png,image/webp,image/avif" multiple
-                    hidden>
-                <div class="hero-admin-msg" id="heroMsg"></div>
-                <div class="hero-admin-actions">
-                    <button type="button" class="hp-btn hp-btn--gold" id="btnSaveHero"
-                        data-translate="heroSave">Enregistrer le héro</button>
-                    <span class="hero-saved-badge" id="heroSavedBadge" hidden><i class="fas fa-check"></i> <span
-                            data-translate="heroSavedBadge">Enregistré</span></span>
-                </div>
-            </section>
-
+            
             <!-- Bannière promo (diaporama "Notre sélection") — same controls as STE -->
             <section class="hero-admin-card" id="bannerAdminCard">
                 <div class="hero-admin-head">
@@ -1001,7 +964,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/admin-gate.js?v=1"></script>
-  <script src="js/app-admincat.js?v=7"></script>
+  <script src="js/app-admincat.js?v=8"></script>
 </body>
 
 </html>

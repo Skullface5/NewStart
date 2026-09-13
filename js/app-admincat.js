@@ -42,16 +42,7 @@
                     footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. Tous droits réservés.",
                     bannerTitle: 'Images Bannière Promo', bannerHelp: "Jusqu'à 6 images de la bannière promotion de l'accueil. Plusieurs images = diaporama.", bannerAutoplay: 'Défilement automatique', bannerSave: 'Enregistrer la bannière', bannerSavedBadge: 'Enregistré', bannerSaved: '✅ Bannière enregistrée', bannerLimit: 'Maximum 6 images.',
                     collTitle: 'Menu Notre Collection', collHelp: 'Les lignes ci-dessous composent le menu « Notre Collection » du site. Réorganisez avec ↑/↓, remplissez les 3 langues, puis Enregistrer.', collAdd: 'Ajouter une entrée', collSave: 'Enregistrer le menu', collSavedBadge: 'Enregistré', collSaved: '✅ Menu enregistré', collLimit: 'Maximum 8 entrées.', collNeedLangs: 'Chaque entrée doit avoir un nom FR, EN et AR.', collDel: 'Supprimer',
-heroTitle: 'Images Héro',
-                    heroHelp: "Jusqu'à 6 images en haut de l'accueil. La première est l'image principale. Cliquez une vignette, puis déplacez et zoomez dans le cadre pour régler sa position.",
-                    heroPosHint: 'Glissez pour repositionner — molette ou curseur pour zoomer.',
-                    heroRecenter: 'Recentrer',
-                    heroAutoplay: 'Défilement automatique',
-                    heroSave: 'Enregistrer le héro',
-                    heroSavedBadge: 'Enregistré',
-                    heroSaved: '✅ Héro enregistré',
                     heroUploading: 'Envoi de',
-                    heroLimit: 'Maximum 6 images — limite atteinte.',
                     heroRemove: 'Retirer',
                     heroAddAria: 'Ajouter des images héro',
                     heroError: 'Erreur d\'enregistrement. Vérifiez que vous êtes connecté en administrateur.'
@@ -73,16 +64,7 @@ heroTitle: 'Images Héro',
                     footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 Rosa Fragrances. All rights reserved.",
                     bannerTitle: 'Promo Banner Images', bannerHelp: 'Up to 6 images on the home promo banner. Several images = slideshow.', bannerAutoplay: 'Auto-play slideshow', bannerSave: 'Save banner', bannerSavedBadge: 'Saved', bannerSaved: '✅ Banner saved', bannerLimit: 'Maximum 6 images.',
                     collTitle: 'Notre Collection Menu', collHelp: 'The rows below build the site\'s « Notre Collection » menu. Reorder with ↑/↓, fill the 3 languages, then Save.', collAdd: 'Add entry', collSave: 'Save menu', collSavedBadge: 'Saved', collSaved: '✅ Menu saved', collLimit: 'Maximum 8 entries.', collNeedLangs: 'Each entry needs FR, EN and AR names.', collDel: 'Delete',
-heroTitle: 'Hero Images',
-                    heroHelp: 'Up to 6 images on the home hero. The first one is the main image. Click a thumbnail, then drag and zoom inside the frame to set its position.',
-                    heroPosHint: 'Drag to reposition — wheel or slider to zoom.',
-                    heroRecenter: 'Recenter',
-                    heroAutoplay: 'Auto-play slideshow',
-                    heroSave: 'Save hero',
-                    heroSavedBadge: 'Saved',
-                    heroSaved: '✅ Hero saved',
                     heroUploading: 'Uploading',
-                    heroLimit: 'Maximum 6 images — limit reached.',
                     heroRemove: 'Remove',
                     heroAddAria: 'Add hero images',
                     heroError: 'Save failed. Make sure you are signed in as an administrator.'
@@ -104,16 +86,7 @@ heroTitle: 'Hero Images',
                     footerEmail: "contact@rosafragrances.tn", footerCopyright: "© 2026 روزا للعطور. جميع الحقوق محفوظة.",
                     bannerTitle: 'صور البانر الإعلاني', bannerHelp: 'حتى 6 صور في بانر الصفحة الرئيسية. عدة صور = عرض تلقائي.', bannerAutoplay: 'عرض تلقائي', bannerSave: 'حفظ البانر', bannerSavedBadge: 'تم الحفظ', bannerSaved: '✅ تم حفظ البانر', bannerLimit: 'الحد الأقصى 6 صور.',
                     collTitle: 'قائمة مجموعتنا', collHelp: 'الأسطر أدناه تُنشئ قائمة «مجموعتنا» في الموقع. رتّب بالأسهم، املأ اللغات الثلاث، ثم احفظ.', collAdd: 'إضافة عنصر', collSave: 'حفظ القائمة', collSavedBadge: 'تم الحفظ', collSaved: '✅ تم حفظ القائمة', collLimit: 'الحد الأقصى 8 عناصر.', collNeedLangs: 'كل عنصر يحتاج اسمًا بالفرنسية والإنجليزية والعربية.', collDel: 'حذف',
-heroTitle: 'صور الواجهة',
-                    heroHelp: 'حتى ٦ صور في واجهة الصفحة الرئيسية. الصورة الأولى هي الرئيسية. انقر على مصغّرة ثم اسحب وكبّر داخل الإطار لضبط موضعها.',
-                    heroPosHint: 'اسحب لإعادة الضبط — العجلة أو المؤشر للتكبير.',
-                    heroRecenter: 'إعادة التمركز',
-                    heroAutoplay: 'عرض تلقائي',
-                    heroSave: 'حفظ الواجهة',
-                    heroSavedBadge: 'تم الحفظ',
-                    heroSaved: '✅ تم حفظ الواجهة',
                     heroUploading: 'جاري رفع',
-                    heroLimit: 'الحد الأقصى ٦ صور — تم بلوغ الحد.',
                     heroRemove: 'إزالة',
                     heroAddAria: 'إضافة صور الواجهة',
                     heroError: 'فشل الحفظ. تأكد من تسجيل الدخول كمسؤول.'
@@ -138,8 +111,6 @@ heroTitle: 'صور الواجهة',
                         else el.textContent = translations[lang][key];
                     }
                 });
-                // hero gallery thumbnails carry generated labels (remove/add) — repaint them
-                if (typeof renderHeroGallery === 'function') renderHeroGallery();
                 renderProductsTable();
             }
 
@@ -415,196 +386,9 @@ heroTitle: 'صور الواجهة',
                 }
             });
 
-            // ==================================================================
-            // Hero images manager — settings rows hero_images + hero_position
-            // (ported from STE admin2.js #hpEditor; same clamps & transform math)
-            // ==================================================================
-            const HERO_MAX = 6;
-            const heroState = {
-                list: [],          // saved public URLs (hero_images)
-                newFiles: [],      // pending File objects (key 'new:<idx>' until upload)
-                posMap: {},        // key (url or 'new:i') -> {tx, ty, zoom}  (numbers)
-                posBase: {},       // snapshot of posMap as saved server-side
-                selected: null,    // current editor key
-                objUrls: {},       // 'new:i' -> object URL cache
-                dirtyPos: false,
-                saving: false
-            };
-
             function heroT(key) {
                 const d = translations[currentLanguage] || translations.fr;
                 return d[key] || (translations.fr[key] || key);
-            }
-
-            function hpClamp(v, lo, hi) { return Math.min(hi, Math.max(lo, isFinite(v) ? v : 0)); }
-
-            // Accepts {tx:"0%", ty:"-8%", zoom:1} (percent strings, per contract)
-            // or numbers; clamps exactly like STE (-50..50, zoom 1..3).
-            function hpNormalize(pos) {
-                const d = { tx: 0, ty: -8, zoom: 1 };
-                pos = (pos && typeof pos === 'object') ? pos : {};
-                const num = (v, dflt) => {
-                    if (v == null) return dflt;
-                    return hpClamp(parseFloat(String(v)), -50, 50);
-                };
-                return {
-                    tx: num(pos.tx, d.tx),
-                    ty: num(pos.ty, d.ty),
-                    zoom: hpClamp(Number(pos.zoom != null ? pos.zoom : d.zoom), 1, 3)
-                };
-            }
-
-            // raw: { "<url>": {tx,ty,zoom}, ... } OR legacy single {tx,ty,zoom} (applies to all)
-            function hpSeedMap(raw, list) {
-                const map = {};
-                raw = (raw && typeof raw === 'object') ? raw : {};
-                const isLegacy = (typeof raw.tx === 'string' || typeof raw.tx === 'number') ||
-                    (typeof raw.ty === 'string' || typeof raw.ty === 'number') ||
-                    typeof raw.zoom === 'number';
-                if (isLegacy) {
-                    list.forEach(u => { map[u] = hpNormalize(raw); });
-                    return map;
-                }
-                Object.keys(raw).forEach(u => {
-                    if (raw[u] && typeof raw[u] === 'object') map[u] = hpNormalize(raw[u]);
-                });
-                return map;
-            }
-
-            function hpCloneMap(m) {
-                return Object.keys(m).reduce((acc, k) => { acc[k] = Object.assign({}, m[k]); return acc; }, {});
-            }
-
-            function hpMapJson(m) {
-                return JSON.stringify(Object.keys(m).sort().map(k => {
-                    const p = m[k];
-                    return [k, Math.round(p.tx * 10) / 10, Math.round(p.ty * 10) / 10, Math.round(p.zoom * 100) / 100];
-                }));
-            }
-
-            function hpSelKey() {
-                const k = heroState.selected;
-                if (k && (heroState.posMap[k] !== undefined || k.indexOf('new:') === 0)) {
-                    if (k.indexOf('new:') === 0) {
-                        if (heroState.newFiles[Number(k.slice(4))]) return k;
-                    } else if (heroState.list.indexOf(k) >= 0) {
-                        return k;
-                    }
-                }
-                if (heroState.list[0]) return heroState.list[0];
-                return heroState.newFiles[0] ? 'new:0' : null;
-            }
-
-            function hpSelPos(key) {
-                if (!key) return null;
-                if (!heroState.posMap[key]) heroState.posMap[key] = hpNormalize();
-                return heroState.posMap[key];
-            }
-
-            function hpSelSrc(key) {
-                if (!key) return '';
-                if (key.indexOf('new:') === 0) {
-                    const i = Number(key.slice(4));
-                    const f = heroState.newFiles[i];
-                    if (!f) return '';
-                    if (!heroState.objUrls[key]) heroState.objUrls[key] = URL.createObjectURL(f);
-                    return heroState.objUrls[key];
-                }
-                return key;
-            }
-
-            function hpDropUrl(url) {
-                delete heroState.posMap[url];
-                if (heroState.selected === url) heroState.selected = null;
-                hpDirty();
-            }
-
-            function hpDropFileIdx(idx) {
-                Object.keys(heroState.posMap).forEach(k => {
-                    if (k.indexOf('new:') === 0 && Number(k.slice(4)) === idx) delete heroState.posMap[k];
-                });
-                const remap = {};
-                Object.keys(heroState.posMap).forEach(k => {
-                    if (k.indexOf('new:') === 0) {
-                        const i = Number(k.slice(4));
-                        remap['new:' + (i > idx ? i - 1 : i)] = heroState.posMap[k];
-                    } else {
-                        remap[k] = heroState.posMap[k];
-                    }
-                });
-                heroState.posMap = remap;
-                if (heroState.selected === 'new:' + idx) heroState.selected = null;
-                hpDirty();
-            }
-
-            function hpDirty() {
-                heroState.dirtyPos = hpMapJson(heroState.posMap) !== hpMapJson(heroState.posBase || {});
-                const sb = document.getElementById('btnSaveHero');
-                if (sb && heroState.dirtyPos) {
-                    sb.classList.remove('hp-btn--pulse'); void sb.offsetWidth; sb.classList.add('hp-btn--pulse');
-                }
-            }
-
-            function renderHeroGallery() {
-                const box = document.getElementById('heroGallery');
-                if (!box) return;
-                let html = heroState.list.map(u => {
-                    return '<div class="g-thumb" data-gurl="' + escapeHtml(u) + '">' +
-                        '<img src="' + escapeHtml(u) + '" alt="" loading="lazy" onerror="this.parentElement.remove()">' +
-                        '<button type="button" class="g-del" data-hdel="' + escapeHtml(u) + '" aria-label="' + heroT('heroRemove') + '">&#10005;</button>' +
-                        '</div>';
-                }).join('');
-                html += heroState.newFiles.map((f, i) => {
-                    return '<div class="g-thumb g-thumb--new" data-gfile="' + i + '">' +
-                        '<img src="' + escapeHtml(URL.createObjectURL(f)) + '" alt="">' +
-                        '<button type="button" class="g-del" data-hdelfile="' + i + '" aria-label="' + heroT('heroRemove') + '">&#10005;</button>' +
-                        '</div>';
-                }).join('');
-                if (heroState.list.length + heroState.newFiles.length < HERO_MAX) {
-                    html += '<label class="g-add" for="heroFileInput" aria-label="' + heroT('heroAddAria') + '">+</label>';
-                }
-                box.innerHTML = html;
-                const badge = document.getElementById('heroCountBadge');
-                if (badge) badge.textContent = (heroState.list.length + heroState.newFiles.length) + '/' + HERO_MAX;
-                hpRender();
-            }
-
-            function hpRender() {
-                const wrap = document.getElementById('hpWrap');
-                if (!wrap) return;
-                const key = hpSelKey();
-                const img = document.getElementById('hpImg');
-                const badge = document.getElementById('hpBadge');
-                const z = document.getElementById('hpZoom');
-                if (!key) { wrap.hidden = true; renderHeroActiveThumb(null); return; }
-                wrap.hidden = false;
-                const src = hpSelSrc(key);
-                if (img && img.getAttribute('data-src') !== src) {
-                    img.setAttribute('data-src', src);
-                    img.src = src;
-                }
-                const p = hpSelPos(key);
-                if (img) img.style.transform = 'scale(' + p.zoom + ') translate(' + p.tx + '%, ' + p.ty + '%)';
-                if (badge) {
-                    const n = heroState.list.length + heroState.newFiles.length;
-                    const idx = (key.indexOf('new:') === 0)
-                        ? heroState.list.length + Number(key.slice(4)) + 1
-                        : heroState.list.indexOf(key) + 1;
-                    badge.textContent = (n > 1 ? ('#' + idx + ' · ') : '') +
-                        Math.round(p.tx) + ' / ' + Math.round(p.ty) + ' · ×' + p.zoom.toFixed(1);
-                }
-                if (z && document.activeElement !== z) z.value = p.zoom;
-                renderHeroActiveThumb(key);
-            }
-
-            function renderHeroActiveThumb(key) {
-                const box = document.getElementById('heroGallery');
-                if (!box) return;
-                box.querySelectorAll('.g-thumb').forEach(th => {
-                    const isActive = th.getAttribute('data-gurl') === key ||
-                        th.getAttribute('data-gfile') === (key && key.indexOf('new:') === 0 ? key.slice(4) : '__none__');
-                    th.classList.toggle('g-thumb--active', isActive);
-                });
             }
 
             // Image compression -> WebP (same pipeline as app-adminadd.js)
@@ -638,222 +422,6 @@ heroTitle: 'صور الواجهة',
                     img.src = url;
                 });
             }
-
-            function heroMsg(text, ok) {
-                const el = document.getElementById('heroMsg');
-                if (!el) return;
-                if (!text) { el.classList.remove('show', 'ok'); el.textContent = ''; return; }
-                el.textContent = text;
-                el.classList.add('show');
-                el.classList.toggle('ok', !!ok);
-            }
-
-            async function loadHeroSettings() {
-                try {
-                    const { data, error } = await supabase.from('settings').select('*');
-                    if (error) throw error;
-                    const settings = {};
-                    (data || []).forEach(row => { settings[row.key] = row.value; });
-                    let list = Array.isArray(settings.hero_images) ? settings.hero_images
-                        .filter(u => typeof u === 'string' && u).slice(0, HERO_MAX) : [];
-                    if (!list.length && typeof settings.hero_image === 'string' && settings.hero_image) {
-                        list = [settings.hero_image]; // legacy single-image key
-                    }
-                    heroState.list = list;
-                    heroState.newFiles = [];
-                    heroState.objUrls = {};
-                    heroState.selected = null;
-                    heroState.posMap = hpSeedMap(settings.hero_position, list);
-                    heroState.posBase = hpCloneMap(heroState.posMap);
-                    heroState.dirtyPos = false;
-                    var apEl = document.getElementById('heroAutoplay');
-                    if (apEl) apEl.checked = settings.hero_autoplay !== false;
-                    renderHeroGallery();
-                } catch (e) {
-                    heroMsg('⚠ ' + (e && e.message ? e.message : String(e)));
-                }
-            }
-
-            async function saveHeroSettings() {
-                if (heroState.saving) return;
-                heroState.saving = true;
-                const btn = document.getElementById('btnSaveHero');
-                if (btn) btn.disabled = true;
-                try {
-                    const list = heroState.list.slice();
-                    // 1. upload pending files to bucket product-images, folder hero/
-                    for (let i = 0; i < heroState.newFiles.length; i++) {
-                        heroMsg(heroT('heroUploading') + ' ' + (i + 1) + '/' + heroState.newFiles.length + '…', true);
-                        const { blob, ext } = await heroCompress(heroState.newFiles[i]);
-                        const path = 'hero/hero-' + Date.now() + '-' + i + '.' + ext;
-                        const { error: upErr } = await supabase.storage
-                            .from('product-images')
-                            .upload(path, blob, { contentType: 'image/' + ext, upsert: true });
-                        if (upErr) throw upErr;
-                        const { data: pub } = supabase.storage.from('product-images').getPublicUrl(path);
-                        const url = pub.publicUrl;
-                        if (heroState.posMap['new:' + i]) {
-                            heroState.posMap[url] = heroState.posMap['new:' + i];
-                            delete heroState.posMap['new:' + i];
-                        }
-                        list.push(url);
-                    }
-                    // 2. merge-duplicates upsert of the two settings rows
-                    const rows = [{ key: 'hero_images', value: list }];
-                    var apEl = document.getElementById('heroAutoplay');
-                    rows.push({ key: 'hero_autoplay', value: !(apEl && apEl.checked === false) });
-                    const willSavePos = heroState.dirtyPos || heroState.newFiles.length > 0;
-                    if (willSavePos) {
-                        const posMap = {};
-                        list.forEach(u => {
-                            const p = heroState.posMap[u];
-                            if (p) posMap[u] = {
-                                tx: (Math.round(p.tx * 10) / 10) + '%',
-                                ty: (Math.round(p.ty * 10) / 10) + '%',
-                                zoom: Math.round(p.zoom * 100) / 100
-                            };
-                        });
-                        rows.push({ key: 'hero_position', value: posMap });
-                    }
-                    const { error: sbErr } = await supabase
-                        .from('settings')
-                        .upsert(rows, { onConflict: 'key' }); // -> Prefer: resolution=merge-duplicates
-                    if (sbErr) throw sbErr;
-                    // 3. commit local state
-                    heroState.list = list;
-                    heroState.newFiles = [];
-                    Object.keys(heroState.objUrls).forEach(k => {
-                        try { URL.revokeObjectURL(heroState.objUrls[k]); } catch (e) { }
-                    });
-                    heroState.objUrls = {};
-                    const savedPos = {};
-                    list.forEach(u => {
-                        const p = heroState.posMap[u];
-                        if (p) savedPos[u] = {
-                            tx: (Math.round(p.tx * 10) / 10) + '%',
-                            ty: (Math.round(p.ty * 10) / 10) + '%',
-                            zoom: Math.round(p.zoom * 100) / 100
-                        };
-                    });
-                    heroState.posMap = hpSeedMap(savedPos, list);
-                    heroState.posBase = hpCloneMap(heroState.posMap);
-                    heroState.selected = list[0] || null;
-                    heroState.dirtyPos = false;
-                    if (btn) btn.classList.remove('hp-btn--pulse');
-                    renderHeroGallery();
-                    heroMsg('');
-                    const saved = document.getElementById('heroSavedBadge');
-                    if (saved) {
-                        saved.hidden = false;
-                        clearTimeout(saveHeroSettings._t);
-                        saveHeroSettings._t = setTimeout(() => { saved.hidden = true; }, 3500);
-                    }
-                    showToast(heroT('heroSaved'));
-                } catch (e) {
-                    heroMsg('⚠ ' + (e && e.message ? e.message : heroT('heroError')));
-                } finally {
-                    heroState.saving = false;
-                    if (btn) btn.disabled = false;
-                }
-            }
-
-            function bindHeroEditor() {
-                const frame = document.getElementById('hpFrame');
-                if (!frame || frame.dataset.hpBound) return;
-                frame.dataset.hpBound = '1';
-
-                let drag = null;
-                frame.addEventListener('pointerdown', (e) => {
-                    const p = hpSelPos(hpSelKey());
-                    if (!p) return;
-                    drag = { x: e.clientX, y: e.clientY, tx: p.tx, ty: p.ty };
-                    frame.classList.add('dragging');
-                    try { frame.setPointerCapture(e.pointerId); } catch (err) { }
-                    e.preventDefault();
-                });
-                frame.addEventListener('pointermove', (e) => {
-                    if (!drag) return;
-                    const r = frame.getBoundingClientRect();
-                    const p = hpSelPos(hpSelKey());
-                    if (!p) return;
-                    p.tx = hpClamp(drag.tx + (e.clientX - drag.x) / r.width * 100, -50, 50);
-                    p.ty = hpClamp(drag.ty + (e.clientY - drag.y) / r.height * 100, -50, 50);
-                    hpDirty(); hpRender();
-                });
-                ['pointerup', 'pointercancel'].forEach(ev => {
-                    frame.addEventListener(ev, () => {
-                        drag = null;
-                        frame.classList.remove('dragging');
-                    });
-                });
-                frame.addEventListener('wheel', (e) => {
-                    const p = hpSelPos(hpSelKey());
-                    if (!p) return;
-                    e.preventDefault();
-                    p.zoom = hpClamp(p.zoom * (e.deltaY < 0 ? 1.06 : 1 / 1.06), 1, 3);
-                    hpDirty(); hpRender();
-                }, { passive: false });
-
-                document.getElementById('hpZoom').addEventListener('input', function () {
-                    const p = hpSelPos(hpSelKey());
-                    if (!p) return;
-                    p.zoom = hpClamp(Number(this.value), 1, 3);
-                    hpDirty(); hpRender();
-                });
-                document.getElementById('hpReset').addEventListener('click', () => {
-                    const key = hpSelKey();
-                    if (!key) return;
-                    heroState.posMap[key] = hpNormalize();
-                    hpDirty(); hpRender();
-                });
-
-                const box = document.getElementById('heroGallery');
-                if (box) box.addEventListener('click', (e) => {
-                    const del = e.target.closest('[data-hdel]');
-                    if (del) {
-                        e.stopPropagation();
-                        hpDropUrl(del.getAttribute('data-hdel'));
-                        heroState.list = heroState.list.filter(u => u !== del.getAttribute('data-hdel'));
-                        renderHeroGallery();
-                        return;
-                    }
-                    const delF = e.target.closest('[data-hdelfile]');
-                    if (delF) {
-                        e.stopPropagation();
-                        const idx = Number(delF.getAttribute('data-hdelfile'));
-                        hpDropFileIdx(idx);
-                        heroState.newFiles.splice(idx, 1);
-                        renderHeroGallery();
-                        return;
-                    }
-                    const th = e.target.closest('.g-thumb');
-                    if (!th) return;
-                    const url = th.getAttribute('data-gurl');
-                    const fi = th.getAttribute('data-gfile');
-                    heroState.selected = url || ('new:' + fi);
-                    hpRender();
-                });
-
-                const fileInput = document.getElementById('heroFileInput');
-                if (fileInput) fileInput.addEventListener('change', async (e) => {
-                    const files = Array.from(e.target.files || []).filter(f => f.type.startsWith('image/'));
-                    fileInput.value = '';
-                    for (const file of files) {
-                        if (heroState.list.length + heroState.newFiles.length >= HERO_MAX) {
-                            heroMsg('⚠ ' + heroT('heroLimit'));
-                            break;
-                        }
-                        heroState.newFiles.push(file);
-                    }
-                    renderHeroGallery();
-                    const keys = heroState.newFiles.map((_, i) => 'new:' + i);
-                    if (keys.length) heroState.selected = keys[keys.length - 1];
-                    hpRender();
-                });
-
-                document.getElementById('btnSaveHero').addEventListener('click', saveHeroSettings);
-            }
-
 
             // ════════════ Promo banner images manager (settings keys banner_images + banner_autoplay) ════════════
             const BANNER_MAX = 6;
@@ -1122,8 +690,6 @@ heroTitle: 'صور الواجهة',
 
             translatePage(currentLanguage);
             loadProducts();
-            bindHeroEditor();
-            loadHeroSettings();
             loadBannerSettings();
             collBind();
             loadCollSettings();
