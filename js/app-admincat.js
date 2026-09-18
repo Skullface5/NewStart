@@ -103,7 +103,7 @@
                 const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
                 const langSpan = document.getElementById('currentLangText');
                 if (langSpan) langSpan.textContent = names[lang];
-                document.getElementById('dash-collections').querySelectorAll('[data-translate]').forEach(el => {
+                (document.getElementById('dash-collections') || document).querySelectorAll('[data-translate]').forEach(el => {
                     const key = el.getAttribute('data-translate');
                     if (translations[lang] && translations[lang][key]) {
                         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = translations[lang][key];

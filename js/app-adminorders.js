@@ -103,11 +103,11 @@
     const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
     const ls = document.getElementById('currentLangText');
     if (ls) ls.textContent = names[lang];
-    document.getElementById('dash-orders').querySelectorAll('[data-translate]').forEach(el => {
+    (document.getElementById('dash-orders') || document).querySelectorAll('[data-translate]').forEach(el => {
       const k = el.getAttribute('data-translate');
       if (t()[k]) el.textContent = t()[k];
     });
-    document.getElementById('dash-orders').querySelectorAll('[data-translate-ph]').forEach(el => {
+    (document.getElementById('dash-orders') || document).querySelectorAll('[data-translate-ph]').forEach(el => {
       const k = el.getAttribute('data-translate-ph');
       if (t()[k]) el.placeholder = t()[k];
     });
