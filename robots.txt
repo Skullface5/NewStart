@@ -7,5 +7,6 @@ Disallow: /adminadd.html
 Disallow: /admincat.html
 Disallow: /adminorders.html
 Disallow: /productedit.html
+Disallow: /admin.html
 
 Sitemap: https://www.rosafragrances.tn/sitemap.xml

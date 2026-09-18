@@ -96,7 +96,6 @@
             function translatePage(lang) {
                 currentLanguage = lang;
                 localStorage.setItem('language', lang);
-                document.title = 'Rosa Fragrances | ' + translations[lang].catName + ' - Administration';
                 const _catIcon = document.getElementById('catIcon');
                 if (_catIcon) _catIcon.className = 'fas ' + CATS[CAT].icon;
                 document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
@@ -104,7 +103,7 @@
                 const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
                 const langSpan = document.getElementById('currentLangText');
                 if (langSpan) langSpan.textContent = names[lang];
-                document.querySelectorAll('[data-translate]').forEach(el => {
+                document.getElementById('dash-collections').querySelectorAll('[data-translate]').forEach(el => {
                     const key = el.getAttribute('data-translate');
                     if (translations[lang] && translations[lang][key]) {
                         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = translations[lang][key];
@@ -253,8 +252,15 @@
             }
 
             window.editProduct = function (productId) {
-                window.location.href = `productedit.html?id=${productId}`;
+                if (window.rosaLoadEdit) {
+                    window.rosaEditId = productId;
+                    location.hash = '#edit';
+                    window.rosaLoadEdit();
+                } else {
+                    window.location.href = `productedit.html?id=${productId}`;
+                }
             };
+            window.rosaReloadCat = function () { if (typeof loadProducts === 'function') loadProducts(); };
 
             window.deleteProduct = async function (productId) {
                 if (!confirm(translations[currentLanguage].deleteConfirm)) return;
@@ -279,67 +285,6 @@
             document.getElementById('searchInput')?.addEventListener('input', (e) => {
                 searchTerm = e.target.value;
                 renderProductsTable();
-            });
-
-            // Theme
-            function initTheme() {
-                const saved = localStorage.getItem('theme') || 'light';
-                if (saved === 'dark') {
-                    document.body.classList.add('dark');
-                    var _sun = document.querySelector('#themeToggle .fa-sun'); if (_sun) _sun.style.display = 'none';
-                    var _moon = document.querySelector('#themeToggle .fa-moon'); if (_moon) _moon.style.display = 'inline-block';
-                }
-            }
-
-            function toggleTheme() {
-                if (document.body.classList.contains('dark')) {
-                    document.body.classList.remove('dark');
-                    localStorage.setItem('theme', 'light');
-                    var _sun = document.querySelector('#themeToggle .fa-sun'); if (_sun) _sun.style.display = 'inline-block';
-                    var _moon = document.querySelector('#themeToggle .fa-moon'); if (_moon) _moon.style.display = 'none';
-                } else {
-                    document.body.classList.add('dark');
-                    localStorage.setItem('theme', 'dark');
-                    var _sun = document.querySelector('#themeToggle .fa-sun'); if (_sun) _sun.style.display = 'none';
-                    var _moon = document.querySelector('#themeToggle .fa-moon'); if (_moon) _moon.style.display = 'inline-block';
-                }
-                renderProductsTable();
-            }
-
-            document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
-            initTheme();
-
-            // Menu
-            const menuToggle = document.getElementById('menuToggle');
-            const navLinks = document.getElementById('navLinks');
-            const menuOverlay = document.getElementById('menuOverlay');
-
-            function toggleMenu() {
-                navLinks.classList.toggle('active');
-                menuOverlay.classList.toggle('active');
-                document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
-            }
-
-            menuToggle?.addEventListener('click', toggleMenu);
-            menuOverlay?.addEventListener('click', toggleMenu);
-
-            // Language
-            const langMenu = document.getElementById('langMenu');
-            const langCurrentBtn = document.getElementById('langCurrentBtn');
-            if (langCurrentBtn) {
-                langCurrentBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    langMenu.classList.toggle('active');
-                });
-            }
-            document.querySelectorAll('.lang-option').forEach(opt => {
-                opt.addEventListener('click', () => {
-                    translatePage(opt.dataset.lang);
-                    langMenu.classList.remove('active');
-                });
-            });
-            document.addEventListener('click', (e) => {
-                if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active');
             });
 
             // Auth

@@ -98,50 +98,22 @@
   function translatePage(lang) {
     currentLanguage = lang;
     localStorage.setItem('language', lang);
-    document.title = 'Rosa Fragrances | ' + t().pageTitle + ' - Administration';
     document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
     document.body.style.textAlign = lang === 'ar' ? 'right' : 'left';
     const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
     const ls = document.getElementById('currentLangText');
     if (ls) ls.textContent = names[lang];
-    document.querySelectorAll('[data-translate]').forEach(el => {
+    document.getElementById('dash-orders').querySelectorAll('[data-translate]').forEach(el => {
       const k = el.getAttribute('data-translate');
       if (t()[k]) el.textContent = t()[k];
     });
-    document.querySelectorAll('[data-translate-ph]').forEach(el => {
+    document.getElementById('dash-orders').querySelectorAll('[data-translate-ph]').forEach(el => {
       const k = el.getAttribute('data-translate-ph');
       if (t()[k]) el.placeholder = t()[k];
     });
     refreshStats();
     render();
   }
-
-  // ─── Menu + lang wiring (sibling pattern) ─────────────────────
-  const menuToggle = document.getElementById('menuToggle');
-  const navLinks = document.getElementById('navLinks');
-  const menuOverlay = document.getElementById('menuOverlay');
-  function toggleMenu() {
-    navLinks.classList.toggle('active');
-    menuOverlay.classList.toggle('active');
-    document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
-  }
-  menuToggle?.addEventListener('click', toggleMenu);
-  menuOverlay?.addEventListener('click', toggleMenu);
-
-  const langMenu = document.getElementById('langMenu');
-  document.getElementById('langCurrentBtn')?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    langMenu.classList.toggle('active');
-  });
-  document.querySelectorAll('.lang-option').forEach(opt => {
-    opt.addEventListener('click', () => {
-      translatePage(opt.dataset.lang);
-      langMenu.classList.remove('active');
-    });
-  });
-  document.addEventListener('click', (e) => {
-    if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active');
-  });
 
   // ─── User display (sibling pattern) ───────────────────────────
   async function updateUserDisplay() {
@@ -379,7 +351,7 @@
   };
 
   let searchT;
-  document.getElementById('searchInput')?.addEventListener('input', e => {
+  document.getElementById('oSearchInput')?.addEventListener('input', e => {
     clearTimeout(searchT);
     searchT = setTimeout(() => { searchQ = e.target.value; render(); }, 220);
   });
@@ -395,23 +367,6 @@
     el.textContent = msg; el.classList.add('show');
     setTimeout(() => el.classList.remove('show'), 2500);
   }
-
-  // ─── Theme (sibling pattern) ──────────────────────────────────
-  (function initTheme() {
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
-      const s = document.querySelector('#themeToggle .fa-sun'), m = document.querySelector('#themeToggle .fa-moon');
-      if (s) s.style.display = 'none';
-      if (m) m.style.display = 'inline-block';
-    }
-  })();
-  document.getElementById('themeToggle')?.addEventListener('click', () => {
-    const dark = document.body.classList.toggle('dark');
-    localStorage.setItem('theme', dark ? 'dark' : 'light');
-    const s2 = document.querySelector('#themeToggle .fa-sun'), m2 = document.querySelector('#themeToggle .fa-moon');
-    if (s2) s2.style.display = dark ? 'none' : 'inline-block';
-    if (m2) m2.style.display = dark ? 'inline-block' : 'none';
-  });
 
   // apply saved language on first paint
   translatePage(currentLanguage);

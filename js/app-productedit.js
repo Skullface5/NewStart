@@ -21,6 +21,7 @@
                     season: 'Saisons (plusieurs choix possibles)', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne',
                     seasonHint: 'Sélectionnez une ou plusieurs saisons (cliquez pour sélectionner/désélectionner)',
                     saveChanges: 'Enregistrer les modifications', cancel: 'Annuler',
+                    editHint: 'Choisissez un produit dans Collections → Modifier pour le charger ici.',
                     loading: 'Chargement...', productNotFound: '❌ Produit non trouvé',
                     productUpdated: '✅ Produit mis à jour', errorUpdating: '❌ Erreur lors de la mise à jour',
                     invalidFields: '❌ Nom, marque et prix valides requis',
@@ -40,6 +41,7 @@
                     season: 'Seasons (multiple choices possible)', summer: 'Summer', winter: 'Winter', spring: 'Spring', autumn: 'Autumn',
                     seasonHint: 'Select one or more seasons (click to select/deselect)',
                     saveChanges: 'Save changes', cancel: 'Cancel',
+                    editHint: 'Pick a product from Collections → Edit to load it here.',
                     loading: 'Loading...', productNotFound: '❌ Product not found',
                     productUpdated: '✅ Product updated', errorUpdating: '❌ Error updating product',
                     invalidFields: '❌ Valid name, brand and price required',
@@ -59,6 +61,7 @@
                     season: 'المواسم (اختيارات متعددة ممكنة)', summer: 'صيف', winter: 'شتاء', spring: 'ربيع', autumn: 'خريف',
                     seasonHint: 'اختر موسماً واحداً أو أكثر (انقر للتحديد/إلغاء التحديد)',
                     saveChanges: 'حفظ التغييرات', cancel: 'إلغاء',
+                    editHint: 'اختر منتجًا من المجموعات ← تعديل لتحميله هنا.',
                     loading: 'جاري التحميل...', productNotFound: '❌ المنتج غير موجود',
                     productUpdated: '✅ تم تحديث المنتج', errorUpdating: '❌ خطأ في تحديث المنتج',
                     invalidFields: '❌ الاسم والعلامة التجارية والسعر مطلوبة',
@@ -77,7 +80,7 @@
                 const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
                 const langSpan = document.getElementById('currentLangText');
                 if (langSpan) langSpan.textContent = names[lang];
-                document.querySelectorAll('[data-translate]').forEach(el => {
+                document.getElementById('dash-edit').querySelectorAll('[data-translate]').forEach(el => {
                     const key = el.getAttribute('data-translate');
                     if (translations[lang] && translations[lang][key]) {
                         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = translations[lang][key];
@@ -109,7 +112,7 @@
             }
 
             function updateImagePreview() {
-                const grid = document.getElementById('imagePreviewGrid');
+                const grid = document.getElementById('eImagePreviewGrid');
                 if (!grid) return;
 
                 grid.innerHTML = '';
@@ -141,9 +144,10 @@
                 });
             }
 
-            async function loadProduct() {
+            async function loadProduct(forcedId) {
                 const urlParams = new URLSearchParams(window.location.search);
-                productId = urlParams.get('id');
+                productId = forcedId || window.rosaEditId || urlParams.get('id');
+                window.rosaEditId = null;
 
                 if (!productId) {
                     document.getElementById('errorContent').style.display = 'block';
@@ -175,18 +179,18 @@
             }
 
             function populateForm(product) {
-                document.getElementById('productName').value = product.name || '';
-                document.getElementById('productBrand').value = product.brand || '';
-                document.getElementById('productPrice').value = product.price || '';
-                document.getElementById('productQuantity').value = product.quantity || 0;
-                document.getElementById('productDescription').value = product.description || '';
+                document.getElementById('eProductName').value = product.name || '';
+                document.getElementById('eProductBrand').value = product.brand || '';
+                document.getElementById('eProductPrice').value = product.price || '';
+                document.getElementById('eProductQuantity').value = product.quantity || 0;
+                document.getElementById('eProductDescription').value = product.description || '';
 
                 const existingImages = parseImages(product.images);
                 uploadedImages = [...existingImages];
                 updateImagePreview();
 
                 // Set category
-                const categoryOptions = document.querySelectorAll('.category-option');
+                const categoryOptions = document.querySelectorAll('.e-category-option');
                 categoryOptions.forEach(opt => {
                     opt.classList.remove('selected');
                     if (opt.dataset.category === product.category) {
@@ -195,7 +199,7 @@
                 });
 
                 // Set seasons (multi-select)
-                const seasonOptions = document.querySelectorAll('.season-option');
+                const seasonOptions = document.querySelectorAll('.e-season-option');
                 seasonOptions.forEach(opt => opt.classList.remove('selected'));
 
                 const selectedSeasons = parseSeasons(product.season);
@@ -207,22 +211,22 @@
             }
 
             async function updateProduct() {
-                const name = document.getElementById('productName').value.trim();
-                const brand = document.getElementById('productBrand').value.trim();
-                const price = parseFloat(document.getElementById('productPrice').value);
-                const quantity = parseInt(document.getElementById('productQuantity').value) || 0;
-                const description = document.getElementById('productDescription').value.trim();
+                const name = document.getElementById('eProductName').value.trim();
+                const brand = document.getElementById('eProductBrand').value.trim();
+                const price = parseFloat(document.getElementById('eProductPrice').value);
+                const quantity = parseInt(document.getElementById('eProductQuantity').value) || 0;
+                const description = document.getElementById('eProductDescription').value.trim();
 
                 if (!name || !brand || isNaN(price) || price <= 0) {
                     showToast(translations[currentLanguage].invalidFields);
                     return;
                 }
 
-                const selectedCategory = document.querySelector('.category-option.selected')?.dataset.category || 'man';
+                const selectedCategory = document.querySelector('.e-category-option.selected')?.dataset.category || 'man';
 
                 // Get selected seasons (multi-select)
                 const selectedSeasons = [];
-                document.querySelectorAll('.season-option.selected').forEach(opt => {
+                document.querySelectorAll('.e-season-option.selected').forEach(opt => {
                     selectedSeasons.push(opt.dataset.season);
                 });
 
@@ -260,7 +264,8 @@
 
                     showToast(translations[currentLanguage].productUpdated);
                     setTimeout(() => {
-                        window.location.href = document.referrer || 'existed.html';
+                        if (window.rosaAfterSave) window.rosaAfterSave();
+                        else window.location.href = document.referrer || 'existed.html';
                     }, 1500);
                 } catch (error) {
                     console.error('Error updating product:', error);
@@ -322,8 +327,8 @@
 
             function previewSrc(item) { return typeof item === 'string' ? item : item.preview; }
 
-            const imageUpload = document.getElementById('imageUpload');
-            const addMoreImagesBtn = document.getElementById('addMoreImagesBtn');
+            const imageUpload = document.getElementById('eImageUpload');
+            const addMoreImagesBtn = document.getElementById('eAddMoreImagesBtn');
 
             addMoreImagesBtn?.addEventListener('click', () => imageUpload.click());
             imageUpload?.addEventListener('change', function (e) {
@@ -340,81 +345,21 @@
             });
 
             // Category selection (single)
-            document.querySelectorAll('.category-option').forEach(opt => {
+            document.querySelectorAll('.e-category-option').forEach(opt => {
                 opt.addEventListener('click', () => {
-                    document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
+                    document.querySelectorAll('.e-category-option').forEach(o => o.classList.remove('selected'));
                     opt.classList.add('selected');
                 });
             });
 
             // Season selection (multi-select)
-            document.querySelectorAll('.season-option').forEach(opt => {
+            document.querySelectorAll('.e-season-option').forEach(opt => {
                 opt.addEventListener('click', () => {
                     opt.classList.toggle('selected');
                 });
             });
 
             document.getElementById('updateProductBtn')?.addEventListener('click', updateProduct);
-
-            // Theme
-            function initTheme() {
-                const saved = localStorage.getItem('theme') || 'light';
-                if (saved === 'dark') {
-                    document.body.classList.add('dark');
-                    document.querySelector('#themeToggle .fa-sun').style.display = 'none';
-                    document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
-                }
-            }
-
-            function toggleTheme() {
-                if (document.body.classList.contains('dark')) {
-                    document.body.classList.remove('dark');
-                    localStorage.setItem('theme', 'light');
-                    document.querySelector('#themeToggle .fa-sun').style.display = 'inline-block';
-                    document.querySelector('#themeToggle .fa-moon').style.display = 'none';
-                } else {
-                    document.body.classList.add('dark');
-                    localStorage.setItem('theme', 'dark');
-                    document.querySelector('#themeToggle .fa-sun').style.display = 'none';
-                    document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
-                }
-            }
-
-            document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
-            initTheme();
-
-            // Menu
-            const menuToggle = document.getElementById('menuToggle');
-            const navLinks = document.getElementById('navLinks');
-            const menuOverlay = document.getElementById('menuOverlay');
-
-            function toggleMenu() {
-                navLinks.classList.toggle('active');
-                menuOverlay.classList.toggle('active');
-                document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
-            }
-
-            menuToggle?.addEventListener('click', toggleMenu);
-            menuOverlay?.addEventListener('click', toggleMenu);
-
-            // Language
-            const langMenu = document.getElementById('langMenu');
-            const langCurrentBtn = document.getElementById('langCurrentBtn');
-            if (langCurrentBtn) {
-                langCurrentBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    langMenu.classList.toggle('active');
-                });
-            }
-            document.querySelectorAll('.lang-option').forEach(opt => {
-                opt.addEventListener('click', () => {
-                    translatePage(opt.dataset.lang);
-                    langMenu.classList.remove('active');
-                });
-            });
-            document.addEventListener('click', (e) => {
-                if (langMenu && !langMenu.contains(e.target)) langMenu.classList.remove('active');
-            });
 
             // Auth
             let updateUserTimeout, isUpdatingUser = false;
@@ -459,6 +404,13 @@
                     updateUserTimeout = setTimeout(() => updateUserDisplay(), 100);
                 }
             });
+
+            window.rosaLoadEdit = function (id) {
+                document.getElementById('loadingContent').style.display = 'block';
+                document.getElementById('editFormContainer').style.display = 'none';
+                document.getElementById('errorContent').style.display = 'none';
+                loadProduct(id);
+            };
 
             // Initialize
             translatePage(currentLanguage);
