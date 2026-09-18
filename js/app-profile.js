@@ -15,7 +15,7 @@
           addedToCart: '✨ Article ajouté', removed: '🗑️ Retiré',
           totalOrders: 'Commandes totales', pending: 'En cours', delivered: 'Livrées',
           orderHistory: 'Historique des commandes', all: 'Toutes', pendingStatus: 'En attente',
-          review: 'En révision', shipped: 'Expédiées', deliveredStatus: 'Livrées',
+          review: 'En révision', shipped: 'Expédiées', deliveredStatus: 'Livrées', cancelled: 'Annulée',
           cancelOrder: 'Annuler', shopNow: 'Découvrir nos parfums',
           notLoggedIn: 'Non connecté', pleaseLogin: 'Veuillez vous connecter pour voir votre profil et vos commandes.',
           noOrders: 'Aucune commande trouvée', errorLoading: 'Erreur lors du chargement',
@@ -458,8 +458,8 @@
         const saved = localStorage.getItem('theme') || 'light';
         if (saved === 'dark') {
           document.body.classList.add('dark');
-          document.querySelector('#themeToggle .fa-sun').style.display = 'none';
-          document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
+          var _sun = document.querySelector('#themeToggle .fa-sun'); if (_sun) _sun.style.display = 'none';
+          var _moon = document.querySelector('#themeToggle .fa-moon'); if (_moon) _moon.style.display = 'inline-block';
         }
       }
 
@@ -467,13 +467,13 @@
         if (document.body.classList.contains('dark')) {
           document.body.classList.remove('dark');
           localStorage.setItem('theme', 'light');
-          document.querySelector('#themeToggle .fa-sun').style.display = 'inline-block';
-          document.querySelector('#themeToggle .fa-moon').style.display = 'none';
+          var _sun = document.querySelector('#themeToggle .fa-sun'); if (_sun) _sun.style.display = 'inline-block';
+          var _moon = document.querySelector('#themeToggle .fa-moon'); if (_moon) _moon.style.display = 'none';
         } else {
           document.body.classList.add('dark');
           localStorage.setItem('theme', 'dark');
-          document.querySelector('#themeToggle .fa-sun').style.display = 'none';
-          document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
+          var _sun = document.querySelector('#themeToggle .fa-sun'); if (_sun) _sun.style.display = 'none';
+          var _moon = document.querySelector('#themeToggle .fa-moon'); if (_moon) _moon.style.display = 'inline-block';
         }
       }
 

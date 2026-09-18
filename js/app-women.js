@@ -471,8 +471,8 @@ async function loadProducts() {
         finally { btn.disabled = false; btn.innerHTML = translations[currentLanguage].confirm; }
       };
       document.getElementById('checkoutForm')?.addEventListener('submit', window.processOrder);
-      window.closeCheckoutModal = () => document.getElementById('checkoutModal').style.display = 'none';
-      window.closeProductModal = function () { document.getElementById('productModal').style.display = 'none'; };
+      window.closeCheckoutModal = () => { var m = document.getElementById('checkoutModal'); if (m) m.style.display = 'none'; };
+      window.closeProductModal = function () { var m = document.getElementById('productModal'); if (m) m.style.display = 'none'; };
 
       let updateUserTimeout, isUpdatingUser = false;
       async function updateUserDisplay() {
@@ -531,21 +531,21 @@ async function loadProducts() {
       const saved = localStorage.getItem('theme') || 'light';
       if (saved === 'dark') {
         document.body.classList.add('dark');
-        document.querySelector('#themeToggle .fa-sun').style.display = 'none';
-        document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
+        var _sun = document.querySelector('#themeToggle .fa-sun'); if (_sun) _sun.style.display = 'none';
+        var _moon = document.querySelector('#themeToggle .fa-moon'); if (_moon) _moon.style.display = 'inline-block';
       }
     }
     function toggleTheme() {
       if (document.body.classList.contains('dark')) {
         document.body.classList.remove('dark');
         localStorage.setItem('theme', 'light');
-        document.querySelector('#themeToggle .fa-sun').style.display = 'inline-block';
-        document.querySelector('#themeToggle .fa-moon').style.display = 'none';
+        var _sun = document.querySelector('#themeToggle .fa-sun'); if (_sun) _sun.style.display = 'inline-block';
+        var _moon = document.querySelector('#themeToggle .fa-moon'); if (_moon) _moon.style.display = 'none';
       } else {
         document.body.classList.add('dark');
         localStorage.setItem('theme', 'dark');
-        document.querySelector('#themeToggle .fa-sun').style.display = 'none';
-        document.querySelector('#themeToggle .fa-moon').style.display = 'inline-block';
+        var _sun = document.querySelector('#themeToggle .fa-sun'); if (_sun) _sun.style.display = 'none';
+        var _moon = document.querySelector('#themeToggle .fa-moon'); if (_moon) _moon.style.display = 'inline-block';
       }
     }
     document.addEventListener('DOMContentLoaded', () => {

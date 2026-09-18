@@ -1,10 +1,11 @@
 /* Rosa admin gate — Ste-style login overlay, shared by all admin pages.
-   RLS remains the real wall; this overlay adds clarity + one-touch access.
-   Fail-OPEN by design: any glitch falls back to the old in-page auth UI. */
+   RLS remains the real wall; this overlay is the first gate.
+   Fail-CLOSED by design: any glitch keeps the page locked with a retry
+   option instead of exposing the admin UI. */
 (function () {
   var ADMIN = 'azmmeli146@gmail.com';
   var URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
-  var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.BUoGwa4nZgR20AI8C5tGhHHKErYIVitgla3dFkyyzMAQ';
+  var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
   var I18N = {
     fr: { sub: 'Espace administration — accès réservé', email: 'Email', pw: 'Mot de passe', cta: 'Se connecter',
       show: 'Afficher le mot de passe', hide: 'Masquer le mot de passe', errFields: 'Veuillez remplir tous les champs',
@@ -72,9 +73,26 @@
 
   function msg(text) { var el = document.getElementById('ragMsg'); if (el) el.textContent = text || ''; }
 
-  function forceOpen() {
-    document.documentElement.classList.remove('rosa-locked');
-    var g = document.getElementById('rosaAdminGate'); if (g) g.remove();
+  /* Fail-closed: never expose the admin UI on error. Show the reason in the
+     gate with a retry button that reloads the page. */
+  function lockedError(text) {
+    document.documentElement.classList.add('rosa-locked');
+    var m = document.getElementById('ragMsg');
+    if (m) {
+      m.textContent = text || t.errNet;
+      if (!document.getElementById('ragRetry')) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.id = 'ragRetry';
+        b.className = 'rag-submit';
+        b.style.marginTop = '8px';
+        b.textContent = '↻';
+        b.setAttribute('aria-label', 'retry');
+        b.addEventListener('click', function () { location.reload(); });
+        var form = document.getElementById('ragForm');
+        if (form) form.appendChild(b);
+      }
+    }
   }
 
   function silentUnlock(email) {
@@ -95,8 +113,10 @@
   function start() {
     var client = window.supabase.createClient(URL, KEY);
 
-    document.getElementById('ragEye').addEventListener('click', function () {
+    var eye = document.getElementById('ragEye');
+    if (eye) eye.addEventListener('click', function () {
       var pw = document.getElementById('ragPw');
+      if (!pw) return;
       var on = pw.type === 'password';
       pw.type = on ? 'text' : 'password';
       this.setAttribute('aria-pressed', on ? 'true' : 'false');
@@ -104,7 +124,8 @@
       pw.focus();
     });
 
-    document.getElementById('ragForm').addEventListener('submit', function (e) {
+    var form = document.getElementById('ragForm');
+    if (form) form.addEventListener('submit', function (e) {
       e.preventDefault();
       var email = document.getElementById('ragEmail').value.trim();
       var pw = document.getElementById('ragPw').value;
@@ -124,22 +145,22 @@
     });
 
     // ---- existing valid session? unlock without reload (page scripts already had it) ----
-    // Fail-OPEN: watchdog + errors fall back to the page's own auth UI. RLS still guards all data.
-    var bail = setTimeout(forceOpen, 12000);
+    // Fail-CLOSED: timeout or errors keep the gate locked with a retry option.
+    var bail = setTimeout(function () { lockedError(t.errNet); }, 12000);
     client.auth.getSession().then(function (r) {
       clearTimeout(bail);
       var s = r.data && r.data.session;
       var u = s && s.user;
       if (u && u.email === ADMIN) { silentUnlock(u.email); return; }
-      if (u) { forceOpen(); return; } // another account signed in: page shows its own "not authorized" view
-    }).catch(function () { clearTimeout(bail); forceOpen(); });
+      if (u) { client.auth.signOut().finally(function () { msg(t.notAdmin); }); return; }
+    }).catch(function () { clearTimeout(bail); lockedError(t.errNet); });
   }
 
   try {
     if (window.supabase && window.supabase.createClient) start();
     else window.addEventListener('load', function () {
       if (window.supabase && window.supabase.createClient) start();
-      else forceOpen(); // CDN unreachable: old behavior beats a hard lock
+      else lockedError(t.errNet); // CDN unreachable: stay locked, offer retry
     });
-  } catch (e) { forceOpen(); }
+  } catch (e) { try { lockedError(t.errNet); } catch (e2) { /* stay locked */ } }
 })();

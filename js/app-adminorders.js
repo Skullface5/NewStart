@@ -1,7 +1,7 @@
 
 (function () {
   const SB_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
-  const SB_KEY = 'eyJhbG...zMAQ';
+  const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
   const ADMIN = 'azmmeli146@gmail.com';
   let sb = null;
   try { if (window.supabase) sb = window.supabase.createClient(SB_URL, SB_KEY); } catch (e) { console.error(e); }
@@ -408,8 +408,9 @@
   document.getElementById('themeToggle')?.addEventListener('click', () => {
     const dark = document.body.classList.toggle('dark');
     localStorage.setItem('theme', dark ? 'dark' : 'light');
-    document.querySelector('#themeToggle .fa-sun').style.display = dark ? 'none' : 'inline-block';
-    document.querySelector('#themeToggle .fa-moon').style.display = dark ? 'inline-block' : 'none';
+    const s2 = document.querySelector('#themeToggle .fa-sun'), m2 = document.querySelector('#themeToggle .fa-moon');
+    if (s2) s2.style.display = dark ? 'none' : 'inline-block';
+    if (m2) m2.style.display = dark ? 'inline-block' : 'none';
   });
 
   // apply saved language on first paint

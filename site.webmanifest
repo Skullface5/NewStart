@@ -1,19 +1,24 @@
 {
-  "name": "",
-  "short_name": "",
+  "name": "Rosa Fragrances",
+  "short_name": "Rosa",
   "icons": [
     {
-      "src": "/android-chrome-192x192.webp",
-      "sizes": "192x192",
+      "src": "/is.webp",
+      "sizes": "512x512",
       "type": "image/webp"
     },
     {
-      "src": "/android-chrome-512x512.webp",
-      "sizes": "512x512",
-      "type": "image/webp"
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "theme_color": "#F7F0E6",
+  "background_color": "#F7F0E6",
   "display": "standalone"
 }

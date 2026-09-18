@@ -3,3 +3,9 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /adminadd.html
+Disallow: /admincat.html
+Disallow: /adminorders.html
+Disallow: /productedit.html
+
+Sitemap: https://www.rosafragrances.tn/sitemap.xml
