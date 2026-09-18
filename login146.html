@@ -255,9 +255,38 @@
       }
     }
 
-    /* Tabs Animation */
-    .tab-container {
+    /* Language switcher */
+    .login-lang {
       display: flex;
+      gap: 6px;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 14px;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+    .login-lang .lang-btn {
+      background: none;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font: inherit;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    }
+    .login-lang .lang-btn:hover { color: var(--accent); }
+    .login-lang .lang-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* Tabs Animation */
+    .tab-container {      display: flex;
       margin-bottom: 2rem;
       border-bottom: 2px solid var(--border);
       position: relative;
@@ -788,7 +817,7 @@
       <h1>Rosa Fragrances</h1>
     </div>
 
-    <div class="login-lang" role="group" aria-label="Langue" style="display:flex;gap:6px;justify-content:center;margin-bottom:14px;">
+    <div class="login-lang" role="group" aria-label="Langue">
       <button type="button" class="lang-btn" data-login-lang="fr">FR</button>
       <span aria-hidden="true">|</span>
       <button type="button" class="lang-btn" data-login-lang="en">EN</button>

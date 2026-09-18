@@ -49,7 +49,7 @@
       document.querySelectorAll('[data-tr-ph]').forEach(function (el) { el.setAttribute('placeholder', tr(el.getAttribute('data-tr-ph'))); });
       document.documentElement.setAttribute('dir', loginLang === 'ar' ? 'rtl' : 'ltr');
       document.querySelectorAll('[data-login-lang]').forEach(function (b) {
-        b.style.fontWeight = b.getAttribute('data-login-lang') === loginLang ? '700' : '400';
+        b.classList.toggle('active', b.getAttribute('data-login-lang') === loginLang);
       });
     }
     document.querySelectorAll('[data-login-lang]').forEach(function (b) {
