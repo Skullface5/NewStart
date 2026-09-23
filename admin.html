@@ -1,13 +1,56 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rosa Fragrances | Administration</title>
 
-  <!-- ==== Styles ==== -->
+<head>
+  <!-- ============================================================ -->
+  <!-- ✅ META PIXEL CODE – PLACÉ EN PREMIER DANS LE HEAD          -->
+  <!-- ============================================================ -->
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1039023089029451');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1039023089029451&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
+  <!-- ============================================================ -->
+  <!-- VOS BALISES HEAD EXISTANTES (intactes)                      -->
+  <!-- ============================================================ -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta property="og:image" content="https://www.rosafragrances.tn/tt.jpg" />
+  <meta name="twitter:image" content="https://www.rosafragrances.tn/tt.jpg" />
+  <meta property="og:image:secure_url" content="https://www.rosafragrances.tn/tt.jpg" />
+  <meta charset="UTF-8">
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  <title>Rosa Fragrances | Administration</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin-hero.css?v=1">
+  <link rel="stylesheet" href="css/collections-admin.css?v=1">
   <style>
-    /* ==== CSS Variables ==== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     :root {
       --cream: #F7F0E6;
       --cream-dark: #EDE4D6;
@@ -18,22 +61,32 @@
       --charcoal: #3A3228;
       --text-mid: #6B5E4E;
       --white: #FEFCF8;
-      --shadow: 0 8px 40px rgba(90,70,50,0.10);
+      --shadow: 0 8px 40px rgba(90, 70, 50, 0.10);
       --card-base: #F5F0EA;
       --card-warm: #F2EDE6;
       --card-elevated: #F7F2EC;
-      --card-shadow: rgba(100,80,60,0.06);
-      --border-light: rgba(180,155,120,0.12);
-      --border-medium: rgba(180,155,120,0.2);
-      --shadow-sm: 0 2px 8px rgba(0,0,0,0.02);
-      --shadow-md: 0 4px 16px rgba(0,0,0,0.03);
-      --shadow-lg: 0 8px 24px rgba(0,0,0,0.04);
-      --shadow-hover: 0 12px 32px rgba(0,0,0,0.06);
+      --card-shadow: rgba(100, 80, 60, 0.06);
+      --border-light: rgba(180, 155, 120, 0.12);
+      --border-medium: rgba(180, 155, 120, 0.2);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.04);
+      --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.06);
       --input-bg: #F9F6F2;
       --input-border: #E2D9CF;
       --input-focus: #C4AF7D;
-      --hover-subtle: rgba(180,155,120,0.05);
-      --hover-medium: rgba(180,155,120,0.1);
+      --hover-subtle: rgba(180, 155, 120, 0.05);
+      --hover-medium: rgba(180, 155, 120, 0.1);
+    }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      overflow-x: hidden;
+      transition: background 0.4s ease, color 0.3s ease;
+      line-height: 1.5;
+      padding-top: 80px;
     }
 
     body.dark {
@@ -48,29 +101,11 @@
       --gold: #B89B5E;
       --gold-dark: #B89B5E;
       --white: #1A1814;
-      --border-light: rgba(184,155,94,0.15);
+      --border-light: rgba(184, 155, 94, 0.15);
       --input-bg: #3A352C;
       --input-border: #4A4438;
     }
 
-    /* ==== Global Reset ==== */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Jost', sans-serif;
-      background: var(--cream);
-      color: var(--charcoal);
-      line-height: 1.5;
-      overflow-x: hidden;
-      transition: background 0.4s ease, color 0.3s ease;
-      padding-top: 80px;
-    }
-
-    /* ==== Particles ==== */
     .particle {
       position: fixed;
       background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
@@ -82,13 +117,25 @@
     }
 
     @keyframes floatParticle {
-      0% { opacity: 0; transform: translateY(100vh) rotate(0deg) scale(0); }
-      20% { opacity: 0.1; }
-      80% { opacity: 0.1; }
-      100% { opacity: 0; transform: translateY(-20vh) rotate(360deg) scale(1.2); }
+      0% {
+        opacity: 0;
+        transform: translateY(100vh) rotate(0deg) scale(0);
+      }
+
+      20% {
+        opacity: 0.1;
+      }
+
+      80% {
+        opacity: 0.1;
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-20vh) rotate(360deg) scale(1.2);
+      }
     }
 
-    /* ==== Layout ==== */
     .container {
       max-width: 1400px;
       margin: 0 auto;
@@ -98,15 +145,19 @@
     }
 
     header {
-      background: rgba(247,240,230,0.92);
+      background: rgba(247, 240, 230, 0.92);
       box-shadow: var(--shadow-sm);
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       z-index: 100;
-      border-bottom: 1px solid rgba(180,154,106,0.2);
+      border-bottom: 1px solid rgba(180, 154, 106, 0.2);
     }
 
-    body.dark header { background: rgba(26,24,20,0.92); }
+    body.dark header {
+      background: rgba(26, 24, 20, 0.92);
+    }
 
     .header-flex {
       display: flex;
@@ -127,7 +178,8 @@
     }
 
     .logo img {
-      width: 48px; height: 48px;
+      width: 48px;
+      height: 48px;
       object-fit: contain;
       border-radius: 50%;
     }
@@ -148,13 +200,13 @@
       cursor: pointer;
       font-size: 1.1rem;
       color: var(--gold-dark);
-      width: 34px; height: 34px;
+      width: 34px;
+      height: 34px;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      transition: background-color 0.3s ease, color 0.3s ease,
-                border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
     }
 
     .theme-toggle:hover,
@@ -163,13 +215,18 @@
       color: var(--gold);
     }
 
-    .right-group { display: flex; align-items: center; gap: 8px; }
+    .right-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
     .nav-links {
       display: flex;
       flex-direction: column;
       position: absolute;
-      top: 100%; right: 0;
+      top: 100%;
+      right: 0;
       width: 250px;
       background: var(--cream-dark);
       backdrop-filter: blur(16px);
@@ -177,8 +234,7 @@
       max-height: 0;
       overflow: hidden;
       opacity: 0;
-      transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1),
-                opacity 0.3s ease;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
       box-shadow: var(--shadow-lg);
       border: 1px solid var(--border-light);
       z-index: 101;
@@ -195,8 +251,7 @@
       padding: 0.9rem 1.5rem;
       text-decoration: none;
       color: var(--charcoal);
-      transition: background-color 0.2s, color 0.2s,
-                border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
       border-bottom: 1px solid var(--border-light);
       display: block;
       font-weight: 400;
@@ -212,13 +267,15 @@
     }
 
     .admin-nav-link {
-      background: rgba(180,154,106,0.08);
+      background: rgba(180, 154, 106, 0.08);
       color: var(--gold-dark) !important;
       font-weight: 600;
       border-bottom: 2px solid var(--gold) !important;
     }
 
-    .lang-menu { border-bottom: 1px solid var(--border-light); }
+    .lang-menu {
+      border-bottom: 1px solid var(--border-light);
+    }
 
     .lang-current {
       display: flex;
@@ -232,8 +289,7 @@
       text-transform: uppercase;
       color: var(--charcoal);
       cursor: pointer;
-      transition: background-color 0.2s, color 0.2s,
-                border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     }
 
     .lang-current:hover {
@@ -248,7 +304,9 @@
       background: var(--cream-dark);
     }
 
-    .lang-menu.active .lang-options { max-height: 130px; }
+    .lang-menu.active .lang-options {
+      max-height: 130px;
+    }
 
     .lang-option {
       display: block;
@@ -260,8 +318,7 @@
       font-size: 0.7rem;
       cursor: pointer;
       color: var(--text-mid);
-      transition: background-color 0.2s, color 0.2s,
-                border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     }
 
     .lang-option:hover {
@@ -271,8 +328,11 @@
 
     .menu-overlay {
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.3);
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(6px);
       z-index: 99;
       visibility: hidden;
@@ -285,9 +345,9 @@
       opacity: 1;
     }
 
-    /* ==== Admin Wrapper ==== */
+    /* Admin Wrapper */
     .admin-wrapper {
-      max-width: 1300px;
+      max-width: 1100px;
       margin: 0 auto;
       padding: 1rem;
     }
@@ -309,7 +369,8 @@
     }
 
     .admin-header img {
-      width: 60px; height: 60px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       object-fit: cover;
     }
@@ -323,7 +384,6 @@
       border-radius: 50px;
     }
 
-    /* ==== Form Panel ==== */
     .form-panel {
       background: var(--card-warm);
       border-radius: 28px;
@@ -345,7 +405,9 @@
       gap: 10px;
     }
 
-    .input-group { margin-bottom: 1.2rem; }
+    .input-group {
+      margin-bottom: 1.2rem;
+    }
 
     .input-group label {
       display: block;
@@ -367,8 +429,7 @@
       color: var(--charcoal);
       font-size: 0.85rem;
       font-family: 'Jost', sans-serif;
-      transition: background-color 0.3s ease, color 0.3s ease,
-                border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
     }
 
     .input-group input:focus,
@@ -376,12 +437,15 @@
     .input-group textarea:focus {
       outline: none;
       border-color: var(--input-focus);
-      box-shadow: 0 0 0 3px rgba(180,154,106,0.1);
+      box-shadow: 0 0 0 3px rgba(180, 154, 106, 0.1);
     }
 
-    .input-group textarea { resize: vertical; min-height: 100px; }
+    .input-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
 
-    /* ==== Image Upload ==== */
+    /* Image Upload */
     .multi-image-upload {
       border: 1px dashed var(--border-medium);
       border-radius: 16px;
@@ -406,25 +470,27 @@
     }
 
     .preview-item img {
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
     }
 
     .remove-image-btn {
       position: absolute;
-      top: 4px; right: 4px;
-      background: rgba(0,0,0,0.6);
+      top: 4px;
+      right: 4px;
+      background: rgba(0, 0, 0, 0.6);
       color: white;
       border: none;
       border-radius: 50%;
-      width: 22px; height: 22px;
+      width: 22px;
+      height: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       font-size: 10px;
-      transition: background-color 0.2s, color 0.2s,
-                border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     }
 
     .remove-image-btn:hover {
@@ -442,8 +508,7 @@
       justify-content: center;
       gap: 5px;
       cursor: pointer;
-      transition: background-color 0.2s, color 0.2s,
-                border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
       aspect-ratio: 1 / 1;
       color: var(--gold-dark);
     }
@@ -453,10 +518,15 @@
       transform: scale(1.02);
     }
 
-    .add-more-btn i { font-size: 1.5rem; }
-    .add-more-btn span { font-size: 0.7rem; }
+    .add-more-btn i {
+      font-size: 1.5rem;
+    }
 
-    /* ==== Category & Season Selectors ==== */
+    .add-more-btn span {
+      font-size: 0.7rem;
+    }
+
+    /* Category & Season Selectors */
     .category-selector,
     .season-selector {
       display: flex;
@@ -476,8 +546,7 @@
       gap: 8px;
       font-size: 0.8rem;
       cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease,
-                border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
       color: var(--charcoal);
     }
 
@@ -505,7 +574,10 @@
       transform: translateY(-2px);
     }
 
-    .season-selector.multi-select .season-option { cursor: pointer; }
+    /* Multi-select for seasons */
+    .season-selector.multi-select .season-option {
+      cursor: pointer;
+    }
 
     .season-selector.multi-select .season-option.selected {
       background: var(--gold-dark);
@@ -531,7 +603,6 @@
       font-size: 0.7rem;
     }
 
-    /* ==== Buttons ==== */
     .btn-primary {
       background: var(--gold-dark);
       color: var(--white);
@@ -541,8 +612,7 @@
       font-size: 0.85rem;
       font-weight: 500;
       cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease,
-                border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
       width: 100%;
       display: flex;
       align-items: center;
@@ -556,7 +626,10 @@
       transform: translateY(-2px);
     }
 
-    .nav-panel { text-align: center; margin-top: 1rem; }
+    .nav-panel {
+      text-align: center;
+      margin-top: 1rem;
+    }
 
     .btn-secondary {
       display: inline-flex;
@@ -569,8 +642,7 @@
       border-radius: 50px;
       font-size: 0.8rem;
       text-decoration: none;
-      transition: background-color 0.3s ease, color 0.3s ease,
-                border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
     }
 
     .btn-secondary:hover {
@@ -592,9 +664,12 @@
       margin-top: 0.5rem;
     }
 
-    .info-text i { margin-right: 4px; color: var(--gold); }
+    .info-text i {
+      margin-right: 4px;
+      color: var(--gold);
+    }
 
-    /* ==== Not Authorized ==== */
+    /* Not Authorized */
     .not-authorized {
       text-align: center;
       padding: 3rem;
@@ -632,7 +707,7 @@
       border-radius: 50px;
     }
 
-    /* ==== Toast ==== */
+    /* Toast */
     .admin-toast {
       position: fixed;
       bottom: 25px;
@@ -654,15 +729,17 @@
       opacity: 1;
     }
 
-    /* ==== Footer ==== */
+    /* Footer */
     footer {
       background: var(--charcoal);
-      color: rgba(247,240,230,0.65);
+      color: rgba(247, 240, 230, 0.65);
       padding: 60px 40px 28px;
       margin-top: 2rem;
     }
 
-    body.dark footer { background: #0F0E0C; }
+    body.dark footer {
+      background: #0F0E0C;
+    }
 
     .footer-inner {
       max-width: 1060px;
@@ -708,14 +785,16 @@
     }
 
     .footer-col a {
-      color: rgba(247,240,230,0.55);
+      color: rgba(247, 240, 230, 0.55);
       text-decoration: none;
       font-size: 0.8rem;
       font-weight: 200;
       transition: color 0.3s;
     }
 
-    .footer-col a:hover { color: var(--gold-light); }
+    .footer-col a:hover {
+      color: var(--gold-light);
+    }
 
     .contact-list {
       list-style: none;
@@ -738,7 +817,7 @@
     }
 
     .footer-bottom {
-      border-top: 1px solid rgba(180,154,106,0.15);
+      border-top: 1px solid rgba(180, 154, 106, 0.15);
       padding-top: 22px;
       display: flex;
       justify-content: space-between;
@@ -752,19 +831,22 @@
       font-weight: 200;
     }
 
-    .socials { display: flex; gap: 10px; }
+    .socials {
+      display: flex;
+      gap: 10px;
+    }
 
     .social {
-      width: 34px; height: 34px;
-      border: 1px solid rgba(180,154,106,0.3);
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(180, 154, 106, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--gold-light);
       text-decoration: none;
       font-size: 0.85rem;
-      transition: background-color 0.3s, color 0.3s,
-                border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
       border-radius: 50%;
     }
 
@@ -775,524 +857,2586 @@
     }
 
     .footer-logo-img {
-      width: 70px; height: 70px;
+      width: 70px;
+      height: 70px;
       object-fit: contain;
       margin-bottom: 10px;
       filter: brightness(0.9);
       border-radius: 50%;
     }
 
-    /* ==== Responsive ==== */
     @media (max-width: 900px) {
-      .footer-top { grid-template-columns: 1fr 1fr; gap: 30px; }
-      .footer-brand { grid-column: 1/-1; }
+      .footer-top {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+      }
+
+      .footer-brand {
+        grid-column: 1/-1;
+      }
     }
 
     @media (max-width: 640px) {
-      .footer-top { grid-template-columns: 1fr; }
-      footer { padding: 40px 18px 22px; }
-      .footer-bottom { flex-direction: column; text-align: center; }
-      body { padding-top: 70px; }
+      .footer-top {
+        grid-template-columns: 1fr;
+      }
+
+      footer {
+        padding: 40px 18px 22px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .admin-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .logged-in-as {
+        margin-left: 0;
+      }
+
+      .form-panel {
+        padding: 1.2rem;
+      }
+
+      body {
+        padding-top: 70px;
+      }
     }
 
     @media (max-width: 768px) {
-      .header-flex { padding: 0.6rem 1rem; }
-      .logo h1 { font-size: 0.9rem; }
-      .logo img { width: 36px; }
-      .category-selector,
-      .season-selector { gap: 0.5rem; }
-      .category-option,
-      .season-option { padding: 0.4rem 1rem; font-size: 0.7rem; }
-    }
+      .header-flex {
+        padding: 0.6rem 1rem;
+      }
 
-    /* ==== Reduced Motion ==== */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+      .logo h1 {
+        font-size: 0.9rem;
+      }
+
+      .logo img {
+        width: 36px;
+      }
+
+      .category-selector,
+      .season-selector {
+        gap: 0.5rem;
+      }
+
+      .category-option,
+      .season-option {
+        padding: 0.4rem 1rem;
+        font-size: 0.7rem;
       }
     }
+  
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
+  
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cream: #F7F0E6;
+            --cream-dark: #EDE4D6;
+            --cream-deep: #E0D4C0;
+            --gold: #B49A6A;
+            --gold-light: #D4B98A;
+            --gold-dark: #8A7150;
+            --charcoal: #3A3228;
+            --text-mid: #6B5E4E;
+            --white: #FEFCF8;
+            --shadow: 0 8px 40px rgba(90, 70, 50, 0.10);
+            --card-base: #F5F0EA;
+            --card-warm: #F2EDE6;
+            --card-elevated: #F7F2EC;
+            --card-shadow: rgba(100, 80, 60, 0.06);
+            --border-light: rgba(180, 155, 120, 0.12);
+            --border-medium: rgba(180, 155, 120, 0.2);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.03);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.06);
+            --input-bg: #F9F6F2;
+            --input-border: #E2D9CF;
+            --input-focus: #C4AF7D;
+            --hover-subtle: rgba(180, 155, 120, 0.05);
+            --hover-medium: rgba(180, 155, 120, 0.1);
+        }
+
+        body {
+            font-family: 'Jost', sans-serif;
+            background: var(--cream);
+            color: var(--charcoal);
+            overflow-x: hidden;
+            transition: background 0.4s ease, color 0.3s ease;
+            line-height: 1.5;
+            padding-top: 80px;
+        }
+
+        body.dark {
+            --cream: #1A1814;
+            --cream-dark: #24201A;
+            --cream-deep: #2E2820;
+            --card-base: #2E2820;
+            --card-warm: #362F26;
+            --card-elevated: #40382D;
+            --charcoal: #F5EFE6;
+            --text-mid: #D4C5B0;
+            --gold: #B89B5E;
+            --gold-dark: #B89B5E;
+            --white: #1A1814;
+            --border-light: rgba(184, 155, 94, 0.15);
+            --input-bg: #3A352C;
+            --input-border: #4A4438;
+        }
+
+        .particle {
+            position: fixed;
+            background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: floatParticle 18s infinite;
+            z-index: 0;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg) scale(0);
+            }
+
+            20% {
+                opacity: 0.1;
+            }
+
+            80% {
+                opacity: 0.1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-20vh) rotate(360deg) scale(1.2);
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        header {
+            background: rgba(247, 240, 230, 0.92);
+            box-shadow: var(--shadow-sm);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(180, 154, 106, 0.2);
+        }
+
+        body.dark header {
+            background: rgba(26, 24, 20, 0.92);
+        }
+
+        .header-flex {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0.8rem 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 102;
+            text-decoration: none;
+        }
+
+        .logo img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .logo h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+            color: var(--gold-dark);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .theme-toggle,
+        .menu-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: var(--gold-dark);
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .theme-toggle:hover,
+        .menu-toggle:hover {
+            background: var(--hover-subtle);
+            color: var(--gold);
+        }
+
+        .right-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 250px;
+            background: var(--cream-dark);
+            backdrop-filter: blur(16px);
+            gap: 0;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            z-index: 101;
+            border-radius: 20px;
+        }
+
+        .nav-links.active {
+            max-height: 500px;
+            opacity: 1;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a {
+            padding: 0.9rem 1.5rem;
+            text-decoration: none;
+            color: var(--charcoal);
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+            border-bottom: 1px solid var(--border-light);
+            display: block;
+            font-weight: 400;
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .nav-links a:hover {
+            background: var(--hover-subtle);
+            color: var(--gold-dark);
+            padding-left: 2rem;
+        }
+
+        .admin-nav-link {
+            background: rgba(180, 154, 106, 0.08);
+            color: var(--gold-dark) !important;
+            font-weight: 600;
+            border-bottom: 2px solid var(--gold) !important;
+        }
+
+        .lang-menu {
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .lang-current {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 0.9rem 1.5rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--charcoal);
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+        }
+
+        .lang-current:hover {
+            background: var(--hover-subtle);
+            color: var(--gold-dark);
+        }
+
+        .lang-options {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: var(--cream-dark);
+        }
+
+        .lang-menu.active .lang-options {
+            max-height: 130px;
+        }
+
+        .lang-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.7rem 1.5rem 0.7rem 2.5rem;
+            background: none;
+            border: none;
+            font-size: 0.7rem;
+            cursor: pointer;
+            color: var(--text-mid);
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+        }
+
+        .lang-option:hover {
+            background: var(--hover-subtle);
+            color: var(--gold-dark);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(6px);
+            z-index: 99;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .menu-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Admin Wrapper */
+        .admin-wrapper {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: var(--charcoal);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-header h1 i {
+            color: var(--gold);
+        }
+
+        .stats-badge {
+            background: var(--card-warm);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            border: 1px solid var(--border-light);
+        }
+
+        .stats-badge i {
+            color: var(--gold);
+            margin-right: 5px;
+        }
+
+        /* Table Styles */
+        .products-table-container {
+            background: var(--card-warm);
+            border-radius: 24px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-light);
+            overflow-x: auto;
+            box-shadow: var(--shadow-md);
+        }
+
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .products-table th {
+            text-align: left;
+            padding: 1rem 0.8rem;
+            background: var(--cream-deep);
+            color: var(--charcoal);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .products-table td {
+            padding: 1rem 0.8rem;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
+        }
+
+        .products-table tr:hover {
+            background: var(--hover-subtle);
+        }
+
+        .product-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            object-fit: cover;
+            background: var(--cream-deep);
+        }
+
+        .product-image-placeholder {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--cream-deep);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .edit-btn {
+            color: var(--gold-dark);
+            border: 1px solid var(--gold);
+        }
+
+        .edit-btn:hover {
+            background: var(--gold-dark);
+            color: var(--white);
+        }
+
+        .delete-btn {
+            color: #b34545;
+            border: 1px solid #b34545;
+        }
+
+        .delete-btn:hover {
+            background: #b34545;
+            color: var(--white);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .status-available {
+            background: rgba(50, 150, 80, 0.15);
+            color: #2c682c;
+        }
+
+        .status-low {
+            background: rgba(255, 150, 50, 0.15);
+            color: #c47d00;
+        }
+
+        .status-out {
+            background: rgba(200, 80, 80, 0.15);
+            color: #b34545;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-mid);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--border-light);
+            margin-bottom: 1rem;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gold);
+        }
+
+        /* Action Bar */
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+        }
+
+        .search-box i {
+            color: var(--gold);
+        }
+
+        .search-box input {
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--charcoal);
+            font-size: 0.85rem;
+            width: 200px;
+        }
+
+        .add-product-btn {
+            background: var(--gold-dark);
+            color: var(--white);
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .add-product-btn:hover {
+            background: var(--charcoal);
+            transform: translateY(-2px);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold-dark);
+            text-decoration: none;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--gold);
+            transform: translateX(-5px);
+        }
+
+        /* Toast */
+        .admin-toast {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: var(--gold-dark);
+            color: var(--white);
+            padding: 0.7rem 1.2rem;
+            border-radius: 50px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: 0.3s ease;
+            z-index: 300;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .admin-toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--charcoal);
+            color: rgba(247, 240, 230, 0.65);
+            padding: 60px 40px 28px;
+            margin-top: 2rem;
+        }
+
+        body.dark footer {
+            background: #0F0E0C;
+        }
+
+        .footer-inner {
+            max-width: 1060px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 56px;
+            margin-bottom: 44px;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.55rem;
+            font-weight: 300;
+            color: var(--gold-light);
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .footer-brand p {
+            font-size: 0.8rem;
+            line-height: 1.8;
+            font-weight: 200;
+            max-width: 250px;
+        }
+
+        .footer-col h4 {
+            font-size: 0.65rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .footer-col a {
+            color: rgba(247, 240, 230, 0.55);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 200;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: var(--gold-light);
+        }
+
+        .contact-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .contact-list li {
+            font-size: 0.8rem;
+            font-weight: 200;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-list .ic {
+            color: var(--gold);
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(180, 154, 106, 0.15);
+            padding-top: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .footer-bottom p {
+            font-size: 0.7rem;
+            font-weight: 200;
+        }
+
+        .socials {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social {
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(180, 154, 106, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-light);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+            border-radius: 50%;
+        }
+
+        .social:hover {
+            background: var(--gold-dark);
+            border-color: var(--gold-dark);
+            color: var(--white);
+        }
+
+        .footer-logo-img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            filter: brightness(0.9);
+            border-radius: 50%;
+        }
+
+        @media (max-width: 900px) {
+            .footer-top {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+
+            .footer-brand {
+                grid-column: 1/-1;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .footer-top {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                padding: 40px 18px 22px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .products-table th,
+            .products-table td {
+                padding: 0.6rem 0.4rem;
+                font-size: 0.7rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            body {
+                padding-top: 70px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-flex {
+                padding: 0.6rem 1rem;
+            }
+
+            .logo h1 {
+                font-size: 0.9rem;
+            }
+
+            .logo img {
+                width: 36px;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    
+        @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
+  
+
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --cream:#F7F0E6;--cream-dark:#EDE4D6;--cream-deep:#E0D4C0;
+      --gold:#B49A6A;--gold-light:#D4B98A;--gold-dark:#8A7150;
+      --charcoal:#3A3228;--text-mid:#6B5E4E;--white:#FEFCF8;
+      --shadow:0 8px 40px rgba(90,70,50,0.10);
+      --card-base:#F5F0EA;--card-warm:#F2EDE6;--card-elevated:#F7F2EC;
+      --border-light:rgba(180,155,120,0.12);--border-medium:rgba(180,155,120,0.2);
+      --shadow-sm:0 2px 8px rgba(0,0,0,0.02);--shadow-md:0 4px 16px rgba(0,0,0,0.03);
+      --shadow-lg:0 8px 24px rgba(0,0,0,0.04);--shadow-hover:0 12px 32px rgba(0,0,0,0.06);
+      --input-bg:#F9F6F2;--input-border:#E2D9CF;--input-focus:#C4AF7D;
+      --hover-subtle:rgba(180,155,120,0.05);--hover-medium:rgba(180,155,120,0.1);
+    }
+    body.dark{
+      --cream:#1A1814;--cream-dark:#24201A;--cream-deep:#2E2820;
+      --card-base:#2E2820;--card-warm:#362F26;--card-elevated:#40382D;
+      --charcoal:#F5EFE6;--text-mid:#D4C5B0;--gold:#B89B5E;--gold-dark:#B89B5E;
+      --white:#1A1814;--border-light:rgba(184,155,94,0.15);
+      --input-bg:#3A352C;--input-border:#4A4438;
+    }
+    body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--charcoal);overflow-x:hidden;line-height:1.5;transition:background 0.4s ease, color 0.3s ease;padding-top:80px;}
+
+    .header-flex{display:flex;align-items:center;justify-content:space-between;position:relative;max-width:1400px;margin:0 auto;padding:0.8rem 2rem;}
+    .logo{display:flex;align-items:center;gap:0.5rem;z-index:102;text-decoration:none;}
+    .logo img{width:48px;height:48px;object-fit:contain;border-radius:50%;}
+    .logo h1{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;color:var(--gold-dark);letter-spacing:0.15em;text-transform:uppercase;}
+    .theme-toggle,.menu-toggle{background:transparent;border:none;cursor:pointer;font-size:1.1rem;color:var(--gold-dark);width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background-color 0.3s ease, color 0.3s ease;}
+    .theme-toggle:hover,.menu-toggle:hover{background:var(--hover-subtle);color:var(--gold);}
+    .right-group{display:flex;align-items:center;gap:8px;}
+    .nav-links{display:flex;flex-direction:column;position:absolute;top:100%;right:0;width:250px;background:var(--cream-dark);backdrop-filter:blur(16px);gap:0;max-height:0;overflow:hidden;opacity:0;transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;box-shadow:var(--shadow-lg);border:1px solid var(--border-light);z-index:101;border-radius:20px;}
+    .nav-links.active{max-height:500px;opacity:1;padding:0.5rem 0;}
+    .nav-links a{padding:0.9rem 1.5rem;text-decoration:none;color:var(--charcoal);transition:background-color 0.2s, color 0.2s, padding 0.2s;border-bottom:1px solid var(--border-light);display:block;font-weight:400;font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;}
+    .nav-links a:hover{background:var(--hover-subtle);color:var(--gold-dark);padding-left:2rem;}
+    .admin-nav-link{background:rgba(180,154,106,0.08);color:var(--gold-dark) !important;font-weight:600;border-bottom:2px solid var(--gold) !important;}
+    .lang-menu{border-bottom:1px solid var(--border-light);}
+    .lang-current{display:flex;justify-content:space-between;width:100%;background:none;border:none;padding:0.9rem 1.5rem;font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--charcoal);cursor:pointer;transition:background-color 0.2s, color 0.2s;}
+    .lang-current:hover{background:var(--hover-subtle);color:var(--gold-dark);}
+    .lang-options{max-height:0;overflow:hidden;transition:max-height 0.3s ease-out;background:var(--cream-dark);}
+    .lang-menu.active .lang-options{max-height:130px;}
+    .lang-option{display:block;width:100%;text-align:left;padding:0.7rem 1.5rem 0.7rem 2.5rem;background:none;border:none;font-size:0.7rem;cursor:pointer;color:var(--text-mid);transition:background-color 0.2s, color 0.2s;}
+    .lang-option:hover{background:var(--hover-subtle);color:var(--gold-dark);}
+    .menu-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(6px);z-index:99;visibility:hidden;opacity:0;transition:0.3s;}
+    .menu-overlay.active{visibility:visible;opacity:1;}
+
+    .access-denied{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;gap:1rem;padding:2rem;}
+    .access-denied i{font-size:3rem;color:var(--gold);}
+    .access-denied h2{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:400;}
+    .access-denied p{color:var(--text-mid);font-size:0.85rem;}
+    .access-denied a{display:inline-block;margin-top:0.5rem;padding:10px 24px;background:var(--gold-dark);color:var(--white);border-radius:50px;text-decoration:none;font-size:0.8rem;}
+    .auth-loading{text-align:center;padding:5rem 2rem;color:var(--text-mid);}
+    .auth-loading i{font-size:1.5rem;color:var(--gold);display:block;margin-bottom:0.5rem;}
+
+    .admin-wrapper{max-width:1300px;margin:0 auto;padding:1rem;position:relative;z-index:10;}
+
+    .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
+    .page-header h1{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;letter-spacing:0.1em;color:var(--charcoal);display:flex;align-items:center;gap:10px;}
+    .page-header h1 i{color:var(--gold);}
+    .stats-badge{background:var(--card-warm);padding:0.5rem 1rem;border-radius:50px;font-size:0.8rem;border:1px solid var(--border-light);}
+    .stats-badge i{color:var(--gold);margin-right:5px;}
+
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.8rem;margin-bottom:2rem;}
+    .stat-card{background:var(--card-warm);border-radius:18px;padding:1.1rem 1.3rem;border:1px solid var(--border-light);display:flex;flex-direction:column;gap:0.3rem;}
+    .stat-card.highlight{background:linear-gradient(135deg,var(--gold-dark) 0%,var(--gold) 100%);}
+    .stat-label{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-mid);}
+    .stat-card.highlight .stat-label{color:rgba(255,255,255,0.8);}
+    .stat-value{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:400;color:var(--gold-dark);line-height:1;}
+    .stat-card.highlight .stat-value{color:var(--white);}
+    .stat-sub{font-size:0.65rem;color:var(--text-mid);}
+    .stat-card.highlight .stat-sub{color:rgba(255,255,255,0.7);}
+
+    .toolbar{display:flex;flex-wrap:wrap;gap:0.7rem;align-items:center;margin-bottom:1.2rem;}
+    .search-box{display:flex;align-items:center;gap:0.5rem;background:var(--input-bg);border:1px solid var(--input-border);border-radius:50px;padding:0.5rem 1.2rem;flex:1;min-width:200px;max-width:450px;}
+    .search-box i{color:var(--gold);font-size:0.85rem;flex-shrink:0;}
+    .search-box input{background:none;border:none;outline:none;font-family:'Jost',sans-serif;font-size:0.82rem;color:var(--charcoal);width:100%;}
+    .search-box input::placeholder{color:var(--text-mid);}
+    .group-toggle{display:flex;gap:0.35rem;flex-wrap:wrap;}
+    .g-btn{background:var(--card-warm);border:1px solid var(--border-medium);color:var(--text-mid);font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;padding:6px 12px;border-radius:50px;cursor:pointer;transition:background-color 0.2s, color 0.2s, border-color 0.2s;font-family:'Jost',sans-serif;white-space:nowrap;}
+    .g-btn.active,.g-btn:hover{background:var(--gold-dark);color:var(--white);border-color:var(--gold-dark);}
+    .refresh-btn{background:none;border:1px solid var(--border-medium);color:var(--text-mid);font-size:0.72rem;padding:6px 13px;border-radius:50px;cursor:pointer;display:flex;align-items:center;gap:5px;font-family:'Jost',sans-serif;transition:border-color 0.2s, color 0.2s;white-space:nowrap;}
+    .refresh-btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+
+    .status-tabs{display:flex;flex-wrap:wrap;gap:0.35rem;margin-bottom:1.5rem;}
+    .s-tab{background:var(--card-warm);border:1px solid var(--border-light);color:var(--text-mid);font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;padding:6px 14px;border-radius:50px;cursor:pointer;font-family:'Jost',sans-serif;display:flex;align-items:center;gap:4px;transition:background-color 0.2s, color 0.2s, border-color 0.2s;white-space:nowrap;}
+    .s-tab .cnt{background:var(--border-medium);color:var(--text-mid);font-size:0.58rem;padding:1px 5px;border-radius:50px;transition:inherit;}
+    .s-tab.active{border-color:currentColor;}
+    .s-tab.s-all.active{background:var(--charcoal);color:var(--white);border-color:var(--charcoal);}
+    .s-tab.s-all.active .cnt{background:rgba(255,255,255,0.2);color:var(--white);}
+    .s-tab.s-pending.active{background:var(--gold-dark);color:var(--white);border-color:var(--gold-dark);}
+    .s-tab.s-review.active{background:var(--charcoal);color:var(--white);border-color:var(--charcoal);}
+    .s-tab.s-shipped.active{background:var(--gold);color:var(--white);border-color:var(--gold);}
+    .s-tab.s-delivered.active{background:var(--gold-light);color:var(--charcoal);border-color:var(--gold-light);}
+    .s-tab.s-cancelled.active{background:#7A4A3E;color:var(--white);border-color:#7A4A3E;}
+    .s-tab.active .cnt{background:rgba(255,255,255,0.25);color:var(--white);}
+
+    .group-section{margin-bottom:2rem;}
+    .group-header{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.8rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border-light);}
+    .group-header h3{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:400;color:var(--gold-dark);}
+    .group-badge{background:var(--cream-deep);color:var(--text-mid);font-size:0.58rem;padding:2px 8px;border-radius:50px;text-transform:uppercase;letter-spacing:0.08em;}
+
+    .orders-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:0.9rem;}
+    .order-card{background:var(--card-warm);border-radius:18px;border:1px solid var(--border-light);overflow:hidden;transition:box-shadow 0.2s, border-color 0.2s;}
+    .order-card:hover{box-shadow:var(--shadow-md);border-color:var(--border-medium);}
+
+    .oc-header{display:flex;justify-content:space-between;align-items:flex-start;padding:0.9rem 1.1rem 0.7rem;border-bottom:1px solid var(--border-light);gap:0.5rem;}
+    .oc-id{font-size:0.68rem;font-weight:500;color:var(--charcoal);display:flex;align-items:center;gap:4px;cursor:pointer;user-select:none;}
+    .oc-id:hover .ci{opacity:1;}
+    .ci{opacity:0;transition:opacity 0.2s;color:var(--gold);font-size:0.65rem;}
+    .oc-date{font-size:0.62rem;color:var(--text-mid);margin-top:2px;}
+    .sbadge{display:inline-flex;align-items:center;gap:3px;font-size:0.6rem;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;padding:3px 9px;border-radius:50px;flex-shrink:0;}
+    .sbadge.pending{background:rgba(180,154,106,0.16);color:#8A7150;}
+    .sbadge.review{background:rgba(138,113,80,0.14);color:#5F4E33;}
+    .sbadge.shipped{background:rgba(180,154,106,0.12);color:#6B5E4E;}
+    .sbadge.delivered{background:rgba(212,185,138,0.20);color:#6B5E4E;}
+    .sbadge.cancelled{background:rgba(122,74,62,0.12);color:#7A4A3E;}
+    body.dark .sbadge.pending,body.dark .sbadge.shipped{color:#B89B5E;}
+    body.dark .sbadge.review,body.dark .sbadge.delivered{color:#D4C5B0;}
+    body.dark .sbadge.cancelled{color:#C98A7D;}
+
+    .oc-customer{padding:0.7rem 1.1rem;border-bottom:1px solid var(--border-light);display:grid;grid-template-columns:1fr 1fr;gap:0.5rem 1rem;}
+    .cf{display:flex;flex-direction:column;gap:1px;}
+    .cl{font-size:0.56rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-mid);}
+    .cv{font-size:0.75rem;color:var(--charcoal);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .cv a{color:var(--gold-dark);text-decoration:none;}
+    .cv a:hover{text-decoration:underline;}
+
+    .oc-address{padding:0.5rem 1.1rem;border-bottom:1px solid var(--border-light);font-size:0.72rem;color:var(--text-mid);display:flex;align-items:flex-start;gap:0.4rem;}
+    .oc-items{padding:0.6rem 1.1rem;border-bottom:1px solid var(--border-light);}
+    .item-row{display:flex;justify-content:space-between;align-items:center;font-size:0.72rem;padding:2px 0;}
+    .item-n{color:var(--charcoal);display:flex;align-items:center;gap:4px;}
+    .item-q{color:var(--text-mid);font-size:0.64rem;}
+    .item-p{color:var(--gold-dark);font-weight:500;font-size:0.72rem;}
+
+    .oc-footer{padding:0.7rem 1.1rem;display:flex;align-items:center;justify-content:space-between;gap:0.6rem;}
+    .oc-total{font-size:0.75rem;color:var(--charcoal);}
+    .oc-total span{color:var(--gold-dark);}
+    .status-sel{background:var(--card-elevated);border:1px solid var(--border-medium);color:var(--charcoal);font-size:0.68rem;padding:5px 9px;border-radius:10px;cursor:pointer;font-family:'Jost',sans-serif;outline:none;transition:border-color 0.2s;}
+    .status-sel:focus{border-color:var(--gold);}
+
+    .orders-empty{text-align:center;padding:3rem;color:var(--text-mid);}
+    .orders-empty i{font-size:2.5rem;color:var(--border-medium);display:block;margin-bottom:0.8rem;}
+    .orders-empty p{font-size:0.82rem;}
+
+    .admin-toast{position:fixed;bottom:25px;left:25px;background:var(--gold-dark);color:var(--white);padding:0.7rem 1.2rem;border-radius:50px;transform:translateY(100px);opacity:0;transition:0.3s ease;z-index:300;font-weight:500;font-size:0.85rem;}
+    .admin-toast.show{transform:translateY(0);opacity:1;}
+
+    footer{background:var(--charcoal);color:rgba(247,240,230,0.65);padding:60px 40px 28px;margin-top:2rem;}
+    body.dark footer{background:#0F0E0C;}
+    .footer-inner{max-width:1060px;margin:0 auto;}
+    .footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:56px;margin-bottom:44px;}
+    .footer-brand h3{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:300;color:var(--gold-light);letter-spacing:0.1em;margin-bottom:10px;}
+    .footer-brand p{font-size:0.8rem;line-height:1.8;font-weight:200;max-width:250px;}
+    .footer-col h4{font-size:0.65rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+    .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+    .footer-col a{color:rgba(247,240,230,0.55);text-decoration:none;font-size:0.8rem;font-weight:200;transition:color 0.3s;}
+    .footer-col a:hover{color:var(--gold-light);}
+    .contact-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
+    .contact-list li{font-size:0.8rem;font-weight:200;display:flex;align-items:center;gap:8px;}
+    .contact-list .ic{color:var(--gold);font-size:0.9rem;}
+    .footer-bottom{border-top:1px solid rgba(180,154,106,0.15);padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+    .footer-bottom p{font-size:0.7rem;font-weight:200;}
+    .socials{display:flex;gap:10px;}
+    .social{width:34px;height:34px;border:1px solid rgba(180,154,106,0.3);display:flex;align-items:center;justify-content:center;color:var(--gold-light);text-decoration:none;font-size:0.85rem;transition:background-color 0.3s, color 0.3s;border-radius:50%;}
+    .social:hover{background:var(--gold-dark);border-color:var(--gold-dark);color:var(--white);}
+    .footer-logo-img{width:70px;height:70px;object-fit:contain;margin-bottom:10px;filter:brightness(0.9);border-radius:50%;}
+
+    header{background:rgba(247,240,230,0.92);box-shadow:var(--shadow-sm);position:fixed;top:0;left:0;right:0;z-index:100;border-bottom:1px solid rgba(180,154,106,0.2);}
+    body.dark header{background:rgba(26,24,20,0.92);}
+
+    @media (max-width: 900px){.footer-top{grid-template-columns:1fr 1fr;gap:30px;}.footer-brand{grid-column:1/-1;}}
+    @media (max-width: 768px){
+      .header-flex{padding:0.6rem 1rem;}
+      .logo h1{font-size:0.9rem;}
+      .logo img{width:36px;}
+      .page-header h1{font-size:1.5rem;}
+    }
+    @media (max-width: 640px){
+      .footer-top{grid-template-columns:1fr;}
+      footer{padding:40px 18px 22px;}
+      .footer-bottom{flex-direction:column;text-align:center;}
+      body{padding-top:70px;}
+    }
+    @media(max-width:720px){
+      .admin-wrapper{padding:1.2rem 1rem;}
+      .orders-grid{grid-template-columns:1fr;}
+      .stats-grid{grid-template-columns:repeat(2,1fr);}
+      .oc-customer{grid-template-columns:1fr;}
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
+  
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cream: #F7F0E6;
+            --cream-dark: #EDE4D6;
+            --cream-deep: #E0D4C0;
+            --gold: #B49A6A;
+            --gold-light: #D4B98A;
+            --gold-dark: #8A7150;
+            --charcoal: #3A3228;
+            --text-mid: #6B5E4E;
+            --white: #FEFCF8;
+            --shadow: 0 8px 40px rgba(90, 70, 50, 0.10);
+            --card-base: #F5F0EA;
+            --card-warm: #F2EDE6;
+            --card-elevated: #F7F2EC;
+            --card-shadow: rgba(100, 80, 60, 0.06);
+            --border-light: rgba(180, 155, 120, 0.12);
+            --border-medium: rgba(180, 155, 120, 0.2);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.03);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.06);
+            --input-bg: #F9F6F2;
+            --input-border: #E2D9CF;
+            --input-focus: #C4AF7D;
+            --hover-subtle: rgba(180, 155, 120, 0.05);
+            --hover-medium: rgba(180, 155, 120, 0.1);
+        }
+
+        body {
+            font-family: 'Jost', sans-serif;
+            background: var(--cream);
+            color: var(--charcoal);
+            overflow-x: hidden;
+            transition: background 0.4s ease, color 0.3s ease;
+            line-height: 1.5;
+            padding-top: 80px;
+        }
+
+        body.dark {
+            --cream: #1A1814;
+            --cream-dark: #24201A;
+            --cream-deep: #2E2820;
+            --card-base: #2E2820;
+            --card-warm: #362F26;
+            --card-elevated: #40382D;
+            --charcoal: #F5EFE6;
+            --text-mid: #D4C5B0;
+            --gold: #B89B5E;
+            --gold-dark: #B89B5E;
+            --white: #1A1814;
+            --border-light: rgba(184, 155, 94, 0.15);
+            --input-bg: #3A352C;
+            --input-border: #4A4438;
+        }
+
+        .particle {
+            position: fixed;
+            background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: floatParticle 18s infinite;
+            z-index: 0;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg) scale(0);
+            }
+
+            20% {
+                opacity: 0.1;
+            }
+
+            80% {
+                opacity: 0.1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-20vh) rotate(360deg) scale(1.2);
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        header {
+            background: rgba(247, 240, 230, 0.92);
+            box-shadow: var(--shadow-sm);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(180, 154, 106, 0.2);
+        }
+
+        body.dark header {
+            background: rgba(26, 24, 20, 0.92);
+        }
+
+        .header-flex {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0.8rem 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 102;
+            text-decoration: none;
+        }
+
+        .logo img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .logo h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+            color: var(--gold-dark);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .theme-toggle,
+        .menu-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: var(--gold-dark);
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .theme-toggle:hover,
+        .menu-toggle:hover {
+            background: var(--hover-subtle);
+            color: var(--gold);
+        }
+
+        .right-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 250px;
+            background: var(--cream-dark);
+            backdrop-filter: blur(16px);
+            gap: 0;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            z-index: 101;
+            border-radius: 20px;
+        }
+
+        .nav-links.active {
+            max-height: 500px;
+            opacity: 1;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a {
+            padding: 0.9rem 1.5rem;
+            text-decoration: none;
+            color: var(--charcoal);
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+            border-bottom: 1px solid var(--border-light);
+            display: block;
+            font-weight: 400;
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .nav-links a:hover {
+            background: var(--hover-subtle);
+            color: var(--gold-dark);
+            padding-left: 2rem;
+        }
+
+        .admin-nav-link {
+            background: rgba(180, 154, 106, 0.08);
+            color: var(--gold-dark) !important;
+            font-weight: 600;
+            border-bottom: 2px solid var(--gold) !important;
+        }
+
+        .lang-menu {
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .lang-current {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 0.9rem 1.5rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--charcoal);
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+        }
+
+        .lang-current:hover {
+            background: var(--hover-subtle);
+            color: var(--gold-dark);
+        }
+
+        .lang-options {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: var(--cream-dark);
+        }
+
+        .lang-menu.active .lang-options {
+            max-height: 130px;
+        }
+
+        .lang-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.7rem 1.5rem 0.7rem 2.5rem;
+            background: none;
+            border: none;
+            font-size: 0.7rem;
+            cursor: pointer;
+            color: var(--text-mid);
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+        }
+
+        .lang-option:hover {
+            background: var(--hover-subtle);
+            color: var(--gold-dark);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(6px);
+            z-index: 99;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .menu-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Edit Form Styles */
+        .edit-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: var(--charcoal);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-header h1 i {
+            color: var(--gold);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold-dark);
+            text-decoration: none;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--gold);
+            transform: translateX(-5px);
+        }
+
+        .form-panel {
+            background: var(--card-warm);
+            border-radius: 28px;
+            padding: 2rem;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-panel h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            color: var(--gold-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-mid);
+            margin-bottom: 0.4rem;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--input-border);
+            border-radius: 14px;
+            background: var(--input-bg);
+            color: var(--charcoal);
+            font-size: 0.85rem;
+            font-family: 'Jost', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 3px rgba(180, 154, 106, 0.1);
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Image Upload */
+        .multi-image-upload {
+            border: 1px dashed var(--border-medium);
+            border-radius: 16px;
+            padding: 1rem;
+            background: var(--cream-deep);
+        }
+
+        .image-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .preview-item {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+            background: var(--card-warm);
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-image-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 10px;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+        }
+
+        .remove-image-btn:hover {
+            background: #b34545;
+            transform: scale(1.1);
+        }
+
+        .add-more-btn {
+            background: var(--card-warm);
+            border: 1px dashed var(--gold);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+            aspect-ratio: 1 / 1;
+            color: var(--gold-dark);
+        }
+
+        .add-more-btn:hover {
+            background: var(--hover-subtle);
+            transform: scale(1.02);
+        }
+
+        .add-more-btn i {
+            font-size: 1.5rem;
+        }
+
+        .add-more-btn span {
+            font-size: 0.7rem;
+        }
+
+        /* Category & Season Selectors */
+        .category-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 0.4rem;
+        }
+
+        .season-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 0.4rem;
+        }
+
+        .e-category-option,
+        .e-season-option {
+            background: var(--cream-deep);
+            border: 1px solid var(--border-light);
+            border-radius: 50px;
+            padding: 0.5rem 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+            color: var(--charcoal);
+        }
+
+        .e-category-option i,
+        .e-season-option i {
+            color: var(--gold);
+            font-size: 0.8rem;
+        }
+
+        .e-category-option.selected,
+        .e-season-option.selected {
+            background: var(--gold-dark);
+            border-color: var(--gold-dark);
+            color: var(--white);
+        }
+
+        .e-category-option.selected i,
+        .e-season-option.selected i {
+            color: var(--white);
+        }
+
+        .e-category-option:hover,
+        .e-season-option:hover {
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .season-hint {
+            font-size: 0.65rem;
+            color: var(--text-mid);
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .season-hint i {
+            color: var(--gold);
+            font-size: 0.7rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--gold-dark);
+            color: var(--white);
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            background: var(--charcoal);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-medium);
+            color: var(--charcoal);
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            background: var(--gold-dark);
+            border-color: var(--gold-dark);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gold);
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 2rem;
+            color: #b34545;
+        }
+
+        .info-text {
+            font-size: 0.65rem;
+            color: var(--text-mid);
+            margin-top: 0.5rem;
+        }
+
+        .info-text i {
+            margin-right: 4px;
+            color: var(--gold);
+        }
+
+        /* Toast */
+        .admin-toast {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: var(--gold-dark);
+            color: var(--white);
+            padding: 0.7rem 1.2rem;
+            border-radius: 50px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: 0.3s ease;
+            z-index: 300;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .admin-toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--charcoal);
+            color: rgba(247, 240, 230, 0.65);
+            padding: 60px 40px 28px;
+            margin-top: 2rem;
+        }
+
+        body.dark footer {
+            background: #0F0E0C;
+        }
+
+        .footer-inner {
+            max-width: 1060px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 56px;
+            margin-bottom: 44px;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.55rem;
+            font-weight: 300;
+            color: var(--gold-light);
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .footer-brand p {
+            font-size: 0.8rem;
+            line-height: 1.8;
+            font-weight: 200;
+            max-width: 250px;
+        }
+
+        .footer-col h4 {
+            font-size: 0.65rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .footer-col a {
+            color: rgba(247, 240, 230, 0.55);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 200;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: var(--gold-light);
+        }
+
+        .contact-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .contact-list li {
+            font-size: 0.8rem;
+            font-weight: 200;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-list .ic {
+            color: var(--gold);
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(180, 154, 106, 0.15);
+            padding-top: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .footer-bottom p {
+            font-size: 0.7rem;
+            font-weight: 200;
+        }
+
+        .socials {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social {
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(180, 154, 106, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-light);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+            border-radius: 50%;
+        }
+
+        .social:hover {
+            background: var(--gold-dark);
+            border-color: var(--gold-dark);
+            color: var(--white);
+        }
+
+        .footer-logo-img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            filter: brightness(0.9);
+            border-radius: 50%;
+        }
+
+        @media (max-width: 900px) {
+            .footer-top {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+
+            .footer-brand {
+                grid-column: 1/-1;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .footer-top {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                padding: 40px 18px 22px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .form-panel {
+                padding: 1.2rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            body {
+                padding-top: 70px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-flex {
+                padding: 0.6rem 1rem;
+            }
+
+            .logo h1 {
+                font-size: 0.9rem;
+            }
+
+            .logo img {
+                width: 36px;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .category-selector,
+            .season-selector {
+                gap: 0.5rem;
+            }
+
+            .e-category-option,
+            .e-season-option {
+                padding: 0.4rem 1rem;
+                font-size: 0.7rem;
+            }
+        }
+    
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
+  
+#dash-edit .btn-primary {
+            background: var(--gold-dark);
+            color: var(--white);
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+#dash-edit .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-medium);
+            color: var(--charcoal);
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+#dash-add .btn-primary {
+      background: var(--gold-dark);
+      color: var(--white);
+      border: none;
+      padding: 0.9rem 2rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 0.5rem;
+    }
+#dash-add .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      border: 1px solid var(--border-medium);
+      color: var(--charcoal);
+      padding: 0.8rem 1.8rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      text-decoration: none;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    }
+.nav-links a {
+      padding: 0.9rem 1.5rem;
+      text-decoration: none;
+      color: var(--charcoal);
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      border-bottom: 1px solid var(--border-light);
+      display: block;
+      font-weight: 400;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+.nav-links a:hover {
+      background: var(--hover-subtle);
+      color: var(--gold-dark);
+      padding-left: 2rem;
+    }#dash-orders .search-box{display:flex;align-items:center;gap:0.5rem;background:var(--input-bg);border:1px solid var(--input-border);border-radius:50px;padding:0.5rem 1.2rem;flex:1;min-width:200px;max-width:450px;}
+#dash-orders .search-box i{color:var(--gold);font-size:0.85rem;flex-shrink:0;}
+#dash-orders .search-box input{background:none;border:none;outline:none;font-family:'Jost',sans-serif;font-size:0.82rem;color:var(--charcoal);width:100%;}
+#dash-orders .search-box input::placeholder{color:var(--text-mid);}
+
+/* ---------- Dashboard tabs ---------- */
+.dash-tabs{position:sticky;top:0;z-index:90;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;background:var(--cream-dark);border-bottom:1px solid var(--border-light);padding:10px 12px;}
+.dash-tab{border:1px solid var(--border-medium);background:none;color:var(--text-mid);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;padding:9px 20px;border-radius:999px;cursor:pointer;transition:background-color .2s,color .2s,border-color .2s;font-family:'Jost',sans-serif;}
+.dash-tab:hover{color:var(--gold-dark);border-color:var(--gold);}
+.dash-tab.active{background:var(--gold-dark);border-color:var(--gold-dark);color:var(--white);font-weight:600;}
+.dash-section[hidden]{display:none !important;}
+.edit-hint{font-size:.85rem;color:var(--text-mid);margin:0 0 12px;}
   </style>
 </head>
 <body>
-  <!-- ==== Header ==== -->
+  <div id="menuOverlay" class="menu-overlay"></div>
+  <div id="adminToast" class="admin-toast"></div>
+  <div id="toast" class="admin-toast"></div>
   <header>
     <div class="header-flex">
-      <div class="logo">
-        <img src="/logo.png" alt="Logo">
+      <a href="index.html" class="logo"><img src="is.webp" width="48" height="48" alt="Rosa">
         <h1>Rosa Fragrances</h1>
-      </div>
+      </a>
       <div class="right-group">
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-          <i class="fas fa-moon"></i>
-        </button>
-        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
-          <i class="fas fa-bars"></i>
-        </button>
+        <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon"
+            style="display:none;"></i></div>
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
       </div>
-    </div>
-
-    <!-- Mobile Navigation -->
-    <div class="nav-links" id="nav-links">
-      <a href="index.html" class="admin-nav-link">Accueil</a>
-      <a href="admin.html" class="admin-nav-link active">Administration</a>
-      <a href="collections.html" class="admin-nav-link">Collections</a>
-      <a href="orders.html" class="admin-nav-link">Commandes</a>
-      <div class="lang-menu" id="lang-menu">
-        <button class="lang-current" id="lang-current">
-          FR <i class="fas fa-chevron-down"></i>
-        </button>
-        <div class="lang-options" id="lang-options">
-          <button class="lang-option" data-lang="fr">Français</button>
-          <button class="lang-option" data-lang="en">English</button>
-          <button class="lang-option" data-lang="ar">العربية</button>
-        </div>
-      </div>
-    </div>
-    <div class="menu-overlay" id="menu-overlay"></div>
-  </header>
-
-  <!-- ==== Admin Content ==== -->
-  <div class="admin-wrapper">
-    <!-- Admin Header -->
-    <div class="admin-header">
-      <h1>Administration</h1>
-      <img src="/admin-avatar.png" alt="Admin Avatar">
-      <div class="logged-in-as">Connecté en tant qu'admin</div>
-    </div>
-
-    <!-- ==== Product Form ==== -->
-    <div class="form-panel">
-      <h2><i class="fas fa-plus-circle"></i> Ajouter un produit</h2>
-
-      <!-- Basic Info -->
-      <div class="input-group">
-        <label for="product-name">Nom du produit</label>
-        <input type="text" id="product-name" placeholder="Ex: Eau de parfum Rosa" required>
-      </div>
-
-      <div class="input-group">
-        <label for="product-description">Description</label>
-        <textarea id="product-description" placeholder="Décrivez le parfum..." required></textarea>
-      </div>
-
-      <div class="input-group">
-        <label for="product-price">Prix (TND)</label>
-        <input type="number" id="product-price" placeholder="Ex: 89.90" min="0" step="0.01" required>
-      </div>
-
-      <div class="input-group">
-        <label for="product-stock">Stock initial</label>
-        <input type="number" id="product-stock" placeholder="Ex: 50" min="0" required>
-      </div>
-
-      <!-- Category & Season -->
-      <div class="input-group">
-        <label>Catégorie</label>
-        <div class="category-selector" id="category-selector">
-          <div class="category-option" data-category="femme"><i class="fas fa-venus"></i> Femme</div>
-          <div class="category-option" data-category="homme"><i class="fas fa-mars"></i> Homme</div>
-          <div class="category-option" data-category="unisexe"><i class="fas fa-transgender"></i> Unisexe</div>
-          <div class="category-option" data-category="enfant"><i class="fas fa-child"></i> Enfant</div>
-        </div>
-      </div>
-
-      <div class="input-group">
-        <label>Saison</label>
-        <div class="season-selector multi-select" id="season-selector">
-          <div class="season-option" data-season="printemps"><i class="fas fa-leaf"></i> Printemps</div>
-          <div class="season-option" data-season="ete"><i class="fas fa-sun"></i> Été</div>
-          <div class="season-option" data-season="automne"><i class="fas fa-wind"></i> Automne</div>
-          <div class="season-option" data-season="hiver"><i class="fas fa-snowflake"></i> Hiver</div>
-        </div>
-        <div class="season-hint">
-          <i class="fas fa-info-circle"></i>
-          Sélectionnez une ou plusieurs saisons
-        </div>
-      </div>
-
-      <!-- Image Upload -->
-      <div class="input-group">
-        <label for="product-images">Images du produit</label>
-        <div class="multi-image-upload" id="multi-image-upload">
-          <div class="image-preview-grid" id="image-preview-grid"></div>
-          <div class="add-more-btn" id="add-more-btn">
-            <i class="fas fa-plus"></i>
-            <span>Ajouter des images</span>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" data-translate="home">ACCUEIL</a>
+        <a href="man.html" data-translate="men">HOMME</a>
+        <a href="women.html" data-translate="women">FEMME</a>
+        <a href="unisexe.html" data-translate="unisex">UNISEXE</a>
+        <a href="kids.html" data-translate="kids">ENFANTS</a>
+        <a href="existed.html" data-translate="existing">PARFUMS EXISTANTS</a>
+        <div class="lang-menu" id="langMenu">
+          <button class="lang-current" id="langCurrentBtn"><span id="currentLangText">FRANÇAIS</span><i
+              class="fas fa-chevron-down"></i></button>
+          <div class="lang-options">
+            <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
+            <button class="lang-option" data-lang="en">🇬🇧 English</button>
+            <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
           </div>
-          <input type="file" id="image-upload" accept="image/*" multiple style="display: none;">
         </div>
+        <a href="login146.html" id="authLink" data-translate="login">Se connecter</a>
+        <a href="profile.html" id="profileLink" style="display:none;" data-translate="profile">Mon Profil</a>
+        <a href="admin.html" id="adminLink" style="display:none;" class="admin-nav-link"><i class="fas fa-crown"></i>
+          Admin</a>
+                <a href="admin.html#orders" id="ordersLink" style="display:none;" class="admin-nav-link"><i class="fas fa-truck"></i> Commandes</a>
       </div>
-
-      <!-- Submit Button -->
-      <button class="btn-primary" id="submit-product-btn">
-        <i class="fas fa-save"></i> Enregistrer le produit
-      </button>
     </div>
 
-    <!-- ==== Products Table ==== -->
-    <div class="products-table-container">
-      <div class="action-bar">
-        <div class="search-box">
-          <i class="fas fa-search"></i>
-          <input type="text" id="product-search" placeholder="Rechercher un produit...">
-        </div>
-        <a href="productedit.html" class="add-product-btn">
-          <i class="fas fa-plus"></i> Nouveau produit
-        </a>
-      </div>
+  <nav class="dash-tabs" role="tablist" aria-label="Administration">
+    <button class="dash-tab active" data-dashtab="add" data-dtab="dtabAdd">Ajouter</button>
+    <button class="dash-tab" data-dashtab="collections" data-dtab="dtabCat">Collections</button>
+    <button class="dash-tab" data-dashtab="orders" data-dtab="dtabOrders">Commandes</button>
+    <button class="dash-tab" data-dashtab="edit" data-dtab="dtabEdit">Modifier</button>
+  </nav>
 
-      <table class="products-table">
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th>Nom</th>
-            <th>Prix</th>
-            <th>Stock</th>
-            <th>Catégorie</th>
-            <th>Saison</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="products-table-body">
-          <!-- Product rows will be injected here by JavaScript -->
-          <tr>
-            <td colspan="7" class="empty-state">
-              <i class="fas fa-box-open"></i>
-              <p>Aucun produit trouvé. Ajoutez votre premier produit ci-dessus.</p>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <main>
+    <section class="dash-section" id="dash-add">
+      <div class="admin-wrapper">
+        <div class="admin-header">
+          <img src="is.webp" width="48" height="48" alt="Rosa">
+          <h1 data-translate="manageProducts">Gérer les produits</h1>
+          <span class="logged-in-as" id="loggedInAs"></span>
+        </div>
+
+        <div class="form-panel">
+          <h2><i class="fas fa-plus-circle"></i> <span data-translate="addPerfume">Ajouter un parfum</span></h2>
+
+          <div class="input-group">
+            <label data-translate="productName">Nom du produit</label>
+            <input type="text" id="productName" placeholder="ex. Bois d'Argent" autocomplete="off">
+          </div>
+
+          <div class="input-group">
+            <label data-translate="brand">Marque / Maison</label>
+            <input type="text" id="productBrand" placeholder="Dior / Chanel / ...">
+          </div>
+
+          <div class="input-group">
+            <label data-translate="price">Prix (TND)</label>
+            <input type="number" id="productPrice" step="0.001" min="0" placeholder="0.000">
+          </div>
+
+          <div class="input-group">
+            <label data-translate="quantity">Quantité en stock</label>
+            <input type="number" id="productQuantity" step="1" min="0" value="0" placeholder="0">
+          </div>
+
+          <div class="input-group">
+            <label data-translate="description">Description</label>
+            <textarea id="productDescription" rows="3"
+              placeholder="Décrivez ce parfum... Notes de tête, cœur, fond, inspiration..."></textarea>
+          </div>
+
+          <div class="input-group">
+            <label data-translate="productImages">Images du produit</label>
+            <div class="multi-image-upload">
+              <div class="image-preview-grid" id="imagePreviewGrid"></div>
+              <div class="add-more-btn" id="addMoreImagesBtn">
+                <i class="fas fa-plus-circle"></i>
+                <span data-translate="addImages">Ajouter des images</span>
+              </div>
+              <input type="file" id="imageUpload" accept="image/*" multiple style="display: none;">
+            </div>
+            <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="imagesInfo">Vous pouvez
+                ajouter plusieurs images. La première sera l'image principale.</span></div>
+          </div>
+
+          <div class="input-group">
+            <label data-translate="category">Catégorie</label>
+            <div class="category-selector" id="categorySelector">
+              <div class="category-option selected" data-category="man"><i class="fas fa-male"></i> <span
+                  data-translate="menCat">Homme</span></div>
+              <div class="category-option" data-category="women"><i class="fas fa-female"></i> <span
+                  data-translate="womenCat">Femme</span></div>
+              <div class="category-option" data-category="unisexe"><i class="fas fa-genderless"></i> <span
+                  data-translate="unisexCat">Unisexe</span></div>
+              <div class="category-option" data-category="kids"><i class="fas fa-child"></i> <span
+                  data-translate="kidsCat">Enfants</span></div>
+              <div class="category-option" data-category="inspires"><i class="fas fa-wand-magic-sparkles"></i> <span
+                  data-translate="catInspires">Parfums inspirés</span></div>
+              <div class="category-option" data-category="voiture"><i class="fas fa-car"></i> <span
+                  data-translate="catVoiture">Parfums voiture</span></div>
+              <div class="category-option" data-category="ambiance"><i class="fas fa-fire"></i> <span
+                  data-translate="catAmbiance">Parfums d'ambiance</span></div>
+              <div class="category-option" data-category="musc"><i class="fas fa-feather"></i> <span
+                  data-translate="catMusc">Musc</span></div>
+              <div class="category-option" data-category="accessoires"><i class="fas fa-gem"></i> <span
+                  data-translate="catAccessoires">Accessoires</span></div>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label data-translate="season">Saisons (plusieurs choix possibles)</label>
+            <div class="season-selector multi-select" id="seasonSelector">
+              <div class="season-option" data-season="summer"><i class="fas fa-sun"></i> <span
+                  data-translate="summer">Été</span></div>
+              <div class="season-option" data-season="winter"><i class="fas fa-snowflake"></i> <span
+                  data-translate="winter">Hiver</span></div>
+              <div class="season-option" data-season="spring"><i class="fas fa-seedling"></i> <span
+                  data-translate="spring">Printemps</span></div>
+              <div class="season-option" data-season="autumn"><i class="fas fa-leaf"></i> <span
+                  data-translate="autumn">Automne</span></div>
+            </div>
+            <div class="season-hint">
+              <i class="fas fa-info-circle"></i>
+              <span data-translate="seasonHint">Sélectionnez une ou plusieurs saisons (cliquez pour
+                sélectionner/désélectionner)</span>
+            </div>
+          </div>
+
+          <button class="btn-primary" id="addProductBtn"><i class="fas fa-gem"></i> <span
+              data-translate="saveProduct">Enregistrer le produit</span></button>
+          <hr>
+          <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="storageInfo">Les images sont
+              stockées en Base64</span></div>
+        </div>
+
+        <div class="nav-panel">
+          <a href="existed.html" class="btn-secondary"><i class="fas fa-box-open"></i> <span
+              data-translate="viewExisting">Voir les parfums existants</span></a>
+        </div>
+      </div>
+    </div>
+
+    </section>
+    <section class="dash-section" id="dash-collections" hidden>
+        <div class="admin-wrapper">
+            <a href="existed.html" class="back-link"><i class="fas fa-arrow-left"></i> <span
+                    data-translate="back">Retour aux catégories</span></a>
+
+            <div class="page-header">
+                <h1><i class="fas fa-female" id="catIcon"></i> <span data-translate="catName">Parfums Femme</span></h1>
+                <div class="stats-badge" id="statsBadge">
+                    <i class="fas fa-box"></i> <span id="productCount">0</span> <span
+                        data-translate="products">produits</span>
+                </div>
+            </div>
+
+            <div class="action-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Rechercher un produit..."
+                        data-translate="searchPlaceholder">
+                </div>
+                <a href="#add" class="add-product-btn"><i class="fas fa-plus"></i> <span
+                        data-translate="addProduct">Ajouter un produit</span></a>
+            </div>
+
+            <div class="products-table-container">
+                <div id="loadingProducts" class="loading-spinner" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i> <span data-translate="loading">Chargement...</span>
+                </div>
+                <div id="productsTableContent"></div>
+            </div>
+
+            
+            <!-- Bannière promo (diaporama "Notre sélection") — same controls as STE -->
+            <section class="hero-admin-card" id="bannerAdminCard">
+                <div class="hero-admin-head">
+                    <h2 class="hero-admin-title"><i class="fas fa-photo-film"></i> <span
+                            data-translate="bannerTitle">Images Bannière Promo</span></h2>
+                    <span class="hero-admin-count"><span id="bannerCountBadge">0/6</span></span>
+                </div>
+                <p class="hero-admin-help" data-translate="bannerHelp">Jusqu'à 6 images de la bannière « promotion »
+                    de l'accueil. Plusieurs images = diaporama automatique.</p>
+                <div class="g-strip" id="bannerGallery"></div>
+                <label class="toggle hero-autoplay-toggle"><input type="checkbox" id="bannerAutoplay" checked><span
+                        class="toggle-track"></span><span class="toggle-label"
+                    data-translate="bannerAutoplay">Défilement automatique</span></label>
+                <input type="file" id="bannerFileInput" accept="image/jpeg,image/png,image/webp,image/avif" multiple
+                    hidden>
+                <div class="hero-admin-msg" id="bannerMsg"></div>
+                <div class="hero-admin-actions">
+                    <button type="button" class="hp-btn hp-btn--gold" id="btnSaveBanner"
+                        data-translate="bannerSave">Enregistrer la bannière</button>
+                    <span class="hero-saved-badge" id="bannerSavedBadge" hidden><i class="fas fa-check"></i> <span
+                            data-translate="bannerSavedBadge">Enregistré</span></span>
+                </div>
+            </section>
+
+            <!-- Menu "Notre Collection" manager (shared site setting: settings.collections) -->
+            <section class="hero-admin-card" id="collAdminCard">
+                <div class="hero-admin-head">
+                    <h2 class="hero-admin-title"><i class="fas fa-list-ul"></i> <span
+                            data-translate="collTitle">Menu Notre Collection</span></h2>
+                    <span class="hero-admin-count"><span id="collCountBadge">0/8</span></span>
+                </div>
+                <p class="hero-admin-help" data-translate="collHelp">Les lignes ci-dessous composent le menu « Notre Collection » du site. Glissez pour changer l'ordre via ↑/↓, remplissez les 3 langues, puis Enregistrer.</p>
+                <div id="collRows"></div>
+                <div class="hero-admin-actions" style="margin-top:.9rem;">
+                    <button type="button" class="hp-btn hp-btn--ghost" id="btnAddCollRow"><i class="fas fa-plus"></i> <span data-translate="collAdd">Ajouter une entrée</span></button>
+                    <button type="button" class="hp-btn hp-btn--gold" id="btnSaveColl" data-translate="collSave">Enregistrer le menu</button>
+                    <span class="hero-saved-badge" id="collSavedBadge" hidden><i class="fas fa-check"></i> <span data-translate="collSavedBadge">Enregistré</span></span>
+                </div>
+                <div class="hero-admin-msg" id="collMsg"></div>
+            </section>
+        </div>
+    </section>
+    <section class="dash-section" id="dash-orders" hidden>
+  <div id="accessDenied" class="access-denied">
+    <i class="fas fa-lock"></i>
+    <h2 data-translate="accessTitle">Accès réservé</h2>
+    <p data-translate="accessText">Cette page est réservée aux administrateurs Rosa Fragrances.</p>
+    <div style="display:flex;gap:0.6rem;flex-wrap:wrap;justify-content:center;">
+      <a href="login146.html"><i class="fas fa-right-to-bracket"></i> <span data-translate="login">Se connecter</span></a>
+      <a href="index.html" style="background:var(--card-warm);color:var(--gold-dark);border:1px solid var(--border-medium);"><i class="fas fa-arrow-left"></i> <span data-translate="backHome">Retour à l'accueil</span></a>
     </div>
   </div>
 
-  <!-- ==== Footer ==== -->
+  <div id="authLoading" class="auth-loading">
+    <i class="fas fa-spinner fa-spin"></i>
+    <p style="font-size:0.8rem;" data-translate="checking">Vérification des accès...</p>
+  </div>
+
+  <main>
+    <div id="mainContent" class="admin-wrapper" style="display:none;">
+
+      <div class="page-header">
+        <h1><i class="fas fa-truck"></i> <span data-translate="pageTitle">Gestion des commandes</span></h1>
+        <div class="stats-badge"><i class="fas fa-receipt"></i> <span id="badgeCount">0</span> <span data-translate="badgeWord">commandes</span></div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card highlight">
+          <div class="stat-label" data-translate="stRevenue">Chiffre d'affaires</div>
+          <div class="stat-value" id="sRevenue">—</div>
+          <div class="stat-sub" data-translate="stRevenueSub">TND · expédiées + livrées</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label" data-translate="stTotal">Total commandes</div>
+          <div class="stat-value" id="sTotal">—</div>
+          <div class="stat-sub" data-translate="stTotalSub">tous statuts confondus</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label" data-translate="stPending">En attente</div>
+          <div class="stat-value" id="sPending" style="color:var(--gold-dark);">—</div>
+          <div class="stat-sub" data-translate="stPendingSub">à traiter en priorité</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label" data-translate="stReview">En révision</div>
+          <div class="stat-value" id="sReview" style="color:var(--text-mid);">—</div>
+          <div class="stat-sub" data-translate="stReviewSub">en cours de vérification</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label" data-translate="stShipped">Expédiées</div>
+          <div class="stat-value" id="sShipped" style="color:var(--gold);">—</div>
+          <div class="stat-sub" data-translate="stShippedSub">en transit</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label" data-translate="stDelivered">Livrées</div>
+          <div class="stat-value" id="sDelivered" style="color:var(--gold-dark);">—</div>
+          <div class="stat-sub" data-translate="stDeliveredSub">avec succès</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label" data-translate="stCancelled">Annulées</div>
+          <div class="stat-value" id="sCancelled" style="color:#7A4A3E;">—</div>
+          <div class="stat-sub" data-translate="stCancelledSub">au total</div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="oSearchInput" data-translate-ph="searchPh" placeholder="ID, nom, téléphone, email, adresse, produit...">
+        </div>
+        <div class="group-toggle">
+          <button class="g-btn active" onclick="setGroup('date',this)"><i class="fas fa-calendar-alt"></i> <span data-translate="gDate">Par date</span></button>
+          <button class="g-btn" onclick="setGroup('city',this)"><i class="fas fa-map-marker-alt"></i> <span data-translate="gCity">Par ville</span></button>
+          <button class="g-btn" onclick="setGroup('product',this)"><i class="fas fa-box"></i> <span data-translate="gProduct">Par produit</span></button>
+          <button class="g-btn" onclick="setGroup('none',this)"><i class="fas fa-list"></i> <span data-translate="gFlat">Liste simple</span></button>
+        </div>
+        <button class="refresh-btn" onclick="loadOrders(true)">
+          <i class="fas fa-sync-alt" id="refreshIcon"></i> <span data-translate="refresh">Actualiser</span>
+        </button>
+      </div>
+
+      <div class="status-tabs">
+        <button class="s-tab s-all active" onclick="setStatus('all',this)"><i class="fas fa-layer-group"></i> <span data-translate="tAll">Toutes</span> <span class="cnt" id="c-all">0</span></button>
+        <button class="s-tab s-pending" onclick="setStatus('pending',this)"><i class="fas fa-clock"></i> <span data-translate="stPending">En attente</span> <span class="cnt" id="c-pending">0</span></button>
+        <button class="s-tab s-review" onclick="setStatus('review',this)"><i class="fas fa-search"></i> <span data-translate="stReview">En révision</span> <span class="cnt" id="c-review">0</span></button>
+        <button class="s-tab s-shipped" onclick="setStatus('shipped',this)"><i class="fas fa-truck"></i> <span data-translate="stShipped">Expédiées</span> <span class="cnt" id="c-shipped">0</span></button>
+        <button class="s-tab s-delivered" onclick="setStatus('delivered',this)"><i class="fas fa-check-circle"></i> <span data-translate="stDelivered">Livrées</span> <span class="cnt" id="c-delivered">0</span></button>
+        <button class="s-tab s-cancelled" onclick="setStatus('cancelled',this)"><i class="fas fa-times-circle"></i> <span data-translate="stCancelled">Annulées</span> <span class="cnt" id="c-cancelled">0</span></button>
+      </div>
+
+      <div id="ordersOut"></div>
+    </div>
+    </section>
+    <section class="dash-section" id="dash-edit" hidden>
+        <div class="edit-wrapper">
+            <a href="#collections" class="back-link"><i class="fas fa-arrow-left"></i> <span
+                    data-translate="back">Retour</span></a>
+
+            <div class="page-header">
+                <h1><i class="fas fa-edit"></i> <span data-translate="editProduct">Modifier le produit</span></h1>
+            </div>
+
+            <p class="edit-hint" data-translate="editHint">Choisissez un produit dans Collections → Modifier pour le charger ici.</p>
+            <div id="loadingContent" class="loading-spinner" style="display: none;">
+                <i class="fas fa-spinner fa-spin"></i> <span data-translate="loading">Chargement...</span>
+            </div>
+
+            <div id="errorContent" class="error-message" style="display: none;"></div>
+
+            <div id="editFormContainer" style="display: none;">
+                <div class="form-panel">
+                    <h2><i class="fas fa-info-circle"></i> <span data-translate="productInfo">Informations
+                            produit</span></h2>
+
+                    <div class="input-group">
+                        <label data-translate="productName">Nom du produit</label>
+                        <input type="text" id="eProductName" placeholder="ex. Bois d'Argent" autocomplete="off">
+                    </div>
+
+                    <div class="input-group">
+                        <label data-translate="brand">Marque / Maison</label>
+                        <input type="text" id="eProductBrand" placeholder="Dior / Chanel / ...">
+                    </div>
+
+                    <div class="input-group">
+                        <label data-translate="price">Prix (TND)</label>
+                        <input type="number" id="eProductPrice" step="0.001" min="0" placeholder="0.000">
+                    </div>
+
+                    <div class="input-group">
+                        <label data-translate="quantity">Quantité en stock</label>
+                        <input type="number" id="eProductQuantity" step="1" min="0" placeholder="0">
+                    </div>
+
+                    <div class="input-group">
+                        <label data-translate="description">Description</label>
+                        <textarea id="eProductDescription" rows="3"
+                            placeholder="Décrivez ce parfum... Notes de tête, cœur, fond, inspiration..."></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label data-translate="productImages">Images du produit</label>
+                        <div class="multi-image-upload">
+                            <div class="image-preview-grid" id="eImagePreviewGrid"></div>
+                            <div class="add-more-btn" id="eAddMoreImagesBtn">
+                                <i class="fas fa-plus-circle"></i>
+                                <span data-translate="addImages">Ajouter des images</span>
+                            </div>
+                            <input type="file" id="eImageUpload" accept="image/*" multiple style="display: none;">
+                        </div>
+                        <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="imagesInfo">Vous
+                                pouvez
+                                ajouter plusieurs images. La première sera l'image principale.</span></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label data-translate="category">Catégorie</label>
+                        <div class="category-selector" id="eCategorySelector">
+                            <div class="e-category-option" data-category="man"><i class="fas fa-male"></i> <span
+                                    data-translate="menCat">Homme</span></div>
+                            <div class="e-category-option" data-category="women"><i class="fas fa-female"></i> <span
+                                    data-translate="womenCat">Femme</span></div>
+                            <div class="e-category-option" data-category="unisexe"><i class="fas fa-genderless"></i> <span
+                                    data-translate="unisexCat">Unisexe</span></div>
+                            <div class="e-category-option" data-category="kids"><i class="fas fa-child"></i> <span
+                                    data-translate="kidsCat">Enfants</span></div>
+                            <div class="e-category-option" data-category="inspires"><i class="fas fa-wand-magic-sparkles"></i> <span
+                                    data-translate="catInspires">Parfums inspirés</span></div>
+              <div class="e-category-option" data-category="voiture"><i class="fas fa-car"></i> <span
+                                data-translate="catVoiture">Parfums voiture</span></div>
+                            <div class="e-category-option" data-category="ambiance"><i class="fas fa-fire"></i> <span
+                                data-translate="catAmbiance">Parfums d'ambiance</span></div>
+                            <div class="e-category-option" data-category="musc"><i class="fas fa-feather"></i> <span
+                                data-translate="catMusc">Musc</span></div>
+                            <div class="e-category-option" data-category="accessoires"><i class="fas fa-gem"></i> <span
+                                data-translate="catAccessoires">Accessoires</span></div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label data-translate="season">Saisons (plusieurs choix possibles)</label>
+                        <div class="season-selector" id="eSeasonSelector">
+                            <div class="e-season-option" data-season="summer"><i class="fas fa-sun"></i> <span
+                                    data-translate="summer">Été</span></div>
+                            <div class="e-season-option" data-season="winter"><i class="fas fa-snowflake"></i> <span
+                                    data-translate="winter">Hiver</span></div>
+                            <div class="e-season-option" data-season="spring"><i class="fas fa-seedling"></i> <span
+                                    data-translate="spring">Printemps</span></div>
+                            <div class="e-season-option" data-season="autumn"><i class="fas fa-leaf"></i> <span
+                                    data-translate="autumn">Automne</span></div>
+                        </div>
+                        <div class="season-hint">
+                            <i class="fas fa-info-circle"></i>
+                            <span data-translate="seasonHint">Sélectionnez une ou plusieurs saisons (cliquez pour
+                                sélectionner/désélectionner)</span>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-primary" id="updateProductBtn"><i class="fas fa-save"></i> <span
+                                data-translate="saveChanges">Enregistrer les modifications</span></button>
+                        <a href="#collections" class="btn-secondary"><i class="fas fa-times"></i> <span
+                                data-translate="cancel">Annuler</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+  </main>
   <footer>
     <div class="footer-inner">
       <div class="footer-top">
         <div class="footer-brand">
-          <h3>Rosa Fragrances</h3>
-          <p>Parfums de luxe fabriqués en Tunisie avec des ingrédients précieux et des essences rares.</p>
+          <img class="footer-logo-img" src="is.webp" alt="Rosa">
+          <h3>ROSA FRAGRANCES</h3>
+          <p data-translate="footerDescription">Parfumerie d'exception depuis 1985. L'art de la parfumerie orientale
+            réinventé pour les connaisseurs exigeants.</p>
         </div>
         <div class="footer-col">
-          <h4>Boutique</h4>
+          <h4 data-translate="footerPerfumesTitle">Parfums</h4>
           <ul>
-            <li><a href="index.html">Accueil</a></li>
-            <li><a href="collections.html">Collections</a></li>
-            <li><a href="admin.html">Administration</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="man.html" data-translate="footerMen">Homme</a></li>
+            <li><a href="women.html" data-translate="footerWomen">Femme</a></li>
+            <li><a href="unisexe.html" data-translate="footerUnisex">Unisexe</a></li>
+            <li><a href="kids.html" data-translate="footerKids">Enfants</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Support</h4>
-          <ul>
-            <li><a href="faq.html">FAQ</a></li>
-            <li><a href="livraison.html">Livraison</a></li>
-            <li><a href="retours.html">Retours</a></li>
-            <li><a href="confidentialite.html">Confidentialité</a></li>
+          <h4 data-translate="footerContactTitle">Contact</h4>
+          <ul class="contact-list">
+            <li><span class="ic">📍</span> <span data-translate="footerAddress">Tunis, Tunisie</span></li>
+            <li><span class="ic">📞</span> <span data-translate="footerPhone">+216 96 163 366</span></li>
+            <li><span class="ic">✉️</span> <span data-translate="footerEmail">contact@rosafragrances.tn</span></li>
+            <div class="socials">
+              <a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/" class="social"
+                target="_blank"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://wa.me/21696163366" class="social" target="_blank"><i class="fab fa-whatsapp"></i></a>
+              <a href="https://www.instagram.com/rosa_fragrances" class="social" target="_blank"><i class="fab fa-instagram"></i></a>
+              <a href="https://www.tiktok.com/@rosa.fragrances6?_r=1&_t=ZS-98OOz406eSF" class="social" target="_blank"><i class="fab fa-tiktok"></i></a>
+            </div>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <div class="socials">
-          <a href="https://instagram.com/rosafragrances" class="social" target="_blank" rel="noopener">
-            <i class="fab fa-instagram"></i>
-          </a>
-          <a href="https://facebook.com/rosafragrances" class="social" target="_blank" rel="noopener">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          <a href="https://tiktok.com/@rosafragrances" class="social" target="_blank" rel="noopener">
-            <i class="fab fa-tiktok"></i>
-          </a>
-          <a href="https://twitter.com/rosafragrances" class="social" target="_blank" rel="noopener">
-            <i class="fab fa-twitter"></i>
-          </a>
-        </div>
-        <div>
-          <p>&copy; 2026 Rosa Fragrances. Tous droits réservés.</p>
-        </div>
-        <div class="footer-logo-img">
-          <img src="/logo-small.png" alt="Logo">
-        </div>
+        <p><span data-translate="footerCopyright">© 2026 Rosa Fragrances. Tous droits réservés.</span></p>
       </div>
     </div>
-  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/admin-gate.js?v=2"></script>
+  <script src="js/app-adminadd.js?v=4"></script>
+  <script src="js/app-admincat.js?v=9"></script>
+  <script src="js/app-adminorders.js?v=2"></script>
+  <script src="js/app-productedit.js?v=2"></script>
 
-  <!-- ==== Admin-Specific JavaScript ==== -->
-  <script src="js/admin-gate.js"></script>
-  <script src="js/app-adminadd.js"></script>
-  <script src="js/app-admincat.js"></script>
-  <script src="js/app-adminorders.js"></script>
-  <script src="js/app-index.js"></script>
   <script>
-    // ==== Theme Toggle ====
-    const themeToggle = document.getElementById('theme-toggle');
-    const menuToggle = document.getElementById('menu-toggle');
-    const navLinks = document.getElementById('nav-links');
-    const menuOverlay = document.getElementById('menu-overlay');
-    const langCurrent = document.getElementById('lang-current');
-    const langOptions = document.getElementById('lang-options');
-    const langMenu = document.getElementById('lang-menu');
-
-    // Theme
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const icon = themeToggle.querySelector('i');
-      icon.classList.toggle('fa-moon');
-      icon.classList.toggle('fa-sun');
-    });
-
-    // Mobile Menu
-    menuToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-      menuOverlay.classList.toggle('active');
-    });
-
-    menuOverlay.addEventListener('click', () => {
-      navLinks.classList.remove('active');
-      menuOverlay.classList.remove('active');
-    });
-
-    // Language Menu
-    langMenu.addEventListener('click', (e) => {
-      if (e.target.classList.contains('lang-option')) {
-        langCurrent.textContent = e.target.dataset.lang.toUpperCase() + ' <i class="fas fa-chevron-down"></i>';
-        langOptions.classList.remove('show');
-      } else {
-        langOptions.classList.toggle('show');
-      }
-    });
-
-    // Close language dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!langMenu.contains(e.target)) {
-        langOptions.classList.remove('show');
-      }
-    });
-
-    // ==== Category Selector ====
-    const categorySelector = document.getElementById('category-selector');
-    categorySelector.addEventListener('click', (e) => {
-      const option = e.target.closest('.category-option');
-      if (option) {
-        // Remove selected from all
-        categorySelector.querySelectorAll('.category-option').forEach(opt => opt.classList.remove('selected'));
-        // Add to clicked
-        option.classList.add('selected');
-      }
-    });
-
-    // ==== Season Selector (Multi-select) ====
-    const seasonSelector = document.getElementById('season-selector');
-    seasonSelector.addEventListener('click', (e) => {
-      const option = e.target.closest('.season-option');
-      if (option) {
-        option.classList.toggle('selected');
-      }
-    });
-
-    // ==== Image Upload ====
-    const imageUpload = document.getElementById('image-upload');
-    const addMoreBtn = document.getElementById('add-more-btn');
-    const imagePreviewGrid = document.getElementById('image-preview-grid');
-
-    addMoreBtn.addEventListener('click', () => {
-      imageUpload.click();
-    });
-
-    imageUpload.addEventListener('change', (e) => {
-      const files = e.target.files;
-      if (files.length) {
-        Array.from(files).forEach(file => {
-          if (file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-              const previewItem = document.createElement('div');
-              previewItem.className = 'preview-item';
-              previewItem.innerHTML = `
-                <img src="${event.target.result}" alt="Preview">
-                <button class="remove-image-btn" aria-label="Remove image">
-                  <i class="fas fa-times"></i>
-                </button>
-              `;
-              // Remove button functionality
-              previewItem.querySelector('.remove-image-btn').addEventListener('click', () => {
-                previewItem.remove();
-              });
-              imagePreviewGrid.appendChild(previewItem);
-            };
-            reader.readAsDataURL(file);
-          }
-        });
-      }
-    });
-
-    // ==== Product Form Submission ====
-    const submitProductBtn = document.getElementById('submit-product-btn');
-    submitProductBtn.addEventListener('click', () => {
-      // Gather form data
-      const name = document.getElementById('product-name').value.trim();
-      const description = document.getElementById('product-description').value.trim();
-      const price = parseFloat(document.getElementById('product-price').value);
-      const stock = parseInt(document.getElementById('product-stock').value);
-      const categoryOption = document.querySelector('.category-option.selected');
-      const category = categoryOption ? categoryOption.dataset.category : '';
-      const seasonOptions = document.querySelectorAll('.season-option.selected');
-      const seasons = Array.from(seasonOptions).map(opt => opt.dataset.season);
-      const images = Array.from(imagePreviewGrid.querySelectorAll('.preview-item img'))
-        .map(img => img.src);
-
-      // Basic validation
-      if (!name || !description || isNaN(price) || price <= 0 || isNaN(stock) || stock < 0 || !category || seasons.length === 0) {
-        alert('Veuillez remplir tous les champs requis correctement.');
-        return;
-      }
-
-      // Prepare product object
-      const product = {
-        id: Date.now(), // Simple ID generation
-        name,
-        description,
-        price,
-        stock,
-        category,
-        seasons,
-        images,
-        createdAt: new Date().toISOString()
-      };
-
-      // Here you would typically send to backend via API
-      // For demo, we'll store in localStorage and refresh table
-      let products = JSON.parse(localStorage.getItem('rosaProducts') || '[]');
-      products.push(product);
-      localStorage.setItem('rosaProducts', JSON.stringify(products));
-
-      // Reset form
-      document.getElementById('product-name').value = '';
-      document.getElementById('product-description').value = '';
-      document.getElementById('product-price').value = '';
-      document.getElementById('product-stock').value = '';
-      categorySelector.querySelectorAll('.category-option').forEach(opt => opt.classList.remove('selected'));
-      seasonSelector.querySelectorAll('.season-option').forEach(opt => opt.classList.remove('selected'));
-      imagePreviewGrid.innerHTML = '';
-      imageUpload.value = '';
-
-      // Show success toast
-      showToast('Produit ajouté avec succès!');
-
-      // Refresh products table
-      renderProductsTable();
-    });
-
-    // ==== Products Table Rendering ====
-    function renderProductsTable() {
-      const products = JSON.parse(localStorage.getItem('rosaProducts') || '[]');
-      const tbody = document.getElementById('products-table-body');
-      tbody.innerHTML = '';
-
-      if (products.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="7" class="empty-state">
-              <i class="fas fa-box-open"></i>
-              <p>Aucun produit trouvé. Ajoutez votre premier produit ci-dessus.</p>
-            </td>
-          </tr>
-        `;
-        return;
-      }
-
-      products.forEach(product => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>
-            <img src="${product.images[0] || '/placeholder.png'}" alt="${product.name}" class="product-image">
-          </td>
-          <td>${product.name}</td>
-          <td>${product.price.toFixed(2)} TND</td>
-          <td>${product.stock}</td>
-          <td>${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</td>
-          <td>
-            ${product.seasons.map(s => `<span class="season-badge">${s.charAt(0).toUpperCase() + s.slice(1)}</span>`).join(' ')}
-          </td>
-          <td class="action-buttons">
-            <button class="edit-btn" data-id="${product.id}">
-              <i class="fas fa-edit"></i> Modifier
-            </button>
-            <button class="delete-btn" data-id="${product.id}">
-              <i class="fas fa-trash"></i> Supprimer
-            </button>
-          </td>
-        `;
-        tbody.appendChild(row);
+  (function () {
+    'use strict';
+    var TR = {
+      fr: { home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS', existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil',
+        footerDescription: "Parfumerie d'exception depuis 1985. L'art de la parfumerie orientale réinventé pour les connaisseurs exigeants.",
+        footerPerfumesTitle: 'Parfums', footerMen: 'Homme', footerWomen: 'Femme', footerUnisexe: 'Unisexe', footerKids: 'Enfants',
+        footerContactTitle: 'Contact', footerAddress: 'Tunis, Tunisie', footerPhone: '+216 96 163 366',
+        footerEmail: 'contact@rosafragrances.tn', footerCopyright: '© 2026 Rosa Fragrances. Tous droits réservés.',
+        dtabAdd: 'Ajouter', dtabCat: 'Collections', dtabOrders: 'Commandes', dtabEdit: 'Modifier' },
+      en: { home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS', existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
+        footerDescription: 'Exceptional perfumery since 1985. The art of oriental perfumery reinvented for discerning connoisseurs.',
+        footerPerfumesTitle: 'Perfumes', footerMen: 'Men', footerWomen: 'Women', footerUnisexe: 'Unisex', footerKids: 'Kids',
+        footerContactTitle: 'Contact', footerAddress: 'Tunis, Tunisia', footerPhone: '+216 96 163 366',
+        footerEmail: 'contact@rosafragrances.tn', footerCopyright: '© 2026 Rosa Fragrances. All rights reserved.',
+        dtabAdd: 'Add', dtabCat: 'Collections', dtabOrders: 'Orders', dtabEdit: 'Edit' },
+      ar: { home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال', existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
+        footerDescription: 'عطور استثنائية منذ 1985. فن العطور الشرقية المعاد ابتكاره للخبراء المميزين.',
+        footerPerfumesTitle: 'العطور', footerMen: 'رجالي', footerWomen: 'نسائي', footerUnisexe: 'للجنسين', footerKids: 'أطفال',
+        footerContactTitle: 'اتصل بنا', footerAddress: 'تونس، تونس', footerPhone: '366 163 96 216+',
+        footerEmail: 'contact@rosafragrances.tn', footerCopyright: '© 2026 روزا للعطور. جميع الحقوق محفوظة.',
+        dtabAdd: 'إضافة', dtabCat: 'المجموعات', dtabOrders: 'الطلبات', dtabEdit: 'تعديل' }
+    };
+    var TABS = ['add', 'collections', 'orders', 'edit'];
+    function lang() { try { var l = localStorage.getItem('language') || 'fr'; return TR[l] ? l : 'fr'; } catch (e) { return 'fr'; } }
+    function applyChrome() {
+      var l = lang(), d = TR[l];
+      document.querySelectorAll('header [data-translate], footer [data-translate]').forEach(function (el) {
+        var k = el.getAttribute('data-translate');
+        if (d[k]) el.textContent = d[k];
       });
-
-      // Add event listeners to action buttons
-      tbody.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const productId = parseInt(btn.dataset.id);
-          // Redirect to edit page with ID (you'd implement this)
-          window.location.href = `productedit.html?id=${productId}`;
-        });
+      document.querySelectorAll('[data-dtab]').forEach(function (el) {
+        var k = el.getAttribute('data-dtab');
+        if (d[k]) el.textContent = d[k];
       });
-
-      tbody.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
-            const productId = parseInt(btn.dataset.id);
-            let products = JSON.parse(localStorage.getItem('rosaProducts') || '[]');
-            products = products.filter(p => p.id !== productId);
-            localStorage.setItem('rosaProducts', JSON.stringify(products));
-            showToast('Produit supprimé.');
-            renderProductsTable();
-          }
-        });
-      });
+      var names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
+      var s = document.getElementById('currentLangText');
+      if (s) s.textContent = names[l];
     }
-
-    // ==== Toast Function ====
-    function showToast(message) {
-      const toast = document.createElement('div');
-      toast.className = 'admin-toast';
-      toast.textContent = message;
-      document.body.appendChild(toast);
-      
-      // Trigger reflow for animation
-      void toast.offsetWidth;
-      toast.classList.add('show');
-      
-      // Remove after delay
-      setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-          toast.remove();
-        }, 300);
-      }, 3000);
+    function currentTab() {
+      var h = (location.hash || '').replace('#', '');
+      return TABS.indexOf(h) !== -1 ? h : 'add';
     }
-
-    // ==== Search Functionality ====
-    const searchInput = document.getElementById('product-search');
-    searchInput.addEventListener('input', () => {
-      const searchTerm = searchInput.value.toLowerCase().trim();
-      const rows = document.querySelectorAll('#products-table-body tr');
-      rows.forEach(row => {
-        if (row.classList.contains('empty-state')) return;
-        const productName = row.cells[1].textContent.toLowerCase();
-        const category = row.cells[4].textContent.toLowerCase();
-        if (productName.includes(searchTerm) || category.includes(searchTerm)) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
+    function showTab(name) {
+      TABS.forEach(function (t) {
+        var sec = document.getElementById('dash-' + t);
+        if (sec) sec.hidden = t !== name;
+      });
+      document.querySelectorAll('[data-dashtab]').forEach(function (b) {
+        b.classList.toggle('active', b.getAttribute('data-dashtab') === name);
+      });
+      if (name === 'edit' && window.rosaEditId && window.rosaLoadEdit) window.rosaLoadEdit();
+    }
+    document.querySelectorAll('[data-dashtab]').forEach(function (b) {
+      b.addEventListener('click', function () { location.hash = '#' + b.getAttribute('data-dashtab'); });
+    });
+    window.addEventListener('hashchange', function () { showTab(currentTab()); });
+    window.rosaAfterSave = function () {
+      location.hash = '#collections';
+      showTab('collections');
+      if (window.rosaReloadCat) window.rosaReloadCat();
+    };
+    // single header chrome (theme / menu / lang)
+    var tt = document.getElementById('themeToggle');
+    if (tt) tt.addEventListener('click', function () {
+      var dark = document.body.classList.toggle('dark');
+      try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) {}
+      var s = document.querySelector('#themeToggle .fa-sun'), m = document.querySelector('#themeToggle .fa-moon');
+      if (s) s.style.display = dark ? 'none' : 'inline-block';
+      if (m) m.style.display = dark ? 'inline-block' : 'none';
+    });
+    try {
+      if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark');
+        var s0 = document.querySelector('#themeToggle .fa-sun'), m0 = document.querySelector('#themeToggle .fa-moon');
+        if (s0) s0.style.display = 'none';
+        if (m0) m0.style.display = 'inline-block';
+      }
+    } catch (e) {}
+    var burger = document.getElementById('menuToggle'), menu = document.getElementById('navLinks'), ov = document.getElementById('menuOverlay');
+    function toggleMenu() {
+      if (!menu) return;
+      menu.classList.toggle('active');
+      if (ov) ov.classList.toggle('active');
+      document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+    }
+    if (burger) burger.addEventListener('click', toggleMenu);
+    if (ov) ov.addEventListener('click', toggleMenu);
+    var lm = document.getElementById('langMenu'), lcb = document.getElementById('langCurrentBtn');
+    if (lcb) lcb.addEventListener('click', function (e) { e.stopPropagation(); if (lm) lm.classList.toggle('active'); });
+    document.querySelectorAll('.lang-option').forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        try { localStorage.setItem('language', opt.dataset.lang); } catch (e) {}
+        if (lm) lm.classList.remove('active');
+        location.reload();
       });
     });
-
-    // ==== Initial Load ====
-    document.addEventListener('DOMContentLoaded', () => {
-      renderProductsTable();
-    });
+    document.addEventListener('click', function (e) { if (lm && !lm.contains(e.target)) lm.classList.remove('active'); });
+    applyChrome();
+    showTab(currentTab());
+  })();
   </script>
+
 </body>
+
 </html>
