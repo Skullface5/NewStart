@@ -45,7 +45,6 @@
   <link rel="stylesheet" href="css/admin-hero.css?v=1">
   <link rel="stylesheet" href="css/collections-admin.css?v=1">
   <style>
-    html, body, main, .admin-wrapper, .edit-wrapper { overflow-y: auto !important; height: auto !important; max-height: none !important; }
     * {
       margin: 0;
       padding: 0;
@@ -88,7 +87,6 @@
       overflow-y: auto;
       transition: background 0.4s ease, color 0.3s ease;
       line-height: 1.5;
-      padding-top: 80px;
     }
 
     body.dark {
@@ -149,7 +147,7 @@
     header {
       background: rgba(247, 240, 230, 0.92);
       box-shadow: var(--shadow-sm);
-      position: fixed;
+      position: sticky;
       top: 0;
       left: 0;
       right: 0;
@@ -904,10 +902,6 @@
       .form-panel {
         padding: 1.2rem;
       }
-
-      body {
-        padding-top: 70px;
-      }
     }
 
     @media (max-width: 768px) {
@@ -982,7 +976,6 @@
             overflow-y: auto;
             transition: background 0.4s ease, color 0.3s ease;
             line-height: 1.5;
-            padding-top: 80px;
         }
 
         body.dark {
@@ -1043,7 +1036,7 @@
         header {
             background: rgba(247, 240, 230, 0.92);
             box-shadow: var(--shadow-sm);
-            position: fixed;
+            position: sticky;
             top: 0;
             left: 0;
             right: 0;
@@ -1681,10 +1674,6 @@
             .action-buttons {
                 flex-direction: column;
             }
-
-            body {
-                padding-top: 70px;
-            }
         }
 
         @media (max-width: 768px) {
@@ -1730,7 +1719,7 @@
       --white:#1A1814;--border-light:rgba(184,155,94,0.15);
       --input-bg:#3A352C;--input-border:#4A4438;
     }
-    body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--charcoal);overflow-x:hidden;overflow-y:auto;line-height:1.5;transition:background 0.4s ease, color 0.3s ease;padding-top:80px;}
+    body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--charcoal);overflow-x:hidden;line-height:1.5;transition:background 0.4s ease, color 0.3s ease;}
 
     .header-flex{display:flex;align-items:center;justify-content:space-between;position:relative;max-width:1400px;margin:0 auto;padding:0.8rem 2rem;}
     .logo{display:flex;align-items:center;gap:0.5rem;z-index:102;text-decoration:none;}
@@ -1875,7 +1864,7 @@
     .social:hover{background:var(--gold-dark);border-color:var(--gold-dark);color:var(--white);}
     .footer-logo-img{width:70px;height:70px;object-fit:contain;margin-bottom:10px;filter:brightness(0.9);border-radius:50%;}
 
-    header{background:rgba(247,240,230,0.92);box-shadow:var(--shadow-sm);position:fixed;top:0;left:0;right:0;z-index:100;border-bottom:1px solid rgba(180,154,106,0.2);}
+    header{background:rgba(247,240,230,0.92);box-shadow:var(--shadow-sm);position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(180,154,106,0.2);}
     body.dark header{background:rgba(26,24,20,0.92);}
 
     @media (max-width: 900px){.footer-top{grid-template-columns:1fr 1fr;gap:30px;}.footer-brand{grid-column:1/-1;}}
@@ -1889,7 +1878,6 @@
       .footer-top{grid-template-columns:1fr;}
       footer{padding:40px 18px 22px;}
       .footer-bottom{flex-direction:column;text-align:center;}
-      body{padding-top:70px;}
     }
     @media(max-width:720px){
       .admin-wrapper{padding:1.2rem 1rem;}
@@ -1945,7 +1933,6 @@
             overflow-y: auto;
             transition: background 0.4s ease, color 0.3s ease;
             line-height: 1.5;
-            padding-top: 80px;
         }
 
         body.dark {
@@ -2006,7 +1993,7 @@
         header {
             background: rgba(247, 240, 230, 0.92);
             box-shadow: var(--shadow-sm);
-            position: fixed;
+            position: sticky;
             top: 0;
             left: 0;
             right: 0;
@@ -2727,10 +2714,6 @@
             .button-group {
                 flex-direction: column;
             }
-
-            body {
-                padding-top: 70px;
-            }
         }
 
         @media (max-width: 768px) {
@@ -2896,6 +2879,7 @@
                 <a href="admin.html#orders" id="ordersLink" style="display:none;" class="admin-nav-link"><i class="fas fa-truck"></i> Commandes</a>
       </div>
     </div>
+  </header>
 
   <nav class="dash-tabs" role="tablist" aria-label="Administration">
     <button class="dash-tab active" data-dashtab="add" data-dtab="dtabAdd">Ajouter</button>
