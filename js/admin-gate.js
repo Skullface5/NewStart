@@ -29,8 +29,9 @@
   var style = document.createElement('style');
   style.textContent = [
     'html.rosa-locked body > *:not(#rosaAdminGate){display:none !important}',
-    '#rosaAdminGate{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:#F7F0E6;font-family:"Jost",sans-serif;padding:22px;overflow:auto}',
-    '#rosaAdminGate .rag-card{width:100%;max-width:380px;background:#fff;border:1px solid #EDE4D6;border-radius:18px;padding:34px 26px;box-shadow:0 18px 45px rgba(58,50,40,.14);text-align:center}',
+    '#rosaAdminGate{position:fixed;inset:0;z-index:99999;display:flex;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#F7F0E6;font-family:"Jost",sans-serif;padding:22px 14px}',
+    '#rosaAdminGate .rag-card{margin:auto;width:100%;max-width:380px;background:#fff;border:1px solid #EDE4D6;border-radius:18px;padding:34px 26px;box-shadow:0 18px 45px rgba(58,50,40,.14);text-align:center}',
+    
     '#rosaAdminGate .rag-mark{width:54px;height:54px;margin:0 auto 14px;border-radius:50%;border:1.6px solid #B49A6A;color:#B49A6A;display:flex;align-items:center;justify-content:center}',
     '#rosaAdminGate .rag-brand{font-family:"Cormorant Garamond",serif;font-size:30px;letter-spacing:.14em;color:#3A3228;margin:0 0 4px;font-weight:600}',
     '#rosaAdminGate .rag-sub{color:#6B5E4E;font-size:13px;letter-spacing:.06em;margin:0 0 22px}',
