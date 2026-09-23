@@ -45,7 +45,7 @@
   <link rel="stylesheet" href="css/admin-hero.css?v=1">
   <link rel="stylesheet" href="css/collections-admin.css?v=1">
   <style>
-    html, body { overflow-y: auto !important; height: auto !important; }
+    html, body, main, .admin-wrapper, .edit-wrapper { overflow-y: auto !important; height: auto !important; max-height: none !important; }
     * {
       margin: 0;
       padding: 0;
@@ -3422,7 +3422,7 @@
       if (!menu) return;
       menu.classList.toggle('active');
       if (ov) ov.classList.toggle('active');
-      document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+      document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
     }
     if (burger) burger.addEventListener('click', toggleMenu);
     if (ov) ov.addEventListener('click', toggleMenu);
