@@ -105,6 +105,18 @@
       }
 
       function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
+      function promoPriceHtml(row) {
+        // STE-style promo: struck old price before current price
+        try {
+          var op = row.old_price != null ? parseFloat(row.old_price) : NaN;
+          var cp = parseFloat(row.price);
+          if (isFinite(op) && isFinite(cp) && op > cp) {
+            return '<s style="opacity:.5;font-weight:300;font-size:.8em;margin-inline-end:7px;">' + formatPrice(op) + '</s>' + formatPrice(cp);
+          }
+        } catch (e) {}
+        return formatPrice(row.price);
+      }
+
       function calculateTotal() { return cart.reduce((s, i) => s + (i.price * i.quantity), 0); }
       function updateCartCount() { const total = cart.reduce((a, i) => a + (i.quantity || 1), 0); if (cartCountSpan) cartCountSpan.textContent = total; }
       function saveCart() { localStorage.setItem('RosaFragrances_cart', JSON.stringify(cart)); updateCartCount(); renderCart(); }
@@ -282,7 +294,7 @@ async function loadProducts() {
               <div class="product-img">${imgHtml}</div>
               <div class="product-title">${escapeHtml(p.name)}</div>
               <div class="product-brand">${escapeHtml(p.brand)}</div>
-              <div class="product-price">${parseFloat(p.price).toFixed(3).replace('.', ',')} TND</div>
+              <div class="product-price">${promoPriceHtml(p)}</div>
             </div>
             <button class="add-to-cart" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${p.price}" data-image="${p.image || ''}"><i class="fas fa-shopping-cart"></i> ${translations[currentLanguage].addToCart}</button>
           </div>`;

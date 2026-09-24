@@ -14,7 +14,7 @@
                     home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
                     existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil',
                     back: 'Retour', editProduct: 'Modifier le produit', productInfo: 'Informations produit',
-                    productName: 'Nom du produit', brand: 'Marque / Maison', price: 'Prix (TND)',
+                    productName: 'Nom du produit', brand: 'Marque / Maison', price: 'Prix (TND)', oldPrice: 'Ancien prix — promo (optionnel)', oldPriceHint: "Si supérieur au prix actuel, le site affiche l'ancien prix barré.",
                     quantity: 'Quantité en stock', description: 'Description', productImages: 'Images du produit',
                     addImages: 'Ajouter des images', imagesInfo: 'Vous pouvez ajouter plusieurs images. La première sera l\'image principale.',
                     category: 'Catégorie', menCat: 'Homme', womenCat: 'Femme', unisexCat: 'Unisexe', kidsCat: 'Enfants', catVoiture: 'Voiture', catAmbiance: 'Ambiance', catMusc: 'Musc', catAccessoires: 'Accessoires', catInspires: 'Parfums inspirés',
@@ -34,7 +34,7 @@
                     home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
                     existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
                     back: 'Back', editProduct: 'Edit Product', productInfo: 'Product Information',
-                    productName: 'Product Name', brand: 'Brand / House', price: 'Price (TND)',
+                    productName: 'Product Name', brand: 'Brand / House', price: 'Price (TND)', oldPrice: 'Old price — promo (optional)', oldPriceHint: 'If higher than the current price, the site shows the old price struck through.',
                     quantity: 'Quantity in stock', description: 'Description', productImages: 'Product Images',
                     addImages: 'Add Images', imagesInfo: 'You can add multiple images. The first one will be the main image.',
                     category: 'Category', menCat: 'Men', womenCat: 'Women', unisexCat: 'Unisex', kidsCat: 'Kids', catVoiture: 'Car', catAmbiance: 'Home', catMusc: 'Musk', catAccessoires: 'Accessories', catInspires: 'Inspired perfumes',
@@ -54,7 +54,7 @@
                     home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
                     existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
                     back: 'رجوع', editProduct: 'تعديل المنتج', productInfo: 'معلومات المنتج',
-                    productName: 'اسم المنتج', brand: 'العلامة التجارية', price: 'السعر (دينار)',
+                    productName: 'اسم المنتج', brand: 'العلامة التجارية', price: 'السعر (دينار)', oldPrice: 'السعر القديم — عرض (اختياري)', oldPriceHint: 'إذا كان أعلى من السعر الحالي، يعرض الموقع السعر القديم مشطوبًا.',
                     quantity: 'الكمية في المخزون', description: 'الوصف', productImages: 'صور المنتج',
                     addImages: 'إضافة صور', imagesInfo: 'يمكنك إضافة عدة صور. الصورة الأولى ستكون الصورة الرئيسية.',
                     category: 'الفئة', menCat: 'رجالي', womenCat: 'نسائي', unisexCat: 'للجنسين', kidsCat: 'أطفال', catVoiture: 'سيارة', catAmbiance: 'جو', catMusc: 'مسك', catAccessoires: 'إكسسوارات', catInspires: 'عطور مستوحاة',
@@ -182,6 +182,7 @@
                 document.getElementById('eProductName').value = product.name || '';
                 document.getElementById('eProductBrand').value = product.brand || '';
                 document.getElementById('eProductPrice').value = product.price || '';
+                document.getElementById('eProductOldPrice') && (document.getElementById('eProductOldPrice').value = (product.old_price != null ? product.old_price : ''));
                 document.getElementById('eProductQuantity').value = product.quantity || 0;
                 document.getElementById('eProductDescription').value = product.description || '';
 
@@ -214,6 +215,8 @@
                 const name = document.getElementById('eProductName').value.trim();
                 const brand = document.getElementById('eProductBrand').value.trim();
                 const price = parseFloat(document.getElementById('eProductPrice').value);
+                const oldPriceRaw = document.getElementById('eProductOldPrice')?.value;
+                const oldPrice = (oldPriceRaw === '' || oldPriceRaw == null) ? null : parseFloat(oldPriceRaw);
                 const quantity = parseInt(document.getElementById('eProductQuantity').value) || 0;
                 const description = document.getElementById('eProductDescription').value.trim();
 
@@ -251,6 +254,7 @@
                         name,
                         brand,
                         price,
+                        old_price: (oldPrice != null && isFinite(oldPrice) && oldPrice > price) ? oldPrice : null,
                         quantity,
                         description: description || null,
                         images: JSON.stringify(finalImages),
@@ -259,7 +263,13 @@
                         updated_at: new Date().toISOString()
                     };
 
-                    const { error } = await supabase.from('products').update(updateData).eq('id', productId);
+                    let error = null;
+                    const first = await supabase.from('products').update(updateData).eq('id', productId);
+                    error = first.error;
+                    if (error && /old_price/.test(String(error.message || ''))) {
+                        delete updateData.old_price; // DB not migrated yet
+                        error = (await supabase.from('products').update(updateData).eq('id', productId)).error;
+                    }
                     if (error) throw error;
 
                     showToast(translations[currentLanguage].productUpdated);

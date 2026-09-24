@@ -2960,6 +2960,11 @@
             <label data-translate="price">Prix (TND)</label>
             <input type="number" id="productPrice" step="0.001" min="0" placeholder="0.000">
           </div>
+          <div class="input-group">
+            <label data-translate="oldPrice">Ancien prix — promo (optionnel)</label>
+            <input type="number" id="productOldPrice" step="0.001" min="0" placeholder="ex. 149.000">
+            <div class="info-text" style="margin-top:.35rem;"><i class="fas fa-tag"></i> <span data-translate="oldPriceHint">Si supérieur au prix actuel, le site affiche l'ancien prix barré.</span></div>
+          </div>
 
           <div class="input-group">
             <label data-translate="quantity">Quantité en stock</label>
@@ -3230,6 +3235,11 @@
                         <label data-translate="price">Prix (TND)</label>
                         <input type="number" id="eProductPrice" step="0.001" min="0" placeholder="0.000">
                     </div>
+                    <div class="input-group">
+                        <label data-translate="oldPrice">Ancien prix — promo (optionnel)</label>
+                        <input type="number" id="eProductOldPrice" step="0.001" min="0" placeholder="ex. 149.000">
+                        <div class="info-text" style="margin-top:.35rem;"><i class="fas fa-tag"></i> <span data-translate="oldPriceHint">Si supérieur au prix actuel, le site affiche l'ancien prix barré.</span></div>
+                    </div>
 
                     <div class="input-group">
                         <label data-translate="quantity">Quantité en stock</label>
@@ -3315,10 +3325,10 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/admin-gate.js?v=4"></script>
-  <script src="js/app-adminadd.js?v=4"></script>
+  <script src="js/app-adminadd.js?v=5"></script>
   <script src="js/app-admincat.js?v=14"></script>
   <script src="js/app-adminorders.js?v=2"></script>
-  <script src="js/app-productedit.js?v=2"></script>
+  <script src="js/app-productedit.js?v=3"></script>
 
   <script>
   (function () {

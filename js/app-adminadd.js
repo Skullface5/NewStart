@@ -11,7 +11,7 @@
           home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
           existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil',
           manageProducts: 'Gérer les produits', addPerfume: 'Ajouter un parfum',
-          productName: 'Nom du produit', brand: 'Marque / Maison', price: 'Prix (TND)',
+          productName: 'Nom du produit', brand: 'Marque / Maison', price: 'Prix (TND)', oldPrice: 'Ancien prix — promo (optionnel)', oldPriceHint: "Si supérieur au prix actuel, le site affiche l'ancien prix barré.",
           quantity: 'Quantité en stock',
           description: 'Description', productImages: 'Images du produit', addImages: 'Ajouter des images',
           imagesInfo: 'Vous pouvez ajouter plusieurs images. La première sera l\'image principale.',
@@ -32,7 +32,7 @@
           home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
           existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
           manageProducts: 'Manage Products', addPerfume: 'Add Perfume',
-          productName: 'Product Name', brand: 'Brand / House', price: 'Price (TND)',
+          productName: 'Product Name', brand: 'Brand / House', price: 'Price (TND)', oldPrice: 'Old price — promo (optional)', oldPriceHint: 'If higher than the current price, the site shows the old price struck through.',
           quantity: 'Quantity in stock',
           description: 'Description', productImages: 'Product Images', addImages: 'Add Images',
           imagesInfo: 'You can add multiple images. The first one will be the main image.',
@@ -53,7 +53,7 @@
           home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
           existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
           manageProducts: 'إدارة المنتجات', addPerfume: 'إضافة عطر',
-          productName: 'اسم المنتج', brand: 'العلامة التجارية', price: 'السعر (دينار)',
+          productName: 'اسم المنتج', brand: 'العلامة التجارية', price: 'السعر (دينار)', oldPrice: 'السعر القديم — عرض (اختياري)', oldPriceHint: 'إذا كان أعلى من السعر الحالي، يعرض الموقع السعر القديم مشطوبًا.',
           quantity: 'الكمية في المخزون',
           description: 'الوصف', productImages: 'صور المنتج', addImages: 'إضافة صور',
           imagesInfo: 'يمكنك إضافة عدة صور. الصورة الأولى ستكون الصورة الرئيسية.',
@@ -215,6 +215,8 @@
         const name = document.getElementById('productName')?.value.trim();
         const brand = document.getElementById('productBrand')?.value.trim();
         const price = parseFloat(document.getElementById('productPrice')?.value);
+        const oldPriceRaw = document.getElementById('productOldPrice')?.value;
+        const oldPrice = (oldPriceRaw === '' || oldPriceRaw == null) ? null : parseFloat(oldPriceRaw);
         const quantity = parseInt(document.getElementById('productQuantity')?.value) || 0;
         const description = document.getElementById('productDescription')?.value.trim();
 
@@ -244,6 +246,7 @@
 
           const newProduct = {
             name, brand, price, quantity,
+            old_price: (oldPrice != null && isFinite(oldPrice) && oldPrice > price) ? oldPrice : null,
             description: description || null,
             images: JSON.stringify(urls),
             icon: 'fa-crown',
@@ -251,13 +254,18 @@
             season: seasonsToSave.join(',') // Store as comma-separated string
           };
 
-          const { error } = await supabase.from('products').insert([newProduct]);
+          let { error } = await supabase.from('products').insert([newProduct]);
+          if (error && /old_price/.test(String(error.message || ''))) {
+            delete newProduct.old_price; // DB not migrated yet: save without promo price
+            error = (await supabase.from('products').insert([newProduct])).error;
+          }
           if (error) throw error;
 
           // Reset form
           document.getElementById('productName').value = '';
           document.getElementById('productBrand').value = '';
           document.getElementById('productPrice').value = '';
+          document.getElementById('productOldPrice').value = '';
           document.getElementById('productQuantity').value = '0';
           document.getElementById('productDescription').value = '';
           uploadedImages.forEach(item => { try { URL.revokeObjectURL(item.preview); } catch (e) {} });

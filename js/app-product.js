@@ -89,6 +89,18 @@
 
       // Helper functions
       function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
+      function promoPriceHtml(row) {
+        // STE-style promo: struck old price before current price
+        try {
+          var op = row.old_price != null ? parseFloat(row.old_price) : NaN;
+          var cp = parseFloat(row.price);
+          if (isFinite(op) && isFinite(cp) && op > cp) {
+            return '<s style="opacity:.5;font-weight:300;font-size:.8em;margin-inline-end:7px;">' + formatPrice(op) + '</s>' + formatPrice(cp);
+          }
+        } catch (e) {}
+        return formatPrice(row.price);
+      }
+
       function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
       function showToast(msgKey, productName = '') {
         if (!toast) return;
@@ -251,7 +263,7 @@
               <div class="product-brand">${escapeHtml(product.brand)}</div>
               <div class="product-meta"><span class="meta-badge"><i class="fas fa-tag"></i> ${categoryName}</span>${seasonsHtml}</div>
               ${stockStatusHTML}
-              <div class="product-price">${formatPrice(product.price)}</div>
+              <div class="product-price">${promoPriceHtml(product)}</div>
               <div class="product-description">${escapeHtml(product.description || translations[currentLanguage].discover)}</div>
               <button class="add-to-cart-btn ${addToCartDisabled}" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${product.price}" data-icon="fa-crown" data-image="${productImages[0] || ''}" ${isOutOfStock ? 'disabled' : ''}>
                 <i class="fas fa-shopping-cart"></i> ${translations[currentLanguage].addToCart}
