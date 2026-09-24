@@ -265,7 +265,7 @@
                     showToast(translations[currentLanguage].productUpdated);
                     setTimeout(() => {
                         if (window.rosaAfterSave) window.rosaAfterSave();
-                        else window.location.href = document.referrer || 'existed.html';
+                        else window.location.href = document.referrer || 'Alucard146.html';
                     }, 1500);
                 } catch (error) {
                     console.error('Error updating product:', error);

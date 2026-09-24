@@ -2840,6 +2840,28 @@
 .dash-tab.active{background:var(--gold-dark);border-color:var(--gold-dark);color:var(--white);font-weight:600;}
 .dash-section[hidden]{display:none !important;}
 .edit-hint{font-size:.85rem;color:var(--text-mid);margin:0 0 12px;}
+/* ── Overview (fused from Alucard146.html) ── */
+.ov-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.9rem;margin:0 0 1.6rem;}
+.ov-card{position:relative;display:block;border-radius:18px;min-height:110px;padding:1rem .8rem;text-decoration:none;color:var(--white);display:flex;flex-direction:column;justify-content:flex-end;background-size:cover;background-position:center;border:1px solid var(--border-light);box-shadow:0 4px 18px rgba(90,70,50,.08);transition:transform .25s ease,box-shadow .25s ease;overflow:hidden;}
+.ov-card::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,24,16,.05) 0%,rgba(30,24,16,.62) 100%);}
+.ov-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(90,70,50,.18);}
+.ov-card h3{position:relative;font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:500;letter-spacing:.02em;}
+.ov-card p{position:relative;font-size:.7rem;opacity:.85;margin-top:.15rem;}
+.ov-count{position:absolute;top:.55rem;right:.55rem;background:rgba(254,252,248,.92);color:var(--charcoal);font-size:.68rem;font-weight:600;border-radius:999px;padding:.18rem .55rem;box-shadow:0 2px 8px rgba(0,0,0,.12);}
+.ov-man{background-image:url('https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/man.jfif');}
+.ov-women{background-image:url('https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/women.jfif');}
+.ov-unisexe{background-image:url('https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/unisexe.jfif');}
+.ov-kids{background-image:url('https://dtwciuhwwanwlwpydeko.supabase.co/storage/v1/object/public/img/kids.jfif');}
+.ov-voiture{background-image:linear-gradient(135deg,#6b5a44 0%,#3e3226 100%);}
+.ov-ambiance{background-image:linear-gradient(135deg,#8a6f52 0%,#4d3a28 100%);}
+.ov-musc{background-image:linear-gradient(135deg,#a08b6b 0%,#5c4a33 100%);}
+.ov-accessoires{background-image:linear-gradient(135deg,#7c6a52 0%,#372c20 100%);}
+.ov-inspires{background-image:linear-gradient(135deg,#94765a 0%,#463526 100%);}
+.ov-total-row{display:flex;gap:.7rem;flex-wrap:wrap;align-items:center;margin-bottom:1.2rem;}
+.ov-tile{flex:1 1 120px;background:var(--white);border:1px solid var(--border-light);border-radius:14px;padding:.7rem .9rem;text-align:center;box-shadow:0 3px 12px rgba(90,70,50,.05);}
+.ov-tile b{display:block;font-size:1.3rem;color:var(--gold-dark);font-family:'Cormorant Garamond',serif;}
+.ov-tile span{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mid);}
+@media (max-width:520px){.ov-grid{grid-template-columns:repeat(2,1fr);gap:.65rem;}.ov-card{min-height:92px;}}
   </style>
 </head>
 <body>
@@ -2862,7 +2884,7 @@
         <a href="women.html" data-translate="women">FEMME</a>
         <a href="unisexe.html" data-translate="unisex">UNISEXE</a>
         <a href="kids.html" data-translate="kids">ENFANTS</a>
-        <a href="existed.html" data-translate="existing">PARFUMS EXISTANTS</a>
+        <a href="Alucard146.html" data-translate="existing">PARFUMS EXISTANTS</a>
         <div class="lang-menu" id="langMenu">
           <button class="lang-current" id="langCurrentBtn"><span id="currentLangText">FRANÇAIS</span><i
               class="fas fa-chevron-down"></i></button>
@@ -2882,14 +2904,51 @@
   </header>
 
   <nav class="dash-tabs" role="tablist" aria-label="Administration">
-    <button class="dash-tab active" data-dashtab="add" data-dtab="dtabAdd">Ajouter</button>
+    <button class="dash-tab active" data-dashtab="overview" data-dtab="dtabOv">Aperçu</button>
+    <button class="dash-tab" data-dashtab="add" data-dtab="dtabAdd">Ajouter</button>
     <button class="dash-tab" data-dashtab="collections" data-dtab="dtabCat">Collections</button>
     <button class="dash-tab" data-dashtab="orders" data-dtab="dtabOrders">Commandes</button>
     <button class="dash-tab" data-dashtab="edit" data-dtab="dtabEdit">Modifier</button>
   </nav>
 
   <main>
-    <section class="dash-section" id="dash-add">
+    <!-- Overview — fused from Alucard146.html -->
+    <section class="dash-section" id="dash-overview">
+      <div class="admin-wrapper">
+        <div class="admin-header">
+          <img src="is.webp" width="48" height="48" alt="Rosa">
+          <h1 data-translate="existingPerfumes">Parfums Existants</h1>
+          <span class="logged-in-as" id="loggedInAsOv"></span>
+        </div>
+
+        <div class="ov-total-row">
+          <div class="ov-tile"><b id="ovTotal">0</b><span data-translate="ovProducts">produits</span></div>
+          <div class="ov-tile"><b id="ovManCount">0</b><span data-translate="menCat">Homme</span></div>
+          <div class="ov-tile"><b id="ovWomenCount">0</b><span data-translate="womenCat">Femme</span></div>
+          <div class="ov-tile"><b id="ovUnisexCount">0</b><span data-translate="unisexCat">Unisexe</span></div>
+          <div class="ov-tile"><b id="ovKidsCount">0</b><span data-translate="kidsCat">Enfants</span></div>
+        </div>
+
+        <div class="ov-grid" id="ovGrid">
+          <a href="#collections" class="ov-card ov-man" data-cat="man"><span class="ov-count" id="ovc-man">0</span><h3 data-translate="menCat">Homme</h3><p data-translate="menDesc">Boisés &amp; épicés</p></a>
+          <a href="#collections" class="ov-card ov-women" data-cat="women"><span class="ov-count" id="ovc-women">0</span><h3 data-translate="womenCat">Femme</h3><p data-translate="womenDesc">Floraux &amp; sensuels</p></a>
+          <a href="#collections" class="ov-card ov-unisexe" data-cat="unisexe"><span class="ov-count" id="ovc-unisexe">0</span><h3 data-translate="unisexCat">Unisexe</h3><p data-translate="unisexDesc">Pour tous</p></a>
+          <a href="#collections" class="ov-card ov-kids" data-cat="kids"><span class="ov-count" id="ovc-kids">0</span><h3 data-translate="kidsCat">Enfants</h3><p data-translate="kidsDesc">Douceurs</p></a>
+          <a href="#collections" class="ov-card ov-voiture" data-cat="voiture"><span class="ov-count" id="ovc-voiture">0</span><h3 data-translate="catVoiture">Parfums voiture</h3></a>
+          <a href="#collections" class="ov-card ov-ambiance" data-cat="ambiance"><span class="ov-count" id="ovc-ambiance">0</span><h3 data-translate="catAmbiance">Parfums d'ambiance</h3></a>
+          <a href="#collections" class="ov-card ov-musc" data-cat="musc"><span class="ov-count" id="ovc-musc">0</span><h3 data-translate="catMusc">Musc</h3></a>
+          <a href="#collections" class="ov-card ov-accessoires" data-cat="accessoires"><span class="ov-count" id="ovc-accessoires">0</span><h3 data-translate="catAccessoires">Accessoires</h3></a>
+          <a href="#collections" class="ov-card ov-inspires" data-cat="inspires"><span class="ov-count" id="ovc-inspires">0</span><h3 data-translate="catInspires">Parfums inspirés</h3></a>
+        </div>
+
+        <div class="nav-panel" style="display:flex;gap:.8rem;flex-wrap:wrap;">
+          <a href="#add" class="btn-secondary" style="text-decoration:none;"><i class="fas fa-plus"></i> <span data-translate="addProduct">Ajouter un produit</span></a>
+          <button type="button" class="btn-secondary" id="ovRefresh" style="cursor:pointer;border:1px solid var(--border-medium);background:none;color:var(--text-mid);font-family:inherit;"><i class="fas fa-sync-alt"></i> <span data-translate="refresh">Rafraîchir</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="dash-section" id="dash-add" hidden>
       <div class="admin-wrapper">
         <div class="admin-header">
           <img src="is.webp" width="48" height="48" alt="Rosa">
@@ -2991,7 +3050,7 @@
         </div>
 
         <div class="nav-panel">
-          <a href="existed.html" class="btn-secondary"><i class="fas fa-box-open"></i> <span
+          <a href="Alucard146.html" class="btn-secondary"><i class="fas fa-box-open"></i> <span
               data-translate="viewExisting">Voir les parfums existants</span></a>
         </div>
       </div>
@@ -3000,7 +3059,7 @@
     </section>
     <section class="dash-section" id="dash-collections" hidden>
         <div class="admin-wrapper">
-            <a href="existed.html" class="back-link"><i class="fas fa-arrow-left"></i> <span
+            <a href="Alucard146.html" class="back-link"><i class="fas fa-arrow-left"></i> <span
                     data-translate="back">Retour aux catégories</span></a>
 
             <div class="page-header">
@@ -3318,7 +3377,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/admin-gate.js?v=3"></script>
   <script src="js/app-adminadd.js?v=4"></script>
-  <script src="js/app-admincat.js?v=10"></script>
+  <script src="js/app-admincat.js?v=11"></script>
   <script src="js/app-adminorders.js?v=2"></script>
   <script src="js/app-productedit.js?v=2"></script>
 
@@ -3331,25 +3390,25 @@
         footerPerfumesTitle: 'Parfums', footerMen: 'Homme', footerWomen: 'Femme', footerUnisexe: 'Unisexe', footerKids: 'Enfants',
         footerContactTitle: 'Contact', footerAddress: 'Tunis, Tunisie', footerPhone: '+216 96 163 366',
         footerEmail: 'contact@rosafragrances.tn', footerCopyright: '© 2026 Rosa Fragrances. Tous droits réservés.',
-        dtabAdd: 'Ajouter', dtabCat: 'Collections', dtabOrders: 'Commandes', dtabEdit: 'Modifier' },
+        dtabAdd: 'Ajouter', dtabCat: 'Collections', dtabOrders: 'Commandes', dtabEdit: 'Modifier', dtabOv: 'Aperçu', existingPerfumes: 'Parfums Existants', ovProducts: 'produits', refresh: 'Rafraîchir', addProduct: 'Ajouter un produit', menCat: 'Homme', menDesc: 'Boisés & épicés', womenCat: 'Femme', womenDesc: 'Floraux & sensuels', unisexCat: 'Unisexe', unisexDesc: 'Pour tous', kidsCat: 'Enfants', kidsDesc: 'Douceurs', catVoiture: 'Parfums voiture', catAmbiance: "Parfums d'ambiance", catMusc: 'Musc', catAccessoires: 'Accessoires', catInspires: 'Parfums inspirés' },
       en: { home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS', existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
         footerDescription: 'Exceptional perfumery since 1985. The art of oriental perfumery reinvented for discerning connoisseurs.',
         footerPerfumesTitle: 'Perfumes', footerMen: 'Men', footerWomen: 'Women', footerUnisexe: 'Unisex', footerKids: 'Kids',
         footerContactTitle: 'Contact', footerAddress: 'Tunis, Tunisia', footerPhone: '+216 96 163 366',
         footerEmail: 'contact@rosafragrances.tn', footerCopyright: '© 2026 Rosa Fragrances. All rights reserved.',
-        dtabAdd: 'Add', dtabCat: 'Collections', dtabOrders: 'Orders', dtabEdit: 'Edit' },
+        dtabAdd: 'Add', dtabCat: 'Collections', dtabOrders: 'Orders', dtabEdit: 'Edit', dtabOv: 'Overview', existingPerfumes: 'Existing Perfumes', ovProducts: 'products', refresh: 'Refresh', addProduct: 'Add product', menCat: 'Men', menDesc: 'Woody & spicy', womenCat: 'Women', womenDesc: 'Floral & sensual', unisexCat: 'Unisex', unisexDesc: 'For everyone', kidsCat: 'Kids', kidsDesc: 'Sweet scents', catVoiture: 'Car perfumes', catAmbiance: 'Home fragrances', catMusc: 'Musk', catAccessoires: 'Accessories', catInspires: 'Inspired perfumes' },
       ar: { home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال', existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
         footerDescription: 'عطور استثنائية منذ 1985. فن العطور الشرقية المعاد ابتكاره للخبراء المميزين.',
         footerPerfumesTitle: 'العطور', footerMen: 'رجالي', footerWomen: 'نسائي', footerUnisexe: 'للجنسين', footerKids: 'أطفال',
         footerContactTitle: 'اتصل بنا', footerAddress: 'تونس، تونس', footerPhone: '366 163 96 216+',
         footerEmail: 'contact@rosafragrances.tn', footerCopyright: '© 2026 روزا للعطور. جميع الحقوق محفوظة.',
-        dtabAdd: 'إضافة', dtabCat: 'المجموعات', dtabOrders: 'الطلبات', dtabEdit: 'تعديل' }
+        dtabAdd: 'إضافة', dtabCat: 'المجموعات', dtabOrders: 'الطلبات', dtabEdit: 'تعديل', dtabOv: 'نظرة عامة', existingPerfumes: 'العطور الموجودة', ovProducts: 'منتجات', refresh: 'تحديث', addProduct: 'إضافة منتج', menCat: 'رجالي', menDesc: 'خشبي و حار', womenCat: 'نسائي', womenDesc: 'زهري و حسي', unisexCat: 'للجنسين', unisexDesc: 'للجميع', kidsCat: 'أطفال', kidsDesc: 'روائح حلوة', catVoiture: 'عطور السيارات', catAmbiance: 'عطورات الجو', catMusc: 'مسك', catAccessoires: 'إكسسوارات', catInspires: 'عطور مستوحاة' }
     };
-    var TABS = ['add', 'collections', 'orders', 'edit'];
+    var TABS = ['overview', 'add', 'collections', 'orders', 'edit'];
     function lang() { try { var l = localStorage.getItem('language') || 'fr'; return TR[l] ? l : 'fr'; } catch (e) { return 'fr'; } }
     function applyChrome() {
       var l = lang(), d = TR[l];
-      document.querySelectorAll('header [data-translate], footer [data-translate]').forEach(function (el) {
+      document.querySelectorAll('header [data-translate], footer [data-translate], #dash-overview [data-translate]').forEach(function (el) {
         var k = el.getAttribute('data-translate');
         if (d[k]) el.textContent = d[k];
       });
@@ -3363,7 +3422,7 @@
     }
     function currentTab() {
       var h = (location.hash || '').replace('#', '');
-      return TABS.indexOf(h) !== -1 ? h : 'add';
+      return TABS.indexOf(h) !== -1 ? h : 'overview';
     }
     function showTab(name) {
       TABS.forEach(function (t) {
@@ -3373,6 +3432,8 @@
       document.querySelectorAll('[data-dashtab]').forEach(function (b) {
         b.classList.toggle('active', b.getAttribute('data-dashtab') === name);
       });
+      if (name === 'overview' && window.rosaLoadOverview) window.rosaLoadOverview();
+      if (name === 'collections' && window.rosaActivateCat) window.rosaActivateCat();
       if (name === 'edit' && window.rosaEditId && window.rosaLoadEdit) window.rosaLoadEdit();
     }
     document.querySelectorAll('[data-dashtab]').forEach(function (b) {

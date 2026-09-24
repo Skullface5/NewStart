@@ -262,6 +262,45 @@
             };
             window.rosaReloadCat = function () { if (typeof loadProducts === 'function') loadProducts(); };
 
+            // ── Overview tab (fused from existed.html) ──
+            async function loadOverviewStats() {
+                try {
+                    const { data } = await supabase.from('products').select('category');
+                    const counts = {};
+                    (data || []).forEach(p => { counts[p.category] = (counts[p.category] || 0) + 1; });
+                    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v || 0; };
+                    ['man', 'women', 'unisexe', 'kids', 'voiture', 'ambiance', 'musc', 'accessoires', 'inspires'].forEach(c => set('ovc-' + c, counts[c]));
+                    set('ovManCount', counts['man']); set('ovWomenCount', counts['women']);
+                    set('ovUnisexCount', counts['unisexe']); set('ovKidsCount', counts['kids']);
+                    set('ovTotal', (data || []).length);
+                } catch (e) { console.error('overview stats:', e); }
+                try {
+                    const { data: s } = await supabase.auth.getSession();
+                    const emailEl = document.getElementById('loggedInAsOv');
+                    if (emailEl && s && s.session && s.session.user) emailEl.textContent = s.session.user.email;
+                } catch (e) {}
+            }
+            window.rosaLoadOverview = function () { loadOverviewStats(); };
+            document.getElementById('ovRefresh')?.addEventListener('click', loadOverviewStats);
+
+            // category cards in overview → open that category in Collections
+            function setCat(slug, thenLoad) {
+                if (!CATS[slug] || slug === CAT) { if (thenLoad) loadProducts(); return; }
+                CAT = slug;
+                Object.keys(translations).forEach(l => { if (translations[l]) translations[l].catName = (CATS[slug] && CATS[slug][l]) || CATS[slug].fr; });
+                const title = document.querySelector('#dash-collections h1 span[data-translate="catName"]');
+                if (title) title.textContent = CATS[slug][currentLanguage] || CATS[slug].fr;
+                const icon = document.getElementById('catIcon');
+                if (icon) icon.className = 'fas ' + CATS[slug].icon;
+                if (thenLoad) loadProducts();
+            }
+            document.querySelectorAll('.ov-card[data-cat]').forEach(c => {
+                c.addEventListener('click', function () { window._rosaPendingCat = this.getAttribute('data-cat'); });
+            });
+            window.rosaActivateCat = function () {
+                if (window._rosaPendingCat) { const c = window._rosaPendingCat; window._rosaPendingCat = null; setCat(c, true); }
+            };
+
             window.deleteProduct = async function (productId) {
                 if (!confirm(translations[currentLanguage].deleteConfirm)) return;
 
