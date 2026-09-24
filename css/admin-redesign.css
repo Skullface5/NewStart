@@ -1,0 +1,127 @@
+/* ═══════════════════════════════════════════════════════
+   Rosa Admin — mobile-first redesign layer
+   Slim topbar · thumb-swipe tabs · card forms · card lists
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Topbar ── */
+.admin-topbar{position:sticky;top:0;z-index:120;background:rgba(247,240,230,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--border-light, #E0D4C0);padding:calc(.55rem + env(safe-area-inset-top)) 0 .55rem;}
+.topbar-inner{max-width:1180px;margin:0 auto;padding:0 14px;display:flex;align-items:center;justify-content:space-between;gap:.8rem;}
+.logo--admin{display:flex;align-items:center;gap:.55rem;text-decoration:none;color:var(--charcoal,#3A3228);}
+.logo--admin img{border-radius:50%;box-shadow:0 2px 8px rgba(90,70,50,.18);}
+.logo--admin span{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;letter-spacing:.04em;}
+.adm-chip{display:none;}
+.lang-seg{display:flex;gap:2px;background:var(--cream-dark,#EDE4D6);border:1px solid var(--border-light,#E0D4C0);border-radius:999px;padding:3px;}
+.lang-seg .lang-option{display:inline-block;width:auto;text-align:center;border:none;background:none;font-family:'Jost',sans-serif;font-size:.68rem;font-weight:600;letter-spacing:.05em;color:var(--text-mid,#6B5E4E);padding:.3rem .6rem;border-radius:999px;cursor:pointer;transition:background-color .2s,color .2s;}
+.lang-seg .lang-option:hover{color:var(--gold-dark,#8A7150);}
+.lang-seg .lang-option.active{background:var(--gold-dark,#8A7150);color:#FEFCF8;}
+.admin-topbar .right-group{display:flex;align-items:center;gap:.6rem;}
+.site-link{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--gold-dark,#8A7150);color:#FEFCF8;text-decoration:none;font-size:.8rem;box-shadow:0 2px 8px rgba(90,70,50,.2);transition:transform .15s;}
+.site-link:hover{transform:scale(1.06);}
+.admin-topbar .theme-toggle{width:34px;height:34px;border-radius:50%;background:var(--cream-dark,#EDE4D6);}
+
+/* ── Tabs: mobile = bottom bar, desktop = pill row ── */
+.dash-tabs{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:115;display:flex;justify-content:space-around;gap:0;background:rgba(254,252,248,.97);backdrop-filter:blur(10px);border-top:1px solid var(--border-light,#E0D4C0);border-bottom:none;padding:.3rem .3rem calc(.3rem + env(safe-area-inset-bottom));}
+.dash-tab{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:.15rem;border:none !important;background:none;border-radius:12px;padding:.45rem .2rem;font-size:.55rem !important;letter-spacing:.04em !important;color:var(--text-mid,#6B5E4E);min-height:44px;}
+.dash-tab i{font-size:1.05rem;}
+.dash-tab.active{background:transparent !important;color:var(--gold-dark,#8A7150) !important;font-weight:600;}
+.dash-tab.active i{transform:scale(1.08);color:var(--gold-dark,#8A7150);}
+.dash-tab i{transition:transform .18s;}
+main{padding-bottom:4.6rem;}
+
+/* ── Sections / wrappers ── */
+.admin-wrapper,.edit-wrapper{max-width:1180px;margin:0 auto;padding:1.1rem 14px 2rem;}
+.admin-header{gap:.7rem;margin-bottom:1.1rem;}
+.admin-header h1{font-size:clamp(1.25rem,4.5vw,1.7rem);}
+.page-header h1{font-size:clamp(1.15rem,4.2vw,1.5rem);}
+.logged-in-as{font-size:.66rem;}
+
+/* ── Forms ── */
+.form-panel{padding:1.15rem 1.05rem;border-radius:18px;}
+.form-panel h2{font-size:1.05rem;margin-bottom:1rem;}
+.input-group{margin-bottom:1rem;}
+.input-group label{font-size:.64rem;letter-spacing:.1em;margin-bottom:.4rem;}
+.input-group input,.input-group textarea{font-size:16px;padding:.72rem .85rem;border-radius:12px;}  /* 16px = no iOS zoom */
+.btn-primary{width:100%;padding:.95rem 1rem;border-radius:14px;font-size:.8rem;letter-spacing:.1em;}
+.button-group{display:flex;flex-direction:column-reverse;gap:.6rem;}
+.button-group .btn-primary,.button-group .btn-secondary{flex:1 1 auto;text-align:center;}
+.btn-secondary{padding:.78rem .9rem;border-radius:12px;font-size:.68rem;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;}
+.season-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;}
+.season-option,.category-option,.e-category-option{min-height:46px;display:flex;align-items:center;justify-content:center;gap:.35rem;padding:.55rem .3rem;font-size:.62rem;border-radius:12px;}
+.category-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem;}
+.season-option i,.category-option i,.e-category-option i{font-size:.85rem;}
+.image-preview-grid{grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:.55rem;}
+.add-more-btn{padding:.85rem 1rem;border-radius:12px;font-size:.72rem;}
+
+/* ── Collections: table → cards on phones ── */
+@media (max-width:720px){
+  .products-table{display:block;background:none;border:none;box-shadow:none;}
+  .products-table thead{display:none;}
+  .products-table tbody{display:flex;flex-direction:column;gap:.75rem;}
+  .products-table tr{display:grid;grid-template-columns:64px 1fr;grid-auto-rows:min-content;column-gap:.75rem;row-gap:.15rem;background:var(--white,#FEFCF8);border:1px solid var(--border-light,#E0D4C0);border-radius:16px;padding:.85rem;box-shadow:0 3px 14px rgba(90,70,50,.06);}
+  .products-table td{border:none;padding:.12rem 0;display:block;}
+  .products-table td:first-child{grid-row:1 / span 2;}
+  .products-table td:nth-child(2) strong{font-size:.95rem;}
+  .products-table td{font-size:.76rem;color:var(--text-mid,#6B5E4E);}
+  .products-table td:last-child{grid-column:1 / -1;margin-top:.5rem;}
+  .product-image,.product-image-placeholder{width:64px;height:64px;border-radius:12px;}
+  .action-buttons{display:flex;gap:.55rem;}
+  .action-buttons .edit-btn,.action-buttons .delete-btn{flex:1;min-height:42px;border-radius:12px;font-size:.7rem;}
+}
+
+/* ── Search / toolbar rows ── */
+.search-box input{font-size:16px;border-radius:12px;}
+.action-bar{flex-direction:column;align-items:stretch;}
+.action-bar .add-product-btn{align-self:stretch;text-align:center;}
+.toolbar{display:flex;flex-direction:column;gap:.65rem;}
+.toolbar .search-box{width:100%;}
+.group-toggle{display:flex;overflow-x:auto;gap:.4rem;scrollbar-width:none;padding-bottom:.1rem;}
+.group-toggle::-webkit-scrollbar{display:none;}
+.g-btn{flex:0 0 auto;min-height:38px;border-radius:999px;font-size:.64rem;}
+.refresh-btn{min-height:42px;border-radius:12px;width:100%;}
+.status-tabs{display:flex;overflow-x:auto;gap:.45rem;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:.2rem;margin-bottom:1.1rem;}
+.status-tabs::-webkit-scrollbar{display:none;}
+.s-tab{flex:0 0 auto;min-height:40px;border-radius:999px;font-size:.66rem;white-space:nowrap;}
+
+/* ── Orders stat grid ── */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.65rem;}
+.stat-card{padding:.9rem .7rem;border-radius:14px;}
+.stat-value{font-size:1.25rem;}
+
+/* ── Banner / collection manager cards ── */
+.hero-admin-card{padding:1rem .95rem;border-radius:16px;}
+.hp-btn{min-height:44px;border-radius:12px;}
+.g-thumb{width:64px;height:64px;}
+
+/* ── Overview polish ── */
+.ov-total-row{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;}
+.ov-total-row .ov-tile:first-child{grid-column:1 / -1;}
+@media (min-width:720px){
+  /* desktop: restore classic top pill tabs, roomier grids */
+  .dash-tabs{position:sticky;top:calc(52px + env(safe-area-inset-top));bottom:auto;justify-content:center;border-top:none;border-bottom:1px solid var(--border-light,#E0D4C0);padding:10px 12px;}
+  .dash-tab{flex:0 0 auto;flex-direction:row;gap:.45rem;border:1px solid var(--border-medium,#D8CCB8) !important;border-radius:999px;padding:9px 20px;font-size:.72rem !important;letter-spacing:.14em !important;}
+  .dash-tab.active{background:var(--gold-dark,#8A7150);color:#FEFCF8;}
+  main{padding-bottom:2rem;}
+  .stats-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));}
+  .ov-total-row{grid-template-columns:repeat(5,1fr);}
+  .ov-total-row .ov-tile:first-child{grid-column:auto;}
+  .adm-chip{display:inline-flex;align-items:center;gap:.4rem;background:var(--gold-dark,#8A7150);color:#FEFCF8;border-radius:999px;padding:.35rem .8rem;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;}
+  .site-link{width:36px;height:36px;}
+  .button-group{flex-direction:row;}
+  .toolbar{flex-direction:row;flex-wrap:wrap;align-items:center;}
+  .toolbar .search-box{flex:1 1 260px;}
+  .refresh-btn{width:auto;}
+}
+
+/* ── Footnote ── */
+.admin-footnote{text-align:center;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-mid,#6B5E4E);opacity:.7;padding:1.2rem 1rem calc(1.4rem + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:center;gap:.5rem;}
+.admin-footnote i{color:var(--gold);}
+#sessionEmailChip{text-transform:none;letter-spacing:.02em;}
+
+/* ── Gate logout chip: keep above the mobile bottom tab bar ── */
+#rosaAdminChip{bottom:calc(82px + env(safe-area-inset-bottom)) !important;}
+@media (min-width:720px){#rosaAdminChip{bottom:14px !important;}}
+
+/* ── Dark-mode touch-ups ── */
+body.dark .admin-topbar{background:rgba(26,22,17,.94);}
+body.dark .dash-tabs{background:rgba(30,25,19,.97);}
+body.dark .topbar-inner .lang-seg{background:#2A241C;}

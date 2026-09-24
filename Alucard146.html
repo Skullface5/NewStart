@@ -2863,52 +2863,39 @@
 .ov-tile span{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mid);}
 @media (max-width:520px){.ov-grid{grid-template-columns:repeat(2,1fr);gap:.65rem;}.ov-card{min-height:92px;}}
   </style>
+  <link rel="stylesheet" href="css/admin-redesign.css?v=1">
 </head>
 <body>
-  <div id="menuOverlay" class="menu-overlay"></div>
   <div id="adminToast" class="admin-toast"></div>
   <div id="toast" class="admin-toast"></div>
-  <header>
-    <div class="header-flex">
-      <a href="index.html" class="logo"><img src="is.webp" width="48" height="48" alt="Rosa">
-        <h1>Rosa Fragrances</h1>
+  <header class="admin-topbar">
+    <div class="topbar-inner">
+      <a href="index.html" class="logo logo--admin"><img src="is.webp" width="34" height="34" alt="Rosa">
+        <span>Admin</span>
       </a>
       <div class="right-group">
-        <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon"
-            style="display:none;"></i></div>
-        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
-      </div>
-      <div class="nav-links" id="navLinks">
-        <a href="index.html" data-translate="home">ACCUEIL</a>
-        <a href="man.html" data-translate="men">HOMME</a>
-        <a href="women.html" data-translate="women">FEMME</a>
-        <a href="unisexe.html" data-translate="unisex">UNISEXE</a>
-        <a href="kids.html" data-translate="kids">ENFANTS</a>
-        <a href="Alucard146.html" data-translate="existing">PARFUMS EXISTANTS</a>
-        <div class="lang-menu" id="langMenu">
-          <button class="lang-current" id="langCurrentBtn"><span id="currentLangText">FRANÇAIS</span><i
-              class="fas fa-chevron-down"></i></button>
-          <div class="lang-options">
-            <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
-            <button class="lang-option" data-lang="en">🇬🇧 English</button>
-            <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
-          </div>
+        <span class="adm-chip"><i class="fas fa-crown"></i> Rosa</span>
+        <div class="lang-seg">
+          <span id="currentLangText" hidden>FRANÇAIS</span>
+          <button class="lang-option" data-lang="fr">FR</button>
+          <button class="lang-option" data-lang="en">EN</button>
+          <button class="lang-option" data-lang="ar">ع</button>
         </div>
-        <a href="login146.html" id="authLink" data-translate="login">Se connecter</a>
-        <a href="profile.html" id="profileLink" style="display:none;" data-translate="profile">Mon Profil</a>
-        <a href="Alucard146.html" id="adminLink" style="display:none;" class="admin-nav-link"><i class="fas fa-crown"></i>
-          Admin</a>
-                <a href="Alucard146.html#orders" id="ordersLink" style="display:none;" class="admin-nav-link"><i class="fas fa-truck"></i> Commandes</a>
+        <div class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i><i class="fas fa-moon" style="display:none;"></i></div>
+        <a class="site-link" href="index.html" title="Voir le site"><i class="fas fa-arrow-left"></i></a>
       </div>
     </div>
   </header>
 
+  <!-- hidden auth-status dummies: page scripts toggle these ids; kept out of view -->
+  <span id="authLink" style="display:none"></span><span id="profileLink" style="display:none"></span><span id="adminLink" style="display:none"></span><span id="ordersLink" style="display:none"></span>
+
   <nav class="dash-tabs" role="tablist" aria-label="Administration">
-    <button class="dash-tab active" data-dashtab="overview" data-dtab="dtabOv">Aperçu</button>
-    <button class="dash-tab" data-dashtab="add" data-dtab="dtabAdd">Ajouter</button>
-    <button class="dash-tab" data-dashtab="collections" data-dtab="dtabCat">Collections</button>
-    <button class="dash-tab" data-dashtab="orders" data-dtab="dtabOrders">Commandes</button>
-    <button class="dash-tab" data-dashtab="edit" data-dtab="dtabEdit">Modifier</button>
+    <button class="dash-tab active" data-dashtab="overview"><i class="fas fa-gauge-simple-high"></i><span data-dtab="dtabOv">Aperçu</span></button>
+    <button class="dash-tab" data-dashtab="add"><i class="fas fa-plus"></i><span data-dtab="dtabAdd">Ajouter</span></button>
+    <button class="dash-tab" data-dashtab="collections"><i class="fas fa-boxes-stacked"></i><span data-dtab="dtabCat">Collections</span></button>
+    <button class="dash-tab" data-dashtab="orders"><i class="fas fa-truck"></i><span data-dtab="dtabOrders">Commandes</span></button>
+    <button class="dash-tab" data-dashtab="edit"><i class="fas fa-pen"></i><span data-dtab="dtabEdit">Modifier</span></button>
   </nav>
 
   <main>
@@ -3048,19 +3035,11 @@
           <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="storageInfo">Les images sont
               stockées en Base64</span></div>
         </div>
-
-        <div class="nav-panel">
-          <a href="Alucard146.html" class="btn-secondary"><i class="fas fa-box-open"></i> <span
-              data-translate="viewExisting">Voir les parfums existants</span></a>
-        </div>
       </div>
-    </div>
-
     </section>
     <section class="dash-section" id="dash-collections" hidden>
         <div class="admin-wrapper">
-            <a href="Alucard146.html" class="back-link"><i class="fas fa-arrow-left"></i> <span
-                    data-translate="back">Retour aux catégories</span></a>
+            
 
             <div class="page-header">
                 <h1><i class="fas fa-female" id="catIcon"></i> <span data-translate="catName">Parfums Femme</span></h1>
@@ -3146,7 +3125,7 @@
     <p style="font-size:0.8rem;" data-translate="checking">Vérification des accès...</p>
   </div>
 
-  <main>
+  <div class="orders-main">
     <div id="mainContent" class="admin-wrapper" style="display:none;">
 
       <div class="page-header">
@@ -3218,6 +3197,7 @@
       </div>
 
       <div id="ordersOut"></div>
+    </div>
     </div>
     </section>
     <section class="dash-section" id="dash-edit" hidden>
@@ -3336,48 +3316,12 @@
         </div>
     </section>
   </main>
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <img class="footer-logo-img" src="is.webp" alt="Rosa">
-          <h3>ROSA FRAGRANCES</h3>
-          <p data-translate="footerDescription">Parfumerie d'exception depuis 1985. L'art de la parfumerie orientale
-            réinventé pour les connaisseurs exigeants.</p>
-        </div>
-        <div class="footer-col">
-          <h4 data-translate="footerPerfumesTitle">Parfums</h4>
-          <ul>
-            <li><a href="man.html" data-translate="footerMen">Homme</a></li>
-            <li><a href="women.html" data-translate="footerWomen">Femme</a></li>
-            <li><a href="unisexe.html" data-translate="footerUnisex">Unisexe</a></li>
-            <li><a href="kids.html" data-translate="footerKids">Enfants</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4 data-translate="footerContactTitle">Contact</h4>
-          <ul class="contact-list">
-            <li><span class="ic">📍</span> <span data-translate="footerAddress">Tunis, Tunisie</span></li>
-            <li><span class="ic">📞</span> <span data-translate="footerPhone">+216 96 163 366</span></li>
-            <li><span class="ic">✉️</span> <span data-translate="footerEmail">contact@rosafragrances.tn</span></li>
-            <div class="socials">
-              <a href="https://www.facebook.com/people/Rosa-Fragrances/61577895125380/" class="social"
-                target="_blank"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://wa.me/21696163366" class="social" target="_blank"><i class="fab fa-whatsapp"></i></a>
-              <a href="https://www.instagram.com/rosa_fragrances" class="social" target="_blank"><i class="fab fa-instagram"></i></a>
-              <a href="https://www.tiktok.com/@rosa.fragrances6?_r=1&_t=ZS-98OOz406eSF" class="social" target="_blank"><i class="fab fa-tiktok"></i></a>
-            </div>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p><span data-translate="footerCopyright">© 2026 Rosa Fragrances. Tous droits réservés.</span></p>
-      </div>
-    </div>
+  <div class="admin-footnote"><i class="fas fa-lock"></i> Rosa Fragrances · Administration <span id="sessionEmailChip"></span></div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/admin-gate.js?v=3"></script>
   <script src="js/app-adminadd.js?v=4"></script>
-  <script src="js/app-admincat.js?v=11"></script>
+  <script src="js/app-admincat.js?v=12"></script>
   <script src="js/app-adminorders.js?v=2"></script>
   <script src="js/app-productedit.js?v=2"></script>
 
@@ -3419,6 +3363,7 @@
       var names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
       var s = document.getElementById('currentLangText');
       if (s) s.textContent = names[l];
+      document.querySelectorAll('.lang-option').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-lang') === l); });
     }
     function currentTab() {
       var h = (location.hash || '').replace('#', '');

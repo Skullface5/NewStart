@@ -277,7 +277,10 @@
                 try {
                     const { data: s } = await supabase.auth.getSession();
                     const emailEl = document.getElementById('loggedInAsOv');
-                    if (emailEl && s && s.session && s.session.user) emailEl.textContent = s.session.user.email;
+                    const chipEl = document.getElementById('sessionEmailChip');
+                    const em = s && s.session && s.session.user ? '· ' + s.session.user.email : '';
+                    if (emailEl && em) emailEl.textContent = em.replace('· ', '');
+                    if (chipEl) chipEl.textContent = em;
                 } catch (e) {}
             }
             window.rosaLoadOverview = function () { loadOverviewStats(); };
