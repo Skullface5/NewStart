@@ -21,8 +21,9 @@
 
 
   var CSS = [
-    '.promo-card-inner img.promo-slide { opacity:0; transition:opacity 1.1s ease; }',
-    '.promo-card-inner img.promo-slide.on { opacity:1; }'
+    '.promo-card-inner img.promo-slide { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 35%; opacity:0; transform:translateX(100%); transition:transform 1.1s ease, opacity 1.1s ease; }',
+    '.promo-card-inner img.promo-slide.on { opacity:1; transform:translateX(0); }',
+    '.promo-card-inner img.promo-slide.out { opacity:0; transform:translateX(-100%); }'
   ].join('\n');
 
   function start() {
@@ -52,8 +53,8 @@
       if (!urls.length) return;                       // keep the static template image
       var first = host.querySelector('img');
       if (urls.length === 1) {
-        if (first) { first.className = 'promo-bg-image'; first.style.display = ''; first.src = urls[0]; }
-        else host.insertBefore(mkSlide(urls[0], true), host.firstChild);
+        if (first) { first.className = 'promo-slide on'; first.style.display = ''; first.src = urls[0]; }
+        else host.insertBefore(mk(urls[0], true), host.firstChild);
         return;
       }
       var mk = function (src, on) {
@@ -62,12 +63,12 @@
         im.alt = '';
         im.loading = 'lazy';
         im.decoding = 'async';
-        im.className = 'promo-bg-image promo-slide' + (on ? ' on' : '');
+        im.className = 'promo-slide' + (on ? ' on' : '');
         return im;
       };
       function mkSlide(s, on) { return mk(s, on); }
       if (first) {
-        first.className = 'promo-bg-image promo-slide on';
+        first.className = 'promo-slide on';
         first.style.display = '';
         if (first.getAttribute('src') !== urls[0]) first.src = urls[0];
       } else {
@@ -93,9 +94,12 @@
         if (document.hidden) return;
         var all = initial ? list : Array.prototype.slice.call(host.querySelectorAll(sel));
         if (all.length < 2) return;
-        all[i].classList.remove('on');
+        var cur = all[i], nxt = all[(i + 1) % all.length];
+        cur.classList.remove('on');
+        cur.classList.add('out');
+        nxt.classList.add('on');
+        setTimeout(function () { cur.classList.remove('out'); }, 1300);
         i = (i + 1) % all.length;
-        all[i].classList.add('on');
       }, 5000);
     }
   }
