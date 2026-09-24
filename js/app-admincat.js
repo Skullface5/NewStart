@@ -398,6 +398,15 @@
                 box.innerHTML = html;
                 const badge = document.getElementById('bannerCountBadge');
                 if (badge) badge.textContent = (bannerState.list.length + bannerState.newFiles.length) + '/' + BANNER_MAX;
+                // STE parity: pulse + scroll the save button while images are staged unsaved
+                const saveBtn = document.getElementById('btnSaveBanner');
+                if (saveBtn && bannerState.newFiles.length) {
+                    saveBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    saveBtn.classList.remove('hp-btn--pulse'); void saveBtn.offsetWidth;
+                    saveBtn.classList.add('hp-btn--pulse');
+                } else if (saveBtn) {
+                    saveBtn.classList.remove('hp-btn--pulse');
+                }
             }
 
             async function loadBannerSettings() {
@@ -408,6 +417,9 @@
                     (data || []).forEach(row => { settings[row.key] = row.value; });
                     let list = Array.isArray(settings.banner_images) ? settings.banner_images
                         .filter(u => typeof u === 'string' && u).slice(0, BANNER_MAX) : [];
+                    if (!list.length && typeof settings.banner_image === 'string' && settings.banner_image) {
+                        list = [settings.banner_image]; // STE parity: legacy single-image key
+                    }
                     bannerState.list = list;
                     bannerState.newFiles = [];
                     const apEl = document.getElementById('bannerAutoplay');
