@@ -1,6 +1,7 @@
 /* Rosa — promo banner diaporama injector (one <script defer src="js/app-hero.js?v=N"> per page).
-   Reads settings keys banner_images / banner_autoplay (the index promo-card slideshow) —
-   STE Mondial parity: cross-fade every 5s, paused on hidden tabs. The home hero is untouched.
+   Reads settings keys banner_images / banner_autoplay (the index promo-card slideshow).
+   banner_images items: {src, type:'image'|'video', link?} — legacy plain URL strings still work.
+   STE Mondial parity: slide in/out every 5s, paused on hidden tabs. The home hero is untouched.
    Anon key from window.__rosaSupabase (exported by page scripts) or data-anon-key on the tag.
    Falls back silently to the gradient hero / static promo image. */
 (function () {
@@ -18,12 +19,13 @@
     return SUPABASE_URL + '/storage/v1/object/public/product-images/' + u;
   }
 
-
+  function isVid(u) { return /\.(mp4|webm|mov|m4v)(\?|$)/i.test(String(u || '')); }
 
   var CSS = [
-    '.promo-card-inner img.promo-slide { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 35%; opacity:0; transform:translateX(100%); transition:transform 1.1s ease, opacity 1.1s ease; }',
-    '.promo-card-inner img.promo-slide.on { opacity:1; transform:translateX(0); }',
-    '.promo-card-inner img.promo-slide.out { opacity:0; transform:translateX(-100%); }'
+    '.promo-card-inner .promo-slide { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 35%; opacity:0; transform:translateX(100%); transition:transform 1.1s ease, opacity 1.1s ease; pointer-events:none; z-index:0; }',
+    '.promo-card-inner .promo-slide.on { opacity:1; transform:translateX(0); pointer-events:auto; }',
+    '.promo-card-inner .promo-slide.out { opacity:0; transform:translateX(-100%); }',
+    '.promo-card-inner .promo-slide.has-link { cursor:pointer; }'
   ].join('\n');
 
   function start() {
@@ -42,65 +44,103 @@
       var rows = (!res.error && Array.isArray(res.data)) ? res.data : [];
       var map = {};
       rows.forEach(function (r) { map[r.key] = r.value; });
-      buildBanner(promo, map);
+      try { buildBanner(promo, map); } catch (e) { /* keep static template image */ }
     });
 
-
-    // Promo banner diaporama — port of STE buildBanner: cross-fade slides every 5s
+    // Promo banner diaporama — slide motion; supports images + videos + optional per-slide links
     function buildBanner(host, map) {
-      var urls = (Array.isArray(map.banner_images) ? map.banner_images : [])
-        .map(absUrl).filter(Boolean);
-      if (!urls.length) return;                       // keep the static template image
-      var first = host.querySelector('img');
-      if (urls.length === 1) {
-        if (first) { first.className = 'promo-slide on'; first.style.display = ''; first.src = urls[0]; }
-        else host.insertBefore(mk(urls[0], true), host.firstChild);
+      var raw = Array.isArray(map.banner_images) ? map.banner_images : [];
+      if (!raw.length && typeof map.banner_image === 'string' && map.banner_image) raw = [map.banner_image];
+      var items = [];
+      raw.forEach(function (it) {
+        if (!it) return;
+        if (typeof it === 'string') { items.push({ src: absUrl(it), type: isVid(it) ? 'video' : 'image', link: '' }); return; }
+        var s = absUrl(it.src || '');
+        if (!s) return;
+        items.push({ src: s, type: (it.type === 'video' || isVid(s)) ? 'video' : 'image', link: String(it.link || '') });
+      });
+      items = items.filter(function (x) { return x.src; }).slice(0, 6);
+      if (!items.length) return;                        // keep the static template image
+
+      var firstImg = host.querySelector('img');
+
+      function mkNode(it, on) {
+        var n;
+        if (it.type === 'video') {
+          n = document.createElement('video');
+          n.src = it.src; n.muted = true; n.loop = true; n.playsInline = true;
+          n.setAttribute('muted', ''); n.setAttribute('loop', '');
+          n.setAttribute('playsinline', ''); n.setAttribute('webkit-playsinline', '');
+          n.preload = 'auto'; n.setAttribute('preload', 'auto');
+        } else {
+          n = document.createElement('img');
+          n.src = it.src; n.alt = ''; n.loading = 'lazy'; n.decoding = 'async';
+        }
+        n.className = 'promo-slide' + (on ? ' on' : '') + (it.link ? ' has-link' : '');
+        if (it.link) n.setAttribute('data-blink', it.link);
+        return n;
+      }
+
+      // single image: reuse the template <img> in place (no clone, no flash)
+      if (items.length === 1 && items[0].type === 'image') {
+        if (firstImg) {
+          firstImg.className = 'promo-slide on' + (items[0].link ? ' has-link' : '');
+          firstImg.style.display = '';
+          if (firstImg.getAttribute('src') !== items[0].src) firstImg.src = items[0].src;
+          if (items[0].link) firstImg.setAttribute('data-blink', items[0].link);
+        } else {
+          host.insertBefore(mkNode(items[0], true), host.firstChild);
+        }
+        bindClick(host);
         return;
       }
-      var mk = function (src, on) {
-        var im = document.createElement('img');
-        im.src = src;
-        im.alt = '';
-        im.loading = 'lazy';
-        im.decoding = 'async';
-        im.className = 'promo-slide' + (on ? ' on' : '');
-        return im;
-      };
-      function mkSlide(s, on) { return mk(s, on); }
-      if (first) {
-        first.className = 'promo-slide on';
-        first.style.display = '';
-        if (first.getAttribute('src') !== urls[0]) first.src = urls[0];
-      } else {
-        first = mk(urls[0], true);
-        host.insertBefore(first, host.firstChild);
-      }
-      Array.prototype.slice.call(host.querySelectorAll('img.promo-slide')).forEach(function (im) {
-        if (im !== first) im.remove();
-      });
+
+      // multiple slides (or a single video): rebuild the slide layer
+      Array.prototype.slice.call(host.querySelectorAll('.promo-slide')).forEach(function (n) { n.remove(); });
+      if (firstImg) firstImg.style.display = 'none';    // keep hidden as ultimate fallback
       var anchor = host.querySelector('.promo-overlay-gradient');
-      for (var s = 1; s < urls.length; s++) host.insertBefore(mk(urls[s], false), anchor || null);
-      rotate(host, 'img.promo-slide', null, map.banner_autoplay, 1100);
+      items.forEach(function (it, i) {
+        host.insertBefore(mkNode(it, i === 0), anchor || null);
+      });
+      bindClick(host);
+      if (typeof host.__rotateCleanup === 'function') host.__rotateCleanup();
+      host.__rotateCleanup = rotate(host, map.banner_autoplay, items.length);
     }
 
-    // shared rotation clock (STE rules: 5s, skip when tab hidden, respect reduce-motion + toggle)
-    function rotate(host, sel, initial, autoplayFlag, fadeMs) {
-      if (autoplayFlag === false) return;
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      var list = initial || Array.prototype.slice.call(host.querySelectorAll(sel));
-      if (list.length < 2) return;
+    function bindClick(host) {
+      if (host.__blinkBound) return;
+      host.__blinkBound = true;
+      host.addEventListener('click', function (e) {
+        var t = e.target;
+        var el = (t && t.closest) ? t.closest('[data-blink]') : null;
+        if (el) { e.preventDefault(); window.location.href = el.getAttribute('data-blink'); }
+      });
+    }
+
+    // rotation clock (STE rules: 5s, skip when tab hidden, respect reduce-motion + toggle)
+    function rotate(host, autoplayFlag, count) {
+      if (autoplayFlag === false) return null;
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null;
+      if (count < 2) return null;
       var i = 0;
-      setInterval(function () {
+      var timer = setInterval(function () {
         if (document.hidden) return;
-        var all = initial ? list : Array.prototype.slice.call(host.querySelectorAll(sel));
+        var all = Array.prototype.slice.call(host.querySelectorAll('.promo-slide'));
         if (all.length < 2) return;
-        var cur = all[i], nxt = all[(i + 1) % all.length];
+        var cur = all[i % all.length], nxt = all[(i + 1) % all.length];
         cur.classList.remove('on');
         cur.classList.add('out');
         nxt.classList.add('on');
+        if (cur.tagName === 'VIDEO' && !cur.paused) { try { cur.pause(); } catch (e) {} }
+        if (nxt.tagName === 'VIDEO') { try { var pr = nxt.play(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {} }
         setTimeout(function () { cur.classList.remove('out'); }, 1300);
         i = (i + 1) % all.length;
       }, 5000);
+      var first = host.querySelector('.promo-slide.on');
+      if (first && first.tagName === 'VIDEO') {
+        try { var p = first.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+      }
+      return function () { clearInterval(timer); };
     }
   }
 

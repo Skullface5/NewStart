@@ -1704,14 +1704,6 @@
   </header>
 
   <main class="container">
-    <div class="search-section reveal-on-scroll">
-      <div class="search-wrapper">
-        <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Rechercher un parfum..." data-translate="searchPlaceholder" autocomplete="off">
-        <div id="searchDropdown" class="search-dropdown"></div>
-      </div>
-    </div>
-
     <div class="promo-card-section reveal-on-scroll">
       <div class="promo-card-wrapper">
         <div class="promo-card-inner">
@@ -1747,18 +1739,31 @@
       </div>
     </div>
 
+    <div class="search-section reveal-on-scroll">
+      <div class="search-wrapper">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Rechercher un parfum..." data-translate="searchPlaceholder" autocomplete="off">
+        <div id="searchDropdown" class="search-dropdown"></div>
+      </div>
+    </div>
+
     <div class="products-section reveal-on-scroll">
       <div class="products-header">
         <div>
           <p class="section-label" data-translate="collectionLabel">Notre Collection</p>
           <h2 class="section-title" data-translate="collectionTitle">Parfums <em data-translate="exclusive">Exclusifs</em></h2>
         </div>
-        <div class="tabs">
+        <div class="tabs" id="catTabs">
           <button class="tab active" onclick="filterProducts('all')" data-translate="allTab">Tous</button>
           <button class="tab" onclick="filterProducts('man')" data-translate="menTab">Homme</button>
           <button class="tab" onclick="filterProducts('women')" data-translate="womenTab">Femme</button>
           <button class="tab" onclick="filterProducts('unisexe')" data-translate="unisexTab">Unisexe</button>
           <button class="tab" onclick="filterProducts('kids')" data-translate="kidsTab">Enfants</button>
+          <button class="tab" onclick="filterProducts('inspires')" data-translate="inspiresTab">Inspires</button>
+          <button class="tab" onclick="filterProducts('voiture')" data-translate="voitureTab">Voiture</button>
+          <button class="tab" onclick="filterProducts('ambiance')" data-translate="ambianceTab">Ambiance</button>
+          <button class="tab" onclick="filterProducts('musc')" data-translate="muscTab">Musc</button>
+          <button class="tab" onclick="filterProducts('accessoires')" data-translate="accessoiresTab">Accessoires</button>
         </div>
       </div>
     </div>
@@ -1811,8 +1816,8 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/app-collections.js?v=2" data-anon-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ"></script>
-<script defer src="js/app-hero.js?v=6" data-anon-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ"></script>
-<script src="js/app-index.js?v=5"></script>
+<script defer src="js/app-hero.js?v=7" data-anon-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ"></script>
+<script src="js/app-index.js?v=6"></script>
     <script src="js/rosa-prefill.js"></script>
 </body>
 
