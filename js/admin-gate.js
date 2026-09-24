@@ -100,16 +100,7 @@
   function silentUnlock(email) {
     document.documentElement.classList.remove('rosa-locked');
     var g = document.getElementById('rosaAdminGate'); if (g) g.remove();
-    var chip = document.createElement('div');
-    chip.id = 'rosaAdminChip';
-    chip.innerHTML = '<span>⚡ ' + email + '</span>';
-    var out = document.createElement('button');
-    out.textContent = t.logout;
-    out.addEventListener('click', function () {
-      window.supabase.createClient(URL, KEY).auth.signOut().finally(function () { location.reload(); });
-    });
-    chip.appendChild(out);
-    document.body.appendChild(chip);
+    var old = document.getElementById('rosaAdminChip'); if (old) old.remove();
   }
 
   function start() {

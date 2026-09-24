@@ -45,9 +45,8 @@ main{padding-bottom:4.6rem;}
 .button-group{display:flex;flex-direction:column-reverse;gap:.6rem;}
 .button-group .btn-primary,.button-group .btn-secondary{flex:1 1 auto;text-align:center;}
 .btn-secondary{padding:.78rem .9rem;border-radius:12px;font-size:.68rem;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;}
-.season-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;}
-.season-option,.category-option,.e-category-option{min-height:46px;display:flex;align-items:center;justify-content:center;gap:.35rem;padding:.55rem .3rem;font-size:.62rem;border-radius:12px;}
-.category-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem;}
+.season-selector,.category-selector{display:flex;flex-wrap:wrap;gap:.5rem;}
+.season-option,.category-option,.e-category-option{min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:.35rem;padding:.55rem .8rem;font-size:.62rem;border-radius:999px;max-width:100%;}
 .season-option i,.category-option i,.e-category-option i{font-size:.85rem;}
 .image-preview-grid{grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:.55rem;}
 .add-more-btn{padding:.85rem 1rem;border-radius:12px;font-size:.72rem;}
@@ -117,9 +116,14 @@ main{padding-bottom:4.6rem;}
 .admin-footnote i{color:var(--gold);}
 #sessionEmailChip{text-transform:none;letter-spacing:.02em;}
 
-/* ── Gate logout chip: keep above the mobile bottom tab bar ── */
-#rosaAdminChip{bottom:calc(82px + env(safe-area-inset-bottom)) !important;}
-@media (min-width:720px){#rosaAdminChip{bottom:14px !important;}}
+/* ── Toast: lift above the mobile bottom tab bar ── */
+.admin-toast{bottom:calc(84px + env(safe-area-inset-bottom)) !important;left:14px !important;right:14px !important;text-align:center;}
+@media (min-width:720px){.admin-toast{bottom:25px !important;left:25px !important;right:auto !important;text-align:left;}}
+
+/* settings logout link */
+.settings-foot{margin-top:1.4rem;text-align:center;}
+.settings-foot a{display:inline-flex;align-items:center;gap:.5rem;color:var(--text-mid,#6B5E4E);border:1px solid var(--border-medium,#D8CCB8);border-radius:999px;padding:.6rem 1.2rem;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;}
+.settings-foot a:hover{color:#b04a4a;border-color:#b04a4a;}
 
 /* ── Dark-mode touch-ups ── */
 body.dark .admin-topbar{background:rgba(26,22,17,.94);}

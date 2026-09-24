@@ -2863,7 +2863,7 @@
 .ov-tile span{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mid);}
 @media (max-width:520px){.ov-grid{grid-template-columns:repeat(2,1fr);gap:.65rem;}.ov-card{min-height:92px;}}
   </style>
-  <link rel="stylesheet" href="css/admin-redesign.css?v=1">
+  <link rel="stylesheet" href="css/admin-redesign.css?v=2">
 </head>
 <body>
   <div id="adminToast" class="admin-toast"></div>
@@ -2895,7 +2895,7 @@
     <button class="dash-tab" data-dashtab="add"><i class="fas fa-plus"></i><span data-dtab="dtabAdd">Ajouter</span></button>
     <button class="dash-tab" data-dashtab="collections"><i class="fas fa-boxes-stacked"></i><span data-dtab="dtabCat">Collections</span></button>
     <button class="dash-tab" data-dashtab="orders"><i class="fas fa-truck"></i><span data-dtab="dtabOrders">Commandes</span></button>
-    <button class="dash-tab" data-dashtab="edit"><i class="fas fa-pen"></i><span data-dtab="dtabEdit">Modifier</span></button>
+    <button class="dash-tab" data-dashtab="settings"><i class="fas fa-sliders"></i><span data-dtab="dtabSettings">Paramètres</span></button>
   </nav>
 
   <main>
@@ -3067,46 +3067,6 @@
             </div>
 
             
-            <!-- Bannière promo (diaporama "Notre sélection") — same controls as STE -->
-            <section class="hero-admin-card" id="bannerAdminCard">
-                <div class="hero-admin-head">
-                    <h2 class="hero-admin-title"><i class="fas fa-photo-film"></i> <span
-                            data-translate="bannerTitle">Images Bannière Promo</span></h2>
-                    <span class="hero-admin-count"><span id="bannerCountBadge">0/6</span></span>
-                </div>
-                <p class="hero-admin-help" data-translate="bannerHelp">Jusqu'à 6 images de la bannière « promotion »
-                    de l'accueil. Plusieurs images = diaporama automatique.</p>
-                <div class="g-strip" id="bannerGallery"></div>
-                <label class="toggle hero-autoplay-toggle"><input type="checkbox" id="bannerAutoplay" checked><span
-                        class="toggle-track"></span><span class="toggle-label"
-                    data-translate="bannerAutoplay">Défilement automatique</span></label>
-                <input type="file" id="bannerFileInput" accept="image/jpeg,image/png,image/webp,image/avif" multiple
-                    hidden>
-                <div class="hero-admin-msg" id="bannerMsg"></div>
-                <div class="hero-admin-actions">
-                    <button type="button" class="hp-btn hp-btn--gold" id="btnSaveBanner"
-                        data-translate="bannerSave">Enregistrer la bannière</button>
-                    <span class="hero-saved-badge" id="bannerSavedBadge" hidden><i class="fas fa-check"></i> <span
-                            data-translate="bannerSavedBadge">Enregistré</span></span>
-                </div>
-            </section>
-
-            <!-- Menu "Notre Collection" manager (shared site setting: settings.collections) -->
-            <section class="hero-admin-card" id="collAdminCard">
-                <div class="hero-admin-head">
-                    <h2 class="hero-admin-title"><i class="fas fa-list-ul"></i> <span
-                            data-translate="collTitle">Menu Notre Collection</span></h2>
-                    <span class="hero-admin-count"><span id="collCountBadge">0/8</span></span>
-                </div>
-                <p class="hero-admin-help" data-translate="collHelp">Les lignes ci-dessous composent le menu « Notre Collection » du site. Glissez pour changer l'ordre via ↑/↓, remplissez les 3 langues, puis Enregistrer.</p>
-                <div id="collRows"></div>
-                <div class="hero-admin-actions" style="margin-top:.9rem;">
-                    <button type="button" class="hp-btn hp-btn--ghost" id="btnAddCollRow"><i class="fas fa-plus"></i> <span data-translate="collAdd">Ajouter une entrée</span></button>
-                    <button type="button" class="hp-btn hp-btn--gold" id="btnSaveColl" data-translate="collSave">Enregistrer le menu</button>
-                    <span class="hero-saved-badge" id="collSavedBadge" hidden><i class="fas fa-check"></i> <span data-translate="collSavedBadge">Enregistré</span></span>
-                </div>
-                <div class="hero-admin-msg" id="collMsg"></div>
-            </section>
         </div>
     </section>
     <section class="dash-section" id="dash-orders" hidden>
@@ -3199,6 +3159,37 @@
       <div id="ordersOut"></div>
     </div>
     </div>
+    </section>
+    <section class="dash-section" id="dash-settings" hidden>
+      <div class="admin-wrapper">
+        <div class="admin-header">
+          <h1 data-translate="dtabSettings">Paramètres</h1>
+        </div>
+        <!-- Bannière promo (diaporama "Notre sélection") — same controls as STE -->
+            <section class="hero-admin-card" id="bannerAdminCard">
+                <div class="hero-admin-head">
+                    <h2 class="hero-admin-title"><i class="fas fa-photo-film"></i> <span
+                            data-translate="bannerTitle">Images Bannière Promo</span></h2>
+                    <span class="hero-admin-count"><span id="bannerCountBadge">0/6</span></span>
+                </div>
+                <p class="hero-admin-help" data-translate="bannerHelp">Jusqu'à 6 images de la bannière « promotion »
+                    de l'accueil. Plusieurs images = diaporama automatique.</p>
+                <div class="g-strip" id="bannerGallery"></div>
+                <label class="toggle hero-autoplay-toggle"><input type="checkbox" id="bannerAutoplay" checked><span
+                        class="toggle-track"></span><span class="toggle-label"
+                    data-translate="bannerAutoplay">Défilement automatique</span></label>
+                <input type="file" id="bannerFileInput" accept="image/jpeg,image/png,image/webp,image/avif" multiple
+                    hidden>
+                <div class="hero-admin-msg" id="bannerMsg"></div>
+                <div class="hero-admin-actions">
+                    <button type="button" class="hp-btn hp-btn--gold" id="btnSaveBanner"
+                        data-translate="bannerSave">Enregistrer la bannière</button>
+                    <span class="hero-saved-badge" id="bannerSavedBadge" hidden><i class="fas fa-check"></i> <span
+                            data-translate="bannerSavedBadge">Enregistré</span></span>
+                </div>
+            </section>
+        <div class="settings-foot"><a href="#" id="btnLogoutSettings"><i class="fas fa-right-from-bracket"></i> <span data-translate="admLogout">Déconnexion</span></a></div>
+      </div>
     </section>
     <section class="dash-section" id="dash-edit" hidden>
         <div class="edit-wrapper">
@@ -3319,9 +3310,9 @@
   <div class="admin-footnote"><i class="fas fa-lock"></i> Rosa Fragrances · Administration <span id="sessionEmailChip"></span></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/admin-gate.js?v=3"></script>
+  <script src="js/admin-gate.js?v=4"></script>
   <script src="js/app-adminadd.js?v=4"></script>
-  <script src="js/app-admincat.js?v=12"></script>
+  <script src="js/app-admincat.js?v=13"></script>
   <script src="js/app-adminorders.js?v=2"></script>
   <script src="js/app-productedit.js?v=2"></script>
 
@@ -3334,21 +3325,21 @@
         footerPerfumesTitle: 'Parfums', footerMen: 'Homme', footerWomen: 'Femme', footerUnisexe: 'Unisexe', footerKids: 'Enfants',
         footerContactTitle: 'Contact', footerAddress: 'Tunis, Tunisie', footerPhone: '+216 96 163 366',
         footerEmail: 'contact@rosafragrances.tn', footerCopyright: '© 2026 Rosa Fragrances. Tous droits réservés.',
-        dtabAdd: 'Ajouter', dtabCat: 'Collections', dtabOrders: 'Commandes', dtabEdit: 'Modifier', dtabOv: 'Aperçu', existingPerfumes: 'Parfums Existants', ovProducts: 'produits', refresh: 'Rafraîchir', addProduct: 'Ajouter un produit', menCat: 'Homme', menDesc: 'Boisés & épicés', womenCat: 'Femme', womenDesc: 'Floraux & sensuels', unisexCat: 'Unisexe', unisexDesc: 'Pour tous', kidsCat: 'Enfants', kidsDesc: 'Douceurs', catVoiture: 'Parfums voiture', catAmbiance: "Parfums d'ambiance", catMusc: 'Musc', catAccessoires: 'Accessoires', catInspires: 'Parfums inspirés' },
+        dtabAdd: 'Ajouter', dtabCat: 'Collections', dtabOrders: 'Commandes', dtabEdit: 'Modifier', dtabOv: 'Aperçu', dtabSettings: 'Paramètres', admLogout: 'Déconnexion', existingPerfumes: 'Parfums Existants', ovProducts: 'produits', refresh: 'Rafraîchir', addProduct: 'Ajouter un produit', menCat: 'Homme', menDesc: 'Boisés & épicés', womenCat: 'Femme', womenDesc: 'Floraux & sensuels', unisexCat: 'Unisexe', unisexDesc: 'Pour tous', kidsCat: 'Enfants', kidsDesc: 'Douceurs', catVoiture: 'Parfums voiture', catAmbiance: "Parfums d'ambiance", catMusc: 'Musc', catAccessoires: 'Accessoires', catInspires: 'Parfums inspirés' },
       en: { home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS', existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
         footerDescription: 'Exceptional perfumery since 1985. The art of oriental perfumery reinvented for discerning connoisseurs.',
         footerPerfumesTitle: 'Perfumes', footerMen: 'Men', footerWomen: 'Women', footerUnisexe: 'Unisex', footerKids: 'Kids',
         footerContactTitle: 'Contact', footerAddress: 'Tunis, Tunisia', footerPhone: '+216 96 163 366',
         footerEmail: 'contact@rosafragrances.tn', footerCopyright: '© 2026 Rosa Fragrances. All rights reserved.',
-        dtabAdd: 'Add', dtabCat: 'Collections', dtabOrders: 'Orders', dtabEdit: 'Edit', dtabOv: 'Overview', existingPerfumes: 'Existing Perfumes', ovProducts: 'products', refresh: 'Refresh', addProduct: 'Add product', menCat: 'Men', menDesc: 'Woody & spicy', womenCat: 'Women', womenDesc: 'Floral & sensual', unisexCat: 'Unisex', unisexDesc: 'For everyone', kidsCat: 'Kids', kidsDesc: 'Sweet scents', catVoiture: 'Car perfumes', catAmbiance: 'Home fragrances', catMusc: 'Musk', catAccessoires: 'Accessories', catInspires: 'Inspired perfumes' },
+        dtabAdd: 'Add', dtabCat: 'Collections', dtabOrders: 'Orders', dtabEdit: 'Edit', dtabOv: 'Overview', dtabSettings: 'Settings', admLogout: 'Log out', existingPerfumes: 'Existing Perfumes', ovProducts: 'products', refresh: 'Refresh', addProduct: 'Add product', menCat: 'Men', menDesc: 'Woody & spicy', womenCat: 'Women', womenDesc: 'Floral & sensual', unisexCat: 'Unisex', unisexDesc: 'For everyone', kidsCat: 'Kids', kidsDesc: 'Sweet scents', catVoiture: 'Car perfumes', catAmbiance: 'Home fragrances', catMusc: 'Musk', catAccessoires: 'Accessories', catInspires: 'Inspired perfumes' },
       ar: { home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال', existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
         footerDescription: 'عطور استثنائية منذ 1985. فن العطور الشرقية المعاد ابتكاره للخبراء المميزين.',
         footerPerfumesTitle: 'العطور', footerMen: 'رجالي', footerWomen: 'نسائي', footerUnisexe: 'للجنسين', footerKids: 'أطفال',
         footerContactTitle: 'اتصل بنا', footerAddress: 'تونس، تونس', footerPhone: '366 163 96 216+',
         footerEmail: 'contact@rosafragrances.tn', footerCopyright: '© 2026 روزا للعطور. جميع الحقوق محفوظة.',
-        dtabAdd: 'إضافة', dtabCat: 'المجموعات', dtabOrders: 'الطلبات', dtabEdit: 'تعديل', dtabOv: 'نظرة عامة', existingPerfumes: 'العطور الموجودة', ovProducts: 'منتجات', refresh: 'تحديث', addProduct: 'إضافة منتج', menCat: 'رجالي', menDesc: 'خشبي و حار', womenCat: 'نسائي', womenDesc: 'زهري و حسي', unisexCat: 'للجنسين', unisexDesc: 'للجميع', kidsCat: 'أطفال', kidsDesc: 'روائح حلوة', catVoiture: 'عطور السيارات', catAmbiance: 'عطورات الجو', catMusc: 'مسك', catAccessoires: 'إكسسوارات', catInspires: 'عطور مستوحاة' }
+        dtabAdd: 'إضافة', dtabCat: 'المجموعات', dtabOrders: 'الطلبات', dtabEdit: 'تعديل', dtabOv: 'نظرة عامة', dtabSettings: 'الإعدادات', admLogout: 'تسجيل الخروج', existingPerfumes: 'العطور الموجودة', ovProducts: 'منتجات', refresh: 'تحديث', addProduct: 'إضافة منتج', menCat: 'رجالي', menDesc: 'خشبي و حار', womenCat: 'نسائي', womenDesc: 'زهري و حسي', unisexCat: 'للجنسين', unisexDesc: 'للجميع', kidsCat: 'أطفال', kidsDesc: 'روائح حلوة', catVoiture: 'عطور السيارات', catAmbiance: 'عطورات الجو', catMusc: 'مسك', catAccessoires: 'إكسسوارات', catInspires: 'عطور مستوحاة' }
     };
-    var TABS = ['overview', 'add', 'collections', 'orders', 'edit'];
+    var TABS = ['overview', 'add', 'collections', 'orders', 'settings', 'edit'];
     function lang() { try { var l = localStorage.getItem('language') || 'fr'; return TR[l] ? l : 'fr'; } catch (e) { return 'fr'; } }
     function applyChrome() {
       var l = lang(), d = TR[l];
@@ -3379,6 +3370,7 @@
       });
       if (name === 'overview' && window.rosaLoadOverview) window.rosaLoadOverview();
       if (name === 'collections' && window.rosaActivateCat) window.rosaActivateCat();
+      if (name === 'settings' && window.rosaReloadBanner) window.rosaReloadBanner();
       if (name === 'edit' && window.rosaEditId && window.rosaLoadEdit) window.rosaLoadEdit();
     }
     document.querySelectorAll('[data-dashtab]').forEach(function (b) {
@@ -3424,6 +3416,13 @@
         if (lm) lm.classList.remove('active');
         location.reload();
       });
+    });
+    document.getElementById('btnLogoutSettings')?.addEventListener('click', function (e) {
+      e.preventDefault();
+      try {
+        var c = window.supabase.createClient('https://dtwciuhwwanwlwpydeko.supabase.co', window.__ROSA_ANON_KEY__ || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlka28iLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc2MTk0Njg4NCwiZXhwIjoyMDc3NTIyODg0fQ.n7mIj4E7B5rT7eQ8XkA4d5Ycp-VG2WSBL2p9-ghzMAM');
+        c.auth.signOut().finally(function () { location.href = 'index.html'; });
+      } catch (err) { location.href = 'index.html'; }
     });
     document.addEventListener('click', function (e) { if (lm && !lm.contains(e.target)) lm.classList.remove('active'); });
     applyChrome();

@@ -103,7 +103,8 @@
                 const names = { fr: 'FRANÇAIS', en: 'ENGLISH', ar: 'العربية' };
                 const langSpan = document.getElementById('currentLangText');
                 if (langSpan) langSpan.textContent = names[lang];
-                (document.getElementById('dash-collections') || document).querySelectorAll('[data-translate]').forEach(el => {
+                const scoped = document.querySelectorAll('#dash-collections [data-translate], #dash-settings [data-translate]');
+                scoped.forEach(el => {
                     const key = el.getAttribute('data-translate');
                     if (translations[lang] && translations[lang][key]) {
                         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = translations[lang][key];
@@ -284,6 +285,7 @@
                 } catch (e) {}
             }
             window.rosaLoadOverview = function () { loadOverviewStats(); };
+            window.rosaReloadBanner = function () { loadBannerSettings(); };
             document.getElementById('ovRefresh')?.addEventListener('click', loadOverviewStats);
 
             // category cards in overview → open that category in Collections
@@ -482,7 +484,7 @@
                     for (let i = 0; i < bannerState.newFiles.length; i++) {
                         bannerMsg(heroT('heroUploading') + ' ' + (i + 1) + '/' + bannerState.newFiles.length + '…', true);
                         const { blob, ext } = await heroCompress(bannerState.newFiles[i]);
-                        const path = 'hero/banner-' + Date.now() + '-' + i + '.' + ext;
+                        const path = 'admin/banner-' + Date.now() + '-' + i + '.' + ext;
                         const { error: upErr } = await supabase.storage
                             .from('product-images')
                             .upload(path, blob, { contentType: 'image/' + ext, upsert: true });
@@ -511,7 +513,9 @@
                     }
                     showToast(heroT('bannerSaved'));
                 } catch (e) {
-                    bannerMsg('⚠ ' + (e && e.message ? e.message : heroT('heroError')));
+                    const em = e && e.message ? e.message : heroT('heroError');
+                    bannerMsg('⚠ ' + em);
+                    showToast('⚠ ' + em);
                 } finally {
                     bannerState.saving = false;
                     if (btn) btn.disabled = false;
@@ -552,145 +556,8 @@
             }
             bindBannerEditor();
 
-            // ════════════ Notre Collection menu editor ════════════
-            const COLL_MAX = 8;
-            const COLL_SLUGS = ['inspires', 'voiture', 'ambiance', 'musc', 'accessoires', 'custom'];
-            const COLL_DEFAULTS = [
-                { slug: 'inspires', fr: 'Parfums inspirés', en: 'Inspired perfumes', ar: 'عطور مستوحاة', href: 'cat.html?cat=inspires' },
-                { slug: 'voiture', fr: 'Parfums pour voiture', en: 'Car perfumes', ar: 'عطور السيارات', href: 'cat.html?cat=voiture' },
-                { slug: 'ambiance', fr: "Parfums d'ambiance", en: 'Home fragrances', ar: 'عطورات الجو', href: 'cat.html?cat=ambiance' },
-                { slug: 'musc', fr: 'Musc', en: 'Musk', ar: 'مسك', href: 'cat.html?cat=musc' },
-                { slug: 'accessoires', fr: 'Accessoires', en: 'Accessories', ar: 'إكسسوارات', href: 'cat.html?cat=accessoires' }
-            ];
-            let collState = [];
-            let collLoaded = false;
-
-            function collEsc(s) {
-                return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
-                    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-            }
-            function collT(key) {
-                const d = translations[currentLanguage] || translations.fr;
-                return d[key] || (translations.fr[key] || key);
-            }
-            function collMsg(text, ok) {
-                const el = document.getElementById('collMsg');
-                if (!el) return;
-                el.textContent = text || '';
-                el.style.color = ok ? 'var(--green, #1d7a4f)' : 'var(--red, #b04a4a)';
-                if (text) setTimeout(() => { if (el.textContent === text) el.textContent = ''; }, 6000);
-            }
-            function collRenderRows() {
-                const host = document.getElementById('collRows');
-                if (!host) return;
-                document.getElementById('collCountBadge').textContent = collState.length + '/' + COLL_MAX;
-                host.innerHTML = collState.length
-                    ? '<div class="coll-lang-head"><span></span><span>FR</span><span>EN</span><span>AR</span><span>SLUG</span><span></span><span></span></div>'
-                    : '';
-                collState.forEach((it, i) => {
-                    const row = document.createElement('div');
-                    row.className = 'coll-row';
-                    row.innerHTML =
-                        '<div class="coll-ord">' +
-                            '<button type="button" data-cmove="up"' + (i === 0 ? ' disabled' : '') + '>↑</button>' +
-                            '<button type="button" data-cmove="down"' + (i === collState.length - 1 ? ' disabled' : '') + '>↓</button>' +
-                        '</div>' +
-                        '<input data-cfield="fr" maxlength="60" placeholder="Nom FR" value="' + collEsc(it.fr) + '">' +
-                        '<input data-cfield="en" maxlength="60" placeholder="Name EN" value="' + collEsc(it.en) + '">' +
-                        '<input data-cfield="ar" maxlength="60" placeholder="الاسم AR" dir="rtl" value="' + collEsc(it.ar) + '">' +
-                        '<select data-cfield="slug">' + COLL_SLUGS.map(s =>
-                            '<option value="' + s + '"' + (it.slug === s ? ' selected' : '') + '>' + s + '</option>').join('') +
-                        '</select>' +
-                        '<button type="button" class="coll-del" data-cdel title="' + collEsc(collT('collDel')) + '"><i class="fas fa-trash"></i></button>';
-                    host.appendChild(row);
-                });
-            }
-            function collBind() {
-                const host = document.getElementById('collRows');
-                if (!host) return;
-                host.addEventListener('input', e => {
-                    const row = e.target.closest('.coll-row');
-                    const inp = e.target.closest('[data-cfield]');
-                    if (!row || !inp) return;
-                    const i = Array.from(host.querySelectorAll('.coll-row')).indexOf(row);
-                    if (i >= 0) { collState[i][inp.getAttribute('data-cfield')] = inp.value; collLoaded = true; }
-                });
-                host.addEventListener('click', e => {
-                    const mv = e.target.closest('[data-cmove]');
-                    const del = e.target.closest('[data-cdel]');
-                    const row = e.target.closest('.coll-row');
-                    if (!row) return;
-                    const i = Array.from(host.querySelectorAll('.coll-row')).indexOf(row);
-                    if (i < 0) return;
-                    if (mv) {
-                        const dir = mv.getAttribute('data-cmove') === 'up' ? -1 : 1;
-                        if (i + dir < 0 || i + dir >= collState.length) return;
-                        const tmp = collState[i]; collState[i] = collState[i + dir]; collState[i + dir] = tmp;
-                        collRenderRows();
-                    } else if (del) {
-                        collState.splice(i, 1);
-                        collRenderRows();
-                    }
-                });
-                document.getElementById('btnAddCollRow').addEventListener('click', () => {
-                    if (collState.length >= COLL_MAX) { collMsg('⚠ ' + collT('collLimit')); return; }
-                    collState.push({ slug: 'custom', fr: '', en: '', ar: '', href: '' });
-                    collRenderRows();
-                });
-                document.getElementById('btnSaveColl').addEventListener('click', saveCollSettings);
-            }
-            async function loadCollSettings() {
-                try {
-                    const { data, error } = await supabase.from('settings').select('*').eq('key', 'collections');
-                    if (error) throw error;
-                    const v = data && data[0] && data[0].value;
-                    collState = Array.isArray(v) && v.length
-                        ? v.slice(0, COLL_MAX).map(it => ({
-                            slug: String(it.slug || 'custom'),
-                            fr: String(it.fr || ''), en: String(it.en || ''), ar: String(it.ar || ''),
-                            href: String(it.href || '')
-                        }))
-                        : COLL_DEFAULTS.map(d => Object.assign({}, d));
-                } catch (e) {
-                    console.error('collections load', e);
-                    collState = COLL_DEFAULTS.map(d => Object.assign({}, d));
-                }
-                collRenderRows();
-            }
-            async function saveCollSettings() {
-                const rows = collState.map(it => ({
-                    slug: String(it.slug || 'custom').trim().toLowerCase(),
-                    fr: String(it.fr || '').trim(),
-                    en: String(it.en || '').trim(),
-                    ar: String(it.ar || '').trim(),
-                    href: String(it.href || '').trim()
-                }));
-                if (!rows.length) { collMsg('⚠ ' + collT('collNeedLangs')); return; }
-                for (const r of rows) {
-                    if (!r.fr || !r.en || !r.ar) { collMsg('⚠ ' + collT('collNeedLangs')); return; }
-                }
-                const btn = document.getElementById('btnSaveColl');
-                btn.disabled = true;
-                try {
-                    const { error } = await supabase.from('settings').upsert(
-                        [{ key: 'collections', value: rows }], { onConflict: 'key' });
-                    if (error) throw error;
-                    collMsg(collT('collSaved'), true);
-                    const badge = document.getElementById('collSavedBadge');
-                    badge.hidden = false;
-                    setTimeout(() => { badge.hidden = true; }, 2500);
-                } catch (e) {
-                    console.error(e);
-                    collMsg('❌ ' + (e.message || e));
-                } finally {
-                    btn.disabled = false;
-                }
-            }
-
-            translatePage(currentLanguage);
+translatePage(currentLanguage);
             loadProducts();
             loadBannerSettings();
-            collBind();
-            loadCollSettings();
-        })();
+                    })();
     
