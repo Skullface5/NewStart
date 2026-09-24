@@ -129,3 +129,58 @@ main{padding-bottom:4.6rem;}
 body.dark .admin-topbar{background:rgba(26,22,17,.94);}
 body.dark .dash-tabs{background:rgba(30,25,19,.97);}
 body.dark .topbar-inner .lang-seg{background:#2A241C;}
+
+/* ═══ Orders tab — unified reskin (mobile-first) ═══ */
+#dash-orders .page-header{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap;}
+#dash-orders .page-header h1{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;letter-spacing:.02em;display:flex;align-items:center;gap:.5rem;color:var(--charcoal,#3A3228);}
+#dash-orders .page-header h1 i{font-size:.95rem;color:var(--gold-dark,#8A7150);}
+#dash-orders .stats-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(180,154,106,.13);border:1px solid rgba(180,154,106,.3);color:var(--gold-dark,#8A7150);border-radius:999px;padding:.4rem .85rem;font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+#dash-orders .stats-badge i{margin:0;}
+
+/* stat tiles: compact pairs, no serif numbers */
+#dash-orders .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.55rem;margin-bottom:1.15rem;}
+#dash-orders .stat-card{background:var(--white,#FEFCF8);border:1px solid var(--border-light,#E0D4C0);border-radius:14px;padding:.7rem .8rem;gap:.05rem;box-shadow:0 2px 10px rgba(90,70,50,.04);}
+#dash-orders .stat-card.highlight{background:linear-gradient(135deg,rgba(180,154,106,.14),rgba(180,154,106,.06));border-color:rgba(180,154,106,.35);}
+#dash-orders .stat-card.highlight .stat-label,#dash-orders .stat-card.highlight .stat-value,#dash-orders .stat-card.highlight .stat-sub{color:inherit;}
+#dash-orders .stat-card.highlight .stat-label{color:var(--text-mid,#6B5E4E);}
+#dash-orders .stat-card.highlight .stat-value{color:var(--gold-dark,#8A7150);}
+#dash-orders .stat-label{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mid,#6B5E4E);font-weight:600;}
+#dash-orders .stat-value{font-family:'Jost',sans-serif;font-size:1.18rem;font-weight:600;letter-spacing:.01em;color:var(--charcoal,#3A3228);line-height:1.25;}
+#dash-orders .stat-sub{display:none;}
+
+/* groups */
+#dash-orders .group-section{margin-bottom:1.4rem;}
+#dash-orders .group-header{margin-bottom:.6rem;padding-bottom:.45rem;}
+#dash-orders .group-header h3{font-size:1rem;font-weight:500;}
+
+/* order cards */
+#dash-orders .orders-grid{display:flex;flex-direction:column;gap:.7rem;}
+#dash-orders .order-card{border-radius:16px;background:var(--white,#FEFCF8);box-shadow:0 3px 14px rgba(90,70,50,.05);}
+#dash-orders .oc-header{padding:.75rem .85rem .6rem;}
+#dash-orders .oc-customer{grid-template-columns:1fr;padding:.6rem .85rem;gap:.4rem;}
+#dash-orders .oc-address,#dash-orders .oc-items{padding:.55rem .85rem;}
+#dash-orders .oc-footer{padding:.7rem .85rem;flex-direction:column;align-items:stretch;gap:.55rem;}
+#dash-orders .oc-total{display:flex;align-items:baseline;justify-content:space-between;font-size:.78rem;font-weight:500;}
+#dash-orders .oc-total span{font-family:'Jost',sans-serif;font-size:.95rem;font-weight:600;}
+#dash-orders .status-sel{width:100%;min-height:46px;font-size:16px;padding:.6rem .85rem;border-radius:12px;background:var(--cream,#F7F0E6);border:1px solid var(--border-medium,#D8CCB8);color:var(--charcoal,#3A3228);font-weight:500;letter-spacing:.02em;}
+#dash-orders .status-sel:focus{border-color:var(--gold,#B49A6A);}
+
+/* filter row: keep pills but aligned with the rest (tinted, not solid charcoal) */
+#dash-orders .s-tab{background:var(--white,#FEFCF8);}
+#dash-orders .s-tab.s-all.active{background:var(--gold-dark,#8A7150);}
+#dash-orders .s-tab.s-review.active{background:var(--gold-dark,#8A7150);}
+
+/* desktop: roomier */
+@media (min-width:720px){
+  #dash-orders .stats-grid{grid-template-columns:repeat(4,1fr);gap:.7rem;}
+  #dash-orders .stat-sub{display:block;}
+  #dash-orders .stat-value{font-size:1.3rem;}
+  #dash-orders .orders-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:.8rem;}
+  #dash-orders .oc-customer{grid-template-columns:1fr 1fr;}
+  #dash-orders .oc-footer{flex-direction:row;align-items:center;justify-content:space-between;}
+  #dash-orders .status-sel{width:auto;min-width:180px;min-height:40px;font-size:.8rem;}
+}
+
+/* dark mode */
+body.dark #dash-orders .stat-card,body.dark #dash-orders .order-card{background:#221C15;}
+body.dark #dash-orders .status-sel{background:#1A1611;border-color:#3A3228;color:#EDE4D6;}

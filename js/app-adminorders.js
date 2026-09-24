@@ -289,7 +289,7 @@
         <span class="item-n"><i class="fas fa-crown" style="color:var(--gold);font-size:0.6rem;"></i>${esc(i.name)} <span class="item-q">×${i.quantity}</span></span>
         <span class="item-p">${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span>
       </div>`).join('') || `<div class="item-row"><span style="color:var(--text-mid);font-size:0.72rem;">${esc(L.GR.none)}</span></div>`;
-    const opt = (v, ic) => `<option value="${v}" ${o.status === v ? 'selected' : ''}>${ic} ${esc(L.SL[v])}</option>`;
+    const opt = (v) => `<option value="${v}" ${o.status === v ? 'selected' : ''}>${esc(L.SL[v])}</option>`;
     return `
     <div class="order-card">
       <div class="oc-header">
@@ -313,7 +313,7 @@
       <div class="oc-footer">
         <div class="oc-total">${esc(L.total)} : <span>${parseFloat(o.total || 0).toFixed(3).replace('.', ',')} TND</span></div>
         <select class="status-sel" onchange="updateStatus('${o.id}',this.value)">
-          ${opt('pending', '⏳')}${opt('review', '🔍')}${opt('shipped', '🚚')}${opt('delivered', '✅')}${opt('cancelled', '❌')}
+          ${opt('pending')}${opt('review')}${opt('shipped')}${opt('delivered')}${opt('cancelled')}
         </select>
       </div>
     </div>`;
