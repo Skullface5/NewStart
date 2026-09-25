@@ -22,7 +22,7 @@
   function isVid(u) { return /\.(mp4|webm|mov|m4v)(\?|$)/i.test(String(u || '')); }
 
   var CSS = [
-    '.promo-card-inner .promo-slide { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 35%; opacity:0; transform:translateX(100%); transition:transform 1.1s ease, opacity 1.1s ease; pointer-events:none; z-index:0; }',
+    '.promo-card-inner .promo-slide { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 35%; opacity:0; transform:translateX(100%); transition:transform 1.1s ease, opacity 1.1s ease; pointer-events:none; z-index:0; border-radius:inherit; -webkit-mask-image:-webkit-radial-gradient(white,black); }',
     '.promo-card-inner .promo-slide.on { opacity:1; transform:translateX(0); pointer-events:auto; }',
     '.promo-card-inner .promo-slide.out { opacity:0; transform:translateX(-100%); }',
     '.promo-card-inner .promo-slide.has-link { cursor:pointer; }'
