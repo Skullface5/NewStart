@@ -186,8 +186,8 @@
       function getSeasonNames(seasonStr) {
         if (!seasonStr) return [];
         const seasonMap = { summer: { icon: 'fas fa-sun', name: 'Été' }, winter: { icon: 'fas fa-snowflake', name: 'Hiver' }, spring: { icon: 'fas fa-seedling', name: 'Printemps' }, autumn: { icon: 'fas fa-leaf', name: 'Automne' } };
-        let seasons = seasonStr === 'all' ? ['summer','winter','spring','autumn'] : seasonStr.split(',');
-        return seasons.map(s => seasonMap[s]).filter(s => s);
+        if (seasonStr === 'all') return [{ icon: 'fas fa-calendar-check', name: 'Toutes saisons' }];
+        return seasonStr.split(',').map(s => seasonMap[s]).filter(s => s);
       }
 
       function getStockStatusHTML(quantity) {
@@ -232,7 +232,7 @@
           else productImages = [];
         } catch(e) { productImages = []; }
         
-        const categoryNames = { man: 'Homme', women: 'Femme', unisexe: 'Unisexe', kids: 'Enfants' };
+        const categoryNames = { man: 'Homme', women: 'Femme', unisexe: 'Unisexe', kids: 'Enfants', inspires: 'Inspires', voiture: 'Voiture', ambiance: 'Ambiance', musc: 'Musc', accessoires: 'Accessoires' };
         const categoryName = categoryNames[product.category] || product.category;
         const seasons = getSeasonNames(product.season);
         const seasonsHtml = seasons.length ? `<span class="meta-badge"><i class="fas fa-calendar-alt"></i> ${translations[currentLanguage].seasons}: ${seasons.map(s => `<i class="${s.icon}" style="margin-left: 5px;"></i> ${s.name}`).join(', ')}</span>` : '';
