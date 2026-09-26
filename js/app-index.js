@@ -104,7 +104,24 @@
         setTimeout(() => toast.classList.remove('show'), 2000);
       }
 
-      function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
+      function formatPrice(p) { var n = parseFloat(p); if (!isFinite(n)) return ''; return n.toFixed(3).replace('.', ',') + ' TND'; }
+      // Guarantees a card can always render: name as string, price as number (or null), image resolved
+      // from images[]/image/image_url no matter which shape a cached row or query happened to have.
+      function normalizeProduct(p) {
+        if (!p || typeof p !== 'object') return null;
+        var firstImage = '';
+        if (Array.isArray(p.images)) firstImage = p.images[0] || '';
+        else if (typeof p.images === 'string' && p.images) {
+          try { var arr = JSON.parse(p.images); if (Array.isArray(arr)) firstImage = arr[0] || ''; } catch (e) {}
+        }
+        if (!firstImage && typeof p.image === 'string') firstImage = p.image;
+        if (!firstImage && typeof p.image_url === 'string') firstImage = p.image_url;
+        var nm = (p.name == null) ? '' : String(p.name);
+        if (nm === 'NaN' || nm === 'undefined' || nm === 'null') nm = '';
+        var pr = parseFloat(p.price);
+        return Object.assign({}, p, { name: nm, price: isFinite(pr) ? pr : null, image: firstImage });
+      }
+      function normalizeList(list) { return (Array.isArray(list) ? list : []).map(normalizeProduct).filter(Boolean); }
       function promoPriceHtml(row) {
         // STE-style promo: struck old price before current price
         try {
@@ -244,7 +261,7 @@
      const obj = JSON.parse(raw);
      const data = obj && obj.data;
      if (!Array.isArray(data) || !data.length || Date.now() - (obj.ts || 0) > 86400000) return false;
-     allProductsData = data;
+     allProductsData = normalizeList(data);
      renderProducts();
      if (loadingEl) loadingEl.style.display = 'none';
      return true;
@@ -255,17 +272,7 @@ async function loadProducts() {
         try {
           const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: true });
           if (error) throw error;
-          allProductsData = (data || []).map(p => {
-            let firstImage = '';
-            if (p.images) {
-              try {
-                const imgArr = typeof p.images === 'string' ? JSON.parse(p.images) : p.images;
-                firstImage = Array.isArray(imgArr) ? imgArr[0] || '' : '';
-              } catch (e) { firstImage = ''; }
-            }
-            if (!firstImage && p.image) firstImage = p.image;
-            return { ...p, image: firstImage };
-          });
+          allProductsData = normalizeList(data);
           renderProducts();
  rosaSaveCache('rosa_cache_all', allProductsData);
         } catch (err) {
@@ -454,6 +461,18 @@ async function loadProducts() {
 
       translatePage(currentLanguage);
       paintCachedProducts(); supabase.auth.refreshSession().then(() => { loadProducts(); saveCart(); });
+
+      // Returning from the admin page can restore a stale, half-hydrated snapshot from the
+      // browser's back/forward cache. Force a repaint + refetch whenever the page is restored.
+      window.addEventListener('pageshow', function (e) {
+        if (!e.persisted) return;
+        try {
+          if (!allProductsData.length) paintCachedProducts();
+          else renderProducts();
+          if (typeof renderCart === 'function') renderCart();
+          loadProducts();
+        } catch (err) {}
+      });
 
       const revealElements = document.querySelectorAll('.reveal-on-scroll');
       const observer = new IntersectionObserver((entries) => {

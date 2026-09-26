@@ -88,7 +88,23 @@
       const checkoutBtn = document.getElementById('checkoutBtn');
 
       // Helper functions
-      function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
+      function formatPrice(p) { var n = parseFloat(p); if (!isFinite(n)) return ''; return n.toFixed(3).replace('.', ',') + ' TND'; }
+      function rosaSaveCache(key, data) { try { localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data: data })); } catch (e) {} }
+      function normalizeProduct(p) {
+        if (!p || typeof p !== 'object') return null;
+        var firstImage = '';
+        if (Array.isArray(p.images)) firstImage = p.images[0] || '';
+        else if (typeof p.images === 'string' && p.images) {
+          try { var arr = JSON.parse(p.images); if (Array.isArray(arr)) firstImage = arr[0] || ''; } catch (e) {}
+        }
+        if (!firstImage && typeof p.image === 'string') firstImage = p.image;
+        if (!firstImage && typeof p.image_url === 'string') firstImage = p.image_url;
+        var nm = (p.name == null) ? '' : String(p.name);
+        if (nm === 'NaN' || nm === 'undefined' || nm === 'null') nm = '';
+        var pr = parseFloat(p.price);
+        return Object.assign({}, p, { name: nm, price: isFinite(pr) ? pr : null, image: firstImage });
+      }
+      function normalizeList(list) { return (Array.isArray(list) ? list : []).map(normalizeProduct).filter(Boolean); }
       function promoPriceHtml(row) {
         // STE-style promo: struck old price before current price
         try {
@@ -337,7 +353,7 @@
           const { data: allData, error: allError } = await supabase.from('products').select('*');
           if (allError) throw allError;
           allProducts = allData || [];
- rosaSaveCache('rosa_cache_all', allProducts);
+ rosaSaveCache('rosa_cache_all', normalizeList(allProducts));
           // Find current product
           currentProduct = allProducts.find(p => p.id == productId);
           if (!currentProduct) throw new Error('Not found');
