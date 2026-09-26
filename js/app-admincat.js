@@ -21,7 +21,10 @@
                 inspires:    { icon: 'fa-wand-magic-sparkles', fr: 'Parfums inspirés', en: 'Inspired perfumes', ar: 'عطور مستوحاة' }
             };
             const _params = new URLSearchParams(window.location.search);
-            let CAT = _params.get('cat') || 'women';
+            // URL param wins; else the category selected earlier this session (survives reload /
+            // mobile back-navigation, which re-loads the page); else default to the first tab.
+            let CAT = _params.get('cat') || '';
+            try { if (!CAT) CAT = sessionStorage.getItem('adminCat') || ''; } catch (e) {}
             if (!CATS[CAT]) CAT = 'women';
 
             const translations = {
@@ -290,7 +293,9 @@
 
             // category cards in overview → open that category in Collections
             function setCat(slug, thenLoad) {
-                if (!CATS[slug] || slug === CAT) { if (thenLoad) loadProducts(); return; }
+                if (!CATS[slug]) { return; }
+                try { sessionStorage.setItem('adminCat', slug); } catch (e) {}
+                if (slug === CAT) { if (thenLoad) loadProducts(); return; }
                 CAT = slug;
                 Object.keys(translations).forEach(l => { if (translations[l]) translations[l].catName = (CATS[slug] && CATS[slug][l]) || CATS[slug].fr; });
                 const title = document.querySelector('#dash-collections h1 span[data-translate="catName"]');
