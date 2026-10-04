@@ -475,9 +475,12 @@ async function loadProducts() {
       });
 
       const revealElements = document.querySelectorAll('.reveal-on-scroll');
+      // threshold:0 breaks on tall grids (e.g. 7700px grid in a 700px viewport:
+      // 10% of the element can NEVER be 50%-visible, so cards stay at opacity:0 forever).
+      // threshold:0 fires the moment ANY pixel of the element enters the shrunken root.
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('revealed'); observer.unobserve(entry.target); } });
-      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+      }, { threshold: 0, rootMargin: '0px 0px -50px 0px' });
       revealElements.forEach(el => observer.observe(el));
     })();
 

@@ -534,7 +534,8 @@
 
       // Scroll reveal observer
       const revealElements = document.querySelectorAll('.reveal-on-scroll');
-      const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('revealed'); observer.unobserve(entry.target); } }); }, { threshold: 0.1 });
+      // threshold:0 — 0.1 can never fire on tall mobile grids (10% of 7700px > viewport)
+      const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('revealed'); observer.unobserve(entry.target); } }); }, { threshold: 0 });
       revealElements.forEach(el => observer.observe(el));
     })();
   
