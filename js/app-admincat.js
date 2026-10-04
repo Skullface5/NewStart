@@ -258,6 +258,7 @@
             window.editProduct = function (productId) {
                 if (window.rosaLoadEdit) {
                     window.rosaEditId = productId;
+                    try { sessionStorage.setItem('rosaEditId', productId); } catch (e) {}
                     location.hash = '#edit';
                     window.rosaLoadEdit();
                 } else {

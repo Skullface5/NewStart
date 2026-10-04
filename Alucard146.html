@@ -3326,9 +3326,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/admin-gate.js?v=4"></script>
   <script src="js/app-adminadd.js?v=5"></script>
-  <script src="js/app-admincat.js?v=15"></script>
+  <script src="js/app-admincat.js?v=16"></script>
   <script src="js/app-adminorders.js?v=3"></script>
-  <script src="js/app-productedit.js?v=3"></script>
+  <script src="js/app-productedit.js?v=4"></script>
 
   <script>
   (function () {
@@ -3385,7 +3385,7 @@
       if (name === 'overview' && window.rosaLoadOverview) window.rosaLoadOverview();
       if (name === 'collections' && window.rosaActivateCat) window.rosaActivateCat();
       if (name === 'settings' && window.rosaReloadBanner) window.rosaReloadBanner();
-      if (name === 'edit' && window.rosaEditId && window.rosaLoadEdit) window.rosaLoadEdit();
+      if (name === 'edit' && window.rosaLoadEdit) window.rosaLoadEdit();
     }
     document.querySelectorAll('[data-dashtab]').forEach(function (b) {
       b.addEventListener('click', function () { location.hash = '#' + b.getAttribute('data-dashtab'); });

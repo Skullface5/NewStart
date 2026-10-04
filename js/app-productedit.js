@@ -146,7 +146,12 @@
 
             async function loadProduct(forcedId) {
                 const urlParams = new URLSearchParams(window.location.search);
-                productId = forcedId || window.rosaEditId || urlParams.get('id');
+                // Survive refresh: the dashboard keeps the edit target only in window.rosaEditId
+                // (lost on reload). sessionStorage persists across refreshes within the tab.
+                var storedId = null;
+                try { storedId = sessionStorage.getItem('rosaEditId'); } catch (e) {}
+                productId = forcedId || window.rosaEditId || urlParams.get('id') || storedId;
+                if (productId) { try { sessionStorage.setItem('rosaEditId', productId); } catch (e) {} }
                 window.rosaEditId = null;
 
                 if (!productId) {
