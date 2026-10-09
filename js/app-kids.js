@@ -11,6 +11,7 @@
           home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE',
           login: 'Se connecter', profile: 'Mon Profil', notreCollection: 'Notre Collection', back: 'Retour à l\'accueil',
           kidsCat: 'Parfums Enfants', kidsDesc: 'Des fragrances douces, légères et ludiques spécialement conçues pour les plus jeunes.',
+          buyNow: 'Commander', buyNowNote: 'Remplissez le formulaire, on vous appelle dans les plus brefs délais!',
           addToCart: 'Ajouter', addedToCart: '✨ Article ajouté', cart: 'Panier', emptyCart: 'Votre panier est vide.',
           total: 'Total', payment: 'PAIEMENT', delivery: 'Livraison', fullName: 'Nom complet *',
           phone: 'Téléphone *', email: 'Email *', address: 'Adresse *', yourOrder: 'Votre commande',
@@ -32,6 +33,7 @@
           home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX',
           login: 'Sign in', profile: 'My Profile', notreCollection: 'Our Collection', back: 'Back to home',
           kidsCat: 'Kids Perfumes', kidsDesc: 'Soft, light and playful fragrances specially designed for the little ones.',
+          buyNow: 'Buy Now', buyNowNote: 'Fill in the form, we will call you as soon as possible!',
           addToCart: 'Add to cart', addedToCart: '✨ Added to cart', cart: 'Cart', emptyCart: 'Your cart is empty.',
           total: 'Total', payment: 'PAYMENT', delivery: 'Delivery', fullName: 'Full name *',
           phone: 'Phone *', email: 'Email *', address: 'Address *', yourOrder: 'Your order',
@@ -53,6 +55,7 @@
           home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين',
           login: 'تسجيل الدخول', profile: 'ملفي الشخصي', notreCollection: 'مجموعتنا', back: 'العودة للرئيسية',
           kidsCat: 'عطور أطفال', kidsDesc: 'عطور ناعمة وخفيفة ومرحة مصممة خصيصاً للصغار.',
+          buyNow: 'اشتري الآن', buyNowNote: 'املأ النموذج وسنتصل بك في أقرب وقت ممكن!',
           addToCart: 'أضف إلى السلة', addedToCart: '✨ تمت الإضافة', cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.',
           total: 'المجموع', payment: 'الدفع', delivery: 'التوصيل', fullName: 'الاسم الكامل *',
           phone: 'الهاتف *', email: 'البريد الإلكتروني *', address: 'العنوان *', yourOrder: 'طلبك',
@@ -387,8 +390,8 @@ async function loadProducts() {
                             <div class="product-price">${promoPriceHtml(p)}</div>
                             <div class="stock-indicator ${stockStatus}">${stockIcon} ${stockText}</div>
                         </div>
-                        <button class="add-to-cart ${isOutOfStock ? 'disabled' : ''}" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${p.price}" data-image="${p.image || ''}" data-quantity="${p.quantity || 0}" ${isOutOfStock ? 'disabled' : ''}>
-                            <i class="fas fa-shopping-cart"></i> ${translations[currentLanguage].addToCart}
+                        <button class="buy-now-btn ${isOutOfStock ? 'disabled' : ''}" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${p.price}" data-image="${p.image || ''}" ${isOutOfStock ? 'disabled' : ''}>
+                            <i class="fas fa-bolt"></i> ${translations[currentLanguage].buyNow}
                         </button>
                     </div>`;
         });
@@ -396,11 +399,11 @@ async function loadProducts() {
         document.querySelectorAll('.product-clickable').forEach(el => {
           el.addEventListener('click', (e) => { if (e.target.closest('.add-to-cart')) return; window.location.href = `product.html?id=${el.dataset.productId}`; });
         });
-        document.querySelectorAll('.add-to-cart').forEach(btn => {
+        document.querySelectorAll('.buy-now-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
             if (btn.classList.contains('disabled')) return;
-            addToCart(btn.dataset.id, btn.dataset.name, parseFloat(btn.dataset.price), 'fa-crown', btn.dataset.image, parseInt(btn.dataset.quantity));
+            openBuyNow(btn.dataset.id, btn.dataset.name, parseFloat(btn.dataset.price), btn.dataset.image);
           });
         });
       }
@@ -451,6 +454,23 @@ async function loadProducts() {
         document.getElementById('checkoutModal').style.display = 'flex';
       });
 
+
+      /* === BUY NOW (ambra.tn pattern): card/product button -> same checkout modal, single item === */
+      let buyNowItem = null; // when set, processOrder submits ONLY this item and never touches the cart
+      window.openBuyNow = function (id, name, price, image) {
+        buyNowItem = { id, name, price, quantity: 1, image: image || '' };
+        const noteEl = document.getElementById('buyNowNote');
+        if (noteEl) { noteEl.textContent = translations[currentLanguage].buyNowNote; noteEl.style.display = 'block'; }
+        const badgeEl = document.getElementById('buyNowBadge');
+        if (badgeEl) { badgeEl.textContent = '⚡ ' + translations[currentLanguage].buyNow; badgeEl.style.display = 'inline'; }
+        const cartTitle = document.getElementById('cartModeTitle');
+        if (cartTitle) cartTitle.style.display = 'none';
+        document.getElementById('modalCartItems').innerHTML = '<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>' + escapeHtml(name) + ' x1</span><span>' + price.toFixed(3).replace('.', ',') + ' TND</span></div>';
+        document.getElementById('modalTotal').textContent = price.toFixed(3).replace('.', ',') + ' TND';
+        document.getElementById('checkoutModal').style.display = 'flex';
+      };
+      window.closeBuyNow = function () { buyNowItem = null; closeCheckoutModal(); };
+
       window.processOrder = async (event) => {
         event.preventDefault();
         const btn = document.getElementById('submitOrderBtn');
@@ -458,10 +478,10 @@ async function loadProducts() {
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
         try {
           const { data: { user } } = await supabase.auth.getUser();
-          const email = user ? user.email : document.getElementById('customerEmail').value;
+          const email = user ? user.email : (buyNowItem ? (document.getElementById('customerEmail')?.value || null) : document.getElementById('customerEmail').value);
           const orderData = {
-            items: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.id })),
-            total: calculateTotal(),
+            items: buyNowItem ? [{ name: buyNowItem.name, quantity: 1, price: buyNowItem.price, id: buyNowItem.id }] : cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.id })),
+            total: buyNowItem ? buyNowItem.price : calculateTotal(),
             customer_name: document.getElementById('customerName').value,
             customer_phone: document.getElementById('customerPhone').value,
             customer_email: email,
@@ -473,17 +493,22 @@ async function loadProducts() {
           if (orderError) throw orderError;
           const orderId = null;
           try { await supabase.functions.invoke('send-order-email', { body: { order: { ...orderData, id: orderId } } }); } catch (emailErr) { console.error('Email error:', emailErr); }
-          cart = [];
-          localStorage.removeItem('RosaFragrances_cart');
-          saveCart();
-          closeCheckoutModal();
-          closeCart();
+          if (buyNowItem) {
+            buyNowItem = null;
+            closeCheckoutModal();
+          } else {
+            cart = [];
+            localStorage.removeItem('RosaFragrances_cart');
+            saveCart();
+            closeCheckoutModal();
+            closeCart();
+          }
           showToast('orderConfirmed');
         } catch (error) { console.error(error); showToast('error'); }
         finally { btn.disabled = false; btn.innerHTML = translations[currentLanguage].confirm; }
       };
       document.getElementById('checkoutForm')?.addEventListener('submit', window.processOrder);
-      window.closeCheckoutModal = () => { var m = document.getElementById('checkoutModal'); if (m) m.style.display = 'none'; };
+      window.closeCheckoutModal = () => {  const noteEl = document.getElementById('buyNowNote'); if (noteEl) noteEl.style.display = 'none'; const badgeEl = document.getElementById('buyNowBadge'); if (badgeEl) badgeEl.style.display = 'none'; const cartTitle = document.getElementById('cartModeTitle'); if (cartTitle) cartTitle.style.display = 'inline'; buyNowItem = null; var m = document.getElementById('checkoutModal'); if (m) m.style.display = 'none';  };
       window.closeProductModal = function () { var m = document.getElementById('productModal'); if (m) m.style.display = 'none'; };
 
       let updateUserTimeout, isUpdatingUser = false;

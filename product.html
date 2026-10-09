@@ -159,6 +159,9 @@
     .add-to-cart-btn.disabled:hover { transform: none; background: var(--text-mid); }
     .add-to-cart-btn { background: var(--gold-dark); border: none; color: var(--white); padding: 0.8rem 2rem; border-radius: 50px; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s; margin-top: 1rem; display: inline-flex; align-items: center; gap: 8px; }
     .add-to-cart-btn:hover { transform: translateY(-2px); background: var(--charcoal); }
+    .buy-now-btn { background: var(--gold); border: 1px solid var(--gold-dark); color: var(--white); padding: 0.8rem 1.6rem; border-radius: 50px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s; margin-top: 1rem; display: inline-flex; align-items: center; gap: 8px; box-shadow: var(--shadow-md); }
+    .buy-now-btn:hover { transform: translateY(-2px); background: var(--gold-dark); }
+    .buy-now-btn.disabled, .buy-now-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
     .suggestions-section { margin-top: 2rem; }
     .suggestions-section h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 300; color: var(--gold-dark); margin-bottom: 1.5rem; }
     .suggestions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
@@ -402,9 +405,7 @@
   </footer>
 
   <!-- CHECKOUT MODAL -->
-  <div id="checkoutModal" class="modal-overlay">
-    <div class="modal-content">
-      <div class="modal-header"><h3 style="font-weight:400;font-size:1.1rem;"><i class="fas fa-truck"></i> <span data-translate="delivery">Livraison</span></h3><button class="close-modal" onclick="closeCheckoutModal()"><i class="fas fa-times"></i></button></div>
+  <span id="cartModeTitle">Livraison</span><span id="buyNowBadge" style="display:none;">⚡ Buy Now</span></h3><p id="buyNowNote" style="display:none;font-size:0.75rem;opacity:.7;margin:0.4rem 1.2rem 0;"></p></h3><button class="close-modal" onclick="closeCheckoutModal()"><i class="fas fa-times"></i></button></div>
       <div style="padding:1.2rem;">
         <form id="checkoutForm">
           <div class="form-group"><label data-translate="fullName">Nom complet *</label><input type="text" id="customerName" required></div>
@@ -421,7 +422,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/app-collections.js?v=2" data-anon-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ"></script>
-<script src="js/app-product.js?v=6"></script>
+<script src="js/app-product.js?v=7"></script>
     <script src="js/rosa-prefill.js"></script>
 </body>
 

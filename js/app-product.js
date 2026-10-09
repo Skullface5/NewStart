@@ -18,6 +18,7 @@
           home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
           login: 'Se connecter', profile: 'Mon Profil', notreCollection: 'Notre Collection', back: 'Retour',
           cart: 'Panier', emptyCart: 'Votre panier est vide.', total: 'Total', payment: 'PAIEMENT',
+          buyNow: 'Acheter maintenant', buyNowNote: 'Remplissez le formulaire, on vous appelle!',
           addToCart: 'Ajouter au panier', addedToCart: '✨ Article ajouté', removed: '🗑️ Retiré',
           loading: 'Chargement...', errorLoading: '❌ Erreur de chargement', productNotFound: '❌ Produit non trouvé',
           youMayLike: 'Vous aimerez aussi', discover: 'Découvrez ce parfum d\'exception, une fragrance unique qui révèle votre personnalité.',
@@ -36,6 +37,7 @@
           home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
           login: 'Sign in', profile: 'My Profile', notreCollection: 'Our Collection', back: 'Back',
           cart: 'Cart', emptyCart: 'Your cart is empty.', total: 'Total', payment: 'PAYMENT',
+          buyNow: 'Buy Now', buyNowNote: 'Fill in the form, we will call you shortly!',
           addToCart: 'Add to cart', addedToCart: '✨ Added to cart', removed: '🗑️ Removed',
           loading: 'Loading...', errorLoading: '❌ Error loading', productNotFound: '❌ Product not found',
           youMayLike: 'You may also like', discover: 'Discover this exceptional perfume, a unique fragrance that reveals your personality.',
@@ -54,6 +56,7 @@
           home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
           login: 'تسجيل الدخول', profile: 'ملفي الشخصي', notreCollection: 'مجموعتنا', back: 'رجوع',
           cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.', total: 'المجموع', payment: 'الدفع',
+          buyNow: 'اشتري الآن', buyNowNote: 'املأ النموذج وسنتصل بك في أقرب وقت!',
           addToCart: 'أضف إلى السلة', addedToCart: '✨ تمت الإضافة', removed: '🗑️ تمت الإزالة',
           loading: 'جاري التحميل...', errorLoading: '❌ خطأ في التحميل', productNotFound: '❌ المنتج غير موجود',
           youMayLike: 'قد يعجبك أيضاً', discover: 'اكتشف هذا العطر الاستثنائي، رائحة فريدة تكشف عن شخصيتك.',
@@ -281,15 +284,21 @@
               ${stockStatusHTML}
               <div class="product-price">${promoPriceHtml(product)}</div>
               <div class="product-description">${escapeHtml(product.description || translations[currentLanguage].discover)}</div>
-              <button class="add-to-cart-btn ${addToCartDisabled}" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${product.price}" data-icon="fa-crown" data-image="${productImages[0] || ''}" ${isOutOfStock ? 'disabled' : ''}>
+<button class="add-to-cart-btn ${addToCartDisabled}" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${product.price}" data-icon="fa-crown" data-image="${productImages[0] || ''}" ${isOutOfStock ? 'disabled' : ''}>
                 <i class="fas fa-shopping-cart"></i> ${translations[currentLanguage].addToCart}
               </button>
-            </div>
+              <button class="buy-now-btn ${isOutOfStock ? 'disabled' : ''}" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${product.price}" data-image="${productImages[0] || ''}" ${isOutOfStock ? 'disabled' : ''}>
+                <i class="fas fa-bolt"></i> ${translations[currentLanguage].buyNow}
+              </button>
           </div>
         `;
         const addBtn = document.querySelector('.add-to-cart-btn');
         if (addBtn && !isOutOfStock) {
           addBtn.addEventListener('click', () => { addToCart(addBtn.dataset.id, addBtn.dataset.name, parseFloat(addBtn.dataset.price), addBtn.dataset.icon, addBtn.dataset.image); });
+        }
+        const buyBtn = document.querySelector('.buy-now-btn');
+        if (buyBtn && !isOutOfStock) {
+          buyBtn.addEventListener('click', () => { openBuyNow(buyBtn.dataset.id, buyBtn.dataset.name, parseFloat(buyBtn.dataset.price), buyBtn.dataset.image); });
         }
         if (productImages.length > 1) setupSwipeAndNavigation(productImages);
       }
@@ -410,6 +419,29 @@
         });
       }
       window.closeCheckoutModal = () => { document.getElementById('checkoutModal').style.display = 'none'; };
+
+      /* === BUY NOW === */
+      let buyNowItem = null;
+      window.openBuyNow = function (id, name, price, image) {
+        buyNowItem = { id, name, price, quantity: 1, image: image || '' };
+        const noteEl = document.getElementById('buyNowNote');
+        if (noteEl) { noteEl.textContent = translations[currentLanguage].buyNowNote; noteEl.style.display = 'block'; }
+        const badgeEl = document.getElementById('buyNowBadge');
+        if (badgeEl) { badgeEl.textContent = '⚡ ' + translations[currentLanguage].buyNow; badgeEl.style.display = 'inline'; }
+        const cartTitle = document.getElementById('cartModeTitle');
+        if (cartTitle) cartTitle.style.display = 'none';
+        document.getElementById('modalCartItems').innerHTML = '<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>' + escapeHtml(name) + ' x1</span><span>' + price.toFixed(3).replace('.', ',') + ' TND</span></div>';
+        document.getElementById('modalTotal').textContent = price.toFixed(3).replace('.', ',') + ' TND';
+        document.getElementById('checkoutModal').style.display = 'flex';
+      };
+      window.closeCheckoutModal = () => {
+        buyNowItem = null;
+        const noteEl = document.getElementById('buyNowNote'); if (noteEl) noteEl.style.display = 'none';
+        const badgeEl = document.getElementById('buyNowBadge'); if (badgeEl) badgeEl.style.display = 'none';
+        const cartTitle = document.getElementById('cartModeTitle'); if (cartTitle) cartTitle.style.display = 'inline';
+        document.getElementById('checkoutModal').style.display = 'none';
+      };
+
       window.processOrder = async (event) => {
         event.preventDefault();
         const btn = document.getElementById('submitOrderBtn');
@@ -417,10 +449,10 @@
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
         try {
           const { data: { user } } = await supabase.auth.getUser();
-          const email = user ? user.email : document.getElementById('customerEmail').value;
+          const email = user ? user.email : (buyNowItem ? (document.getElementById('customerEmail')?.value || null) : document.getElementById('customerEmail').value);
           const orderData = {
-            items: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.id })),
-            total: calculateTotal(),
+            items: buyNowItem ? [{ name: buyNowItem.name, quantity: 1, price: buyNowItem.price, id: buyNowItem.id }] : cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.id })),
+            total: buyNowItem ? buyNowItem.price : calculateTotal(),
             customer_name: document.getElementById('customerName').value,
             customer_phone: document.getElementById('customerPhone').value,
             customer_email: email,
@@ -434,11 +466,16 @@
           try {
             await supabase.functions.invoke('send-order-email', { body: { order: { ...orderData, id: orderId } } });
           } catch (emailErr) { console.error('Email not sent:', emailErr); }
-          cart = [];
-          localStorage.removeItem('RosaFragrances_cart');
-          saveCart();
-          closeCheckoutModal();
-          closeCart();
+          if (buyNowItem) {
+            buyNowItem = null;
+            closeCheckoutModal();
+          } else {
+            cart = [];
+            localStorage.removeItem('RosaFragrances_cart');
+            saveCart();
+            closeCheckoutModal();
+            closeCart();
+          }
           showToast('orderConfirmed');
         } catch (error) { console.error(error); showToast('error'); }
         finally { btn.disabled = false; btn.innerHTML = translations[currentLanguage].confirm; }
