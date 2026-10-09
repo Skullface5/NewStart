@@ -386,9 +386,9 @@ async function loadProducts() {
             status: 'pending',
             user_id: user ? user.id : null
           };
-          const { data: orderResult, error: orderError } = await supabase.from('orders').insert([orderData]).select();
+          const { error: orderError } = await supabase.from('orders').insert([orderData]);
           if (orderError) throw orderError;
-          const orderId = orderResult?.[0]?.id;
+          const orderId = null;
           try {
             const { error: emailError } = await supabase.functions.invoke('send-order-email', { body: { order: { ...orderData, id: orderId } } });
             if (emailError) console.error('Email sending error:', emailError);

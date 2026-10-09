@@ -469,9 +469,9 @@ async function loadProducts() {
             status: 'pending',
             user_id: user ? user.id : null
           };
-          const { data: orderResult, error: orderError } = await supabase.from('orders').insert([orderData]).select();
+          const { error: orderError } = await supabase.from('orders').insert([orderData]);
           if (orderError) throw orderError;
-          const orderId = orderResult?.[0]?.id;
+          const orderId = null;
           try { await supabase.functions.invoke('send-order-email', { body: { order: { ...orderData, id: orderId } } }); } catch (emailErr) { console.error('Email error:', emailErr); }
           cart = [];
           localStorage.removeItem('RosaFragrances_cart');

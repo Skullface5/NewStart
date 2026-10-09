@@ -408,9 +408,9 @@
             shipping_address: document.getElementById('shippingAddress').value,
             status: 'pending', user_id: user ? user.id : null
           };
-          const { data: orderResult, error: orderError } = await supabase.from('orders').insert([orderData]).select();
+          const { error: orderError } = await supabase.from('orders').insert([orderData]);
           if (orderError) throw orderError;
-          const orderId = orderResult?.[0]?.id;
+          const orderId = null;
           const { error: emailError } = await supabase.functions.invoke('send-order-email', { body: { order: { ...orderData, id: orderId } } });
           if (emailError) console.error('Email error:', emailError);
           cart = []; localStorage.removeItem('RosaFragrances_cart'); saveCart();
