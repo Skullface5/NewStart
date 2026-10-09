@@ -1474,7 +1474,11 @@
     </div>
   </div>
 
-  <span id="cartModeTitle">Livraison</span><span id="buyNowBadge" style="display:none;">⚡ Buy Now</span></h3><p id="buyNowNote" style="display:none;font-size:0.75rem;opacity:.7;margin:0.4rem 1.2rem 0;"></p></h3>
+  <div id="checkoutModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-weight:400;font-size:1.1rem;"><i class="fas fa-truck"></i> <span id="cartModeTitle" data-translate="delivery">Livraison</span> <span id="buyNowBadge" style="display:none;">⚡ Commander</span></h3>
+        <p id="buyNowNote" style="display:none;font-size:0.75rem;opacity:.7;margin:0.4rem 1.2rem 0;"></p>
         <button class="close-modal" onclick="closeCheckoutModal()"><i class="fas fa-times"></i></button>
       </div>
       <div style="padding:1rem;">
@@ -1666,7 +1670,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/app-collections.js?v=2" data-anon-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ"></script>
 <script defer src="js/app-hero.js?v=9" data-anon-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ"></script>
-<script src="js/app-unisexe.js?v=6"></script>
+<script src="js/app-unisexe.js?v=7"></script>
 
     <script src="js/rosa-prefill.js"></script>
 </body>
