@@ -162,6 +162,10 @@
     .buy-now-btn { background: var(--gold); border: 1px solid var(--gold-dark); color: var(--white); padding: 0.8rem 1.6rem; border-radius: 50px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s; margin-top: 1rem; display: inline-flex; align-items: center; gap: 8px; box-shadow: var(--shadow-md); }
     .buy-now-btn:hover { transform: translateY(-2px); background: var(--gold-dark); }
     .buy-now-btn.disabled, .buy-now-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    /* center the buy + bag pair under the product info */
+    .product-actions.rp-buy-row { display: flex; justify-content: center; align-items: center; max-width: 480px; width: 100%; margin-left: auto; margin-right: auto; gap: .5rem; }
+    .product-actions.rp-buy-row .buy-now-btn { flex: 1 1 auto; }
+    .product-actions .rp-cart-btn { flex: 0 0 auto; }
     .suggestions-section { margin-top: 2rem; }
     .suggestions-section h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 300; color: var(--gold-dark); margin-bottom: 1.5rem; }
     .suggestions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
