@@ -167,7 +167,7 @@
     .suggestions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
     @media (max-width: 1024px) { .suggestions-grid { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 768px) { .suggestions-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; } }
-    @media (max-width: 400px) { .suggestions-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 400px) { .suggestions-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; } }
     .suggestion-card { background: var(--card-warm); border-radius: 16px; padding: 1rem; text-align: center; border: 1px solid var(--border-light); transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s; cursor: pointer; text-decoration: none; color: var(--charcoal); }
     .suggestion-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: var(--gold-light); }
     .suggestion-img { width: 100%; aspect-ratio: 1 / 1; margin: 0 auto 0.8rem; border-radius: 12px; overflow: hidden; background: var(--cream-deep); display: flex; align-items: center; justify-content: center; }
