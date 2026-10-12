@@ -2971,6 +2971,13 @@
             <input type="number" id="productQuantity" step="1" min="0" value="0" placeholder="0">
           </div>
 
+          <div class="input-group" id="addVariantsGroup">
+              <label data-translate="variants">Variantes (Nos Produits)</label>
+              <div class="variants-admin" id="variantsList"></div>
+              <button type="button" class="variants-add" id="addVariantBtn" data-translate="addVariant">+ Ajouter une variante</button>
+              <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="variantsInfo">Optionnel. Laissez vide pour un produit à un seul format.</span></div>
+          </div>
+
           <div class="input-group">
             <label data-translate="description">Description</label>
             <textarea id="productDescription" rows="3"
@@ -3246,6 +3253,13 @@
                         <input type="number" id="eProductQuantity" step="1" min="0" placeholder="0">
                     </div>
 
+                      <div class="input-group" id="editVariantsGroup">
+                          <label data-translate="variants">Variantes (Nos Produits)</label>
+                          <div class="variants-admin" id="eVariantsList"></div>
+                          <button type="button" class="variants-add" id="eAddVariantBtn" data-translate="addVariant">+ Ajouter une variante</button>
+                          <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="variantsInfo">Optionnel. Laissez vide pour un produit à un seul format.</span></div>
+                      </div>
+
                     <div class="input-group">
                         <label data-translate="description">Description</label>
                         <textarea id="eProductDescription" rows="3"
@@ -3325,10 +3339,29 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/admin-gate.js?v=4"></script>
-  <script src="js/app-adminadd.js?v=5"></script>
+  <script src="js/app-adminadd.js?v=6"></script>
   <script src="js/app-admincat.js?v=16"></script>
-  <script src="js/app-adminorders.js?v=3"></script>
-  <script src="js/app-productedit.js?v=4"></script>
+  <script src="js/app-adminorders.js?v=4"></script>
+  <script src="js/rosa-admin-variants.js?v=1"></script>
+<script>
+/* mounts the variant editors (add + edit forms) once their containers exist */
+(function () {
+  var RV = window.RosaAdminVariants;
+  if (!RV) return;
+  function q(id) { return document.getElementById(id); }
+  function mount() {
+    var a = q('variantsList'), ab = q('addVariantBtn');
+    var e = q('eVariantsList'), eb = q('eAddVariantBtn');
+    if (a && !a.__rosaMounted) RV.mount(a, ab);
+    if (e && !e.__rosaMounted) RV.mount(e, eb);
+  }
+  document.addEventListener('DOMContentLoaded', mount);
+  window.addEventListener('load', mount);
+  var t = setInterval(mount, 500);
+  setTimeout(function () { clearInterval(t); }, 30000);
+})();
+</script>
+<script src="js/app-productedit.js?v=5"></script>
 
   <script>
   (function () {

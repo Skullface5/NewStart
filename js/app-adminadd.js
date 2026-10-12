@@ -12,7 +12,7 @@
           existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil',
           manageProducts: 'Gérer les produits', addPerfume: 'Ajouter un parfum',
           productName: 'Nom du produit', brand: 'Marque / Maison', price: 'Prix (TND)', oldPrice: 'Ancien prix — promo (optionnel)', oldPriceHint: "Si supérieur au prix actuel, le site affiche l'ancien prix barré.",
-          quantity: 'Quantité en stock',
+          quantity: 'Quantité en stock', variants: 'Variantes (Nos Produits)', addVariant: '+ Ajouter une variante', variantsInfo: 'Optionnel. Laissez vide pour un produit à un seul format.',
           description: 'Description', productImages: 'Images du produit', addImages: 'Ajouter des images',
           imagesInfo: 'Vous pouvez ajouter plusieurs images. La première sera l\'image principale.',
           category: 'Catégorie', menCat: 'Homme', womenCat: 'Femme', unisexCat: 'Unisexe', kidsCat: 'Enfants', catVoiture: 'Voiture', catAmbiance: 'Ambiance', catMusc: 'Musc', catAccessoires: 'Accessoires', catInspires: 'Parfums inspirés',
@@ -33,7 +33,7 @@
           existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
           manageProducts: 'Manage Products', addPerfume: 'Add Perfume',
           productName: 'Product Name', brand: 'Brand / House', price: 'Price (TND)', oldPrice: 'Old price — promo (optional)', oldPriceHint: 'If higher than the current price, the site shows the old price struck through.',
-          quantity: 'Quantity in stock',
+          quantity: 'Quantity in stock', variants: 'Variants (Our Products)', addVariant: '+ Add variant', variantsInfo: 'Optional. Leave empty for a single-size product.',
           description: 'Description', productImages: 'Product Images', addImages: 'Add Images',
           imagesInfo: 'You can add multiple images. The first one will be the main image.',
           category: 'Category', menCat: 'Men', womenCat: 'Women', unisexCat: 'Unisex', kidsCat: 'Kids', catVoiture: 'Car', catAmbiance: 'Home', catMusc: 'Musk', catAccessoires: 'Accessories', catInspires: 'Inspired perfumes',
@@ -54,7 +54,7 @@
           existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
           manageProducts: 'إدارة المنتجات', addPerfume: 'إضافة عطر',
           productName: 'اسم المنتج', brand: 'العلامة التجارية', price: 'السعر (دينار)', oldPrice: 'السعر القديم — عرض (اختياري)', oldPriceHint: 'إذا كان أعلى من السعر الحالي، يعرض الموقع السعر القديم مشطوبًا.',
-          quantity: 'الكمية في المخزون',
+          quantity: 'الكمية في المخزون', variants: 'الأنواع (منتجاتنا)', addVariant: '+ إضافة نوع', variantsInfo: 'اختياري. اتركه فارغاً لمنتج بحجم واحد.',
           description: 'الوصف', productImages: 'صور المنتج', addImages: 'إضافة صور',
           imagesInfo: 'يمكنك إضافة عدة صور. الصورة الأولى ستكون الصورة الرئيسية.',
           category: 'الفئة', menCat: 'رجالي', womenCat: 'نسائي', unisexCat: 'للجنسين', kidsCat: 'أطفال', catVoiture: 'سيارة', catAmbiance: 'جو', catMusc: 'مسك', catAccessoires: 'إكسسوارات', catInspires: 'عطور مستوحاة',
@@ -214,10 +214,10 @@
       async function addProduct() {
         const name = document.getElementById('productName')?.value.trim();
         const brand = document.getElementById('productBrand')?.value.trim();
-        const price = parseFloat(document.getElementById('productPrice')?.value);
-        const oldPriceRaw = document.getElementById('productOldPrice')?.value;
+        const price = parseFloat((document.getElementById('eProductPrice') || document.getElementById('productPrice'))?.value);
+        const oldPriceRaw = (document.getElementById('eProductOldPrice') || document.getElementById('productOldPrice'))?.value;
         const oldPrice = (oldPriceRaw === '' || oldPriceRaw == null) ? null : parseFloat(oldPriceRaw);
-        const quantity = parseInt(document.getElementById('productQuantity')?.value) || 0;
+        const quantity = parseInt((document.getElementById('eProductQuantity') || document.getElementById('productQuantity'))?.value) || 0;
         const description = document.getElementById('productDescription')?.value.trim();
 
         if (!name || !brand || isNaN(price) || price <= 0) {
@@ -244,8 +244,11 @@
             urls.push(pub.publicUrl);
           }
 
+          const __vList = document.getElementById('variantsList');
+          const __vRows = (window.RosaAdminVariants && __vList && window.RosaAdminVariants.readRows(__vList)) || [];
           const newProduct = {
             name, brand, price, quantity,
+            variants: __vRows.length ? JSON.stringify(__vRows) : null,
             old_price: (oldPrice != null && isFinite(oldPrice) && oldPrice > price) ? oldPrice : null,
             description: description || null,
             images: JSON.stringify(urls),
@@ -257,6 +260,10 @@
           let { error } = await supabase.from('products').insert([newProduct]);
           if (error && /old_price/.test(String(error.message || ''))) {
             delete newProduct.old_price; // DB not migrated yet: save without promo price
+            error = (await supabase.from('products').insert([newProduct])).error;
+          }
+          if (error && /variants/.test(String(error.message || ''))) {
+            delete newProduct.variants; // column not migrated yet
             error = (await supabase.from('products').insert([newProduct])).error;
           }
           if (error) throw error;
@@ -271,6 +278,7 @@
           uploadedImages.forEach(item => { try { URL.revokeObjectURL(item.preview); } catch (e) {} });
           uploadedImages = [];
           updateImagePreview();
+          if (window.RosaAdminVariants) window.RosaAdminVariants.setRows(document.getElementById('variantsList'), []);
 
           // Reset category
           document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));

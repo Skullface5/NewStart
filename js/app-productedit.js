@@ -15,7 +15,7 @@
                     existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil',
                     back: 'Retour', editProduct: 'Modifier le produit', productInfo: 'Informations produit',
                     productName: 'Nom du produit', brand: 'Marque / Maison', price: 'Prix (TND)', oldPrice: 'Ancien prix — promo (optionnel)', oldPriceHint: "Si supérieur au prix actuel, le site affiche l'ancien prix barré.",
-                    quantity: 'Quantité en stock', description: 'Description', productImages: 'Images du produit',
+                    quantity: 'Quantité en stock', variants: 'Variantes (Nos Produits)', addVariant: '+ Ajouter une variante', variantsInfo: 'Optionnel. Laissez vide pour un produit à un seul format.', description: 'Description', productImages: 'Images du produit',
                     addImages: 'Ajouter des images', imagesInfo: 'Vous pouvez ajouter plusieurs images. La première sera l\'image principale.',
                     category: 'Catégorie', menCat: 'Homme', womenCat: 'Femme', unisexCat: 'Unisexe', kidsCat: 'Enfants', catVoiture: 'Voiture', catAmbiance: 'Ambiance', catMusc: 'Musc', catAccessoires: 'Accessoires', catInspires: 'Parfums inspirés',
                     season: 'Saisons (plusieurs choix possibles)', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne',
@@ -35,7 +35,7 @@
                     existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
                     back: 'Back', editProduct: 'Edit Product', productInfo: 'Product Information',
                     productName: 'Product Name', brand: 'Brand / House', price: 'Price (TND)', oldPrice: 'Old price — promo (optional)', oldPriceHint: 'If higher than the current price, the site shows the old price struck through.',
-                    quantity: 'Quantity in stock', description: 'Description', productImages: 'Product Images',
+                    quantity: 'Quantity in stock', variants: 'Variants (Our Products)', addVariant: '+ Add variant', variantsInfo: 'Optional. Leave empty for a single-size product.', description: 'Description', productImages: 'Product Images',
                     addImages: 'Add Images', imagesInfo: 'You can add multiple images. The first one will be the main image.',
                     category: 'Category', menCat: 'Men', womenCat: 'Women', unisexCat: 'Unisex', kidsCat: 'Kids', catVoiture: 'Car', catAmbiance: 'Home', catMusc: 'Musk', catAccessoires: 'Accessories', catInspires: 'Inspired perfumes',
                     season: 'Seasons (multiple choices possible)', summer: 'Summer', winter: 'Winter', spring: 'Spring', autumn: 'Autumn',
@@ -55,7 +55,7 @@
                     existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
                     back: 'رجوع', editProduct: 'تعديل المنتج', productInfo: 'معلومات المنتج',
                     productName: 'اسم المنتج', brand: 'العلامة التجارية', price: 'السعر (دينار)', oldPrice: 'السعر القديم — عرض (اختياري)', oldPriceHint: 'إذا كان أعلى من السعر الحالي، يعرض الموقع السعر القديم مشطوبًا.',
-                    quantity: 'الكمية في المخزون', description: 'الوصف', productImages: 'صور المنتج',
+                    quantity: 'الكمية في المخزون', variants: 'الأنواع (منتجاتنا)', addVariant: '+ إضافة نوع', variantsInfo: 'اختياري. اتركه فارغاً لمنتج بحجم واحد.', description: 'الوصف', productImages: 'صور المنتج',
                     addImages: 'إضافة صور', imagesInfo: 'يمكنك إضافة عدة صور. الصورة الأولى ستكون الصورة الرئيسية.',
                     category: 'الفئة', menCat: 'رجالي', womenCat: 'نسائي', unisexCat: 'للجنسين', kidsCat: 'أطفال', catVoiture: 'سيارة', catAmbiance: 'جو', catMusc: 'مسك', catAccessoires: 'إكسسوارات', catInspires: 'عطور مستوحاة',
                     season: 'المواسم (اختيارات متعددة ممكنة)', summer: 'صيف', winter: 'شتاء', spring: 'ربيع', autumn: 'خريف',
@@ -191,6 +191,15 @@
                 document.getElementById('eProductQuantity').value = product.quantity || 0;
                 document.getElementById('eProductDescription').value = product.description || '';
 
+                try {
+                    const listEl = document.getElementById('eVariantsList');
+                    if (listEl && window.RosaAdminVariants) {
+                        let varr = product.variants;
+                        if (typeof varr === 'string') { try { varr = JSON.parse(varr); } catch (e) { varr = null; } }
+                        window.RosaAdminVariants.setRows(listEl, Array.isArray(varr) ? varr : []);
+                    }
+                } catch (e) {}
+
                 const existingImages = parseImages(product.images);
                 uploadedImages = [...existingImages];
                 updateImagePreview();
@@ -231,6 +240,8 @@
                 }
 
                 const selectedCategory = document.querySelector('.e-category-option.selected')?.dataset.category || 'man';
+                const __vList = document.getElementById('eVariantsList');
+                const __vRows = (window.RosaAdminVariants && __vList && window.RosaAdminVariants.readRows(__vList)) || null;
 
                 // Get selected seasons (multi-select)
                 const selectedSeasons = [];
@@ -268,11 +279,17 @@
                         updated_at: new Date().toISOString()
                     };
 
+                    if (__vRows) updateData.variants = __vRows.length ? JSON.stringify(__vRows) : null;
+
                     let error = null;
                     const first = await supabase.from('products').update(updateData).eq('id', productId);
                     error = first.error;
                     if (error && /old_price/.test(String(error.message || ''))) {
                         delete updateData.old_price; // DB not migrated yet
+                        error = (await supabase.from('products').update(updateData).eq('id', productId)).error;
+                    }
+                    if (error && /variants/.test(String(error.message || ''))) {
+                        delete updateData.variants; // column not migrated yet
                         error = (await supabase.from('products').update(updateData).eq('id', productId)).error;
                     }
                     if (error) throw error;

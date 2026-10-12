@@ -1,5 +1,7 @@
 
     (function () {
+      const VR = window.RosaVariants || { parse: function () { return []; }, priceFor: function (p) { return parseFloat(p && p.price) || 0; }, inStock: function (p) { return !p || p.quantity == null || Number(p.quantity) > 0; }, stockOf: function (p) { return p && p.quantity != null ? Number(p.quantity) : null; }, esc: function (s) { return s == null ? '' : String(s).replace(/[&<>"]/g, function (m) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[m]; }); } };
+
       const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
       const supabase = window.__rosaSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -13,7 +15,7 @@
           kidsCat: 'Parfums Enfants', kidsDesc: 'Des fragrances douces, légères et ludiques spécialement conçues pour les plus jeunes.',
           buyNow: 'Commander', buyNowNote: 'Remplissez le formulaire, on vous appelle dans les plus brefs délais!',
           addToCart: 'Ajouter', addedToCart: '✨ Article ajouté', cart: 'Panier', emptyCart: 'Votre panier est vide.',
-          total: 'Total', payment: 'PAIEMENT', delivery: 'Livraison', fullName: 'Nom complet *',
+          total: 'Total', payment: 'PAIEMENT', delivery: 'Livraison', fullName: 'Nom complet *', ourProducts: 'Nos Produits',
           phone: 'Téléphone *', email: 'Email *', address: 'Adresse *', yourOrder: 'Votre commande',
           cancel: 'Annuler', confirm: 'Confirmer', orderConfirmed: '✅ Commande confirmée!',
           cartEmptyWarning: '🛒 Panier vide', error: '❌ Erreur', details: 'Détails', close: 'Fermer',
@@ -35,7 +37,7 @@
           kidsCat: 'Kids Perfumes', kidsDesc: 'Soft, light and playful fragrances specially designed for the little ones.',
           buyNow: 'Buy Now', buyNowNote: 'Fill in the form, we will call you as soon as possible!',
           addToCart: 'Add to cart', addedToCart: '✨ Added to cart', cart: 'Cart', emptyCart: 'Your cart is empty.',
-          total: 'Total', payment: 'PAYMENT', delivery: 'Delivery', fullName: 'Full name *',
+          total: 'Total', payment: 'PAYMENT', delivery: 'Delivery', fullName: 'Full name *', ourProducts: 'Our Products',
           phone: 'Phone *', email: 'Email *', address: 'Address *', yourOrder: 'Your order',
           cancel: 'Cancel', confirm: 'Confirm', orderConfirmed: '✅ Order confirmed!',
           cartEmptyWarning: '🛒 Cart is empty', error: '❌ Error', details: 'Details', close: 'Close',
@@ -57,7 +59,7 @@
           kidsCat: 'عطور أطفال', kidsDesc: 'عطور ناعمة وخفيفة ومرحة مصممة خصيصاً للصغار.',
           buyNow: 'اشتري الآن', buyNowNote: 'املأ النموذج وسنتصل بك في أقرب وقت ممكن!',
           addToCart: 'أضف إلى السلة', addedToCart: '✨ تمت الإضافة', cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.',
-          total: 'المجموع', payment: 'الدفع', delivery: 'التوصيل', fullName: 'الاسم الكامل *',
+          total: 'المجموع', payment: 'الدفع', delivery: 'التوصيل', fullName: 'الاسم الكامل *', ourProducts: 'منتجاتنا',
           phone: 'الهاتف *', email: 'البريد الإلكتروني *', address: 'العنوان *', yourOrder: 'طلبك',
           cancel: 'إلغاء', confirm: 'تأكيد', orderConfirmed: '✅ تم تأكيد الطلب!',
           cartEmptyWarning: '🛒 السلة فارغة', error: '❌ خطأ', details: 'التفاصيل', close: 'إغلاق',
@@ -279,7 +281,7 @@
           html += `<div class="cart-item" data-id="${item.id}">
                         <div class="cart-item-icon">${item.image ? `<img src="${item.image}" alt="${escapeHtml(item.name)}" loading="lazy" decoding="async">` : `<i class="fas fa-crown"></i>`}</div>
                         <div class="cart-item-info">
-                            <div class="cart-item-title">${escapeHtml(item.name)}</div>
+                            <div class="cart-item-title">${escapeHtml(item.name)}${item.variant ? ` <span class="cart-item-sub">(${escapeHtml(item.variant)})</span>` : ''}</div>
                             <div class="cart-item-price">${formatPrice(item.price)}</div>
                             <div class="cart-item-quantity">
                                 <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
@@ -377,9 +379,13 @@ async function loadProducts() {
         }
         let html = '';
         filteredProducts.forEach(p => {
+          const __vs = VR.parse(p.variants);
+          const __vf = __vs.length ? (__vs.find(v => VR.inStock(p, v)) || __vs[0]) : null;
+          const __chip = __vs.length ? `<div class="variant-chip">${VR.esc(__vs.map(v => v.label).join(' / '))}</div>` : '';
           const imgHtml = p.image ? `<img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async">` : `<i class="fas fa-crown"></i>`;
-          const stockStatus = getStockStatus(p.quantity);
-          const stockIcon = getStockIcon(p.quantity);
+          const __qty = __vf ? (VR.stockOf(p, __vf) == null ? p.quantity : VR.stockOf(p, __vf)) : p.quantity;
+          const stockStatus = getStockStatus(__qty);
+          const stockIcon = getStockIcon(__qty);
           const stockText = translations[currentLanguage][stockStatus];
           const isOutOfStock = stockStatus === 'outOfStock';
           html += `<div class="product-card" data-product-id="${p.id}">
@@ -388,9 +394,10 @@ async function loadProducts() {
                             <div class="product-title">${escapeHtml(p.name)}</div>
                             <div class="product-brand">${escapeHtml(p.brand)}</div>
                             <div class="product-price">${promoPriceHtml(p)}</div>
+${__chip}
                             <div class="stock-indicator ${stockStatus}">${stockIcon} ${stockText}</div>
                         </div>
-                        <button class="buy-now-btn ${isOutOfStock ? 'disabled' : ''}" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${p.price}" data-image="${p.image || ''}" ${isOutOfStock ? 'disabled' : ''}>
+                        <button class="buy-now-btn ${isOutOfStock ? 'disabled' : ''}" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${__vf ? VR.priceFor(p, __vf) : p.price}" data-variant="${__vf ? VR.esc(__vf.label) : ''}" data-image="${p.image || ''}" ${isOutOfStock ? 'disabled' : ''}>
                             <i class="fas fa-bolt"></i> ${translations[currentLanguage].buyNow}
                         </button>
                     </div>`;
@@ -403,7 +410,7 @@ async function loadProducts() {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
             if (btn.classList.contains('disabled')) return;
-            openBuyNow(btn.dataset.id, btn.dataset.name, parseFloat(btn.dataset.price), btn.dataset.image);
+            openBuyNow(btn.dataset.id, btn.dataset.name, parseFloat(btn.dataset.price), btn.dataset.image, btn.dataset.variant);
           });
         });
       }
@@ -449,7 +456,7 @@ async function loadProducts() {
           loggedDiv.style.display = 'none';
           emailInp.required = true;
         }
-        document.getElementById('modalCartItems').innerHTML = cart.map(i => `<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>${escapeHtml(i.name)} x${i.quantity}</span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`).join('');
+        document.getElementById('modalCartItems').innerHTML = cart.map(i => `<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>${escapeHtml(i.name)}${i.variant ? ' <span class="cart-item-sub">(' + escapeHtml(i.variant) + ')</span>' : ''} x${i.quantity}</span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`).join('');
         document.getElementById('modalTotal').textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND';
         document.getElementById('checkoutModal').style.display = 'flex';
       });
@@ -457,15 +464,15 @@ async function loadProducts() {
 
       /* === BUY NOW (ambra.tn pattern): card/product button -> same checkout modal, single item === */
       let buyNowItem = null; // when set, processOrder submits ONLY this item and never touches the cart
-      window.openBuyNow = function (id, name, price, image) {
-        buyNowItem = { id, name, price, quantity: 1, image: image || '' };
+      window.openBuyNow = function (id, name, price, image, variant) {
+        buyNowItem = { id, name, price, quantity: 1, image: image || '', variant: variant || '' };
         const noteEl = document.getElementById('buyNowNote');
         if (noteEl) { noteEl.textContent = translations[currentLanguage].buyNowNote; noteEl.style.display = 'block'; }
         const badgeEl = document.getElementById('buyNowBadge');
         if (badgeEl) { badgeEl.textContent = '⚡ ' + translations[currentLanguage].buyNow; badgeEl.style.display = 'inline'; }
         const cartTitle = document.getElementById('cartModeTitle');
         if (cartTitle) cartTitle.style.display = 'none';
-        document.getElementById('modalCartItems').innerHTML = '<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>' + escapeHtml(name) + ' x1</span><span>' + price.toFixed(3).replace('.', ',') + ' TND</span></div>';
+        document.getElementById('modalCartItems').innerHTML = '<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>' + escapeHtml(name) + (variant ? ' <span class="cart-item-sub">(' + escapeHtml(variant) + ')</span>' : '') + ' x1</span><span>' + price.toFixed(3).replace('.', ',') + ' TND</span></div>';
         document.getElementById('modalTotal').textContent = price.toFixed(3).replace('.', ',') + ' TND';
         document.getElementById('checkoutModal').style.display = 'flex';
       };
@@ -480,7 +487,7 @@ async function loadProducts() {
           const { data: { user } } = await supabase.auth.getUser();
           const email = user ? user.email : (buyNowItem ? (document.getElementById('customerEmail')?.value || null) : document.getElementById('customerEmail').value);
           const orderData = {
-            items: buyNowItem ? [{ name: buyNowItem.name, quantity: 1, price: buyNowItem.price, id: buyNowItem.id }] : cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.id })),
+            items: buyNowItem ? [{ name: buyNowItem.name, quantity: 1, price: buyNowItem.price, id: buyNowItem.id, variant: buyNowItem.variant || null }] : cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.productId || item.id, variant: item.variant || null })),
             total: buyNowItem ? buyNowItem.price : calculateTotal(),
             customer_name: document.getElementById('customerName').value,
             customer_phone: document.getElementById('customerPhone').value,

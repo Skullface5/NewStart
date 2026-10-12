@@ -983,6 +983,13 @@
                     </div>
 
                     <div class="input-group">
+                        <label data-translate="variants">Variantes (Nos Produits)</label>
+                        <div class="variants-admin" id="eVariantsList"></div>
+                        <button type="button" class="variants-add" id="eAddVariantBtn" data-translate="addVariant">+ Ajouter une variante</button>
+                        <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="variantsInfo">Optionnel. Laissez vide pour un produit à un seul format. Les boutons 100ml peuvent remplacer celui du client.</span></div>
+                    </div>
+
+                    <div class="input-group">
                         <label data-translate="description">Description</label>
                         <textarea id="productDescription" rows="3"
                             placeholder="Décrivez ce parfum... Notes de tête, cœur, fond, inspiration..."></textarea>
@@ -1101,7 +1108,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/admin-gate.js?v=1"></script>
-  <script src="js/app-productedit.js?v=3"></script>
+    <script src="js/rosa-admin-variants.js?v=1"></script>
+  <script src="js/app-productedit.js?v=4"></script>
 </body>
 
 </html>

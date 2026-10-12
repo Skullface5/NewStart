@@ -5,6 +5,8 @@
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
       const supabase = window.__rosaSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+      const VR = window.RosaVariants || { parse: function () { return []; }, priceFor: function (p) { return parseFloat(p && p.price) || 0; }, inStock: function (p) { return !p || p.quantity == null || Number(p.quantity) > 0; }, stockOf: function (p) { return p && p.quantity != null ? Number(p.quantity) : null; }, esc: escapeHtmlRaw };
+      function escapeHtmlRaw(s) { return s == null ? '' : String(s).replace(/[&<>"]/g, function (m) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[m]; }); }
       let currentLanguage = localStorage.getItem('language') || 'fr';
       let allProducts = [];
       let currentProduct = null;
@@ -31,7 +33,8 @@
           orderConfirmed: '✅ Commande confirmée!', cartEmptyWarning: '🛒 Panier vide', error: '❌ Erreur',
           confirm: 'Confirmer', cancel: 'Annuler', yourOrder: 'Votre commande',
           fullName: 'Nom complet *', phone: 'Téléphone *', email: 'Email *',
-          address: 'Adresse *', delivery: 'Livraison'
+          address: 'Adresse *', delivery: 'Livraison',
+          ourProducts: 'Nos Produits'
         },
         en: {
           home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
@@ -50,7 +53,8 @@
           orderConfirmed: '✅ Order confirmed!', cartEmptyWarning: '🛒 Cart is empty', error: '❌ Error',
           confirm: 'Confirm', cancel: 'Cancel', yourOrder: 'Your order',
           fullName: 'Full name *', phone: 'Phone *', email: 'Email *',
-          address: 'Address *', delivery: 'Delivery'
+          address: 'Address *', delivery: 'Delivery',
+          ourProducts: 'Our Products'
         },
         ar: {
           home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
@@ -69,7 +73,8 @@
           orderConfirmed: '✅ تم تأكيد الطلب!', cartEmptyWarning: '🛒 السلة فارغة', error: '❌ خطأ',
           confirm: 'تأكيد', cancel: 'إلغاء', yourOrder: 'طلبك',
           fullName: 'الاسم الكامل *', phone: 'الهاتف *', email: 'البريد الإلكتروني *',
-          address: 'العنوان *', delivery: 'التوصيل'
+          address: 'العنوان *', delivery: 'التوصيل',
+          ourProducts: 'منتجاتنا'
         }
       };
 
@@ -148,6 +153,7 @@
             <div class="cart-item-icon">${imageHtml}</div>
             <div class="cart-item-info">
               <div class="cart-item-title">${escapeHtml(item.name)}</div>
+              ${item.variant ? `<div class="cart-item-sub">${escapeHtml(item.variant)}</div>` : ''}
               <div class="cart-item-price">${formatPrice(item.price)}</div>
               <div class="cart-item-quantity">
                 <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
@@ -163,20 +169,23 @@
       }
 
       // Fixed addToCart with proper stock check using allProducts
-      function addToCart(id, name, price, icon, image) {
+      function addToCart(id, name, price, icon, image, variantLabel) {
         const product = allProducts.find(p => p.id == id);
         if (!product) return;
-        const stock = product.quantity || 0;
-        const existing = cart.find(i => i.id === id);
-        const currentQty = existing ? existing.quantity : 0;
-        if (currentQty >= stock) {
+        const variantLabelStr = variantLabel || '';
+        const variant = variantLabelStr ? (VR.parse(product.variants).find(v => v.label === variantLabelStr) || null) : null;
+        const stock = VR.stockOf(product, variant);
+        const lineId = variantLabelStr ? (id + '::' + variantLabelStr) : id;
+        const existing = cart.find(i => i.id === lineId);
+        const currentQty = existing ? (existing.quantity || 1) : 0;
+        if (stock != null && currentQty >= stock) {
           showToast('outOfStock');
           return;
         }
         if (existing) {
-          existing.quantity = (existing.quantity || 1) + 1;
+          existing.quantity = currentQty + 1;
         } else {
-          cart.push({ id, name, price, icon: icon || 'fa-crown', image, quantity: 1 });
+          cart.push({ id: lineId, productId: id, variant: variantLabelStr, name, price, icon: icon || 'fa-crown', image, quantity: 1 });
         }
         saveCart();
         showToast('addedToCart', name);
@@ -186,10 +195,12 @@
       function updateQuantity(id, action) {
         const item = cart.find(i => i.id === id);
         if (!item) return;
-        const product = allProducts.find(p => p.id == id);
-        const stock = product ? (product.quantity || 0) : 0;
+        const pid = item.productId || String(id).split('::')[0];
+        const product = allProducts.find(p => p.id == pid);
+        const variant = (item.variant && product) ? (VR.parse(product.variants).find(v => v.label === item.variant) || null) : null;
+        const stock = product ? VR.stockOf(product, variant) : 0;
         if (action === 'increase') {
-          if ((item.quantity || 1) + 1 > stock) { showToast('outOfStock'); return; }
+          if (stock != null && (item.quantity || 1) + 1 > stock) { showToast('outOfStock'); return; }
           item.quantity = (item.quantity || 1) + 1;
         } else if (action === 'decrease') {
           if (item.quantity > 1) item.quantity -= 1;
@@ -264,9 +275,26 @@
         } else {
           mainImageHtml = `<i class="fas fa-crown"></i>`;
         }
-        const stockStatusHTML = getStockStatusHTML(product.quantity);
-        const isOutOfStock = !product.quantity || product.quantity === 0;
+        // ── Variants ("Nos Produits") ─────────────────────────────
+        const variants = VR.parse(product.variants);
+        const hasVariants = variants.length > 0;
+        const activeVariant = hasVariants ? (variants.find(v => VR.inStock(product, v)) || variants[0]) : null;
+        const showOptPrices = hasVariants && variants.some(v => VR.priceFor(product, v) !== VR.priceFor(product, variants[0]));
+        const activeQty = hasVariants ? (VR.stockOf(product, activeVariant) == null ? product.quantity : VR.stockOf(product, activeVariant)) : product.quantity;
+        const stockStatusHTML = getStockStatusHTML(activeQty);
+        const isOutOfStock = hasVariants ? !VR.inStock(product, activeVariant) : (!product.quantity || product.quantity === 0);
         const addToCartDisabled = isOutOfStock ? 'disabled' : '';
+        const variantsHtml = hasVariants ? `
+              <div class="variant-block">
+                <div class="variant-title"><i class="fas fa-layer-group" style="margin-inline-end:5px;"></i>${translations[currentLanguage].ourProducts}</div>
+                <div class="variant-options" id="variantOptions">${variants.map(v => {
+                  const out = !VR.inStock(product, v);
+                  return `<button type="button" class="variant-opt${v.label === activeVariant.label ? ' is-active' : ''}${out ? ' is-out' : ''}" data-variant="${VR.esc(v.label)}"${out ? ' disabled' : ''}>
+                    <span class="variant-radio"></span>
+                    <span class="variant-opt-txt"><span class="variant-label">${VR.esc(v.label)}</span>${showOptPrices && v.price != null ? `<span class="variant-price">${formatPrice(v.price)}</span>` : ''}</span>
+                  </button>`;
+                }).join('')}</div>
+              </div>` : '';
         productDetailContainer.innerHTML = `
           <div class="product-detail">
             <div class="product-gallery">
@@ -282,23 +310,78 @@
               <div class="product-brand">${escapeHtml(product.brand)}</div>
               <div class="product-meta"><span class="meta-badge"><i class="fas fa-tag"></i> ${categoryName}</span>${seasonsHtml}</div>
               ${stockStatusHTML}
-              <div class="product-price">${promoPriceHtml(product)}</div>
+              <div class="product-price" id="productPriceLine">${promoPriceHtml(product)}</div>
+              ${variantsHtml}
               <div class="product-description">${escapeHtml(product.description || translations[currentLanguage].discover)}</div>
-<button class="add-to-cart-btn ${addToCartDisabled}" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${product.price}" data-icon="fa-crown" data-image="${productImages[0] || ''}" ${isOutOfStock ? 'disabled' : ''}>
+<button class="add-to-cart-btn ${addToCartDisabled}" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${hasVariants ? VR.priceFor(product, activeVariant) : product.price}" data-variant="${activeVariant ? VR.esc(activeVariant.label) : ''}" data-stock="${hasVariants ? (VR.stockOf(product, activeVariant) == null ? '' : VR.stockOf(product, activeVariant)) : ''}" data-icon="fa-crown" data-image="${productImages[0] || ''}" ${isOutOfStock ? 'disabled' : ''}>
                 <i class="fas fa-shopping-cart"></i> ${translations[currentLanguage].addToCart}
               </button>
-              <button class="buy-now-btn ${isOutOfStock ? 'disabled' : ''}" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${product.price}" data-image="${productImages[0] || ''}" ${isOutOfStock ? 'disabled' : ''}>
+              <button class="buy-now-btn ${isOutOfStock ? 'disabled' : ''}" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${hasVariants ? VR.priceFor(product, activeVariant) : product.price}" data-variant="${activeVariant ? VR.esc(activeVariant.label) : ''}" data-stock="${hasVariants ? (VR.stockOf(product, activeVariant) == null ? '' : VR.stockOf(product, activeVariant)) : ''}" data-image="${productImages[0] || ''}" ${isOutOfStock ? 'disabled' : ''}>
                 <i class="fas fa-bolt"></i> ${translations[currentLanguage].buyNow}
               </button>
           </div>
         `;
         const addBtn = document.querySelector('.add-to-cart-btn');
-        if (addBtn && !isOutOfStock) {
-          addBtn.addEventListener('click', () => { addToCart(addBtn.dataset.id, addBtn.dataset.name, parseFloat(addBtn.dataset.price), addBtn.dataset.icon, addBtn.dataset.image); });
+        if (addBtn) {
+          addBtn.addEventListener('click', () => {
+            if (addBtn.disabled) return;
+            addToCart(addBtn.dataset.id, addBtn.dataset.name, parseFloat(addBtn.dataset.price), addBtn.dataset.icon, addBtn.dataset.image, addBtn.dataset.variant);
+          });
         }
         const buyBtn = document.querySelector('.buy-now-btn');
-        if (buyBtn && !isOutOfStock) {
-          buyBtn.addEventListener('click', () => { openBuyNow(buyBtn.dataset.id, buyBtn.dataset.name, parseFloat(buyBtn.dataset.price), buyBtn.dataset.image); });
+        if (buyBtn) {
+          buyBtn.addEventListener('click', () => {
+            if (buyBtn.disabled) return;
+            openBuyNow(buyBtn.dataset.id, buyBtn.dataset.name, parseFloat(buyBtn.dataset.price), buyBtn.dataset.image, buyBtn.dataset.variant);
+          });
+        }
+        // Variant picker: swap price line, stock badge and button payloads.
+        if (hasVariants) {
+          const priceLine = document.getElementById('productPriceLine');
+          const stockSlot = document.querySelector('.product-info .stock-status');
+          const qtyInfo = document.querySelector('.product-info .quantity-info');
+          function paintVariant(label) {
+            const v = variants.find(x => x.label === label);
+            if (!v) return;
+            document.querySelectorAll('.variant-opt').forEach(b => b.classList.toggle('is-active', b.dataset.variant === label));
+            const out = !VR.inStock(product, v);
+            const linePrice = VR.priceFor(product, v);
+            if (priceLine) {
+              const op = product.old_price != null ? parseFloat(product.old_price) : NaN;
+              priceLine.innerHTML = (isFinite(op) && op > linePrice)
+                ? '<s style="opacity:.5;font-weight:300;font-size:.8em;margin-inline-end:7px;">' + formatPrice(op) + '</s>' + formatPrice(linePrice)
+                : formatPrice(linePrice);
+            }
+            const qty = VR.stockOf(product, v) == null ? product.quantity : VR.stockOf(product, v);
+            const fresh = getStockStatusHTML(qty);
+            // re-query every time: the previous badge node is replaced (detached)
+            const cur = document.querySelector('.product-info .stock-status');
+            const holder = cur ? cur.parentNode : document.querySelector('.product-info');
+            if (cur && holder) {
+              const tmp = document.createElement('div');
+              tmp.innerHTML = fresh;
+              holder.replaceChild(tmp.firstElementChild, cur);
+            }
+            if (addBtn) {
+              addBtn.dataset.price = linePrice;
+              addBtn.dataset.variant = label;
+              addBtn.dataset.stock = qty == null ? '' : qty;
+              addBtn.disabled = out;
+              addBtn.classList.toggle('disabled', out);
+            }
+            if (buyBtn) {
+              buyBtn.dataset.price = linePrice;
+              buyBtn.dataset.variant = label;
+              buyBtn.dataset.stock = qty == null ? '' : qty;
+              buyBtn.disabled = out;
+              buyBtn.classList.toggle('disabled', out);
+            }
+          }
+          document.querySelectorAll('.variant-opt').forEach(btn => btn.addEventListener('click', () => {
+            if (btn.disabled || btn.classList.contains('is-out')) return;
+            paintVariant(btn.dataset.variant);
+          }));
+          paintVariant(activeVariant.label);
         }
         if (productImages.length > 1) setupSwipeAndNavigation(productImages);
       }
@@ -413,7 +496,7 @@
             loggedDiv.style.display = 'none';
             emailInp.required = true;
           }
-          document.getElementById('modalCartItems').innerHTML = cart.map(i => `<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>${escapeHtml(i.name)} x${i.quantity}</span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`).join('');
+          document.getElementById('modalCartItems').innerHTML = cart.map(i => `<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>${escapeHtml(i.name)}${i.variant ? ' <span class="cart-item-sub">(' + escapeHtml(i.variant) + ')</span>' : ''} x${i.quantity}</span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`).join('');
           document.getElementById('modalTotal').textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND';
           document.getElementById('checkoutModal').style.display = 'flex';
         });
@@ -422,15 +505,15 @@
 
       /* === BUY NOW === */
       let buyNowItem = null;
-      window.openBuyNow = function (id, name, price, image) {
-        buyNowItem = { id, name, price, quantity: 1, image: image || '' };
+      window.openBuyNow = function (id, name, price, image, variant) {
+        buyNowItem = { id, name, price, quantity: 1, image: image || '', variant: variant || '' };
         const noteEl = document.getElementById('buyNowNote');
         if (noteEl) { noteEl.textContent = translations[currentLanguage].buyNowNote; noteEl.style.display = 'block'; }
         const badgeEl = document.getElementById('buyNowBadge');
         if (badgeEl) { badgeEl.textContent = '⚡ ' + translations[currentLanguage].buyNow; badgeEl.style.display = 'inline'; }
         const cartTitle = document.getElementById('cartModeTitle');
         if (cartTitle) cartTitle.style.display = 'none';
-        document.getElementById('modalCartItems').innerHTML = '<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>' + escapeHtml(name) + ' x1</span><span>' + price.toFixed(3).replace('.', ',') + ' TND</span></div>';
+        document.getElementById('modalCartItems').innerHTML = '<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>' + escapeHtml(name) + (variant ? ' <span class="cart-item-sub">(' + escapeHtml(variant) + ')</span>' : '') + ' x1</span><span>' + price.toFixed(3).replace('.', ',') + ' TND</span></div>';
         document.getElementById('modalTotal').textContent = price.toFixed(3).replace('.', ',') + ' TND';
         document.getElementById('checkoutModal').style.display = 'flex';
       };
@@ -451,7 +534,7 @@
           const { data: { user } } = await supabase.auth.getUser();
           const email = user ? user.email : (buyNowItem ? (document.getElementById('customerEmail')?.value || null) : document.getElementById('customerEmail').value);
           const orderData = {
-            items: buyNowItem ? [{ name: buyNowItem.name, quantity: 1, price: buyNowItem.price, id: buyNowItem.id }] : cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.id })),
+            items: buyNowItem ? [{ name: buyNowItem.name, quantity: 1, price: buyNowItem.price, id: buyNowItem.id, variant: buyNowItem.variant || null }] : cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.productId || item.id, variant: item.variant || null })),
             total: buyNowItem ? buyNowItem.price : calculateTotal(),
             customer_name: document.getElementById('customerName').value,
             customer_phone: document.getElementById('customerPhone').value,

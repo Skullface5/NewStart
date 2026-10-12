@@ -286,7 +286,7 @@
     const shortId = (o.id || '').slice(0, 8).toUpperCase();
     const items = (o.items || []).map(i => `
       <div class="item-row">
-        <span class="item-n"><i class="fas fa-crown" style="color:var(--gold);font-size:0.6rem;"></i>${esc(i.name)} <span class="item-q">×${i.quantity}</span></span>
+        <span class="item-n"><i class="fas fa-crown" style="color:var(--gold);font-size:0.6rem;"></i>${esc(i.name)}${i.variant ? ` <span class="item-q">${esc(i.variant)}</span>` : ''} <span class="item-q">×${i.quantity}</span></span>
         <span class="item-p">${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span>
       </div>`).join('') || `<div class="item-row"><span style="color:var(--text-mid);font-size:0.72rem;">${esc(L.GR.none)}</span></div>`;
     const opt = (v) => `<option value="${v}" ${o.status === v ? 'selected' : ''}>${esc(L.SL[v])}</option>`;
