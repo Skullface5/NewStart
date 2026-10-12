@@ -326,13 +326,6 @@
               </div>
           </div>
         `;
-        const addBtn = document.querySelector('.add-to-cart-btn');
-        if (addBtn) {
-          addBtn.addEventListener('click', () => {
-            if (addBtn.disabled) return;
-            addToCart(addBtn.dataset.id, addBtn.dataset.name, parseFloat(addBtn.dataset.price), addBtn.dataset.icon, addBtn.dataset.image, addBtn.dataset.variant);
-          });
-        }
         /* the icon button reports a fresh stock limit on each click */
         document.querySelectorAll('.rp-add-btn').forEach(b => b.addEventListener('click', () => {
           if (b.disabled) return;
