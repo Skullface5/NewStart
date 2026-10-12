@@ -32,6 +32,7 @@
 .rp-badge--corner{top:0;left:0;min-width:54px;height:26px;padding:0 11px;border-radius:0 0 12px 0;font-size:15px;}
 .rp-price--promo{color:var(--rp-price-color,${COLORS.red})!important;}
 .rp-buy-row{display:flex;gap:.4rem;align-items:center;}
+.rp-buy-row.product-actions{justify-content:center;max-width:480px;margin-left:auto;margin-right:auto;width:100%;}
 .rp-buy-btn{flex:1 1 auto;min-width:0;}
 /* buttons follow the site palette: light = warm charcoal pill, dark = cream pill (vars flip) */
 .rp-buy-row .buy-now-btn{background:var(--charcoal,#3A3228);border:none;color:var(--white);min-height:56px;padding:.6rem 1.1rem;border-radius:999px;font-weight:600;font-size:1rem;letter-spacing:.02em;box-shadow:0 6px 18px rgba(90,70,50,.18);}
