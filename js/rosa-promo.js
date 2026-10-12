@@ -42,6 +42,11 @@
 .rp-cart-btn:hover{background:#111111;color:#fff;}
 .rp-cart-btn svg{width:21px;height:21px;}
 .rp-cart-btn[disabled]{opacity:.5;cursor:not-allowed;}
+body.dark .rp-buy-row .buy-now-btn{background:#F5EFE6;border:none;color:#1A1814;}
+body.dark .rp-buy-row .buy-now-btn:hover{background:#FFFFFF;}
+body.dark .rp-buy-row .buy-now-btn.disabled,body.dark .rp-buy-row .buy-now-btn:disabled{background:#6b675f;}
+body.dark .rp-cart-btn{border:1px solid #F5EFE6;color:#F5EFE6;}
+body.dark .rp-cart-btn:hover{background:#F5EFE6;color:#1A1814;}
 @media (max-width:420px){.rp-badge--pill,.rp-badge--corner{height:24px;min-width:50px;font-size:14px;padding:0 10px;}}
 `;
 
