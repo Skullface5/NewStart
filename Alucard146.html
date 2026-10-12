@@ -2886,9 +2886,8 @@
     .promo-preview-actions { max-width: 260px; }
     .promo-preview-buy { background: var(--gold-dark); color: #fff; border: none; border-radius: 12px; padding: 0.6rem 1rem; font-family: inherit; font-size: 0.82rem; font-weight: 600; cursor: default; min-height: 46px; }
     .promo-preview-cart { cursor: default; }
-    .promo-preview .rp-badge--starburst { top: 6px; left: 6px; width: 42px; height: 42px; font-size: 0.68rem; }
-    .promo-preview .rp-badge--pill { top: 6px; left: 6px; font-size: 0.66rem; padding: 0.28rem 0.5rem; }
-    .promo-preview .rp-badge--corner { top: 0; left: 0; padding: 0.32rem 0.6rem 0.32rem 0.45rem; font-size: 0.66rem; }
+    .promo-preview .rp-badge--pill { top: 7px; left: 7px; height: 26px; min-width: 54px; padding: 0 11px; border-radius: 999px; font-size: 15px; }
+    .promo-preview .rp-badge--corner { top: 0; left: 0; height: 26px; min-width: 54px; padding: 0 11px; border-radius: 0 0 12px 0; font-size: 15px; }
   </style>
   <link rel="stylesheet" href="css/admin-redesign.css?v=3">
 </head>
@@ -3257,7 +3256,6 @@
                 <div class="promo-field">
                     <label data-translate="promoBadgeShape">Forme du badge</label>
                     <div class="promo-seg" id="promoBadgeShape">
-                        <button type="button" data-value="starburst" data-translate="promoShapeStar">Étoile</button>
                         <button type="button" data-value="pill" data-translate="promoShapePill">Pastille</button>
                         <button type="button" data-value="corner" data-translate="promoShapeCorner">Coin</button>
                     </div>
@@ -3285,7 +3283,7 @@
 
             <div class="promo-preview" id="promoPreview">
                 <div class="promo-preview-img">
-                    <span id="promoPreviewBadge" class="rp-badge rp-badge--starburst">-40%</span>
+                    <span id="promoPreviewBadge" class="rp-badge rp-badge--pill">-40%</span>
                     <i class="fas fa-crown"></i>
                 </div>
                 <div class="promo-preview-info">

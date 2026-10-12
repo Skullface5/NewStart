@@ -10,7 +10,7 @@
   var DEFAULTS = {
     promo_badge_color: 'green',
     promo_price_color: 'red',
-    promo_badge_shape: 'starburst',
+    promo_badge_shape: 'pill',
     buy_cart_icon: 'plus-cart'
   };
 

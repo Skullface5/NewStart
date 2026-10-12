@@ -10,10 +10,11 @@
   const DEFAULTS = {
     promo_badge_color: 'green',
     promo_price_color: 'red',
-    promo_badge_shape: 'starburst',
+    promo_badge_shape: 'pill',
     buy_cart_icon: 'plus-cart'
   };
-  const COLORS = { green: '#1E9E57', red: '#D62828', gold: '#B49A6A', black: '#2B2B2B' };
+  /* green + red sampled from the reference screenshot */
+  const COLORS = { green: '#03B557', red: '#E0231F', gold: '#B49A6A', black: '#2B2B2B' };
   const ICONS = {
     'plus-cart': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 7.5h11l-1 11h-9z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9.2 7.5V6.4a2.8 2.8 0 0 1 5.6 0v1.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M12 11.2v5M9.5 13.7h5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
     'bag': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 7.5h11l-1 11h-9z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9.2 7.5V6.4a2.8 2.8 0 0 1 5.6 0v1.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
@@ -25,22 +26,20 @@
 
   const CSS = `
 .rp-badge{position:absolute;z-index:4;display:inline-flex;align-items:center;justify-content:center;
-  font-family:'Jost',sans-serif;font-weight:700;letter-spacing:.03em;color:#fff;text-align:center;line-height:1;
-  background:var(--rp-badge-bg,${COLORS.green});box-shadow:0 6px 18px rgba(0,0,0,.22);pointer-events:none;}
-.rp-badge--pill{top:10px;left:10px;width:auto;height:auto;aspect-ratio:auto;padding:.34rem .62rem;border-radius:999px;font-size:.72rem;}
-.rp-badge--starburst{top:10px;left:10px;width:52px;height:52px;aspect-ratio:1;border-radius:50%;font-size:.8rem;font-weight:600;
-  clip-path:polygon(50% 0%,60% 12%,74% 6%,78% 21%,93% 22%,88% 36%,100% 45%,90% 56%,98% 70%,83% 74%,84% 90%,69% 86%,60% 100%,50% 88%,40% 100%,31% 86%,16% 90%,17% 74%,2% 70%,10% 56%,0% 45%,12% 36%,7% 22%,22% 21%,26% 6%,40% 12%);}
-.rp-badge--corner{top:0;left:0;width:auto;height:auto;padding:.4rem .8rem .4rem .6rem;border-radius:0 0 14px 0;font-size:.74rem;}
+  font-family:'Jost',sans-serif;font-weight:600;letter-spacing:.01em;color:#fff;text-align:center;line-height:1;
+  background:var(--rp-badge-bg,${COLORS.green});pointer-events:none;border:0;box-shadow:none;}
+.rp-badge--pill{top:11px;left:11px;min-width:54px;height:26px;padding:0 11px;border-radius:999px;font-size:15px;}
+.rp-badge--corner{top:0;left:0;min-width:54px;height:26px;padding:0 11px;border-radius:0 0 12px 0;font-size:15px;}
 .rp-price--promo{color:var(--rp-price-color,${COLORS.red})!important;}
 .rp-buy-row{display:flex;gap:.5rem;align-items:stretch;}
 .rp-buy-btn{flex:1 1 auto;min-width:0;}
 .rp-cart-btn{flex:0 0 auto;width:46px;min-height:46px;display:inline-flex;align-items:center;justify-content:center;
-  background:transparent;border:1px solid var(--rp-badge-bg,${COLORS.green});color:var(--rp-badge-bg,${COLORS.green});border-radius:12px;cursor:pointer;
+  background:transparent;border:1.5px solid var(--rp-cart-color,var(--gold-dark,#8A7150));color:var(--rp-cart-color,var(--gold-dark,#8A7150));border-radius:10px;cursor:pointer;
   transition:background-color .25s,color .25s,transform .25s;padding:0;}
-.rp-cart-btn:hover{background:var(--rp-badge-bg,${COLORS.green});color:#fff;transform:translateY(-2px);}
+.rp-cart-btn:hover{background:var(--rp-cart-color,var(--gold-dark,#8A7150));color:#fff;transform:translateY(-2px);}
 .rp-cart-btn svg{width:22px;height:22px;}
 .rp-cart-btn[disabled]{opacity:.5;cursor:not-allowed;}
-@media (max-width:420px){.rp-badge--starburst{width:44px;height:44px;font-size:.72rem;}}
+@media (max-width:420px){.rp-badge--pill,.rp-badge--corner{height:24px;min-width:50px;font-size:14px;padding:0 10px;}}
 `;
 
   let cssDone = false;
@@ -60,7 +59,7 @@
 
   function bg() { return COLORS[S.promo_badge_color] || COLORS.green; }
   function priceColor() { return COLORS[S.promo_price_color] || COLORS.red; }
-  function shape() { return ['starburst', 'pill', 'corner'].indexOf(S.promo_badge_shape) >= 0 ? S.promo_badge_shape : 'starburst'; }
+  function shape() { return ['pill', 'corner'].indexOf(S.promo_badge_shape) >= 0 ? S.promo_badge_shape : 'pill'; }
   function buyIcon() { return ICONS[S.buy_cart_icon] || ICONS['plus-cart']; }
 
   /* percent for a product row, or null when it isn't a promo */
@@ -83,7 +82,7 @@
   function badgeHtml(p) {
     const pct = percent(p);
     if (pct == null) return '';
-    return '<span class="rp-badge rp-badge--' + shape() + '">-' + pct + '%</span>';
+    return '<span class="rp-badge rp-badge--' + shape() + '" style="background:' + bg() + '">-' + pct + '%</span>';
   }
 
   /* badge anchored to a positioned image container */
