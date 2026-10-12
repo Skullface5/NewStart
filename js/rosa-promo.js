@@ -33,11 +33,14 @@
 .rp-price--promo{color:var(--rp-price-color,${COLORS.red})!important;}
 .rp-buy-row{display:flex;gap:.5rem;align-items:stretch;}
 .rp-buy-btn{flex:1 1 auto;min-width:0;}
-.rp-cart-btn{flex:0 0 auto;width:46px;min-height:46px;display:inline-flex;align-items:center;justify-content:center;
-  background:transparent;border:1.5px solid var(--rp-cart-color,var(--gold-dark,#8A7150));color:var(--rp-cart-color,var(--gold-dark,#8A7150));border-radius:10px;cursor:pointer;
-  transition:background-color .25s,color .25s,transform .25s;padding:0;}
-.rp-cart-btn:hover{background:var(--rp-cart-color,var(--gold-dark,#8A7150));color:#fff;transform:translateY(-2px);}
-.rp-cart-btn svg{width:22px;height:22px;}
+.rp-buy-row .buy-now-btn{background:#111111;border:none;color:#fff;min-height:49px;border-radius:999px;font-weight:600;font-size:.92rem;box-shadow:none;}
+.rp-buy-row .buy-now-btn:hover{background:#000000;transform:none;}
+.rp-buy-row .buy-now-btn.disabled,.rp-buy-row .buy-now-btn:disabled{background:#8a8a8a;}
+.rp-cart-btn{flex:0 0 auto;width:75px;min-height:49px;display:inline-flex;align-items:center;justify-content:center;
+  background:transparent;border:1px solid #111111;color:#111111;border-radius:10px;cursor:pointer;
+  transition:background-color .25s,color .25s;padding:0;}
+.rp-cart-btn:hover{background:#111111;color:#fff;}
+.rp-cart-btn svg{width:21px;height:21px;}
 .rp-cart-btn[disabled]{opacity:.5;cursor:not-allowed;}
 @media (max-width:420px){.rp-badge--pill,.rp-badge--corner{height:24px;min-width:50px;font-size:14px;padding:0 10px;}}
 `;
