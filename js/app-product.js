@@ -332,18 +332,24 @@
           const __arr = (typeof allProducts !== 'undefined' && allProducts) || (typeof products !== 'undefined' && products) || (typeof allProductsData !== 'undefined' && allProductsData) || [];
           const prod = __arr.find(x => x.id == b.dataset.id);
           if (!prod) return;
-          const v = VR.parse(prod.variants).find(x => x.label === b.dataset.variant) || null;
-          const left = VR.stockOf(prod, v) == null ? prod.quantity : VR.stockOf(prod, v);
-          const lineId = b.dataset.variant ? (b.dataset.id + '::' + b.dataset.variant) : b.dataset.id;
+          /* read the LIVE selected variant, not the stale data-variant baked at render time */
+          const activeOpt = document.querySelector('.variant-opt.is-active');
+          const activeLabel = activeOpt ? (activeOpt.dataset.variant || activeOpt.dataset.label || '') : '';
+          const v = activeLabel ? VR.parse(prod.variants).find(x => x.label === activeLabel) : null;
+          const left = v ? (VR.stockOf(prod, v) == null ? prod.quantity : VR.stockOf(prod, v)) : (prod.quantity == null ? null : prod.quantity);
+          const lineId = activeLabel ? (b.dataset.id + '::' + activeLabel) : b.dataset.id;
           const inCart = (cart.find(i => i.id === lineId) || {}).quantity || 0;
           if (left != null && inCart >= left) { showToast('outOfStock'); return; }
-          addToCart(b.dataset.id, b.dataset.name, parseFloat(b.dataset.price), b.dataset.icon, b.dataset.image, b.dataset.variant);
+          addToCart(b.dataset.id, b.dataset.name, parseFloat(b.dataset.price), b.dataset.icon, b.dataset.image, activeLabel);
         }));
         const buyBtn = document.querySelector('.buy-now-btn');
         if (buyBtn) {
           buyBtn.addEventListener('click', () => {
             if (buyBtn.disabled) return;
-            openBuyNow(buyBtn.dataset.id, buyBtn.dataset.name, parseFloat(buyBtn.dataset.price), buyBtn.dataset.image, buyBtn.dataset.variant);
+            /* live variant, same as the cart-add path */
+            const activeOpt = document.querySelector('.variant-opt.is-active');
+            const liveVariant = activeOpt ? (activeOpt.dataset.variant || activeOpt.dataset.label || '') : buyBtn.dataset.variant;
+            openBuyNow(buyBtn.dataset.id, buyBtn.dataset.name, parseFloat(buyBtn.dataset.price), buyBtn.dataset.image, liveVariant);
           });
         }
         // Variant picker: swap price line, stock badge and button payloads.
