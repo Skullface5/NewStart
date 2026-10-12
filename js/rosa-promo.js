@@ -55,7 +55,7 @@
   .rp-buy-row .rp-cart-btn svg{width:18px;height:18px;}
   /* product page has the whole row to itself — go big, it's the money button */
   .product-actions.rp-buy-row{gap:.5rem;}
-  .product-actions.rp-buy-row .buy-now-btn{min-height:60px;padding:.5rem 1rem;font-size:1.15rem;}
+  .product-actions.rp-buy-row .buy-now-btn{min-height:60px;max-height:60px;padding:.3rem 1.4rem;font-size:1.15rem;}
   .product-actions .rp-cart-btn{width:64px;min-height:60px;border-radius:10px;}
   .product-actions .rp-cart-btn svg{width:24px;height:24px;}
 }
