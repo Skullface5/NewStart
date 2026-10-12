@@ -408,7 +408,27 @@
 
       function loadSuggestions() {
         if (!currentProduct || !allProducts.length) return;
-        const suggestions = allProducts.filter(p => p.id !== currentProduct.id && p.category === currentProduct.category).slice(0, 4);
+        /* "You may also like" — same gender (category), same season universe:
+           a summer product only suggests summer or all-seasons products, and
+           all-season products suggest anything. Same brand ranked above others.
+           6 picks, shuffled on every load so the order is never the same. */
+        const SEASONS = ['summer', 'winter', 'spring', 'autumn'];
+        const parseSeasons = (s) => (!s || s === 'all') ? SEASONS : String(s).split(',').map(x => x.trim()).filter(Boolean);
+        const mine = parseSeasons(currentProduct.season);
+        const sameSeason = (p) => parseSeasons(p.season).some(s => mine.includes(s));
+        const pool = allProducts.filter(p =>
+          p.id !== currentProduct.id &&
+          p.category === currentProduct.category &&
+          sameSeason(p)
+        );
+        // shuffle so refresh order changes every time
+        for (let i = pool.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [pool[i], pool[j]] = [pool[j], pool[i]];
+        }
+        // same manufacturer first within the shuffled set (stable-ish preference)
+        pool.sort((a, b) => (b.brand === currentProduct.brand ? 1 : 0) - (a.brand === currentProduct.brand ? 1 : 0));
+        const suggestions = pool.slice(0, 6);
         if (suggestions.length === 0) { suggestionsContainer.style.display = 'none'; return; }
         suggestionsContainer.style.display = 'block';
         let html = '';
