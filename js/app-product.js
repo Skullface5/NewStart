@@ -332,15 +332,16 @@
           const __arr = (typeof allProducts !== 'undefined' && allProducts) || (typeof products !== 'undefined' && products) || (typeof allProductsData !== 'undefined' && allProductsData) || [];
           const prod = __arr.find(x => x.id == b.dataset.id);
           if (!prod) return;
-          /* paintVariant() keeps buyBtn.dataset.variant and addBtn.dataset.variant
-             in sync on every variant click — read from dataset for both buttons */
+          /* the variant-opt buttons carry data-variant but no data-price, so the
+             price must come from paintVariant()'s synced addBtn dataset */
           const activeOpt = document.querySelector('.variant-opt.is-active');
-          const activeLabel = activeOpt ? (activeOpt.dataset.variant || activeOpt.dataset.label || '') : '';
+          const activeLabel = activeOpt ? (activeOpt.dataset.variant || '') : '';
+          const linePrice = parseFloat(b.dataset.price) || 0;
           const lineId = activeLabel ? (b.dataset.id + '::' + activeLabel) : b.dataset.id;
           const left = b.dataset.stock != null && b.dataset.stock !== '' ? parseInt(b.dataset.stock) : null;
           const inCart = (cart.find(i => i.id === lineId) || {}).quantity || 0;
           if (left != null && inCart >= left) { showToast('outOfStock'); return; }
-          addToCart(b.dataset.id, b.dataset.name, parseFloat(b.dataset.price), b.dataset.icon, b.dataset.image, activeLabel);
+          addToCart(b.dataset.id, b.dataset.name, linePrice, b.dataset.icon, b.dataset.image, activeLabel);
         }));
         const buyBtn = document.querySelector('.buy-now-btn');
         if (buyBtn) {
@@ -381,14 +382,14 @@
               holder.replaceChild(tmp.firstElementChild, cur);
             }
             if (addBtn) {
-              addBtn.dataset.price = linePrice;
+              addBtn.setAttribute('data-price', linePrice);
               addBtn.setAttribute('data-variant', label);
               addBtn.dataset.stock = qty == null ? '' : qty;
               addBtn.disabled = out;
               addBtn.classList.toggle('disabled', out);
             }
             if (buyBtn) {
-              buyBtn.dataset.price = linePrice;
+              buyBtn.setAttribute('data-price', linePrice);
               buyBtn.setAttribute('data-variant', label);
               buyBtn.dataset.stock = qty == null ? '' : qty;
               buyBtn.disabled = out;
