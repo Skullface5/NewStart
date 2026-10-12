@@ -344,12 +344,16 @@
           addToCart(b.dataset.id, b.dataset.name, linePrice, b.dataset.icon, b.dataset.image, activeLabel);
         }));
         const buyBtn = document.querySelector('.buy-now-btn');
+        const cartBtn = document.querySelector('.rp-add-btn');
         if (buyBtn) {
           buyBtn.addEventListener('click', () => {
             if (buyBtn.disabled) return;
-            /* paintVariant() already keeps buyBtn.dataset.variant in sync on every
-               variant click, so just read it directly here */
-            openBuyNow(buyBtn.dataset.id, buyBtn.dataset.name, parseFloat(buyBtn.dataset.price), buyBtn.dataset.image, buyBtn.dataset.variant);
+            /* read from the cart button (paintVariant() writes price+variant to it first,
+               then to buyBtn — always read from the other button to avoid same-element staleness) */
+            const cartBtnEl = document.querySelector('.rp-add-btn');
+            const liveVariant = cartBtnEl ? cartBtnEl.dataset.variant : buyBtn.dataset.variant;
+            const livePrice = parseFloat(cartBtnEl ? cartBtnEl.dataset.price : buyBtn.dataset.price) || 0;
+            openBuyNow(buyBtn.dataset.id, buyBtn.dataset.name, livePrice, buyBtn.dataset.image, liveVariant);
           });
         }
         // Variant picker: swap price line, stock badge and button payloads.
