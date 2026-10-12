@@ -5,6 +5,7 @@
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0d2NpdWh3d2Fud2x3cHlkZWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5ODg4MTYsImV4cCI6MjA4ODU2NDgxNn0.hUPGHckNyOZuIlJZb8f-bGDup50C3kS_0zrfh4nzMAQ';
       const supabase = window.__rosaSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+      const RP = window.RosaPromo || { setSettings: function(){}, settings: function(){return {};}, percent: function(){return null;}, isPromo: function(){return false;}, badge: function(){return '';}, badgeHtml: function(){return '';}, priceHtml: function(r,f){return f ? f(r.price) : r.price;}, buyIcon: function(){return '';}, bg: function(){return '#1E9E57';}, priceColor: function(){return '#D62828';}, injectCss: function(){} };
       const VR = window.RosaVariants || { parse: function () { return []; }, priceFor: function (p) { return parseFloat(p && p.price) || 0; }, inStock: function (p) { return !p || p.quantity == null || Number(p.quantity) > 0; }, stockOf: function (p) { return p && p.quantity != null ? Number(p.quantity) : null; }, esc: escapeHtmlRaw };
       function escapeHtmlRaw(s) { return s == null ? '' : String(s).replace(/[&<>"]/g, function (m) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[m]; }); }
       let currentLanguage = localStorage.getItem('language') || 'fr';
@@ -20,7 +21,7 @@
           home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
           login: 'Se connecter', profile: 'Mon Profil', notreCollection: 'Notre Collection', back: 'Retour',
           cart: 'Panier', emptyCart: 'Votre panier est vide.', total: 'Total', payment: 'PAIEMENT',
-          buyNow: 'Acheter maintenant', buyNowNote: 'Remplissez le formulaire, on vous appelle!',
+          buyNow: 'Acheter', buyNowNote: 'Remplissez le formulaire, on vous appelle!',
           addToCart: 'Ajouter au panier', addedToCart: '✨ Article ajouté', removed: '🗑️ Retiré',
           loading: 'Chargement...', errorLoading: '❌ Erreur de chargement', productNotFound: '❌ Produit non trouvé',
           youMayLike: 'Vous aimerez aussi', discover: 'Découvrez ce parfum d\'exception, une fragrance unique qui révèle votre personnalité.',
@@ -40,7 +41,7 @@
           home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
           login: 'Sign in', profile: 'My Profile', notreCollection: 'Our Collection', back: 'Back',
           cart: 'Cart', emptyCart: 'Your cart is empty.', total: 'Total', payment: 'PAYMENT',
-          buyNow: 'Buy Now', buyNowNote: 'Fill in the form, we will call you shortly!',
+          buyNow: 'Buy', buyNowNote: 'Fill in the form, we will call you shortly!',
           addToCart: 'Add to cart', addedToCart: '✨ Added to cart', removed: '🗑️ Removed',
           loading: 'Loading...', errorLoading: '❌ Error loading', productNotFound: '❌ Product not found',
           youMayLike: 'You may also like', discover: 'Discover this exceptional perfume, a unique fragrance that reveals your personality.',
@@ -115,6 +116,7 @@
       function normalizeList(list) { return (Array.isArray(list) ? list : []).map(normalizeProduct).filter(Boolean); }
       function promoPriceHtml(row) {
         // STE-style promo: struck old price before current price
+        try { return RP.priceHtml(row, formatPrice); } catch (e) {}
         try {
           var op = row.old_price != null ? parseFloat(row.old_price) : NaN;
           var cp = parseFloat(row.price);
@@ -300,6 +302,7 @@
             <div class="product-gallery">
               <div class="main-image-container">
                 <div class="image-container">${mainImageHtml}</div>
+                ${RP.badge(product)}
                 ${arrowsHtml}
                 <div class="swipe-indicators">${swipeIndicatorsHtml}</div>
               </div>
@@ -313,12 +316,14 @@
               <div class="product-price" id="productPriceLine">${promoPriceHtml(product)}</div>
               ${variantsHtml}
               <div class="product-description">${escapeHtml(product.description || translations[currentLanguage].discover)}</div>
-<button class="add-to-cart-btn ${addToCartDisabled}" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${hasVariants ? VR.priceFor(product, activeVariant) : product.price}" data-variant="${activeVariant ? VR.esc(activeVariant.label) : ''}" data-stock="${hasVariants ? (VR.stockOf(product, activeVariant) == null ? '' : VR.stockOf(product, activeVariant)) : ''}" data-icon="fa-crown" data-image="${productImages[0] || ''}" ${isOutOfStock ? 'disabled' : ''}>
-                <i class="fas fa-shopping-cart"></i> ${translations[currentLanguage].addToCart}
-              </button>
-              <button class="buy-now-btn ${isOutOfStock ? 'disabled' : ''}" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${hasVariants ? VR.priceFor(product, activeVariant) : product.price}" data-variant="${activeVariant ? VR.esc(activeVariant.label) : ''}" data-stock="${hasVariants ? (VR.stockOf(product, activeVariant) == null ? '' : VR.stockOf(product, activeVariant)) : ''}" data-image="${productImages[0] || ''}" ${isOutOfStock ? 'disabled' : ''}>
-                <i class="fas fa-bolt"></i> ${translations[currentLanguage].buyNow}
-              </button>
+<div class="rp-buy-row product-actions">
+                <button class="buy-now-btn rp-buy-btn ${isOutOfStock ? 'disabled' : ''}" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${hasVariants ? VR.priceFor(product, activeVariant) : product.price}" data-variant="${activeVariant ? VR.esc(activeVariant.label) : ''}" data-stock="${hasVariants ? (VR.stockOf(product, activeVariant) == null ? '' : VR.stockOf(product, activeVariant)) : ''}" data-image="${productImages[0] || ''}" ${isOutOfStock ? 'disabled' : ''}>
+                  ${translations[currentLanguage].buyNow}
+                </button>
+                <button type="button" class="add-to-cart-btn rp-cart-btn rp-add-btn ${addToCartDisabled}" title="${translations[currentLanguage].addToCart}" aria-label="${translations[currentLanguage].addToCart}" data-id="${product.id}" data-name="${escapeHtml(product.name)}" data-price="${hasVariants ? VR.priceFor(product, activeVariant) : product.price}" data-variant="${activeVariant ? VR.esc(activeVariant.label) : ''}" data-stock="${hasVariants ? (VR.stockOf(product, activeVariant) == null ? '' : VR.stockOf(product, activeVariant)) : ''}" data-icon="fa-crown" data-image="${productImages[0] || ''}" ${isOutOfStock ? 'disabled' : ''}>
+                  ${RP.buyIcon()}
+                </button>
+              </div>
           </div>
         `;
         const addBtn = document.querySelector('.add-to-cart-btn');
@@ -328,6 +333,19 @@
             addToCart(addBtn.dataset.id, addBtn.dataset.name, parseFloat(addBtn.dataset.price), addBtn.dataset.icon, addBtn.dataset.image, addBtn.dataset.variant);
           });
         }
+        /* the icon button reports a fresh stock limit on each click */
+        document.querySelectorAll('.rp-add-btn').forEach(b => b.addEventListener('click', () => {
+          if (b.disabled) return;
+          const __arr = (typeof allProducts !== 'undefined' && allProducts) || (typeof products !== 'undefined' && products) || (typeof allProductsData !== 'undefined' && allProductsData) || [];
+          const prod = __arr.find(x => x.id == b.dataset.id);
+          if (!prod) return;
+          const v = VR.parse(prod.variants).find(x => x.label === b.dataset.variant) || null;
+          const left = VR.stockOf(prod, v) == null ? prod.quantity : VR.stockOf(prod, v);
+          const lineId = b.dataset.variant ? (b.dataset.id + '::' + b.dataset.variant) : b.dataset.id;
+          const inCart = (cart.find(i => i.id === lineId) || {}).quantity || 0;
+          if (left != null && inCart >= left) { showToast('outOfStock'); return; }
+          addToCart(b.dataset.id, b.dataset.name, parseFloat(b.dataset.price), b.dataset.icon, b.dataset.image, b.dataset.variant);
+        }));
         const buyBtn = document.querySelector('.buy-now-btn');
         if (buyBtn) {
           buyBtn.addEventListener('click', () => {
@@ -348,9 +366,11 @@
             const linePrice = VR.priceFor(product, v);
             if (priceLine) {
               const op = product.old_price != null ? parseFloat(product.old_price) : NaN;
-              priceLine.innerHTML = (isFinite(op) && op > linePrice)
-                ? '<s style="opacity:.5;font-weight:300;font-size:.8em;margin-inline-end:7px;">' + formatPrice(op) + '</s>' + formatPrice(linePrice)
-                : formatPrice(linePrice);
+              const pct = RP.percent(Object.assign({}, product, { price: linePrice }));
+              const sale = (isFinite(op) && op > linePrice)
+                ? '<s style="opacity:.5;font-weight:300;font-size:.8em;margin-inline-end:7px;">' + formatPrice(op) + '</s><span class="rp-price--promo">' + formatPrice(linePrice) + '</span>'
+                : (pct != null ? '<span class="rp-price--promo">' + formatPrice(linePrice) + '</span>' : formatPrice(linePrice));
+              priceLine.innerHTML = sale;
             }
             const qty = VR.stockOf(product, v) == null ? product.quantity : VR.stockOf(product, v);
             const fresh = getStockStatusHTML(qty);
@@ -510,7 +530,7 @@
         const noteEl = document.getElementById('buyNowNote');
         if (noteEl) { noteEl.textContent = translations[currentLanguage].buyNowNote; noteEl.style.display = 'block'; }
         const badgeEl = document.getElementById('buyNowBadge');
-        if (badgeEl) { badgeEl.textContent = '⚡ ' + translations[currentLanguage].buyNow; badgeEl.style.display = 'inline'; }
+        if (badgeEl) { badgeEl.textContent = translations[currentLanguage].buyNow; badgeEl.style.display = 'inline'; }
         const cartTitle = document.getElementById('cartModeTitle');
         if (cartTitle) cartTitle.style.display = 'none';
         document.getElementById('modalCartItems').innerHTML = '<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>' + escapeHtml(name) + (variant ? ' <span class="cart-item-sub">(' + escapeHtml(variant) + ')</span>' : '') + ' x1</span><span>' + price.toFixed(3).replace('.', ',') + ' TND</span></div>';

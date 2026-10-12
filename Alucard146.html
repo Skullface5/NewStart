@@ -2862,6 +2862,33 @@
 .ov-tile b{display:block;font-size:1.3rem;color:var(--gold-dark);font-family:'Cormorant Garamond',serif;}
 .ov-tile span{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mid);}
 @media (max-width:520px){.ov-grid{grid-template-columns:repeat(2,1fr);gap:.65rem;}.ov-card{min-height:92px;}}
+  
+    /* ── Promo appearance card (settings tab) ── */
+    .promo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+    .promo-field label { display: block; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-mid); margin-bottom: 0.45rem; }
+    .promo-swatches { display: flex; gap: 0.45rem; }
+    .promo-sw { width: 34px; height: 34px; border-radius: 12px; border: 2px solid transparent; background: var(--sw); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 0.7rem; opacity: 0.85; transition: opacity 0.2s, border-color 0.2s, transform 0.2s; }
+    .promo-sw i { opacity: 0; transition: opacity 0.2s; }
+    .promo-sw:hover { transform: translateY(-2px); }
+    .promo-sw.is-active { opacity: 1; border-color: var(--charcoal); }
+    .promo-sw.is-active i { opacity: 1; }
+    .promo-seg { display: inline-flex; border: 1px solid var(--border-medium); border-radius: 12px; overflow: hidden; }
+    .promo-seg button { background: none; border: none; padding: 0.5rem 0.8rem; font-family: inherit; font-size: 0.74rem; color: var(--text-mid); cursor: pointer; border-inline-end: 1px solid var(--border-light); }
+    .promo-seg button:last-child { border-inline-end: none; }
+    .promo-seg button.is-active { background: var(--gold-dark); color: #fff; }
+    .promo-preview { display: flex; gap: 1rem; align-items: center; background: var(--card-warm); border: 1px solid var(--border-light); border-radius: 18px; padding: 1rem; }
+    .promo-preview-img { position: relative; width: 96px; height: 96px; flex: 0 0 auto; border-radius: 14px; background: var(--cream-deep); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .promo-preview-img i { font-size: 2rem; color: var(--gold); }
+    .promo-preview-info { min-width: 0; flex: 1; }
+    .promo-preview-name { font-size: 0.85rem; font-weight: 500; margin-bottom: 0.25rem; }
+    .promo-preview-price { font-size: 0.9rem; margin-bottom: 0.6rem; }
+    .promo-preview-price s { opacity: 0.5; font-weight: 300; font-size: 0.85em; margin-inline-end: 7px; }
+    .promo-preview-actions { max-width: 260px; }
+    .promo-preview-buy { background: var(--gold-dark); color: #fff; border: none; border-radius: 12px; padding: 0.6rem 1rem; font-family: inherit; font-size: 0.82rem; font-weight: 600; cursor: default; min-height: 46px; }
+    .promo-preview-cart { cursor: default; }
+    .promo-preview .rp-badge--starburst { top: 6px; left: 6px; width: 42px; height: 42px; font-size: 0.68rem; }
+    .promo-preview .rp-badge--pill { top: 6px; left: 6px; font-size: 0.66rem; padding: 0.28rem 0.5rem; }
+    .promo-preview .rp-badge--corner { top: 0; left: 0; padding: 0.32rem 0.6rem 0.32rem 0.45rem; font-size: 0.66rem; }
   </style>
   <link rel="stylesheet" href="css/admin-redesign.css?v=3">
 </head>
@@ -2963,6 +2990,11 @@
           <div class="input-group">
             <label data-translate="oldPrice">Ancien prix — promo (optionnel)</label>
             <input type="number" id="productOldPrice" step="0.001" min="0" placeholder="ex. 149.000">
+            <div class="input-group">
+                <label data-translate="promoPercent">Remise % (badge promo)</label>
+                <input type="number" id="productPromoPercent" step="1" min="0" max="90" placeholder="auto">
+                <div class="info-text"><i class="fas fa-percent"></i> <span data-translate="promoPercentHint">Laissez vide : le % se calcule automatiquement depuis l'ancien prix. Sinon, il remplace celui du badge.</span></div>
+            </div>
             <div class="info-text" style="margin-top:.35rem;"><i class="fas fa-tag"></i> <span data-translate="oldPriceHint">Si supérieur au prix actuel, le site affiche l'ancien prix barré.</span></div>
           </div>
 
@@ -3204,6 +3236,74 @@
                             data-translate="bannerSavedBadge">Enregistré</span></span>
                 </div>
             </section>
+        <!-- Apparence promo (badge -X%, prix promo, bouton Buy + panier) -->
+        <section class="hero-admin-card" id="promoAdminCard">
+            <div class="hero-admin-head">
+                <h2 class="hero-admin-title"><i class="fas fa-tags"></i> <span data-translate="promoTitle">Apparence des promotions</span></h2>
+            </div>
+            <p class="hero-admin-help" data-translate="promoHelp">Le badge -X% apparaît sur les produits qui ont un « ancien prix ». Le pourcentage se calcule tout seul à partir des deux prix.</p>
+
+            <div class="promo-grid">
+                <div class="promo-field">
+                    <label data-translate="promoBadgeColor">Couleur du badge</label>
+                    <div class="promo-swatches" id="promoBadgeColor">
+                        <button type="button" class="promo-sw" data-value="green" style="--sw:#1E9E57" data-translate-title="promoGreen" title="Vert"><i class="fas fa-check"></i></button>
+                        <button type="button" class="promo-sw" data-value="red" style="--sw:#D62828" data-translate-title="promoRed" title="Rouge"><i class="fas fa-check"></i></button>
+                        <button type="button" class="promo-sw" data-value="gold" style="--sw:#B49A6A" data-translate-title="promoGold" title="Or"><i class="fas fa-check"></i></button>
+                        <button type="button" class="promo-sw" data-value="black" style="--sw:#2B2B2B" data-translate-title="promoBlack" title="Noir"><i class="fas fa-check"></i></button>
+                    </div>
+                </div>
+
+                <div class="promo-field">
+                    <label data-translate="promoBadgeShape">Forme du badge</label>
+                    <div class="promo-seg" id="promoBadgeShape">
+                        <button type="button" data-value="starburst" data-translate="promoShapeStar">Étoile</button>
+                        <button type="button" data-value="pill" data-translate="promoShapePill">Pastille</button>
+                        <button type="button" data-value="corner" data-translate="promoShapeCorner">Coin</button>
+                    </div>
+                </div>
+
+                <div class="promo-field">
+                    <label data-translate="promoPriceColor">Couleur du prix promo</label>
+                    <div class="promo-swatches" id="promoPriceColor">
+                        <button type="button" class="promo-sw" data-value="green" style="--sw:#1E9E57" data-translate-title="promoGreen" title="Vert"><i class="fas fa-check"></i></button>
+                        <button type="button" class="promo-sw" data-value="red" style="--sw:#D62828" data-translate-title="promoRed" title="Rouge"><i class="fas fa-check"></i></button>
+                        <button type="button" class="promo-sw" data-value="gold" style="--sw:#B49A6A" data-translate-title="promoGold" title="Or"><i class="fas fa-check"></i></button>
+                        <button type="button" class="promo-sw" data-value="black" style="--sw:#2B2B2B" data-translate-title="promoBlack" title="Noir"><i class="fas fa-check"></i></button>
+                    </div>
+                </div>
+
+                <div class="promo-field">
+                    <label data-translate="promoCartIcon">Icône du bouton panier</label>
+                    <div class="promo-seg" id="promoCartIcon">
+                        <button type="button" data-value="plus-cart" data-translate="promoIconPlusCart">Panier +</button>
+                        <button type="button" data-value="bag" data-translate="promoIconBag">Sac</button>
+                        <button type="button" data-value="cart" data-translate="promoIconCart">Chariot</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="promo-preview" id="promoPreview">
+                <div class="promo-preview-img">
+                    <span id="promoPreviewBadge" class="rp-badge rp-badge--starburst">-40%</span>
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="promo-preview-info">
+                    <div class="promo-preview-name">Exemple de produit</div>
+                    <div class="promo-preview-price"><s>99,000 TND</s> <span id="promoPreviewPrice">59,000 TND</span></div>
+                    <div class="rp-buy-row promo-preview-actions">
+                        <button type="button" class="rp-buy-btn promo-preview-buy" data-translate="promoBuyPreview">Buy</button>
+                        <button type="button" class="rp-cart-btn promo-preview-cart" id="promoPreviewCart"><span id="promoPreviewIcon"></span></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-admin-msg" id="promoMsg"></div>
+            <div class="hero-admin-actions">
+                <button type="button" class="hp-btn hp-btn--gold" id="btnSavePromo" data-translate="promoSave">Enregistrer l'apparence</button>
+                <span class="hero-saved-badge" id="promoSavedBadge" hidden><i class="fas fa-check"></i> <span data-translate="bannerSavedBadge">Enregistré</span></span>
+            </div>
+        </section>
         <div class="settings-foot"><a href="#" id="btnLogoutSettings"><i class="fas fa-right-from-bracket"></i> <span data-translate="admLogout">Déconnexion</span></a></div>
       </div>
     </section>
@@ -3245,6 +3345,11 @@
                     <div class="input-group">
                         <label data-translate="oldPrice">Ancien prix — promo (optionnel)</label>
                         <input type="number" id="eProductOldPrice" step="0.001" min="0" placeholder="ex. 149.000">
+                        <div class="input-group">
+                            <label data-translate="promoPercent">Remise % (badge promo)</label>
+                            <input type="number" id="eProductPromoPercent" step="1" min="0" max="90" placeholder="auto">
+                            <div class="info-text"><i class="fas fa-percent"></i> <span data-translate="promoPercentHint">Laissez vide : le % se calcule automatiquement depuis l'ancien prix. Sinon, il remplace celui du badge.</span></div>
+                        </div>
                         <div class="info-text" style="margin-top:.35rem;"><i class="fas fa-tag"></i> <span data-translate="oldPriceHint">Si supérieur au prix actuel, le site affiche l'ancien prix barré.</span></div>
                     </div>
 
@@ -3343,6 +3448,8 @@
   <script src="js/app-admincat.js?v=16"></script>
   <script src="js/app-adminorders.js?v=4"></script>
   <script src="js/rosa-admin-variants.js?v=1"></script>
+  <script src="js/rosa-promo.js?v=1"></script>
+  <script src="js/rosa-promo-admin.js?v=1"></script>
 <script>
 /* mounts the variant editors (add + edit forms) once their containers exist */
 (function () {
@@ -3418,6 +3525,7 @@
       if (name === 'overview' && window.rosaLoadOverview) window.rosaLoadOverview();
       if (name === 'collections' && window.rosaActivateCat) window.rosaActivateCat();
       if (name === 'settings' && window.rosaReloadBanner) window.rosaReloadBanner();
+      if (name === 'settings' && window.rosaReloadPromo) window.rosaReloadPromo();
       if (name === 'edit' && window.rosaLoadEdit) window.rosaLoadEdit();
     }
     document.querySelectorAll('[data-dashtab]').forEach(function (b) {

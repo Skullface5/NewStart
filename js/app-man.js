@@ -1,5 +1,6 @@
 
     (function () {
+      const RP = window.RosaPromo || { setSettings: function(){}, settings: function(){return {};}, percent: function(){return null;}, isPromo: function(){return false;}, badge: function(){return '';}, badgeHtml: function(){return '';}, priceHtml: function(r,f){return f ? f(r.price) : r.price;}, buyIcon: function(){return '';}, bg: function(){return '#1E9E57';}, priceColor: function(){return '#D62828';}, injectCss: function(){} };
       const VR = window.RosaVariants || { parse: function () { return []; }, priceFor: function (p) { return parseFloat(p && p.price) || 0; }, inStock: function (p) { return !p || p.quantity == null || Number(p.quantity) > 0; }, stockOf: function (p) { return p && p.quantity != null ? Number(p.quantity) : null; }, esc: function (s) { return s == null ? '' : String(s).replace(/[&<>"]/g, function (m) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[m]; }); } };
 
       const SUPABASE_URL = 'https://dtwciuhwwanwlwpydeko.supabase.co';
@@ -13,7 +14,7 @@
           home: 'ACCUEIL', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
           login: 'Se connecter', profile: 'Mon Profil', notreCollection: 'Notre Collection', back: 'Retour à l\'accueil',
           menCat: 'Parfums Homme', menDesc: 'Des fragrances boisées, épicées et audacieuses qui révèlent votre caractère et votre élégance.',
-          buyNow: 'Commander', buyNowNote: 'Remplissez le formulaire, on vous appelle dans les plus brefs délais!',
+          buyNow: 'Acheter', buyNowNote: 'Remplissez le formulaire, on vous appelle dans les plus brefs délais!',
           addToCart: 'Ajouter', addedToCart: '✨ Article ajouté', cart: 'Panier', emptyCart: 'Votre panier est vide.',
           total: 'Total', payment: 'PAIEMENT', delivery: 'Livraison', fullName: 'Nom complet *', ourProducts: 'Nos Produits',
           phone: 'Téléphone *', email: 'Email *', address: 'Adresse *', yourOrder: 'Votre commande',
@@ -35,7 +36,7 @@
           home: 'HOME', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
           login: 'Sign in', profile: 'My Profile', notreCollection: 'Our Collection', back: 'Back to home',
           menCat: 'Men Perfumes', menDesc: 'Woody, spicy and bold fragrances that reveal your character and elegance.',
-          buyNow: 'Buy Now', buyNowNote: 'Fill in the form, we will call you as soon as possible!',
+          buyNow: 'Buy', buyNowNote: 'Fill in the form, we will call you as soon as possible!',
           addToCart: 'Add to cart', addedToCart: '✨ Added to cart', cart: 'Cart', emptyCart: 'Your cart is empty.',
           total: 'Total', payment: 'PAYMENT', delivery: 'Delivery', fullName: 'Full name *', ourProducts: 'Our Products',
           phone: 'Phone *', email: 'Email *', address: 'Address *', yourOrder: 'Your order',
@@ -155,6 +156,7 @@
       function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
       function promoPriceHtml(row) {
         // STE-style promo: struck old price before current price
+        try { return RP.priceHtml(row, formatPrice); } catch (e) {}
         try {
           var op = row.old_price != null ? parseFloat(row.old_price) : NaN;
           var cp = parseFloat(row.price);
@@ -296,14 +298,15 @@
         if (cartTotalSpan) cartTotalSpan.textContent = formatPrice(total);
       }
 
-      function addToCart(id, name, price, icon, image, quantityLeft) {
+      function addToCart(id, name, price, icon, image, quantityLeft, variantLabel) {
         if (quantityLeft <= 0) { showToast('outOfStock'); return; }
-        const existing = cart.find(i => i.id === id);
+        const lineId = variantLabel ? (id + '::' + variantLabel) : id;
+        const existing = cart.find(i => i.id === lineId);
         if (existing) {
-          if (existing.quantity >= quantityLeft) { showToast('outOfStock'); return; }
+          if (quantityLeft != null && existing.quantity >= quantityLeft) { showToast('outOfStock'); return; }
           existing.quantity = (existing.quantity || 1) + 1;
         } else {
-          cart.push({ id, name, price, icon: icon || 'fa-crown', image, quantity: 1 });
+          cart.push({ id: lineId, productId: id, variant: variantLabel || '', name, price, icon: icon || 'fa-crown', image, quantity: 1 });
         }
         saveCart();
         showToast('addedToCart', name);
@@ -382,6 +385,7 @@ async function loadProducts() {
           const __vs = VR.parse(p.variants);
           const __vf = __vs.length ? (__vs.find(v => VR.inStock(p, v)) || __vs[0]) : null;
           const __chip = __vs.length ? `<div class="variant-chip">${VR.esc(__vs.map(v => v.label).join(' / '))}</div>` : '';
+          const __badge = RP.badge(p);
           const imgHtml = p.image ? `<img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async">` : `<i class="fas fa-crown"></i>`;
           const __qty = __vf ? (VR.stockOf(p, __vf) == null ? p.quantity : VR.stockOf(p, __vf)) : p.quantity;
           const stockStatus = getStockStatus(__qty);
@@ -390,16 +394,22 @@ async function loadProducts() {
           const isOutOfStock = stockStatus === 'outOfStock';
           html += `<div class="product-card" data-product-id="${p.id}">
                         <div class="product-clickable" data-product-id="${p.id}">
-                            <div class="product-img">${imgHtml}</div>
+                            <div class="product-img">${imgHtml}${__badge}</div>
                             <div class="product-title">${escapeHtml(p.name)}</div>
                             <div class="product-brand">${escapeHtml(p.brand)}</div>
                             <div class="product-price">${promoPriceHtml(p)}</div>
 ${__chip}
                             <div class="stock-indicator ${stockStatus}">${stockIcon} ${stockText}</div>
                         </div>
-                        <button class="buy-now-btn ${isOutOfStock ? 'disabled' : ''}" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${__vf ? VR.priceFor(p, __vf) : p.price}" data-variant="${__vf ? VR.esc(__vf.label) : ''}" data-image="${p.image || ''}" ${isOutOfStock ? 'disabled' : ''}>
-                            <i class="fas fa-bolt"></i> ${translations[currentLanguage].buyNow}
-                        </button>
+                        <div class="rp-buy-row">
+                            <button class="buy-now-btn rp-buy-btn ${isOutOfStock ? 'disabled' : ''}" data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${__vf ? VR.priceFor(p, __vf) : p.price}" data-variant="${__vf ? VR.esc(__vf.label) : ''}" data-image="${p.image || ''}" ${isOutOfStock ? 'disabled' : ''}>
+                                ${translations[currentLanguage].buyNow}
+                            </button>
+                            <button type="button" class="rp-cart-btn rp-add-btn ${isOutOfStock ? 'disabled' : ''}" title="${translations[currentLanguage].addToCart}" aria-label="${translations[currentLanguage].addToCart}"
+                                data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${__vf ? VR.priceFor(p, __vf) : p.price}" data-variant="${__vf ? VR.esc(__vf.label) : ''}" data-image="${p.image || ''}" ${isOutOfStock ? 'disabled' : ''}>
+                                ${RP.buyIcon()}
+                            </button>
+                        </div>
                     </div>`;
         });
         productGrid.innerHTML = html;
@@ -411,6 +421,19 @@ ${__chip}
             e.stopPropagation();
             if (btn.classList.contains('disabled')) return;
             openBuyNow(btn.dataset.id, btn.dataset.name, parseFloat(btn.dataset.price), btn.dataset.image, btn.dataset.variant);
+          });
+        });
+        document.querySelectorAll('.rp-add-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (btn.disabled) return;
+const __arr = (typeof products !== 'undefined' && products) || (typeof allProducts !== 'undefined' && allProducts) || (typeof products !== 'undefined' && products) || (typeof allProductsData !== 'undefined' && allProductsData) || [];
+            const prod = __arr.find(x => x.id == btn.dataset.id);
+            if (!prod) return;
+            const v = (window.RosaVariants && window.RosaVariants.parse(prod.variants).find(x => x.label === btn.dataset.variant)) || null;
+            const left = (window.RosaVariants ? window.RosaVariants.stockOf(prod, v) : prod.quantity);
+            if (left == null) left = prod.quantity;
+            addToCart(btn.dataset.id, btn.dataset.name, parseFloat(btn.dataset.price), prod.icon, btn.dataset.image, left, btn.dataset.variant);
           });
         });
       }

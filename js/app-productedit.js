@@ -15,7 +15,7 @@
                     existing: 'PARFUMS EXISTANTS', login: 'Se connecter', profile: 'Mon Profil',
                     back: 'Retour', editProduct: 'Modifier le produit', productInfo: 'Informations produit',
                     productName: 'Nom du produit', brand: 'Marque / Maison', price: 'Prix (TND)', oldPrice: 'Ancien prix — promo (optionnel)', oldPriceHint: "Si supérieur au prix actuel, le site affiche l'ancien prix barré.",
-                    quantity: 'Quantité en stock', variants: 'Variantes (Nos Produits)', addVariant: '+ Ajouter une variante', variantsInfo: 'Optionnel. Laissez vide pour un produit à un seul format.', description: 'Description', productImages: 'Images du produit',
+                    promoPercent: 'Remise % (badge promo)', promoPercentHint: "Laissez vide : le % se calcule depuis l'ancien prix.", quantity: 'Quantité en stock', variants: 'Variantes (Nos Produits)', addVariant: '+ Ajouter une variante', variantsInfo: 'Optionnel. Laissez vide pour un produit à un seul format.', description: 'Description', productImages: 'Images du produit',
                     addImages: 'Ajouter des images', imagesInfo: 'Vous pouvez ajouter plusieurs images. La première sera l\'image principale.',
                     category: 'Catégorie', menCat: 'Homme', womenCat: 'Femme', unisexCat: 'Unisexe', kidsCat: 'Enfants', catVoiture: 'Voiture', catAmbiance: 'Ambiance', catMusc: 'Musc', catAccessoires: 'Accessoires', catInspires: 'Parfums inspirés',
                     season: 'Saisons (plusieurs choix possibles)', summer: 'Été', winter: 'Hiver', spring: 'Printemps', autumn: 'Automne',
@@ -35,7 +35,7 @@
                     existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
                     back: 'Back', editProduct: 'Edit Product', productInfo: 'Product Information',
                     productName: 'Product Name', brand: 'Brand / House', price: 'Price (TND)', oldPrice: 'Old price — promo (optional)', oldPriceHint: 'If higher than the current price, the site shows the old price struck through.',
-                    quantity: 'Quantity in stock', variants: 'Variants (Our Products)', addVariant: '+ Add variant', variantsInfo: 'Optional. Leave empty for a single-size product.', description: 'Description', productImages: 'Product Images',
+                    promoPercent: 'Discount % (promo badge)', promoPercentHint: 'Leave empty: the % is computed from the old price.', quantity: 'Quantity in stock', variants: 'Variants (Our Products)', addVariant: '+ Add variant', variantsInfo: 'Optional. Leave empty for a single-size product.', description: 'Description', productImages: 'Product Images',
                     addImages: 'Add Images', imagesInfo: 'You can add multiple images. The first one will be the main image.',
                     category: 'Category', menCat: 'Men', womenCat: 'Women', unisexCat: 'Unisex', kidsCat: 'Kids', catVoiture: 'Car', catAmbiance: 'Home', catMusc: 'Musk', catAccessoires: 'Accessories', catInspires: 'Inspired perfumes',
                     season: 'Seasons (multiple choices possible)', summer: 'Summer', winter: 'Winter', spring: 'Spring', autumn: 'Autumn',
@@ -55,7 +55,7 @@
                     existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
                     back: 'رجوع', editProduct: 'تعديل المنتج', productInfo: 'معلومات المنتج',
                     productName: 'اسم المنتج', brand: 'العلامة التجارية', price: 'السعر (دينار)', oldPrice: 'السعر القديم — عرض (اختياري)', oldPriceHint: 'إذا كان أعلى من السعر الحالي، يعرض الموقع السعر القديم مشطوبًا.',
-                    quantity: 'الكمية في المخزون', variants: 'الأنواع (منتجاتنا)', addVariant: '+ إضافة نوع', variantsInfo: 'اختياري. اتركه فارغاً لمنتج بحجم واحد.', description: 'الوصف', productImages: 'صور المنتج',
+                    promoPercent: 'نسبة الخصم %', promoPercentHint: 'اتركه فارغاً ليُحسب من السعر القديم.', quantity: 'الكمية في المخزون', variants: 'الأنواع (منتجاتنا)', addVariant: '+ إضافة نوع', variantsInfo: 'اختياري. اتركه فارغاً لمنتج بحجم واحد.', description: 'الوصف', productImages: 'صور المنتج',
                     addImages: 'إضافة صور', imagesInfo: 'يمكنك إضافة عدة صور. الصورة الأولى ستكون الصورة الرئيسية.',
                     category: 'الفئة', menCat: 'رجالي', womenCat: 'نسائي', unisexCat: 'للجنسين', kidsCat: 'أطفال', catVoiture: 'سيارة', catAmbiance: 'جو', catMusc: 'مسك', catAccessoires: 'إكسسوارات', catInspires: 'عطور مستوحاة',
                     season: 'المواسم (اختيارات متعددة ممكنة)', summer: 'صيف', winter: 'شتاء', spring: 'ربيع', autumn: 'خريف',
@@ -188,6 +188,7 @@
                 document.getElementById('eProductBrand').value = product.brand || '';
                 document.getElementById('eProductPrice').value = product.price || '';
                 document.getElementById('eProductOldPrice') && (document.getElementById('eProductOldPrice').value = (product.old_price != null ? product.old_price : ''));
+                document.getElementById('eProductPromoPercent') && (document.getElementById('eProductPromoPercent').value = (product.promo_percent != null ? product.promo_percent : ''));
                 document.getElementById('eProductQuantity').value = product.quantity || 0;
                 document.getElementById('eProductDescription').value = product.description || '';
 
@@ -232,6 +233,8 @@
                 const oldPriceRaw = document.getElementById('eProductOldPrice')?.value;
                 const oldPrice = (oldPriceRaw === '' || oldPriceRaw == null) ? null : parseFloat(oldPriceRaw);
                 const quantity = parseInt(document.getElementById('eProductQuantity').value) || 0;
+                const promoPercentRaw = document.getElementById('eProductPromoPercent')?.value;
+                const promoPercent = (promoPercentRaw === '' || promoPercentRaw == null) ? null : parseFloat(promoPercentRaw);
                 const description = document.getElementById('eProductDescription').value.trim();
 
                 if (!name || !brand || isNaN(price) || price <= 0) {
@@ -271,6 +274,7 @@
                         brand,
                         price,
                         old_price: (oldPrice != null && isFinite(oldPrice) && oldPrice > price) ? oldPrice : null,
+                        promo_percent: (promoPercent != null && isFinite(promoPercent) && promoPercent > 0) ? promoPercent : null,
                         quantity,
                         description: description || null,
                         images: JSON.stringify(finalImages),
@@ -290,6 +294,10 @@
                     }
                     if (error && /variants/.test(String(error.message || ''))) {
                         delete updateData.variants; // column not migrated yet
+                        error = (await supabase.from('products').update(updateData).eq('id', productId)).error;
+                    }
+                    if (error && /promo_percent/.test(String(error.message || ''))) {
+                        delete updateData.promo_percent; // column not migrated yet
                         error = (await supabase.from('products').update(updateData).eq('id', productId)).error;
                     }
                     if (error) throw error;
