@@ -33,29 +33,30 @@
 .rp-price--promo{color:var(--rp-price-color,${COLORS.red})!important;}
 .rp-buy-row{display:flex;gap:.4rem;align-items:center;}
 .rp-buy-btn{flex:1 1 auto;min-width:0;}
-.rp-buy-row .buy-now-btn{background:#111111;border:none;color:#fff;min-height:49px;border-radius:999px;font-weight:600;font-size:.92rem;box-shadow:none;}
-.rp-buy-row .buy-now-btn:hover{background:#000000;transform:none;}
-.rp-buy-row .buy-now-btn.disabled,.rp-buy-row .buy-now-btn:disabled{background:#8a8a8a;}
-.rp-cart-btn{flex:0 0 auto;width:75px;min-height:49px;display:inline-flex;align-items:center;justify-content:center;
-  background:transparent;border:1px solid #111111;color:#111111;border-radius:10px;cursor:pointer;
+/* buttons follow the site palette: light = warm charcoal pill, dark = cream pill (vars flip) */
+.rp-buy-row .buy-now-btn{background:var(--charcoal,#3A3228);border:none;color:var(--white);min-height:56px;padding:.6rem 1.1rem;border-radius:999px;font-weight:600;font-size:1rem;letter-spacing:.02em;box-shadow:0 6px 18px rgba(90,70,50,.18);}
+.rp-buy-row .buy-now-btn:hover{background:var(--gold-dark);transform:translateY(-1px);}
+.rp-cart-btn{flex:0 0 auto;width:75px;min-height:56px;display:inline-flex;align-items:center;justify-content:center;
+  background:transparent;border:1.5px solid var(--charcoal);color:var(--charcoal);border-radius:10px;cursor:pointer;
   transition:background-color .25s,color .25s;padding:0;}
-.rp-cart-btn:hover{background:#111111;color:#fff;}
-.rp-cart-btn svg{width:21px;height:21px;}
+.rp-cart-btn:hover{background:var(--charcoal);color:var(--white);}
+.rp-cart-btn svg{width:23px;height:23px;}
 .rp-cart-btn[disabled]{opacity:.5;cursor:not-allowed;}
-body.dark .rp-buy-row .buy-now-btn{background:#F5EFE6;border:none;color:#1A1814;}
-body.dark .rp-buy-row .buy-now-btn:hover{background:#FFFFFF;}
-body.dark .rp-buy-row .buy-now-btn.disabled,body.dark .rp-buy-row .buy-now-btn:disabled{background:#6b675f;}
-body.dark .rp-cart-btn{border:1px solid #F5EFE6;color:#F5EFE6;}
-body.dark .rp-cart-btn:hover{background:#F5EFE6;color:#1A1814;}
 /* Compact phones (Galaxy J6 / A10 / Redmi 7 class, ~360px CSS): cards are
    2-col ~155px wide — full-size 49px pill + 75px square leaves the pill ~45px
    and it wraps into a blob. Shrink the whole row, force nowrap on the label,
    keep the square an exact square so it never stretches. */
 @media (max-width:480px){
   .rp-buy-row{gap:.35rem;}
-  .rp-buy-row .buy-now-btn{min-height:40px;padding:.35rem .55rem;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .rp-cart-btn{width:42px;min-height:40px;border-radius:9px;}
-  .rp-cart-btn svg{width:18px;height:18px;}
+  /* card grids: compact so 2-col cards never deform */
+  .rp-buy-row .buy-now-btn{min-height:40px;padding:.4rem .5rem;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .rp-buy-row .rp-cart-btn{width:42px;min-height:44px;border-radius:9px;}
+  .rp-buy-row .rp-cart-btn svg{width:18px;height:18px;}
+  /* product page has the whole row to itself — go big, it's the money button */
+  .product-actions.rp-buy-row{gap:.5rem;}
+  .product-actions.rp-buy-row .buy-now-btn{min-height:60px;padding:.5rem 1rem;font-size:1.05rem;}
+  .product-actions .rp-cart-btn{width:64px;min-height:60px;border-radius:10px;}
+  .product-actions .rp-cart-btn svg{width:24px;height:24px;}
 }
 @media (max-width:420px){.rp-badge--pill,.rp-badge--corner{height:24px;min-width:50px;font-size:14px;padding:0 10px;}}
 `;
