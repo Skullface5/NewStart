@@ -382,14 +382,14 @@
             }
             if (addBtn) {
               addBtn.dataset.price = linePrice;
-              addBtn.dataset.variant = label;
+              addBtn.setAttribute('data-variant', label);
               addBtn.dataset.stock = qty == null ? '' : qty;
               addBtn.disabled = out;
               addBtn.classList.toggle('disabled', out);
             }
             if (buyBtn) {
               buyBtn.dataset.price = linePrice;
-              buyBtn.dataset.variant = label;
+              buyBtn.setAttribute('data-variant', label);
               buyBtn.dataset.stock = qty == null ? '' : qty;
               buyBtn.disabled = out;
               buyBtn.classList.toggle('disabled', out);
