@@ -31,7 +31,7 @@
 .rp-badge--pill{top:11px;left:11px;min-width:54px;height:26px;padding:0 11px;border-radius:999px;font-size:15px;}
 .rp-badge--corner{top:0;left:0;min-width:54px;height:26px;padding:0 11px;border-radius:0 0 12px 0;font-size:15px;}
 .rp-price--promo{color:var(--rp-price-color,${COLORS.red})!important;}
-.rp-buy-row{display:flex;gap:.5rem;align-items:stretch;}
+.rp-buy-row{display:flex;gap:.4rem;align-items:center;}
 .rp-buy-btn{flex:1 1 auto;min-width:0;}
 .rp-buy-row .buy-now-btn{background:#111111;border:none;color:#fff;min-height:49px;border-radius:999px;font-weight:600;font-size:.92rem;box-shadow:none;}
 .rp-buy-row .buy-now-btn:hover{background:#000000;transform:none;}
@@ -47,6 +47,16 @@ body.dark .rp-buy-row .buy-now-btn:hover{background:#FFFFFF;}
 body.dark .rp-buy-row .buy-now-btn.disabled,body.dark .rp-buy-row .buy-now-btn:disabled{background:#6b675f;}
 body.dark .rp-cart-btn{border:1px solid #F5EFE6;color:#F5EFE6;}
 body.dark .rp-cart-btn:hover{background:#F5EFE6;color:#1A1814;}
+/* Compact phones (Galaxy J6 / A10 / Redmi 7 class, ~360px CSS): cards are
+   2-col ~155px wide — full-size 49px pill + 75px square leaves the pill ~45px
+   and it wraps into a blob. Shrink the whole row, force nowrap on the label,
+   keep the square an exact square so it never stretches. */
+@media (max-width:480px){
+  .rp-buy-row{gap:.35rem;}
+  .rp-buy-row .buy-now-btn{min-height:40px;padding:.35rem .55rem;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .rp-cart-btn{width:42px;min-height:40px;border-radius:9px;}
+  .rp-cart-btn svg{width:18px;height:18px;}
+}
 @media (max-width:420px){.rp-badge--pill,.rp-badge--corner{height:24px;min-width:50px;font-size:14px;padding:0 10px;}}
 `;
 
