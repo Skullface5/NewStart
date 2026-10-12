@@ -291,7 +291,7 @@
                 <div class="variant-title"><i class="fas fa-layer-group" style="margin-inline-end:5px;"></i>${translations[currentLanguage].ourProducts}</div>
                 <div class="variant-options" id="variantOptions">${variants.map(v => {
                   const out = !VR.inStock(product, v);
-                  return `<button type="button" class="variant-opt${v.label === activeVariant.label ? ' is-active' : ''}${out ? ' is-out' : ''}" data-variant="${VR.esc(v.label)}"${out ? ' disabled' : ''}>
+                  return `<button type="button" class="variant-opt${v.label === activeVariant.label ? ' is-active' : ''}${out ? ' is-out' : ''}" data-variant="${VR.esc(v.label)}" data-price="${v.price != null ? v.price : ''}"${out ? ' disabled' : ''}>
                     <span class="variant-radio"></span>
                     <span class="variant-opt-txt"><span class="variant-label">${VR.esc(v.label)}</span>${showOptPrices && v.price != null ? `<span class="variant-price">${formatPrice(v.price)}</span>` : ''}</span>
                   </button>`;
@@ -348,11 +348,10 @@
         if (buyBtn) {
           buyBtn.addEventListener('click', () => {
             if (buyBtn.disabled) return;
-            /* read from the cart button (paintVariant() writes price+variant to it first,
-               then to buyBtn — always read from the other button to avoid same-element staleness) */
-            const cartBtnEl = document.querySelector('.rp-add-btn');
-            const liveVariant = cartBtnEl ? cartBtnEl.dataset.variant : buyBtn.dataset.variant;
-            const livePrice = parseFloat(cartBtnEl ? cartBtnEl.dataset.price : buyBtn.dataset.price) || 0;
+            /* each variant-opt carries data-price, so the buy-btn click just reads the live active one */
+            const activeOpt = document.querySelector('.variant-opt.is-active');
+            const liveVariant = activeOpt ? activeOpt.dataset.variant : buyBtn.dataset.variant;
+            const livePrice = parseFloat(activeOpt?.dataset.price ?? buyBtn.dataset.price) || 0;
             openBuyNow(buyBtn.dataset.id, buyBtn.dataset.name, livePrice, buyBtn.dataset.image, liveVariant);
           });
         }
