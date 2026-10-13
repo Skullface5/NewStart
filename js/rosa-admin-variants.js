@@ -130,4 +130,30 @@
 
   inject();
   window.RosaAdminVariants = API;
+
+  /* ── auto-mount ──────────────────────────────────────────────
+     Wire every variant editor on the page, wherever it lives
+     (dashboard #dash-edit, standalone productedit.html, add forms).
+     Hidden sections still have their elements in the DOM, so this
+     works regardless of tab visibility. Polls briefly to survive
+     late-injected containers, then stops. */
+  function autoMount() {
+    var pairs = [
+      ['eVariantsList', 'eAddVariantBtn'], // edit form (standalone + dashboard)
+      ['variantsList', 'addVariantBtn']     // add form (dashboard)
+    ];
+    pairs.forEach(function (ids) {
+      var list = document.getElementById(ids[0]);
+      if (!list) return;
+      var btn = document.getElementById(ids[1]);
+      API.mount(list, btn);
+    });
+  }
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', autoMount);
+    else autoMount();
+    window.addEventListener('load', autoMount);
+    var __t = setInterval(autoMount, 500);
+    setTimeout(function () { clearInterval(__t); }, 30000);
+  }
 })();
