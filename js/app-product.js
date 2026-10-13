@@ -278,10 +278,11 @@
         const isOutOfStock = hasVariants ? !VR.inStock(product, activeVariant) : (!product.quantity || product.quantity === 0);
         const addToCartDisabled = isOutOfStock ? 'disabled' : '';
         let thumbnailsHtml = '', mainImageHtml = '', swipeIndicatorsHtml = '', arrowsHtml = '';
-        const gallerySrc = (activeVariant && activeVariant.image) ? activeVariant.image : (productImages[0] || '');
+        const activeVariantImg = VR.variantImage(activeVariant);
+        const gallerySrc = activeVariantImg || (productImages[0] || '');
         if (gallerySrc) {
           mainImageHtml = `<img src="${gallerySrc}" alt="${escapeHtml(product.name)}" id="mainImage" onerror="this.onerror=null;this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-crown\'></i>';">`;
-          thumbnailsHtml = productImages.map((img, idx) => `<div class="thumbnail ${img === gallerySrc || (idx === 0 && !(activeVariant && activeVariant.image)) ? 'active' : ''}" data-img="${img}"><img src="${img}" alt="thumbnail ${idx+1}" loading="lazy" decoding="async" onerror="this.onerror=null;this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-crown\'></i>';"></div>`).join('');
+          thumbnailsHtml = productImages.map((img, idx) => `<div class="thumbnail ${img === gallerySrc || (idx === 0 && !activeVariantImg) ? 'active' : ''}" data-img="${img}"><img src="${img}" alt="thumbnail ${idx+1}" loading="lazy" decoding="async" onerror="this.onerror=null;this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-crown\'></i>';"></div>`).join('');
           swipeIndicatorsHtml = productImages.map((_, idx) => `<div class="swipe-dot ${idx === 0 ? 'active' : ''}"></div>`).join('');
           if (productImages.length > 1) arrowsHtml = `<div class="nav-arrow prev"><i class="fas fa-chevron-left"></i></div><div class="nav-arrow next"><i class="fas fa-chevron-right"></i></div>`;
         } else {
@@ -378,7 +379,8 @@
               priceLine.innerHTML = sale;
             }
             // swap the gallery image when this variant has its own picture
-            if (v.image) showVariantImage(v.image, vPct);
+            const vImg = VR.variantImage(v);
+            if (vImg) showVariantImage(vImg, vPct);
             else showProductImage(productImages[0] || '', RP.percent(product));
             const qty = VR.stockOf(product, v) == null ? product.quantity : VR.stockOf(product, v);
             const fresh = getStockStatusHTML(qty);

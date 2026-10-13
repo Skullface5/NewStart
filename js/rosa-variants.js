@@ -54,14 +54,34 @@
       if (!isFinite(price)) price = null;
       var qty = r.quantity == null || r.quantity === '' ? null : parseInt(r.quantity, 10);
       if (!isFinite(qty)) qty = null;
-      // per-variant picture (URL) — absent = fall back to the product gallery
-      var image = (r.image != null && r.image !== '') ? String(r.image).trim() : null;
+      // per-variant pictures (array of URLs); a legacy single string stays supported
+      var images = normalizeImages(r.images != null ? r.images : r.image);
       // per-variant discount: old price (pre-discount). % auto-computed vs price.
       var oldPrice = r.old_price == null || r.old_price === '' ? null : parseFloat(r.old_price);
       if (!isFinite(oldPrice) || (price != null && oldPrice <= price)) oldPrice = null;
-      out.push({ label: label, price: price, quantity: qty, image: image, old_price: oldPrice });
+      out.push({ label: label, price: price, quantity: qty, images: images, old_price: oldPrice });
     });
     return out;
+  }
+
+  /* Accept an array, a single URL string, or a JSON-encoded array; return URL[]. */
+  function normalizeImages(v) {
+    if (v == null || v === '') return [];
+    var arr = v;
+    if (typeof arr === 'string') {
+      var s = arr.trim();
+      if (s.charAt(0) === '[') { try { arr = JSON.parse(s); } catch (e) { arr = [s]; } }
+      else arr = [s];
+    }
+    if (!Array.isArray(arr)) return [];
+    var out = [];
+    arr.forEach(function (u) { if (u != null && String(u).trim()) out.push(String(u).trim()); });
+    return out;
+  }
+
+  /* First variant picture, or null. */
+  function variantImage(variant) {
+    return (variant && variant.images && variant.images.length) ? variant.images[0] : null;
   }
 
   /* Discount % for one variant (vs its own price), or null when not on sale. */
@@ -102,6 +122,8 @@
 
   window.RosaVariants = {
     parse: parse,
+    normalizeImages: normalizeImages,
+    variantImage: variantImage,
     variantPercent: variantPercent,
     variantOnSale: variantOnSale,
     priceFor: priceFor,
