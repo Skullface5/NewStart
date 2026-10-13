@@ -255,6 +255,35 @@
         };
       }
 
+      function injectProductSchema(product, images) {
+        try {
+          var old = document.getElementById('rosaProductSchema');
+          if (old) old.remove();
+          var price = parseFloat(product.price);
+          var avail = (!product.quantity || product.quantity === 0) ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock';
+          var schema = {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": product.name || '',
+            "brand": { "@type": "Brand", "name": (product.brand || 'Rosa Fragrances') },
+            "image": (images && images.length) ? images : [],
+            "description": (product.description || product.name || '').toString().slice(0, 5000),
+            "offers": {
+              "@type": "Offer",
+              "price": isFinite(price) ? price : 0,
+              "priceCurrency": "TND",
+              "availability": avail,
+              "url": window.location.href
+            }
+          };
+          var tag = document.createElement('script');
+          tag.type = 'application/ld+json';
+          tag.id = 'rosaProductSchema';
+          tag.textContent = JSON.stringify(schema);
+          (document.head || document.documentElement).appendChild(tag);
+        } catch (e) {}
+      }
+
       function displayProduct(product) {
         // Parse images
         try {
@@ -263,6 +292,8 @@
           else if (product.image) productImages = [product.image];
           else productImages = [];
         } catch(e) { productImages = []; }
+
+        injectProductSchema(product, productImages);
         
         const categoryNames = { man: 'Homme', women: 'Femme', unisexe: 'Unisexe', kids: 'Enfants', inspires: 'Inspires', voiture: 'Voiture', ambiance: 'Ambiance', musc: 'Musc', accessoires: 'Accessoires' };
         const categoryName = categoryNames[product.category] || product.category;
