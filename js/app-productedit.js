@@ -6,6 +6,7 @@
 
             let currentLanguage = localStorage.getItem('language') || 'fr';
             let productId = null;
+            let productLoadToken = 0; // guards against double-invocation races
             let currentProduct = null;
             let uploadedImages = [];
 
@@ -161,9 +162,14 @@
                     return;
                 }
 
+                // Latest load wins: any earlier in-flight fetch is discarded when it resolves.
+                const loadToken = ++productLoadToken;
+
                 try {
                     const { data, error } = await supabase.from('products').select('*').eq('id', productId).single();
                     if (error) throw error;
+                    // A newer loadProduct() (or a different product) started while we waited.
+                    if (loadToken !== productLoadToken) return;
                     if (!data) {
                         document.getElementById('errorContent').style.display = 'block';
                         document.getElementById('errorContent').innerHTML = translations[currentLanguage].productNotFound;

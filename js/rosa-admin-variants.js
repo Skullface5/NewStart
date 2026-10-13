@@ -53,22 +53,36 @@
     }
   }
 
+  /* Delegated delete handler — bound ONCE per list element so it survives
+     setRows() (which rewrites innerHTML). Mounting is idempotent on the list. */
+  function bindDelegates(listEl) {
+    if (!listEl || listEl.__rosaBound) return;
+    listEl.__rosaBound = true;
+    listEl.addEventListener('click', function (e) {
+      var del = e.target.closest('.var-del');
+      if (!del) return;
+      var row = del.closest('.var-row');
+      if (row) row.remove();
+      ensureEmpty(listEl);
+    });
+  }
+
   var API = {
     inject: inject,
 
     /* Wire a list container + its "+ Ajouter" button. */
     mount: function (listEl, addBtn) {
       inject();
-      if (!listEl || listEl.__rosaMounted) return;
+      if (!listEl) return;
+      bindDelegates(listEl);
+      /* rebind idempotently: the add button is the only per-mount listener;
+         row add/delete are delegated on the list itself (survives setRows),
+         so re-mount never creates a second hidden handler set. */
+      if (addBtn && !addBtn.__rosaBound) {
+        addBtn.__rosaBound = true;
+        addBtn.addEventListener('click', function () { API.addRow(listEl); });
+      }
       listEl.__rosaMounted = true;
-      if (addBtn) addBtn.addEventListener('click', function () { API.addRow(listEl); });
-      listEl.addEventListener('click', function (e) {
-        var del = e.target.closest('.var-del');
-        if (!del) return;
-        var row = del.closest('.var-row');
-        if (row) row.remove();
-        ensureEmpty(listEl);
-      });
       ensureEmpty(listEl);
     },
 
