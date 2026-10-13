@@ -268,16 +268,7 @@
         const categoryName = categoryNames[product.category] || product.category;
         const seasons = getSeasonNames(product.season);
         const seasonsHtml = seasons.length ? `<span class="meta-badge"><i class="fas fa-calendar-alt"></i> ${translations[currentLanguage].seasons}: ${seasons.map(s => `<i class="${s.icon}" style="margin-left: 5px;"></i> ${s.name}`).join(', ')}</span>` : '';
-        let thumbnailsHtml = '', mainImageHtml = '', swipeIndicatorsHtml = '', arrowsHtml = '';
-        if (productImages.length) {
-          mainImageHtml = `<img src="${productImages[0]}" alt="${escapeHtml(product.name)}" id="mainImage" onerror="this.onerror=null;this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-crown\'></i>';">`;
-          thumbnailsHtml = productImages.map((img, idx) => `<div class="thumbnail ${idx === 0 ? 'active' : ''}" data-img="${img}"><img src="${img}" alt="thumbnail ${idx+1}" loading="lazy" decoding="async" onerror="this.onerror=null;this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-crown\'></i>';"></div>`).join('');
-          swipeIndicatorsHtml = productImages.map((_, idx) => `<div class="swipe-dot ${idx === 0 ? 'active' : ''}"></div>`).join('');
-          if (productImages.length > 1) arrowsHtml = `<div class="nav-arrow prev"><i class="fas fa-chevron-left"></i></div><div class="nav-arrow next"><i class="fas fa-chevron-right"></i></div>`;
-        } else {
-          mainImageHtml = `<i class="fas fa-crown"></i>`;
-        }
-        // ── Variants ("Nos Produits") ─────────────────────────────
+        // ── Variants ("Nos Produits") — parsed first so the gallery + prices can use them ──
         const variants = VR.parse(product.variants);
         const hasVariants = variants.length > 0;
         const activeVariant = hasVariants ? (variants.find(v => VR.inStock(product, v)) || variants[0]) : null;
@@ -286,6 +277,16 @@
         const stockStatusHTML = getStockStatusHTML(activeQty);
         const isOutOfStock = hasVariants ? !VR.inStock(product, activeVariant) : (!product.quantity || product.quantity === 0);
         const addToCartDisabled = isOutOfStock ? 'disabled' : '';
+        let thumbnailsHtml = '', mainImageHtml = '', swipeIndicatorsHtml = '', arrowsHtml = '';
+        const gallerySrc = (activeVariant && activeVariant.image) ? activeVariant.image : (productImages[0] || '');
+        if (gallerySrc) {
+          mainImageHtml = `<img src="${gallerySrc}" alt="${escapeHtml(product.name)}" id="mainImage" onerror="this.onerror=null;this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-crown\'></i>';">`;
+          thumbnailsHtml = productImages.map((img, idx) => `<div class="thumbnail ${img === gallerySrc || (idx === 0 && !(activeVariant && activeVariant.image)) ? 'active' : ''}" data-img="${img}"><img src="${img}" alt="thumbnail ${idx+1}" loading="lazy" decoding="async" onerror="this.onerror=null;this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-crown\'></i>';"></div>`).join('');
+          swipeIndicatorsHtml = productImages.map((_, idx) => `<div class="swipe-dot ${idx === 0 ? 'active' : ''}"></div>`).join('');
+          if (productImages.length > 1) arrowsHtml = `<div class="nav-arrow prev"><i class="fas fa-chevron-left"></i></div><div class="nav-arrow next"><i class="fas fa-chevron-right"></i></div>`;
+        } else {
+          mainImageHtml = `<i class="fas fa-crown"></i>`;
+        }
         const variantsHtml = hasVariants ? `
               <div class="variant-block">
                 <div class="variant-title"><i class="fas fa-layer-group" style="margin-inline-end:5px;"></i>${translations[currentLanguage].ourProducts}</div>
@@ -366,14 +367,19 @@
             document.querySelectorAll('.variant-opt').forEach(b => b.classList.toggle('is-active', b.dataset.variant === label));
             const out = !VR.inStock(product, v);
             const linePrice = VR.priceFor(product, v);
+            // per-variant discount: variant old_price wins, else the product's
+            const vOld = (v.old_price != null && v.old_price > linePrice) ? v.old_price
+                       : (product.old_price != null && parseFloat(product.old_price) > linePrice ? parseFloat(product.old_price) : NaN);
+            const vPct = (isFinite(vOld) && vOld > linePrice) ? Math.round(((vOld - linePrice) / vOld) * 100) : null;
             if (priceLine) {
-              const op = product.old_price != null ? parseFloat(product.old_price) : NaN;
-              const pct = RP.percent(Object.assign({}, product, { price: linePrice }));
-              const sale = (isFinite(op) && op > linePrice)
-                ? '<s style="opacity:.5;font-weight:300;font-size:.8em;margin-inline-end:7px;">' + formatPrice(op) + '</s><span class="rp-price--promo">' + formatPrice(linePrice) + '</span>'
-                : (pct != null ? '<span class="rp-price--promo">' + formatPrice(linePrice) + '</span>' : formatPrice(linePrice));
+              const sale = (isFinite(vOld) && vOld > linePrice)
+                ? '<s style="opacity:.5;font-weight:300;font-size:.8em;margin-inline-end:7px;">' + formatPrice(vOld) + '</s><span class="rp-price--promo">' + formatPrice(linePrice) + '</span>'
+                : (vPct != null ? '<span class="rp-price--promo">' + formatPrice(linePrice) + '</span>' : formatPrice(linePrice));
               priceLine.innerHTML = sale;
             }
+            // swap the gallery image when this variant has its own picture
+            if (v.image) showVariantImage(v.image, vPct);
+            else showProductImage(productImages[0] || '', RP.percent(product));
             const qty = VR.stockOf(product, v) == null ? product.quantity : VR.stockOf(product, v);
             const fresh = getStockStatusHTML(qty);
             // re-query every time: the previous badge node is replaced (detached)
@@ -397,6 +403,32 @@
               buyBtn.dataset.stock = qty == null ? '' : qty;
               buyBtn.disabled = out;
               buyBtn.classList.toggle('disabled', out);
+            }
+          }
+
+          /* Set the main gallery image + its % badge (variant-specific or product). */
+          function showVariantImage(src, pct) {
+            const main = document.getElementById('mainImage');
+            if (main && src) main.src = src;
+            paintBadge(pct);
+          }
+          function showProductImage(src, pct) {
+            const main = document.getElementById('mainImage');
+            if (main && src) main.src = src;
+            paintBadge(pct);
+          }
+          function paintBadge(pct) {
+            const badgeHost = document.querySelector('.main-image-container');
+            if (!badgeHost) return;
+            badgeHost.querySelectorAll('.rp-badge').forEach(b => b.remove());
+            if (pct != null) {
+              const shape = (window.RosaPromo && RP.shape) ? RP.shape() : 'pill';
+              const bg = RP.bg ? RP.bg() : '';
+              const b = document.createElement('span');
+              b.className = 'rp-badge rp-badge--' + shape;
+              if (bg) b.style.background = bg;
+              b.textContent = '-' + pct + '%';
+              badgeHost.appendChild(b);
             }
           }
           document.querySelectorAll('.variant-opt').forEach(btn => btn.addEventListener('click', () => {

@@ -54,10 +54,25 @@
       if (!isFinite(price)) price = null;
       var qty = r.quantity == null || r.quantity === '' ? null : parseInt(r.quantity, 10);
       if (!isFinite(qty)) qty = null;
-      out.push({ label: label, price: price, quantity: qty });
+      // per-variant picture (URL) — absent = fall back to the product gallery
+      var image = (r.image != null && r.image !== '') ? String(r.image).trim() : null;
+      // per-variant discount: old price (pre-discount). % auto-computed vs price.
+      var oldPrice = r.old_price == null || r.old_price === '' ? null : parseFloat(r.old_price);
+      if (!isFinite(oldPrice) || (price != null && oldPrice <= price)) oldPrice = null;
+      out.push({ label: label, price: price, quantity: qty, image: image, old_price: oldPrice });
     });
     return out;
   }
+
+  /* Discount % for one variant (vs its own price), or null when not on sale. */
+  function variantPercent(variant) {
+    if (!variant || variant.old_price == null || variant.price == null) return null;
+    if (variant.old_price <= variant.price) return null;
+    return Math.round(((variant.old_price - variant.price) / variant.old_price) * 100);
+  }
+
+  /* Is this variant on sale (has a valid old_price above its price)? */
+  function variantOnSale(variant) { return variantPercent(variant) != null; }
 
   /* Variant price resolved against the product: variant price wins, else product price. */
   function priceFor(product, variant) {
@@ -87,6 +102,8 @@
 
   window.RosaVariants = {
     parse: parse,
+    variantPercent: variantPercent,
+    variantOnSale: variantOnSale,
     priceFor: priceFor,
     inStock: inStock,
     stockOf: stockOf,
