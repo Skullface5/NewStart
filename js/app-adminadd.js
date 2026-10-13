@@ -249,6 +249,10 @@
 
           const __vList = document.getElementById('variantsList');
           const __vRows = (window.RosaAdminVariants && __vList && window.RosaAdminVariants.readRows(__vList)) || [];
+          // Images come from the FIRST variant (product-images UI is hidden);
+          // product.images stays in sync so category cards / cart / search keep working.
+          const __vImages = (__vRows.length && __vRows[0].images && __vRows[0].images.length) ? __vRows[0].images.slice() : null;
+          if (__vImages) { urls.length = 0; __vImages.forEach(u => urls.push(u)); }
           const newProduct = {
             name, brand, price, quantity,
             promo_percent: (promoPercent != null && isFinite(promoPercent) && promoPercent > 0) ? promoPercent : null,

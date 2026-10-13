@@ -276,6 +276,17 @@
                 if (upErr) throw upErr;
                 finalImages.push(supabase.storage.from('product-images').getPublicUrl(path).data.publicUrl);
             }
+            // Images come from the FIRST variant. The product-images UI is hidden;
+            // product.images stays in sync so category cards / cart / search keep working.
+            // No variant images -> keep whatever images the product already has.
+            const __vImages = (__vRows && __vRows.length && __vRows[0].images && __vRows[0].images.length)
+                ? __vRows[0].images.slice() : null;
+            if (__vImages) {
+                finalImages.length = 0;
+                __vImages.forEach(u => finalImages.push(u));
+            } else if (finalImages.length === 0) {
+                parseImages(product.images).forEach(u => finalImages.push(u));
+            }
             const updateData = {
                         name,
                         brand,

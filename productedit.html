@@ -986,7 +986,7 @@
                         <label data-translate="variants">Variantes (Nos Produits)</label>
                         <div class="variants-admin" id="eVariantsList"></div>
                         <button type="button" class="variants-add" id="eAddVariantBtn" data-translate="addVariant">+ Ajouter une variante</button>
-                        <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="variantsInfo">Optionnel. Laissez vide pour un produit à un seul format. Les boutons 100ml peuvent remplacer celui du client.</span></div>
+                        <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="variantsInfo">Les images du produit proviennent de la première variante. Créez au moins une variante et ajoutez-lui des photos.</span></div>
                     </div>
 
                     <div class="input-group">
@@ -995,7 +995,7 @@
                             placeholder="Décrivez ce parfum... Notes de tête, cœur, fond, inspiration..."></textarea>
                     </div>
 
-                    <div class="input-group">
+                    <div class="input-group" id="productImagesGroup" style="display:none;">
                         <label data-translate="productImages">Images du produit</label>
                         <div class="multi-image-upload">
                             <div class="image-preview-grid" id="imagePreviewGrid"></div>
@@ -1005,9 +1005,8 @@
                             </div>
                             <input type="file" id="imageUpload" accept="image/*" multiple style="display: none;">
                         </div>
-                        <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="imagesInfo">Vous
-                                pouvez
-                                ajouter plusieurs images. La première sera l'image principale.</span></div>
+                        <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="imagesInfo">Les
+                                images proviennent désormais de la première variante.</span></div>
                     </div>
 
                     <div class="input-group">
@@ -1109,7 +1108,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/admin-gate.js?v=1"></script>
     <script src="js/rosa-admin-variants.js?v=5"></script>
-  <script src="js/app-productedit.js?v=7"></script>
+  <script src="js/app-productedit.js?v=8"></script>
 </body>
 
 </html>

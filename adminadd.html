@@ -1033,7 +1033,7 @@
               placeholder="Décrivez ce parfum... Notes de tête, cœur, fond, inspiration..."></textarea>
           </div>
 
-          <div class="input-group">
+          <div class="input-group" id="productImagesGroup" style="display:none;">
             <label data-translate="productImages">Images du produit</label>
             <div class="multi-image-upload">
               <div class="image-preview-grid" id="imagePreviewGrid"></div>
@@ -1043,8 +1043,8 @@
               </div>
               <input type="file" id="imageUpload" accept="image/*" multiple style="display: none;">
             </div>
-            <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="imagesInfo">Vous pouvez
-                ajouter plusieurs images. La première sera l'image principale.</span></div>
+            <div class="info-text"><i class="fas fa-info-circle"></i> <span data-translate="imagesInfo">Les images
+                proviennent désormais de la première variante.</span></div>
           </div>
 
           <div class="input-group">
@@ -1158,7 +1158,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/admin-gate.js?v=1"></script>
     <script src="js/rosa-admin-variants.js?v=5"></script>
-  <script src="js/app-adminadd.js?v=7"></script>
+  <script src="js/app-adminadd.js?v=8"></script>
 </body>
 
 </html>
