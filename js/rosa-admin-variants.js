@@ -1,6 +1,6 @@
 /* ============================================================
    ROSA — admin variant editor ("Nos Produits")
-   Shared by the add-product form (Alucard146 / adminadd.html)
+   Shared by the add-product form (admin / adminadd.html)
    and the edit-product form (app-productedit.js).
    Rows: label | price | stock | delete.  Empty label = row ignored.
    ============================================================ */
