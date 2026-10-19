@@ -179,6 +179,7 @@
         else cart.push({ id, name, price, icon: icon || 'fa-crown', image, quantity: 1 });
         saveCart();
         showToast('addedToCart', name);
+        if (window.RosaPixel) window.RosaPixel.addToCart({ productId: id, name: name, price: price, quantity: 1 });
       }
 
       function removeFromCart(id) {
@@ -371,6 +372,7 @@
 
       checkoutBtn?.addEventListener('click', async () => {
         if (cart.length === 0) { showToast('cartEmptyWarning'); return; }
+        if (window.RosaPixel) window.RosaPixel.initiateCheckout(cart);
         const { data: { user } } = await supabase.auth.getUser();
         const emailField = document.getElementById('emailFieldGroup');
         const loggedDiv = document.getElementById('loggedInEmailDisplay');
@@ -410,6 +412,7 @@
           };
           const { error: orderError } = await supabase.from('orders').insert([orderData]);
           if (orderError) throw orderError;
+          if (window.RosaPixel) window.RosaPixel.purchase(orderData.items, orderData.total);
           const orderId = null;
           const { error: emailError } = await supabase.functions.invoke('send-order-email', { body: { order: { ...orderData, id: orderId } } });
           if (emailError) console.error('Email error:', emailError);

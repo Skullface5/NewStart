@@ -185,6 +185,7 @@
         else cart.push({ id: lineId, productId: id, variant: variantLabel || '', name, price, icon: icon || 'fa-crown', image, quantity: 1 });
         saveCart();
         showToast('addedToCart', name);
+        if (window.RosaPixel) window.RosaPixel.addToCart({ productId: id, name: name, price: price, variant: variantLabel, quantity: 1 });
       }
 
       function removeFromCart(id) { cart = cart.filter(i => i.id !== id); saveCart(); showToast('removed'); }
@@ -380,6 +381,7 @@ const __arr = (typeof allProductsData !== 'undefined' && allProductsData) || (ty
 
       checkoutBtn?.addEventListener('click', async () => {
         if (cart.length === 0) { showToast('cartEmptyWarning'); return; }
+        if (window.RosaPixel) window.RosaPixel.initiateCheckout(cart);
         const { data: { user } } = await supabase.auth.getUser();
         const emailField = document.getElementById('emailFieldGroup'), loggedDiv = document.getElementById('loggedInEmailDisplay'), emailInp = document.getElementById('customerEmail');
         if (user) {
@@ -407,6 +409,7 @@ const __arr = (typeof allProductsData !== 'undefined' && allProductsData) || (ty
       /* === BUY NOW (ambra.tn pattern): card/product button -> same checkout modal, single item === */
       let buyNowItem = null; // when set, processOrder submits ONLY this item and never touches the cart
       window.openBuyNow = function (id, name, price, image, variant) {
+        if (window.RosaPixel) window.RosaPixel.initiateCheckout([{ productId: id, name: name, price: price, variant: variant, quantity: 1 }]);
         buyNowItem = { id, name, price, quantity: 1, image: image || '', variant: variant || '' };
         const noteEl = document.getElementById('buyNowNote');
         if (noteEl) { noteEl.textContent = translations[currentLanguage].buyNowNote; noteEl.style.display = 'block'; }
@@ -440,6 +443,7 @@ const __arr = (typeof allProductsData !== 'undefined' && allProductsData) || (ty
           };
           const { error: orderError } = await supabase.from('orders').insert([orderData]);
           if (orderError) throw orderError;
+          if (window.RosaPixel) window.RosaPixel.purchase(orderData.items, orderData.total);
           const orderId = null;
           try {
             const { error: emailError } = await supabase.functions.invoke('send-order-email', { body: { order: { ...orderData, id: orderId } } });

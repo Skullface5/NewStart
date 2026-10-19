@@ -191,6 +191,7 @@
         }
         saveCart();
         showToast('addedToCart', name);
+        if (window.RosaPixel) window.RosaPixel.addToCart({ productId: id, name: name, price: price, variant: variantLabel, quantity: 1 });
       }
 
       function removeFromCart(id) { cart = cart.filter(i => i.id !== id); saveCart(); showToast('removed'); }
@@ -285,6 +286,20 @@
       }
 
       function displayProduct(product) {
+        if (window.RosaPixel && product) {
+          var __vp = product.price;
+          try {
+            var __VR = (typeof VR !== 'undefined' && VR) ? VR : window.RosaVariants;
+            if (__VR && product.variants) {
+              var __vs = __VR.parse(product.variants);
+              if (__vs && __vs.length) {
+                var __pick = __vs.filter(function (v) { return __VR.inStock(product, v); })[0] || __vs[0];
+                __vp = __VR.priceFor(product, __pick);
+              }
+            }
+          } catch (e) {}
+          window.RosaPixel.viewContent({ id: product.id, name: product.name, price: __vp });
+        }
         // Parse images
         try {
           if (product.images && typeof product.images === 'string') productImages = JSON.parse(product.images);
@@ -589,6 +604,7 @@
       if (checkoutBtn) {
         checkoutBtn.addEventListener('click', async () => {
           if (cart.length === 0) { showToast('cartEmptyWarning'); return; }
+          if (window.RosaPixel) window.RosaPixel.initiateCheckout(cart);
           const { data: { user } } = await supabase.auth.getUser();
           const emailField = document.getElementById('emailFieldGroup');
           const loggedDiv = document.getElementById('loggedInEmailDisplay');
@@ -613,6 +629,7 @@
       /* === BUY NOW === */
       let buyNowItem = null;
       window.openBuyNow = function (id, name, price, image, variant) {
+        if (window.RosaPixel) window.RosaPixel.initiateCheckout([{ productId: id, name: name, price: price, variant: variant, quantity: 1 }]);
         buyNowItem = { id, name, price, quantity: 1, image: image || '', variant: variant || '' };
         const noteEl = document.getElementById('buyNowNote');
         if (noteEl) { noteEl.textContent = translations[currentLanguage].buyNowNote; noteEl.style.display = 'block'; }
@@ -652,6 +669,7 @@
           };
           const { error: orderError } = await supabase.from('orders').insert([orderData]);
           if (orderError) throw orderError;
+          if (window.RosaPixel) window.RosaPixel.purchase(orderData.items, orderData.total);
           const orderId = null;
           try {
             await supabase.functions.invoke('send-order-email', { body: { order: { ...orderData, id: orderId } } });

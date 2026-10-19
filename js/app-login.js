@@ -162,6 +162,7 @@
           signupBtn.innerHTML = '<span>' + tr('signupBtn') + '</span>';
         } else {
           showMessage(tr('okSignup'), 'success');
+          if (window.RosaPixel) window.RosaPixel.registration();
           document.getElementById('signupEmail').value = '';
           document.getElementById('signupPassword').value = '';
           document.getElementById('signupConfirmPassword').value = '';
