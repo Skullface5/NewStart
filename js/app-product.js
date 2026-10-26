@@ -20,7 +20,7 @@
         fr: {
           home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
           login: 'Se connecter', profile: 'Mon Profil', notreCollection: 'Notre Collection', back: 'Retour',
-          cart: 'Panier', emptyCart: 'Votre panier est vide.', total: 'Total', payment: 'PAIEMENT',
+          cart: 'Panier', emptyCart: 'Votre panier est vide.', total: 'Total', payment: 'PAIEMENT', delivery: 'Livraison',
           buyNow: 'Acheter', buyNowNote: 'Remplissez le formulaire, on vous appelle!',
           addToCart: 'Ajouter au panier', addedToCart: '✨ Article ajouté', removed: '🗑️ Retiré',
           loading: 'Chargement...', errorLoading: '❌ Erreur de chargement', productNotFound: '❌ Produit non trouvé',
@@ -40,7 +40,7 @@
         en: {
           home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
           login: 'Sign in', profile: 'My Profile', notreCollection: 'Our Collection', back: 'Back',
-          cart: 'Cart', emptyCart: 'Your cart is empty.', total: 'Total', payment: 'PAYMENT',
+          cart: 'Cart', emptyCart: 'Your cart is empty.', total: 'Total', payment: 'PAYMENT', delivery: 'Delivery',
           buyNow: 'Buy', buyNowNote: 'Fill in the form, we will call you shortly!',
           addToCart: 'Add to cart', addedToCart: '✨ Added to cart', removed: '🗑️ Removed',
           loading: 'Loading...', errorLoading: '❌ Error loading', productNotFound: '❌ Product not found',
@@ -60,7 +60,7 @@
         ar: {
           home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
           login: 'تسجيل الدخول', profile: 'ملفي الشخصي', notreCollection: 'مجموعتنا', back: 'رجوع',
-          cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.', total: 'المجموع', payment: 'الدفع',
+          cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.', total: 'المجموع', payment: 'الدفع', delivery: 'التوصيل',
           buyNow: 'اشتري الآن', buyNowNote: 'املأ النموذج وسنتصل بك في أقرب وقت!',
           addToCart: 'أضف إلى السلة', addedToCart: '✨ تمت الإضافة', removed: '🗑️ تمت الإزالة',
           loading: 'جاري التحميل...', errorLoading: '❌ خطأ في التحميل', productNotFound: '❌ المنتج غير موجود',
@@ -137,6 +137,13 @@
         setTimeout(() => toast.classList.remove('show'), 2000);
       }
       function calculateTotal() { return cart.reduce((sum, i) => sum + (i.price * i.quantity), 0); }
+      function deliveryFee() {
+        return (window.RosaShop && typeof window.RosaShop.deliveryFee === 'function')
+          ? window.RosaShop.deliveryFee() : 0;
+      }
+      /* what the customer actually pays: goods + delivery (delivery is 0 by default) */
+      function orderTotal() { return calculateTotal() + (cart.length ? deliveryFee() : 0); }
+      window.addEventListener('rosa-shop-ready', function () { try { renderCart(); } catch (e) {} });
       function updateCartCount() { const total = cart.reduce((acc, i) => acc + (i.quantity || 1), 0); if (cartCountSpan) cartCountSpan.textContent = total; }
       function saveCart() { localStorage.setItem('RosaFragrances_cart', JSON.stringify(cart)); updateCartCount(); renderCart(); }
       
@@ -166,8 +173,11 @@
             <button class="cart-item-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
           </div>`;
         });
+        if (deliveryFee() > 0) {
+          html += '<div style="display:flex;justify-content:space-between;padding:6px 2px;font-size:0.85rem"><span>' + translations[currentLanguage].delivery + '</span><span>' + formatPrice(deliveryFee()) + '</span></div>';
+        }
         cartItemsContainer.innerHTML = html;
-        if (cartTotalSpan) cartTotalSpan.textContent = formatPrice(total);
+        if (cartTotalSpan) cartTotalSpan.textContent = formatPrice(total + deliveryFee());
       }
 
       // Fixed addToCart with proper stock check using allProducts
@@ -620,7 +630,11 @@
             emailInp.required = true;
           }
           document.getElementById('modalCartItems').innerHTML = cart.map(i => `<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>${escapeHtml(i.name)}${i.variant ? ' <span class="cart-item-sub">(' + escapeHtml(i.variant) + ')</span>' : ''} x${i.quantity}</span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`).join('');
-          document.getElementById('modalTotal').textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND';
+          if (deliveryFee() > 0) {
+          var dBox = document.getElementById('modalCartItems');
+          if (dBox) dBox.innerHTML += '<div style="display:flex;justify-content:space-between;padding:5px 0"><span>' + translations[currentLanguage].delivery + '</span><span>' + deliveryFee().toFixed(3).replace('.', ',') + ' TND</span></div>';
+        }
+        document.getElementById('modalTotal').textContent = orderTotal().toFixed(3).replace('.', ',') + ' TND';
           document.getElementById('checkoutModal').style.display = 'flex';
         });
       }
@@ -638,7 +652,11 @@
         const cartTitle = document.getElementById('cartModeTitle');
         if (cartTitle) cartTitle.style.display = 'none';
         document.getElementById('modalCartItems').innerHTML = '<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>' + escapeHtml(name) + (variant ? ' <span class="cart-item-sub">(' + escapeHtml(variant) + ')</span>' : '') + ' x1</span><span>' + price.toFixed(3).replace('.', ',') + ' TND</span></div>';
-        document.getElementById('modalTotal').textContent = price.toFixed(3).replace('.', ',') + ' TND';
+        if (deliveryFee() > 0) {
+          var dBox = document.getElementById('modalCartItems');
+          if (dBox) dBox.innerHTML += '<div style="display:flex;justify-content:space-between;padding:5px 0"><span>' + translations[currentLanguage].delivery + '</span><span>' + deliveryFee().toFixed(3).replace('.', ',') + ' TND</span></div>';
+        }
+        document.getElementById('modalTotal').textContent = (price + deliveryFee()).toFixed(3).replace('.', ',') + ' TND';
         document.getElementById('checkoutModal').style.display = 'flex';
       };
       window.closeCheckoutModal = () => {
@@ -659,7 +677,7 @@
           const email = user ? user.email : (buyNowItem ? (document.getElementById('customerEmail')?.value || null) : document.getElementById('customerEmail').value);
           const orderData = {
             items: buyNowItem ? [{ name: buyNowItem.name, quantity: 1, price: buyNowItem.price, id: buyNowItem.id, variant: buyNowItem.variant || null }] : cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.productId || item.id, variant: item.variant || null })),
-            total: buyNowItem ? buyNowItem.price : calculateTotal(),
+            total: buyNowItem ? (buyNowItem.price + deliveryFee()) : orderTotal(),
             customer_name: document.getElementById('customerName').value,
             customer_phone: document.getElementById('customerPhone').value,
             customer_email: email,

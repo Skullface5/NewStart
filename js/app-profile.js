@@ -11,7 +11,7 @@
  myInfo: 'Mes informations', fullName: 'Nom complet', phone: 'Téléphone', address: 'Adresse', saveInfo: 'Enregistrer', infoSaved: '✓ Enregistré', infoRequired: 'Nom et téléphone requis',
           home: 'ACCUEIL', men: 'HOMME', women: 'FEMME', unisex: 'UNISEXE', kids: 'ENFANTS',
           login: 'Se connecter', profile: 'Mon Profil', notreCollection: 'Notre Collection', logout: 'Déconnexion',
-          cart: 'Panier', emptyCart: 'Votre panier est vide.', total: 'Total', payment: 'PAIEMENT',
+          cart: 'Panier', emptyCart: 'Votre panier est vide.', total: 'Total', payment: 'PAIEMENT', delivery: 'Livraison',
           addedToCart: '✨ Article ajouté', removed: '🗑️ Retiré',
           totalOrders: 'Commandes totales', pending: 'En cours', delivered: 'Livrées',
           orderHistory: 'Historique des commandes', all: 'Toutes', pendingStatus: 'En attente',
@@ -30,7 +30,7 @@
  myInfo: 'My Info', fullName: 'Full name', phone: 'Phone', address: 'Address', saveInfo: 'Save', infoSaved: '✓ Saved', infoRequired: 'Name and phone required',
           home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS',
           login: 'Sign in', profile: 'My Profile', notreCollection: 'Our Collection', logout: 'Logout',
-          cart: 'Cart', emptyCart: 'Your cart is empty.', total: 'Total', payment: 'PAYMENT',
+          cart: 'Cart', emptyCart: 'Your cart is empty.', total: 'Total', payment: 'PAYMENT', delivery: 'Delivery',
           addedToCart: '✨ Added to cart', removed: '🗑️ Removed',
           totalOrders: 'Total orders', pending: 'In progress', delivered: 'Delivered',
           orderHistory: 'Order history', all: 'All', pendingStatus: 'Pending',
@@ -49,7 +49,7 @@
  myInfo: 'معلوماتي', fullName: 'الاسم الكامل', phone: 'الهاتف', address: 'العنوان', saveInfo: 'حفظ', infoSaved: '✓ تم الحفظ', infoRequired: 'الاسم والهاتف مطلوبان',
           home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال',
           login: 'تسجيل الدخول', profile: 'ملفي الشخصي', notreCollection: 'مجموعتنا', logout: 'تسجيل الخروج',
-          cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.', total: 'المجموع', payment: 'الدفع',
+          cart: 'سلة التسوق', emptyCart: 'سلة التسوق فارغة.', total: 'المجموع', payment: 'الدفع', delivery: 'التوصيل',
           addedToCart: '✨ تمت الإضافة', removed: '🗑️ تمت الإزالة',
           totalOrders: 'إجمالي الطلبات', pending: 'قيد المعالجة', delivered: 'تم التوصيل',
           orderHistory: 'سجل الطلبات', all: 'الكل', pendingStatus: 'قيد الانتظار',
@@ -132,6 +132,13 @@
 
       function formatPrice(p) { return parseFloat(p).toFixed(3).replace('.', ',') + ' TND'; }
       function calculateTotal() { return cart.reduce((sum, i) => sum + (i.price * i.quantity), 0); }
+      function deliveryFee() {
+        return (window.RosaShop && typeof window.RosaShop.deliveryFee === 'function')
+          ? window.RosaShop.deliveryFee() : 0;
+      }
+      /* what the customer actually pays: goods + delivery (delivery is 0 by default) */
+      function orderTotal() { return calculateTotal() + (cart.length ? deliveryFee() : 0); }
+      window.addEventListener('rosa-shop-ready', function () { try { renderCart(); } catch (e) {} });
 
       function updateCartCount() {
         const total = cart.reduce((acc, i) => acc + (i.quantity || 1), 0);
@@ -169,8 +176,11 @@
           <button class="cart-item-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
         </div>`;
         });
+        if (deliveryFee() > 0) {
+          html += '<div style="display:flex;justify-content:space-between;padding:6px 2px;font-size:0.85rem"><span>' + translations[currentLanguage].delivery + '</span><span>' + formatPrice(deliveryFee()) + '</span></div>';
+        }
         cartItemsContainer.innerHTML = html;
-        if (cartTotalSpan) cartTotalSpan.textContent = formatPrice(total);
+        if (cartTotalSpan) cartTotalSpan.textContent = formatPrice(total + deliveryFee());
       }
 
       function addToCart(id, name, price, icon, image) {
@@ -388,7 +398,11 @@
         document.getElementById('modalCartItems').innerHTML = cart.map(i =>
           `<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>${escapeHtml(i.name)} x${i.quantity}</span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`
         ).join('');
-        document.getElementById('modalTotal').textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND';
+        if (deliveryFee() > 0) {
+          var dBox = document.getElementById('modalCartItems');
+          if (dBox) dBox.innerHTML += '<div style="display:flex;justify-content:space-between;padding:5px 0"><span>' + translations[currentLanguage].delivery + '</span><span>' + deliveryFee().toFixed(3).replace('.', ',') + ' TND</span></div>';
+        }
+        document.getElementById('modalTotal').textContent = orderTotal().toFixed(3).replace('.', ',') + ' TND';
         document.getElementById('checkoutModal').style.display = 'flex';
       });
 
@@ -403,7 +417,7 @@
           const email = user ? user.email : document.getElementById('customerEmail').value;
           const orderData = {
             items: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.id })),
-            total: calculateTotal(),
+            total: orderTotal(),
             customer_name: document.getElementById('customerName').value,
             customer_phone: document.getElementById('customerPhone').value,
             customer_email: email,

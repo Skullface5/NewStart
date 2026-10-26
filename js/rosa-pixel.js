@@ -12,7 +12,9 @@
    --------------------------------------------------------------------------- */
 (function () {
   var CURRENCY = 'TND';
+  var PIXEL_ID = '1039023089029451';
   var lastView = '';
+  var pendingIdentity = null;   // promise from the checkout form, awaited by Purchase
 
   function ready() { return typeof window.fbq === 'function'; }
 
@@ -70,6 +72,93 @@
     return (prefix || 'ev') + '.' + Date.now() + '.' + Math.random().toString(36).slice(2, 10);
   }
 
+  /* --- advanced matching -------------------------------------------------
+     The customer's own details, SHA-256 hashed in the browser before anything
+     is sent, so Meta can match the visit to a real account and the shop's
+     reported numbers get attributed to the right ad. Meta's rules: lowercase
+     emails, digits-only phone including the country code (Tunisia = 216),
+     lowercase names. The clear values never leave this function. */
+  function sha256(value) {
+    if (!value) return Promise.resolve(null);
+    try {
+      if (window.crypto && window.crypto.subtle && window.TextEncoder) {
+        var data = new TextEncoder().encode(value);
+        return window.crypto.subtle.digest('SHA-256', data).then(function (buf) {
+          var bytes = new Uint8Array(buf), out = '';
+          for (var i = 0; i < bytes.length; i++) out += (bytes[i] < 16 ? '0' : '') + bytes[i].toString(16);
+          return out;
+        }).catch(function () { return null; });
+      }
+    } catch (e) {}
+    return Promise.resolve(null);
+  }
+
+  function normEmail(v) { return String(v || '').trim().toLowerCase(); }
+
+  function normPhone(v) {
+    var d = String(v || '').replace(/\D/g, '');
+    if (!d) return '';
+    if (d.indexOf('216') === 0) return d;
+    return d.length === 8 ? '216' + d : d;
+  }
+
+  function splitName(v) {
+    var parts = String(v || '').trim().toLowerCase().split(/\s+/).filter(Boolean);
+    return { fn: parts[0] || '', ln: parts.length > 1 ? parts[parts.length - 1] : '' };
+  }
+
+  /* hash whatever the caller knows and hand it to Meta's init; resolves true
+     when at least one usable identifier was sent. */
+  function identify(user) {
+    var u = user || {};
+    var n = splitName(u.name);
+    return Promise.all([
+      sha256(normEmail(u.email)),
+      sha256(normPhone(u.phone)),
+      sha256(n.fn),
+      sha256(n.ln)
+    ]).then(function (h) {
+      var params = {};
+      if (h[0]) params.em = h[0];
+      if (h[1]) params.ph = h[1];
+      if (h[2]) params.fn = h[2];
+      if (h[3]) params.ln = h[3];
+      if (Object.keys(params).length && ready()) {
+        try { window.fbq('init', PIXEL_ID, params); } catch (e) {}
+      }
+      return Object.keys(params).length > 0;
+    }).catch(function () { return false; });
+  }
+
+  /* run `done` once the pending identity work settles — but never let a slow
+     hash delay or swallow the event. */
+  function withIdentity(done) {
+    var p = pendingIdentity;
+    if (!p) { done(); return; }
+    var called = false;
+    var go = function () { if (!called) { called = true; done(); } };
+    p.then(go, go);
+    setTimeout(go, 1500);
+  }
+
+  /* the checkout form carries the only customer details we ever see before the
+     order exists: start hashing them the moment the form is submitted (this
+     listener is registered before the app's own, the pixel loads first). */
+  function captureCheckoutForm() {
+    try {
+      var form = document.getElementById('checkoutForm');
+      if (!form || form.__rosaAm) return;
+      form.__rosaAm = true;
+      form.addEventListener('submit', function () {
+        var val = function (id) { var el = document.getElementById(id); return el ? el.value : ''; };
+        pendingIdentity = identify({ name: val('customerName'), phone: val('customerPhone'), email: val('customerEmail') });
+      });
+    } catch (e) {}
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', captureCheckoutForm);
+  else captureCheckoutForm();
+  window.addEventListener('load', captureCheckoutForm);
+
   window.RosaPixel = {
     CURRENCY: CURRENCY,
     num: num,
@@ -103,15 +192,22 @@
       fire('InitiateCheckout', payload(items));
     },
 
-    /* total comes from the order row when the caller has it (DB is the truth) */
+    /* total comes from the order row when the caller has it (DB is the truth).
+       Waits for the checkout form's hashed identity (if it is still in flight)
+       so Meta receives the purchase with the customer details attached. */
     purchase: function (items, total) {
       var p = payload(items);
       if (total != null && num(total) > 0) p.value = money(total);
-      fire('Purchase', p, uid('purchase'));
+      withIdentity(function () { fire('Purchase', p, uid('purchase')); });
     },
 
-    registration: function () {
-      fire('CompleteRegistration', { currency: CURRENCY });
+    /* optional: hand it {name, phone, email} (raw — it hashes them itself) */
+    identify: identify,
+
+    registration: function (user) {
+      var go = function () { fire('CompleteRegistration', { currency: CURRENCY }); };
+      if (user) { identify(user).then(go, go); return; }
+      withIdentity(go);
     }
   };
 })();

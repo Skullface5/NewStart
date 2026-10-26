@@ -140,8 +140,14 @@
         } catch (e) {}
         return formatPrice(row.price);
       }
-
       function calculateTotal() { return cart.reduce((s, i) => s + (i.price * i.quantity), 0); }
+      function deliveryFee() {
+        return (window.RosaShop && typeof window.RosaShop.deliveryFee === 'function')
+          ? window.RosaShop.deliveryFee() : 0;
+      }
+      /* what the customer actually pays: goods + delivery (delivery is 0 by default) */
+      function orderTotal() { return calculateTotal() + (cart.length ? deliveryFee() : 0); }
+      window.addEventListener('rosa-shop-ready', function () { try { renderCart(); } catch (e) {} });
       function updateCartCount() { const total = cart.reduce((a, i) => a + (i.quantity || 1), 0); if (cartCountSpan) cartCountSpan.textContent = total; }
       function saveCart() { localStorage.setItem('RosaFragrances_cart', JSON.stringify(cart)); updateCartCount(); renderCart(); }
       function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
@@ -171,8 +177,11 @@
             <button class="cart-item-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
           </div>`;
         });
+        if (deliveryFee() > 0) {
+          html += '<div style="display:flex;justify-content:space-between;padding:6px 2px;font-size:0.85rem"><span>' + translations[currentLanguage].delivery + '</span><span>' + formatPrice(deliveryFee()) + '</span></div>';
+        }
         cartItemsContainer.innerHTML = html;
-        if (cartTotalSpan) cartTotalSpan.textContent = formatPrice(total);
+        if (cartTotalSpan) cartTotalSpan.textContent = formatPrice(total + deliveryFee());
       }
 
       function addToCart(id, name, price, icon, image, quantityLeft, variantLabel) {
@@ -399,8 +408,11 @@ const __arr = (typeof allProductsData !== 'undefined' && allProductsData) || (ty
         if (modalCartItems) {
           modalCartItems.innerHTML = cart.map(i => `<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>${escapeHtml(i.name)} x${i.quantity}</span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`).join('');
         }
-        const modalTotalSpan = document.getElementById('modalTotal');
-        if (modalTotalSpan) modalTotalSpan.textContent = calculateTotal().toFixed(3).replace('.', ',') + ' TND';
+        if (deliveryFee() > 0) {
+          var dBox = document.getElementById('modalCartItems');
+          if (dBox) dBox.innerHTML += '<div style="display:flex;justify-content:space-between;padding:5px 0"><span>' + translations[currentLanguage].delivery + '</span><span>' + deliveryFee().toFixed(3).replace('.', ',') + ' TND</span></div>';
+        }
+        document.getElementById('modalTotal').textContent = orderTotal().toFixed(3).replace('.', ',') + ' TND';
         const checkoutModal = document.getElementById('checkoutModal');
         if (checkoutModal) checkoutModal.style.display = 'flex';
       });
@@ -418,7 +430,11 @@ const __arr = (typeof allProductsData !== 'undefined' && allProductsData) || (ty
         const cartTitle = document.getElementById('cartModeTitle');
         if (cartTitle) cartTitle.style.display = 'none';
         document.getElementById('modalCartItems').innerHTML = '<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>' + escapeHtml(name) + (variant ? ' <span class="cart-item-sub">(' + escapeHtml(variant) + ')</span>' : '') + ' x1</span><span>' + price.toFixed(3).replace('.', ',') + ' TND</span></div>';
-        document.getElementById('modalTotal').textContent = price.toFixed(3).replace('.', ',') + ' TND';
+        if (deliveryFee() > 0) {
+          var dBox = document.getElementById('modalCartItems');
+          if (dBox) dBox.innerHTML += '<div style="display:flex;justify-content:space-between;padding:5px 0"><span>' + translations[currentLanguage].delivery + '</span><span>' + deliveryFee().toFixed(3).replace('.', ',') + ' TND</span></div>';
+        }
+        document.getElementById('modalTotal').textContent = (price + deliveryFee()).toFixed(3).replace('.', ',') + ' TND';
         document.getElementById('checkoutModal').style.display = 'flex';
       };
       window.closeBuyNow = function () { buyNowItem = null; closeCheckoutModal(); };
@@ -433,7 +449,7 @@ const __arr = (typeof allProductsData !== 'undefined' && allProductsData) || (ty
           const email = user ? user.email : (buyNowItem ? (document.getElementById('customerEmail')?.value || null) : document.getElementById('customerEmail').value);
           const orderData = {
             items: buyNowItem ? [{ name: buyNowItem.name, quantity: 1, price: buyNowItem.price, id: buyNowItem.id, variant: buyNowItem.variant || null }] : cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.productId || item.id, variant: item.variant || null })),
-            total: buyNowItem ? buyNowItem.price : calculateTotal(),
+            total: buyNowItem ? (buyNowItem.price + deliveryFee()) : orderTotal(),
             customer_name: document.getElementById('customerName').value,
             customer_phone: document.getElementById('customerPhone').value,
             customer_email: email,
