@@ -392,17 +392,13 @@ const __arr = (typeof allProductsData !== 'undefined' && allProductsData) || (ty
         if (cart.length === 0) { showToast('cartEmptyWarning'); return; }
         if (window.RosaPixel) window.RosaPixel.initiateCheckout(cart);
         const { data: { user } } = await supabase.auth.getUser();
-        const emailField = document.getElementById('emailFieldGroup'), loggedDiv = document.getElementById('loggedInEmailDisplay'), emailInp = document.getElementById('customerEmail');
+        const loggedDiv = document.getElementById('loggedInEmailDisplay');
         if (user) {
-          if (emailField) emailField.style.display = 'none';
           if (loggedDiv) loggedDiv.style.display = 'block';
           const displaySpan = document.getElementById('displayEmail');
           if (displaySpan) displaySpan.textContent = user.email;
-          if (emailInp) emailInp.required = false;
         } else {
-          if (emailField) emailField.style.display = 'block';
           if (loggedDiv) loggedDiv.style.display = 'none';
-          if (emailInp) emailInp.required = true;
         }
         const modalCartItems = document.getElementById('modalCartItems');
         if (modalCartItems) {
@@ -446,7 +442,7 @@ const __arr = (typeof allProductsData !== 'undefined' && allProductsData) || (ty
         if (btn) btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
         try {
           const { data: { user } } = await supabase.auth.getUser();
-          const email = user ? user.email : (buyNowItem ? (document.getElementById('customerEmail')?.value || null) : document.getElementById('customerEmail').value);
+          const email = user ? user.email : null;
           const orderData = {
             items: buyNowItem ? [{ name: buyNowItem.name, quantity: 1, price: buyNowItem.price, id: buyNowItem.id, variant: buyNowItem.variant || null }] : cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.productId || item.id, variant: item.variant || null })),
             total: buyNowItem ? (buyNowItem.price + deliveryFee()) : orderTotal(),

@@ -538,16 +538,12 @@ const __arr = (typeof products !== 'undefined' && products) || (typeof allProduc
         if (cart.length === 0) { showToast('cartEmptyWarning'); return; }
         if (window.RosaPixel) window.RosaPixel.initiateCheckout(cart);
         const { data: { user } } = await supabase.auth.getUser();
-        const emailField = document.getElementById('emailFieldGroup'), loggedDiv = document.getElementById('loggedInEmailDisplay'), emailInp = document.getElementById('customerEmail');
+        const loggedDiv = document.getElementById('loggedInEmailDisplay');
         if (user) {
-          emailField.style.display = 'none';
           loggedDiv.style.display = 'block';
           document.getElementById('displayEmail').textContent = user.email;
-          emailInp.required = false;
         } else {
-          emailField.style.display = 'block';
           loggedDiv.style.display = 'none';
-          emailInp.required = true;
         }
         document.getElementById('modalCartItems').innerHTML = cart.map(i => `<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>${escapeHtml(i.name)}${i.variant ? ' <span class="cart-item-sub">(' + escapeHtml(i.variant) + ')</span>' : ''} x${i.quantity}</span><span>${(i.price * i.quantity).toFixed(3).replace('.', ',')} TND</span></div>`).join('');
         if (deliveryFee() > 0) {
@@ -587,7 +583,7 @@ const __arr = (typeof products !== 'undefined' && products) || (typeof allProduc
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
         try {
           const { data: { user } } = await supabase.auth.getUser();
-          const email = user ? user.email : (buyNowItem ? (document.getElementById('customerEmail')?.value || null) : document.getElementById('customerEmail').value);
+          const email = user ? user.email : null;
           const orderData = {
             items: buyNowItem ? [{ name: buyNowItem.name, quantity: 1, price: buyNowItem.price, id: buyNowItem.id, variant: buyNowItem.variant || null }] : cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, id: item.productId || item.id, variant: item.variant || null })),
             total: buyNowItem ? (buyNowItem.price + deliveryFee()) : orderTotal(),
