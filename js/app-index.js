@@ -214,10 +214,11 @@
 
       window.filterProducts = function (category) {
         currentFilter = category;
-        const tabs = document.querySelectorAll('.tab');
-        tabs.forEach(tab => tab.classList.remove('active'));
-        const activeIndex = { all: 0, man: 1, women: 2, unisexe: 3, kids: 4 }[category];
-        if (tabs[activeIndex]) tabs[activeIndex].classList.add('active');
+        // was a hardcoded index map covering only five tabs, so Inspires,
+        // Voiture, Ambiance, Musc and Accessoires never got highlighted
+        document.querySelectorAll('#catTabs .tab').forEach(tab => {
+          tab.classList.toggle('active', tab.dataset.category === category);
+        });
         renderProducts();
       };
 
@@ -304,24 +305,13 @@ async function loadProducts() {
         }
       }
 
-      function renderProducts() {
-        if (!productGrid) return;
-        let filteredProducts = allProductsData;
-        if (currentFilter !== 'all') {
-          filteredProducts = filteredProducts.filter(p => p.category === currentFilter);
-        }
-        if (!filteredProducts || filteredProducts.length === 0) {
-          productGrid.innerHTML = `<div class="empty-cart-message">${translations[currentLanguage].noProducts}</div>`;
-          return;
-        }
-        let html = '';
-        filteredProducts.forEach(p => {
-          const __vs = VR.parse(p.variants);
-          const __vf = __vs.length ? (__vs.find(v => VR.inStock(p, v)) || __vs[0]) : null;
-          const __chip = __vs.length ? `<div class="variant-chip">${VR.esc(__vs.map(v => v.label).join(' / '))}</div>` : '';
-          const __badge = RP.badge(p);
-          const imgHtml = p.image ? `<img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async">` : `<i class="fas fa-crown"></i>`;
-          html += `<div class="product-card" data-product-id="${p.id}">
+      function productCardHtml(p) {
+        const __vs = VR.parse(p.variants);
+        const __vf = __vs.length ? (__vs.find(v => VR.inStock(p, v)) || __vs[0]) : null;
+        const __chip = __vs.length ? `<div class="variant-chip">${VR.esc(__vs.map(v => v.label).join(' / '))}</div>` : '';
+        const __badge = RP.badge(p);
+        const imgHtml = p.image ? `<img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async">` : `<i class="fas fa-crown"></i>`;
+        return `<div class="product-card" data-product-id="${p.id}">
             <div class="product-clickable" data-product-id="${p.id}">
               <div class="product-img">${imgHtml}${__badge}</div>
               <div class="product-title">${escapeHtml(p.name)}</div>
@@ -337,8 +327,58 @@ async function loadProducts() {
             </button>
             </div>
           </div>`;
-        });
-        productGrid.innerHTML = html;
+      }
+
+      const GROUP_OTHERS_LABEL = { fr: 'Autres', en: 'Others', ar: 'أخرى' };
+
+      function groupHeadHtml(label, count) {
+        return `<div class="product-group-head">
+            <h3>${escapeHtml(label)}</h3>
+            <span class="group-rule"></span>
+            <span class="group-count">${count}</span>
+          </div>`;
+      }
+
+      function renderProducts() {
+        if (!productGrid) return;
+        let filteredProducts = allProductsData;
+        if (currentFilter !== 'all') {
+          filteredProducts = filteredProducts.filter(p => p.category === currentFilter);
+        }
+        if (!filteredProducts || filteredProducts.length === 0) {
+          productGrid.classList.remove('grouped');
+          productGrid.innerHTML = `<div class="empty-cart-message">${translations[currentLanguage].noProducts}</div>`;
+          return;
+        }
+        if (currentFilter === 'all') {
+          // "Tous" used to be one 41-card stream: now one labelled grid per
+          // category, in the order the client's own tabs are written.
+          const order = [];
+          document.querySelectorAll('#catTabs .tab').forEach(tab => {
+            const key = tab.dataset.category;
+            if (key && key !== 'all' && !order.some(g => g.key === key)) {
+              order.push({ key: key, label: tab.textContent.trim() });
+            }
+          });
+          const placed = new Set();
+          let html = '';
+          order.forEach(g => {
+            const items = filteredProducts.filter(p => p.category === g.key);
+            if (!items.length) return;
+            items.forEach(p => placed.add(p.id));
+            html += `<div class="product-group">${groupHeadHtml(g.label, items.length)}<div class="product-grid">${items.map(productCardHtml).join('')}</div></div>`;
+          });
+          const rest = filteredProducts.filter(p => !placed.has(p.id));
+          if (rest.length) {
+            const label = GROUP_OTHERS_LABEL[currentLanguage] || GROUP_OTHERS_LABEL.fr;
+            html += `<div class="product-group">${groupHeadHtml(label, rest.length)}<div class="product-grid">${rest.map(productCardHtml).join('')}</div></div>`;
+          }
+          productGrid.classList.add('grouped');
+          productGrid.innerHTML = html;
+        } else {
+          productGrid.classList.remove('grouped');
+          productGrid.innerHTML = filteredProducts.map(productCardHtml).join('');
+        }
         document.querySelectorAll('.product-clickable').forEach(el => {
           el.addEventListener('click', (e) => {
             if (e.target.closest('.add-to-cart')) return;

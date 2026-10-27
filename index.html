@@ -926,6 +926,26 @@
       flex-wrap: wrap;
     }
 
+    /* Main page only: one scrollable row. Stacked, the ten tabs took four rows
+       and pushed the first product ~1130px down the page. */
+    #catTabs {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      max-width: 100%;
+      padding-bottom: 2px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    #catTabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    #catTabs .tab {
+      flex: 0 0 auto;
+    }
+
     .tab {
       padding: 8px 20px;
       border: 1px solid var(--cream-deep);
@@ -969,6 +989,49 @@
       .product-grid {
         grid-template-columns: repeat(2, 1fr);
       }
+    }
+
+    /* The "Tous" view is grouped by category: a heading, then that category's
+       own grid. #productGrid is itself a grid, so it switches to block while
+       grouped and each inner .product-grid does the column layout. */
+    #productGrid.grouped {
+      display: block;
+    }
+
+    .product-group + .product-group {
+      margin-top: 2.4rem;
+    }
+
+    .product-group-head {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .product-group-head h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: var(--charcoal);
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .product-group-head .group-count {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--text-mid);
+      white-space: nowrap;
+      margin-left: 0.1rem;
+    }
+
+    .product-group-head .group-rule {
+      flex: 1;
+      height: 1px;
+      background: var(--cream-deep);
     }
 
     .product-card {
@@ -1773,16 +1836,16 @@
           <h2 class="section-title" data-translate="collectionTitle">Parfums <em data-translate="exclusive">Exclusifs</em></h2>
         </div>
         <div class="tabs" id="catTabs">
-          <button class="tab active" onclick="filterProducts('all')" data-translate="allTab">Tous</button>
-          <button class="tab" onclick="filterProducts('man')" data-translate="menTab">Homme</button>
-          <button class="tab" onclick="filterProducts('women')" data-translate="womenTab">Femme</button>
-          <button class="tab" onclick="filterProducts('unisexe')" data-translate="unisexTab">Unisexe</button>
-          <button class="tab" onclick="filterProducts('kids')" data-translate="kidsTab">Enfants</button>
-          <button class="tab" onclick="filterProducts('inspires')" data-translate="inspiresTab">Inspires</button>
-          <button class="tab" onclick="filterProducts('voiture')" data-translate="voitureTab">Voiture</button>
-          <button class="tab" onclick="filterProducts('ambiance')" data-translate="ambianceTab">Ambiance</button>
-          <button class="tab" onclick="filterProducts('musc')" data-translate="muscTab">Musc</button>
-          <button class="tab" onclick="filterProducts('accessoires')" data-translate="accessoiresTab">Accessoires</button>
+          <button class="tab active" data-category="all" onclick="filterProducts('all')" data-translate="allTab">Tous</button>
+          <button class="tab" data-category="man" onclick="filterProducts('man')" data-translate="menTab">Homme</button>
+          <button class="tab" data-category="women" onclick="filterProducts('women')" data-translate="womenTab">Femme</button>
+          <button class="tab" data-category="unisexe" onclick="filterProducts('unisexe')" data-translate="unisexTab">Unisexe</button>
+          <button class="tab" data-category="kids" onclick="filterProducts('kids')" data-translate="kidsTab">Enfants</button>
+          <button class="tab" data-category="inspires" onclick="filterProducts('inspires')" data-translate="inspiresTab">Inspires</button>
+          <button class="tab" data-category="voiture" onclick="filterProducts('voiture')" data-translate="voitureTab">Voiture</button>
+          <button class="tab" data-category="ambiance" onclick="filterProducts('ambiance')" data-translate="ambianceTab">Ambiance</button>
+          <button class="tab" data-category="musc" onclick="filterProducts('musc')" data-translate="muscTab">Musc</button>
+          <button class="tab" data-category="accessoires" onclick="filterProducts('accessoires')" data-translate="accessoiresTab">Accessoires</button>
         </div>
       </div>
     </div>
