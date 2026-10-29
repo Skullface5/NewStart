@@ -284,17 +284,48 @@
      const data = obj && obj.data;
      if (!Array.isArray(data) || !data.length || Date.now() - (obj.ts || 0) > 86400000) return false;
      allProductsData = normalizeList(data);
+     hideEmptyTabs(allProductsData);
      renderProducts();
      if (loadingEl) loadingEl.style.display = 'none';
      return true;
    } catch (e) { return false; }
  }
+
+ function hideEmptyTabs(list) {
+   /* Five of the ten category tabs had zero products, so tapping them landed on
+      a blank page. A tab is hidden only when the catalogue actually loaded and
+      that category counts zero - it comes back by itself the moment the owner
+      adds stock, no deploy needed. Never hides "Tous". */
+   try {
+     var tabs = document.querySelectorAll('#catTabs .tab[data-category]');
+     if (!tabs.length || !Array.isArray(list) || !list.length) return;
+     var counts = {};
+     list.forEach(function (p) {
+       var c = p && p.category ? String(p.category).trim().toLowerCase() : '';
+       if (c) counts[c] = (counts[c] || 0) + 1;
+     });
+     var any = 0;
+     Object.keys(counts).forEach(function (k) { any += counts[k]; });
+     if (!any) return;
+     var activeHidden = false;
+     for (var i = 0; i < tabs.length; i++) {
+       var cat = tabs[i].dataset.category;
+       if (!cat || cat === 'all') continue;
+       var n = counts[cat] || 0;
+       tabs[i].style.display = n > 0 ? '' : 'none';
+       if (n === 0 && tabs[i].classList.contains('active')) activeHidden = true;
+     }
+     if (activeHidden && typeof window.filterProducts === 'function') window.filterProducts('all');
+   } catch (e) {}
+ }
+
 async function loadProducts() {
         if (loadingEl) loadingEl.style.display = 'block';
         try {
           const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: true });
           if (error) throw error;
           allProductsData = normalizeList(data);
+          hideEmptyTabs(allProductsData);
           renderProducts();
  rosaSaveCache('rosa_cache_all', allProductsData);
         } catch (err) {
