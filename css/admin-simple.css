@@ -68,3 +68,31 @@
   .simple-card{ padding:22px 20px; min-height:96px; }
   .ov-grid{ gap:12px; }
 }
+
+/* --- Reglages: the delivery price is the one that matters, so it leads ---------- */
+.simple-more--block{ margin:14px 0 0; padding-top:0; border-top:0; }
+.simple-more--block > summary{
+  padding:16px; border:1px solid var(--border-light,#e8e2d8); border-radius:16px;
+  background: var(--card-warm,#fffdf9); font-size:.95rem;
+}
+.hero-admin-card{ border-radius:20px; }
+.hero-admin-card .hero-admin-title{ font-size:1.08rem; }
+.hero-admin-help{ font-size:.9rem; line-height:1.45; }
+.hero-admin-card input[type="number"],
+.hero-admin-card input[type="text"],
+.hero-admin-card input[type="url"]{ font-size:16px !important; min-height:48px; }
+.hp-btn{ min-height:48px; border-radius:14px; font-size:.95rem; }
+
+/* --- Commandes: filters a thumb can hit, one scrollable row instead of six squeezed --- */
+.status-tabs{
+  display:flex; flex-wrap:nowrap; gap:10px; overflow-x:auto;
+  padding:2px 2px 8px; -webkit-overflow-scrolling:touch; scrollbar-width:none;
+}
+.status-tabs::-webkit-scrollbar{ display:none; }
+.status-tabs .s-tab{
+  flex:0 0 auto; min-height:48px; padding:0 18px; border-radius:50px;
+  font-size:.95rem; white-space:nowrap;
+}
+@media (min-width:720px){
+  .status-tabs{ flex-wrap:wrap; overflow:visible; }
+}
