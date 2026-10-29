@@ -1,0 +1,70 @@
+/* ---------------------------------------------------------------------------
+   "Grandma" pass on the Rosa admin (client request: simplify the whole page).
+   Loaded after the legacy inline <style>, so it wins on equal specificity.
+   Mobile-first. Everything is scoped to the admin dashboard surfaces
+   (.dash-section / .dash-tabs / the overview blocks) - the storefront and the
+   other admin pages are untouched.
+
+   Rules of the pass: one thing per row, big type, >=48px tap targets,
+   plain words, and every secondary control tucked behind one quiet line.
+   --------------------------------------------------------------------------- */
+
+/* --- the four big doors on the landing screen --- */
+.simple-grid{ display:grid; grid-template-columns:1fr; gap:12px; margin:10px 0 18px; }
+
+.simple-card{
+  display:flex; align-items:center; gap:14px; min-height:88px;
+  padding:18px 16px; border-radius:20px; text-decoration:none; color:inherit;
+  background: var(--card-warm, #fffdf9);
+  border:1px solid var(--border-light, #e8e2d8);
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.simple-card:active{ transform: scale(.985); }
+@media (hover:hover){
+  .simple-card:hover{ border-color: var(--gold, #b8945f); box-shadow: 0 8px 20px rgba(0,0,0,.08); }
+}
+.simple-card:focus-visible{ outline:2px solid var(--gold, #b8945f); outline-offset:2px; }
+
+.sc-ico{
+  flex:0 0 54px; height:54px; border-radius:16px; display:grid; place-items:center;
+  background: rgba(184,148,95,.14); color: var(--gold-dark, #8a6d3b); font-size:1.4rem;
+}
+.sc-txt{ display:flex; flex-direction:column; gap:4px; min-width:0; }
+.sc-txt b{ font-size:1.14rem; font-weight:600; }
+.sc-txt i{ font-style:normal; font-size:.9rem; line-height:1.35; color: var(--text-mid, #7a7266); }
+
+/* --- everything that used to shout, now behind one quiet line --- */
+.simple-more{ margin-top:4px; border-top:1px solid var(--border-light, #e8e2d8); padding-top:6px; }
+.simple-more > summary{
+  list-style:none; cursor:pointer; min-height:52px; padding:14px 6px;
+  display:flex; align-items:center; gap:8px; font-size:.95rem; color: var(--text-mid, #7a7266);
+}
+.simple-more > summary::-webkit-details-marker{ display:none; }
+.simple-more > summary::after{ content:'\25BE'; margin-left:auto; transition:transform .18s ease; }
+.simple-more[open] > summary::after{ transform:rotate(180deg); }
+
+/* --- grandma-sized type and tap targets inside the dashboard --- */
+.dash-section{ font-size:1.02rem; }
+.dash-section .admin-header h1{ font-size:1.35rem; line-height:1.25; }
+.dash-section input,
+.dash-section select,
+.dash-section textarea{ font-size:16px !important; min-height:46px; border-radius:12px; }
+.dash-section button,
+.dash-section .btn-primary,
+.dash-section .btn-secondary,
+.dash-section a.btn-secondary{ min-height:48px; font-size:.98rem; border-radius:14px; }
+.dash-section label{ font-size:.92rem; }
+
+.dash-tabs .dash-tab{ min-height:54px; font-size:.95rem; }
+.dash-tabs .dash-tab i{ font-size:1.05rem; }
+
+/* --- one thing per row: never make him read across --- */
+.ov-total-row{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px; }
+.ov-grid{ display:grid; grid-template-columns:1fr; gap:10px; }
+
+@media (min-width:720px){
+  .simple-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); gap:14px; }
+  .simple-card{ padding:22px 20px; min-height:96px; }
+  .ov-grid{ gap:12px; }
+}

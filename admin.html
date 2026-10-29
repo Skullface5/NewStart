@@ -2870,6 +2870,7 @@
     .promo-preview .rp-badge--corner { top: 0; left: 0; height: 26px; min-width: 54px; padding: 0 11px; border-radius: 0 0 12px 0; font-size: 15px; }
   </style>
   <link rel="stylesheet" href="css/admin-redesign.css?v=3">
+  <link rel="stylesheet" href="css/admin-simple.css?v=1">
 </head>
 <body>
   <div id="adminToast" class="admin-toast"></div>
@@ -2913,7 +2914,28 @@
           <h1 data-translate="existingPerfumes">Parfums Existants</h1>
           <span class="logged-in-as" id="loggedInAsOv"></span>
         </div>
+          <div class="simple-grid">
+            <a href="#collections" class="simple-card">
+              <span class="sc-ico"><i class="fas fa-boxes-stacked"></i></span>
+              <span class="sc-txt"><b data-translate="simpleMyProducts">Mes produits</b><i data-translate="simpleMyProductsSub">Voir, changer un prix, une photo</i></span>
+            </a>
+            <a href="#add" class="simple-card">
+              <span class="sc-ico"><i class="fas fa-circle-plus"></i></span>
+              <span class="sc-txt"><b data-translate="simpleAddProduct">Ajouter un produit</b><i data-translate="simpleAddProductSub">Mettre un parfum en vente</i></span>
+            </a>
+            <a href="#orders" class="simple-card">
+              <span class="sc-ico"><i class="fas fa-truck-fast"></i></span>
+              <span class="sc-txt"><b data-translate="simpleOrders">Commandes</b><i data-translate="simpleOrdersSub">Voir les commandes des clients</i></span>
+            </a>
+            <a href="#settings" class="simple-card">
+              <span class="sc-ico"><i class="fas fa-truck-ramp-box"></i></span>
+              <span class="sc-txt"><b data-translate="simpleDelivery">Prix de livraison</b><i data-translate="simpleDeliverySub">Combien le client paie</i></span>
+            </a>
+          </div>
 
+
+        <details class="simple-more">
+          <summary data-translate="simpleMore">Plus d'options</summary>
         <div class="ov-total-row">
           <div class="ov-tile"><b id="ovTotal">0</b><span data-translate="ovProducts">produits</span></div>
           <div class="ov-tile"><b id="ovManCount">0</b><span data-translate="menCat">Homme</span></div>
@@ -2938,6 +2960,7 @@
           <a href="#add" class="btn-secondary" style="text-decoration:none;"><i class="fas fa-plus"></i> <span data-translate="addProduct">Ajouter un produit</span></a>
           <button type="button" class="btn-secondary" id="ovRefresh" style="cursor:pointer;border:1px solid var(--border-medium);background:none;color:var(--text-mid);font-family:inherit;"><i class="fas fa-sync-alt"></i> <span data-translate="refresh">Rafraîchir</span></button>
         </div>
+        </details>
       </div>
     </section>
 
@@ -3473,19 +3496,22 @@
         footerPerfumesTitle: 'Parfums', footerMen: 'Homme', footerWomen: 'Femme', footerUnisexe: 'Unisexe', footerKids: 'Enfants',
         footerContactTitle: 'Contact', footerAddress: 'Tunis, Tunisie', footerPhone: '+216 96 163 366',
         footerEmail: 'contact@rosafragrances.tn', footerCopyright: '© 2026 Rosa Fragrances. Tous droits réservés.',
-        dtabAdd: 'Ajouter', dtabCat: 'Collections', dtabOrders: 'Commandes', dtabEdit: 'Modifier', dtabOv: 'Aperçu', dtabSettings: 'Paramètres', admLogout: 'Déconnexion', existingPerfumes: 'Parfums Existants', ovProducts: 'produits', refresh: 'Rafraîchir', addProduct: 'Ajouter un produit', menCat: 'Homme', menDesc: 'Boisés & épicés', womenCat: 'Femme', womenDesc: 'Floraux & sensuels', unisexCat: 'Unisexe', unisexDesc: 'Pour tous', kidsCat: 'Enfants', kidsDesc: 'Douceurs', catVoiture: 'Parfums voiture', catAmbiance: "Parfums d'ambiance", catMusc: 'Musc', catAccessoires: 'Accessoires', catInspires: 'Parfums inspirés' },
+        dtabAdd: 'Ajouter', dtabCat: 'Mes produits', dtabOrders: 'Commandes', dtabEdit: 'Modifier', dtabOv: 'Accueil', dtabSettings: 'Réglages',
+        simpleMyProducts: 'Mes produits', simpleMyProductsSub: 'Voir, changer un prix, une photo', simpleAddProduct: 'Ajouter un produit', simpleAddProductSub: 'Mettre un parfum en vente', simpleOrders: 'Commandes', simpleOrdersSub: 'Voir les commandes des clients', simpleDelivery: 'Prix de livraison', simpleDeliverySub: 'Combien le client paie', simpleMore: 'Plus d\'options', admLogout: 'Déconnexion', existingPerfumes: 'Parfums Existants', ovProducts: 'produits', refresh: 'Rafraîchir', addProduct: 'Ajouter un produit', menCat: 'Homme', menDesc: 'Boisés & épicés', womenCat: 'Femme', womenDesc: 'Floraux & sensuels', unisexCat: 'Unisexe', unisexDesc: 'Pour tous', kidsCat: 'Enfants', kidsDesc: 'Douceurs', catVoiture: 'Parfums voiture', catAmbiance: "Parfums d'ambiance", catMusc: 'Musc', catAccessoires: 'Accessoires', catInspires: 'Parfums inspirés' },
       en: { home: 'HOME', men: 'MEN', women: 'WOMEN', unisex: 'UNISEX', kids: 'KIDS', existing: 'EXISTING PERFUMES', login: 'Sign in', profile: 'My Profile',
         footerDescription: 'Exceptional perfumery since 1985. The art of oriental perfumery reinvented for discerning connoisseurs.',
         footerPerfumesTitle: 'Perfumes', footerMen: 'Men', footerWomen: 'Women', footerUnisexe: 'Unisex', footerKids: 'Kids',
         footerContactTitle: 'Contact', footerAddress: 'Tunis, Tunisia', footerPhone: '+216 96 163 366',
         footerEmail: 'contact@rosafragrances.tn', footerCopyright: '© 2026 Rosa Fragrances. All rights reserved.',
-        dtabAdd: 'Add', dtabCat: 'Collections', dtabOrders: 'Orders', dtabEdit: 'Edit', dtabOv: 'Overview', dtabSettings: 'Settings', admLogout: 'Log out', existingPerfumes: 'Existing Perfumes', ovProducts: 'products', refresh: 'Refresh', addProduct: 'Add product', menCat: 'Men', menDesc: 'Woody & spicy', womenCat: 'Women', womenDesc: 'Floral & sensual', unisexCat: 'Unisex', unisexDesc: 'For everyone', kidsCat: 'Kids', kidsDesc: 'Sweet scents', catVoiture: 'Car perfumes', catAmbiance: 'Home fragrances', catMusc: 'Musk', catAccessoires: 'Accessories', catInspires: 'Inspired perfumes' },
+        dtabAdd: 'Add', dtabCat: 'My products', dtabOrders: 'Orders', dtabEdit: 'Edit', dtabOv: 'Home', dtabSettings: 'Settings',
+        simpleMyProducts: 'My products', simpleMyProductsSub: 'See or change a price, a photo', simpleAddProduct: 'Add a product', simpleAddProductSub: 'Put a perfume on sale', simpleOrders: 'Orders', simpleOrdersSub: 'See the customers orders', simpleDelivery: 'Delivery price', simpleDeliverySub: 'What the customer pays', simpleMore: 'More options', admLogout: 'Log out', existingPerfumes: 'Existing Perfumes', ovProducts: 'products', refresh: 'Refresh', addProduct: 'Add product', menCat: 'Men', menDesc: 'Woody & spicy', womenCat: 'Women', womenDesc: 'Floral & sensual', unisexCat: 'Unisex', unisexDesc: 'For everyone', kidsCat: 'Kids', kidsDesc: 'Sweet scents', catVoiture: 'Car perfumes', catAmbiance: 'Home fragrances', catMusc: 'Musk', catAccessoires: 'Accessories', catInspires: 'Inspired perfumes' },
       ar: { home: 'الرئيسية', men: 'رجالي', women: 'نسائي', unisex: 'للجنسين', kids: 'أطفال', existing: 'العطور الموجودة', login: 'تسجيل الدخول', profile: 'ملفي الشخصي',
         footerDescription: 'عطور استثنائية منذ 1985. فن العطور الشرقية المعاد ابتكاره للخبراء المميزين.',
         footerPerfumesTitle: 'العطور', footerMen: 'رجالي', footerWomen: 'نسائي', footerUnisexe: 'للجنسين', footerKids: 'أطفال',
         footerContactTitle: 'اتصل بنا', footerAddress: 'تونس، تونس', footerPhone: '366 163 96 216+',
         footerEmail: 'contact@rosafragrances.tn', footerCopyright: '© 2026 روزا للعطور. جميع الحقوق محفوظة.',
-        dtabAdd: 'إضافة', dtabCat: 'المجموعات', dtabOrders: 'الطلبات', dtabEdit: 'تعديل', dtabOv: 'نظرة عامة', dtabSettings: 'الإعدادات', admLogout: 'تسجيل الخروج', existingPerfumes: 'العطور الموجودة', ovProducts: 'منتجات', refresh: 'تحديث', addProduct: 'إضافة منتج', menCat: 'رجالي', menDesc: 'خشبي و حار', womenCat: 'نسائي', womenDesc: 'زهري و حسي', unisexCat: 'للجنسين', unisexDesc: 'للجميع', kidsCat: 'أطفال', kidsDesc: 'روائح حلوة', catVoiture: 'عطور السيارات', catAmbiance: 'عطورات الجو', catMusc: 'مسك', catAccessoires: 'إكسسوارات', catInspires: 'عطور مستوحاة' }
+        dtabAdd: 'إضافة', dtabCat: 'منتجاتي', dtabOrders: 'الطلبات', dtabEdit: 'تعديل', dtabOv: 'الرئيسية', dtabSettings: 'الإعدادات',
+        simpleMyProducts: 'منتجاتي', simpleMyProductsSub: 'تعديل السعر أو الصورة', simpleAddProduct: 'إضافة منتج', simpleAddProductSub: 'إضافة عطر للبيع', simpleOrders: 'الطلبات', simpleOrdersSub: 'طلبات الحرفاء', simpleDelivery: 'سعر التوصيل', simpleDeliverySub: 'الذي يدفعه الحريف', simpleMore: 'خيارات أخرى', admLogout: 'تسجيل الخروج', existingPerfumes: 'العطور الموجودة', ovProducts: 'منتجات', refresh: 'تحديث', addProduct: 'إضافة منتج', menCat: 'رجالي', menDesc: 'خشبي و حار', womenCat: 'نسائي', womenDesc: 'زهري و حسي', unisexCat: 'للجنسين', unisexDesc: 'للجميع', kidsCat: 'أطفال', kidsDesc: 'روائح حلوة', catVoiture: 'عطور السيارات', catAmbiance: 'عطورات الجو', catMusc: 'مسك', catAccessoires: 'إكسسوارات', catInspires: 'عطور مستوحاة' }
     };
     var TABS = ['overview', 'add', 'collections', 'orders', 'settings', 'edit'];
     function lang() { try { var l = localStorage.getItem('language') || 'fr'; return TR[l] ? l : 'fr'; } catch (e) { return 'fr'; } }
