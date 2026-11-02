@@ -215,11 +215,11 @@
       async function addProduct() {
         const name = document.getElementById('productName')?.value.trim();
         const brand = document.getElementById('productBrand')?.value.trim();
-        const price = parseFloat((document.getElementById('eProductPrice') || document.getElementById('productPrice'))?.value);
-        const oldPriceRaw = (document.getElementById('eProductOldPrice') || document.getElementById('productOldPrice'))?.value;
+        const price = parseFloat((document.getElementById('productPrice') || document.getElementById('eProductPrice'))?.value);
+        const oldPriceRaw = (document.getElementById('productOldPrice') || document.getElementById('eProductOldPrice'))?.value;
         const oldPrice = (oldPriceRaw === '' || oldPriceRaw == null) ? null : parseFloat(oldPriceRaw);
-        const quantity = parseInt((document.getElementById('eProductQuantity') || document.getElementById('productQuantity'))?.value) || 0;
-        const promoRaw = (document.getElementById('eProductPromoPercent') || document.getElementById('productPromoPercent'))?.value;
+        const quantity = parseInt((document.getElementById('productQuantity') || document.getElementById('eProductQuantity'))?.value) || 0;
+        const promoRaw = (document.getElementById('productPromoPercent') || document.getElementById('eProductPromoPercent'))?.value;
         const promoPercent = (promoRaw === '' || promoRaw == null) ? null : parseFloat(promoRaw);
         const description = document.getElementById('productDescription')?.value.trim();
 
@@ -286,7 +286,7 @@
           document.getElementById('productPrice').value = '';
           document.getElementById('productOldPrice').value = '';
           document.getElementById('productQuantity').value = '0';
-          const pp = document.getElementById('eProductPromoPercent') || document.getElementById('productPromoPercent');
+          const pp = document.getElementById('productPromoPercent') || document.getElementById('eProductPromoPercent');
           if (pp) pp.value = '';
           document.getElementById('productDescription').value = '';
           uploadedImages.forEach(item => { try { URL.revokeObjectURL(item.preview); } catch (e) {} });
