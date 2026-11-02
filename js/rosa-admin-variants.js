@@ -87,7 +87,11 @@
     var rows = listEl.querySelectorAll('.var-row');
     var empty = listEl.querySelector('.var-empty');
     if (rows.length === 0 && !empty) {
-      listEl.insertAdjacentHTML('beforeend', '<div class="var-empty">—</div>');
+      // Start him on a REAL row. The picture button lives inside a variant row, so an empty
+      // form used to show no photo control at all. Only once the list is mounted, so the
+      // row's buttons are wired; an untouched empty row is skipped by readRows.
+      if (listEl.__rosaBound) listEl.insertAdjacentHTML('beforeend', rowHtml({}));
+      else listEl.insertAdjacentHTML('beforeend', '<div class="var-empty">—</div>');
     } else if (rows.length > 0 && empty) {
       empty.remove();
     }
