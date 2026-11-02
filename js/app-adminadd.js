@@ -224,6 +224,14 @@
         const description = document.getElementById('productDescription')?.value.trim();
 
         if (!name || !brand || isNaN(price) || price <= 0) {
+          // The brand box lives behind the "Plus d'options" fold: open it and put the cursor
+          // there instead of leaving him with a bare "invalid fields" toast.
+          if (!brand) {
+            const bEl = document.getElementById('productBrand');
+            const bFold = bEl && bEl.closest('details');
+            if (bFold) bFold.open = true;
+            if (bEl) { try { bEl.focus(); } catch (e) {} }
+          }
           showAdminToast('invalidFields');
           return;
         }

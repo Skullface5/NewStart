@@ -237,7 +237,6 @@
       var out = [];
       listEl.querySelectorAll('.var-row').forEach(function (row) {
         var label = (row.querySelector('.var-label').value || '').trim();
-        if (!label) return;
         var pRaw = row.querySelector('.var-price').value;
         var qRaw = row.querySelector('.var-qty').value;
         var opRaw = row.querySelector('.var-oldprice') ? row.querySelector('.var-oldprice').value : '';
@@ -247,6 +246,17 @@
           var val = (u.value || '').trim();
           if (val) imgs.push(val);
         });
+        // A row carrying a photo/price but no size label used to be dropped in silence --
+        // which lost the picture with it. Keep it under a plain label; only a completely
+        // empty row is ignored.
+        if (!label) {
+          var hasContent = imgs.length ||
+            (pRaw !== '' && pRaw != null) ||
+            (qRaw !== '' && qRaw != null) ||
+            (opRaw !== '' && opRaw != null);
+          if (!hasContent) return;
+          label = 'Unique';
+        }
         var price = (pRaw === '' || pRaw == null) ? null : parseFloat(pRaw);
         var qty = (qRaw === '' || qRaw == null) ? null : parseInt(qRaw, 10);
         var oldPrice = (opRaw === '' || opRaw == null) ? null : parseFloat(opRaw);
